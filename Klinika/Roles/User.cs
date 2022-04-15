@@ -1,6 +1,6 @@
 ﻿namespace Klinika.Roles
 {
-    internal class User
+    abstract class User
     {
         #region [ --- VARIABLES --- ]
         string Email { get; set; }
