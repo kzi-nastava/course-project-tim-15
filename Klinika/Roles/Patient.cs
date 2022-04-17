@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Klinika.Roles
+﻿namespace Klinika.Roles
 {
-    internal class Patient
+    internal class Patient : User
     {
+        public Patient(string email, string password, RoleType role) : base(email, password, role)
+        {
+        }
     }
 }
