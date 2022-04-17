@@ -1,0 +1,33 @@
+[
+  {
+    "Email": "doctor1@gmail.com",
+    "Password": "doctor1",
+    "Role": 0
+  },
+  {
+    "Email": "doctor2@gmail.com",
+    "Password": "doctor2",
+    "Role": 0
+  },
+
+  {
+    "Email": "patient1@gmail.com",
+    "Password": "patient1",
+    "Role": 1
+  },
+  {
+    "Email": "patient2@gmail.com",
+    "Password": "patient2",
+    "Role": 1
+  },
+  {
+    "Email": "secretarian1@gmail.com",
+    "Password": "secretarian1",
+    "Role": 2
+  },
+  {
+    "Email": "manager1@gmail.com",
+    "Password": "manager1",
+    "Role": 3
+  }
+]

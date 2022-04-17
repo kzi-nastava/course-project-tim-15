@@ -33,43 +33,44 @@
             this.passwordLabel = new System.Windows.Forms.Label();
             this.passwordField = new System.Windows.Forms.TextBox();
             this.loginButton = new System.Windows.Forms.Button();
+            this.errorLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // emailLabel
             // 
             this.emailLabel.AutoSize = true;
-            this.emailLabel.Location = new System.Drawing.Point(12, 9);
+            this.emailLabel.Location = new System.Drawing.Point(28, 19);
             this.emailLabel.Name = "emailLabel";
-            this.emailLabel.Size = new System.Drawing.Size(52, 20);
+            this.emailLabel.Size = new System.Drawing.Size(55, 20);
             this.emailLabel.TabIndex = 0;
-            this.emailLabel.Text = "e-mail";
+            this.emailLabel.Text = "e-mail:";
             // 
             // emailField
             // 
-            this.emailField.Location = new System.Drawing.Point(90, 6);
+            this.emailField.Location = new System.Drawing.Point(106, 16);
             this.emailField.Name = "emailField";
-            this.emailField.Size = new System.Drawing.Size(125, 27);
+            this.emailField.Size = new System.Drawing.Size(188, 27);
             this.emailField.TabIndex = 1;
             // 
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Location = new System.Drawing.Point(12, 42);
+            this.passwordLabel.Location = new System.Drawing.Point(28, 52);
             this.passwordLabel.Name = "passwordLabel";
-            this.passwordLabel.Size = new System.Drawing.Size(72, 20);
+            this.passwordLabel.Size = new System.Drawing.Size(75, 20);
             this.passwordLabel.TabIndex = 2;
-            this.passwordLabel.Text = "password";
+            this.passwordLabel.Text = "password:";
             // 
             // passwordField
             // 
-            this.passwordField.Location = new System.Drawing.Point(90, 39);
+            this.passwordField.Location = new System.Drawing.Point(106, 49);
             this.passwordField.Name = "passwordField";
-            this.passwordField.Size = new System.Drawing.Size(125, 27);
+            this.passwordField.Size = new System.Drawing.Size(188, 27);
             this.passwordField.TabIndex = 3;
             // 
             // loginButton
             // 
-            this.loginButton.Location = new System.Drawing.Point(214, 95);
+            this.loginButton.Location = new System.Drawing.Point(112, 129);
             this.loginButton.Name = "loginButton";
             this.loginButton.Size = new System.Drawing.Size(94, 29);
             this.loginButton.TabIndex = 4;
@@ -77,18 +78,27 @@
             this.loginButton.UseVisualStyleBackColor = true;
             this.loginButton.Click += new System.EventHandler(this.LoginButton_Click);
             // 
+            // errorLbl
+            // 
+            this.errorLbl.AutoSize = true;
+            this.errorLbl.Location = new System.Drawing.Point(123, 92);
+            this.errorLbl.Name = "errorLbl";
+            this.errorLbl.Size = new System.Drawing.Size(0, 20);
+            this.errorLbl.TabIndex = 5;
+            // 
             // LoginPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(320, 136);
+            this.ClientSize = new System.Drawing.Size(320, 180);
+            this.Controls.Add(this.errorLbl);
             this.Controls.Add(this.loginButton);
             this.Controls.Add(this.passwordField);
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.emailField);
             this.Controls.Add(this.emailLabel);
             this.Name = "LoginPage";
-            this.Text = "Form1";
+            this.Text = "Login";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,5 +111,6 @@
         private Label passwordLabel;
         private TextBox passwordField;
         private Button loginButton;
+        private Label errorLbl;
     }
 }

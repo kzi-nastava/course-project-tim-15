@@ -3,10 +3,13 @@
     abstract class User
     {
         #region [ --- CONSTANTS --- ]
+
         public enum RoleType
         {
             DOCTOR,
-            PATIENT
+            PATIENT,
+            SECRETARIAN,
+            MANAGER
         }
         #endregion
         #region [ --- VARIABLES --- ]
