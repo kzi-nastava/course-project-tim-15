@@ -10,9 +10,9 @@
         }
         #endregion
         #region [ --- VARIABLES --- ]
-        string Email { get; set; }
-        string Password { get; set; }
-        RoleType Role { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public RoleType Role { get; set; }
         #endregion
 
         #region [ --- CONSTRUCTORS --- ]
