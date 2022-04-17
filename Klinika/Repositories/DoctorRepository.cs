@@ -24,13 +24,13 @@ namespace Klinika.Repositories
         #endregion
 
         #region [ --- SINGLETON --- ]
+        private static DoctorRepository? instance;
         private DoctorRepository()
         {
             var doctors = JsonConvert.DeserializeObject<List<Doctor>>(File.ReadAllText(PATH));
             if (doctors == null) Doctors = new List<Doctor>();
             else Doctors = doctors;
         }
-        private static DoctorRepository? instance;
         public static DoctorRepository Instance
         {
             get
