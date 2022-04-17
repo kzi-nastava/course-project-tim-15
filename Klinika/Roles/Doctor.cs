@@ -12,7 +12,7 @@ namespace Klinika.Roles
         #endregion
 
         #region [ --- CONSTRUCTORS --- ]
-        public Doctor(string email, string password) : base(email, password)
+        public Doctor(string email, string password, RoleType roleType) : base(email, password, roleType)
         {
         }
         #endregion
