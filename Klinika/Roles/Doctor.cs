@@ -12,8 +12,8 @@ namespace Klinika.Roles
         #endregion
 
         #region [ --- CONSTRUCTORS --- ]
-        public Doctor(string email, string password, string name, string surname, string jmbg, DateOnly birthdate,
-                      RoleType roleType) : base(email, password,name,surname,jmbg,birthdate, roleType)
+        public Doctor(string email, string password, string name, string surname, string jmbg, DateOnly birthdate, GenderEnum gender,
+                      RoleType roleType) : base(email, password,name,surname,jmbg,birthdate, gender, roleType)
         {
         }
         #endregion

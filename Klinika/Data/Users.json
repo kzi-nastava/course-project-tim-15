@@ -5,7 +5,8 @@
     "Name": "Marko",
     "Surname": "Marković",
     "JMBG": "1234567890829",
-    "Birthdate" :  "21.12.1967.",
+    "Birthdate": "21.12.1967.",
+    "Gender": "M",
     "Role": 0
   },
   {
@@ -15,6 +16,7 @@
     "Surname": "Ivanović",
     "JMBG": "5869301957392",
     "Birthdate": "01.05.1974.",
+    "Gender": "M",
     "Role": 0
   },
 
@@ -25,6 +27,7 @@
     "Surname": "Simić",
     "JMBG": "6940029573819",
     "Birthdate": "10.10.2001.",
+    "Gender": "M",
     "Role": 1
   },
   {
@@ -34,6 +37,7 @@
     "Surname": "Nikolić",
     "JMBG": "7958300128443",
     "Birthdate": "18.06.1993.",
+    "Gender": "M",
     "Role": 1
   },
   {
@@ -43,6 +47,7 @@
     "Surname": "Sirar",
     "JMBG": "7784911049885",
     "Birthdate": "14.08.1978.",
+    "Gender": "M",
     "Role": 2
   },
   {
@@ -52,6 +57,7 @@
     "Surname": "Simić",
     "JMBG": "8559375801462",
     "Birthdate": "24.11.1990.",
+    "Gender": "F",
     "Role": 3
   }
 ]
