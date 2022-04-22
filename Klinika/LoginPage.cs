@@ -35,7 +35,6 @@ namespace Klinika
                         //Show patients window
                         break;
                 }
-                //MessageBox.Show(loggingUser.Password);
                 this.Close();
 
             }
