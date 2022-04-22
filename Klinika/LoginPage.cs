@@ -9,57 +9,62 @@ namespace Klinika
         public LoginPage()
         {
             InitializeComponent();
+            UserRepository.GetInstance();
         }
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            //DoctorRepository.Instance.Put(new Doctor("doctor1@gmail.com", "doctor1", User.RoleType.DOCTOR));
-            //PatientRepository.Instance.Put(new Patient("patient1@gmail.com", "patient1", User.RoleType.PATIENT));
             try
             {
                 string email = emailField.Text.Trim();
                 string password = passwordField.Text.Trim();
-                User loggedUser = LoginService.Validate(email, password);
-                switch (loggedUser)
+
+                User loggingUser = LoginService.Validate(email, password);
+                switch (loggingUser.Role)
                 {
-                    case Secretarian:
+                    case "Secretary":
                         //Show secretarians window
                         break;
-                    case Doctor:
+                    case "Doctor":
                         //Show doctors window
                         break;
-                    case Manager:
+                    case "Manager":
                         //Show managers window
                         break;
                     default:
                         //Show patients window
                         break;
                 }
+                //MessageBox.Show(loggingUser.Password);
                 this.Close();
 
             }
-            catch(EmailEmptyException ex)
+            catch(EmailEmptyException)
             {
                 passwordField.Text = "";
-                MessageBox.Show(ex.Message);
             }
 
-            catch(EmailUnknownException ex)
+            catch(EmailUnknownException)
             {
                 emailField.Text = "";
                 passwordField.Text = "";
-                MessageBox.Show(ex.Message);
             }
 
-            catch (PasswordEmptyException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            catch (PasswordIncorrectException ex)
+            catch (PasswordEmptyException)
             {
                 passwordField.Text = "";
-                MessageBox.Show(ex.Message);
+                passwordField.Text = "";
+            }
+
+            catch (PasswordIncorrectException)
+            {
+                passwordField.Text = "";
+            }
+
+            catch(UserBlockedException)
+            {
+                emailField.Text = "";
+                passwordField.Text = "";
             }
         }
     }
