@@ -65,6 +65,7 @@
             // 
             this.passwordField.Location = new System.Drawing.Point(106, 49);
             this.passwordField.Name = "passwordField";
+            this.passwordField.PasswordChar = '*';
             this.passwordField.Size = new System.Drawing.Size(188, 27);
             this.passwordField.TabIndex = 3;
             // 

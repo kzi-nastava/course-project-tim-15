@@ -12,9 +12,9 @@ namespace Klinika.Repositories
 {
     internal class UserRepository
     {
-        public  Dictionary<string, User> users { get; }
+        public Dictionary<string, User> users { get; }
 
-        
+
         private static UserRepository? instance;
         private UserRepository()
         {
@@ -23,11 +23,11 @@ namespace Klinika.Repositories
 
             SqlCommand getUserCredentials = new SqlCommand(getUserCredentialsQuery, SQLConnection.GetInstance().databaseConnection);
             SQLConnection.GetInstance().databaseConnection.Open();
-            using(SqlDataReader reader = getUserCredentials.ExecuteReader())
+            using (SqlDataReader reader = getUserCredentials.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    User user = new User(reader["Email"].ToString(),reader["Password"].ToString(),reader["UserType"].ToString(),Convert.ToBoolean(reader["IsBlocked"]));
+                    User user = new User(reader["Email"].ToString(), reader["Password"].ToString(), reader["UserType"].ToString(), Convert.ToBoolean(reader["IsBlocked"]));
                     users.TryAdd(user.Email, user);
                 }
             }
@@ -36,8 +36,9 @@ namespace Klinika.Repositories
         }
         public static UserRepository GetInstance()
         {
-                if (instance == null) instance = new UserRepository();
-                return instance;
+            if (instance == null) instance = new UserRepository();
+            return instance;
         }
+
     }
 }
