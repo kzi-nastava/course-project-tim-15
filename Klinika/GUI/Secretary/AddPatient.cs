@@ -8,13 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Klinika.Exceptions;
+using Klinika.Repositories;
 using Klinika.Services;
 
 namespace Klinika.GUI.Secretary
 {
     public partial class AddPatient : Form
     {
-        private mainWindow parent = null;
+        private mainWindow parent;
         public AddPatient(mainWindow parent)
         {
             this.parent = parent;
@@ -40,7 +41,7 @@ namespace Klinika.GUI.Secretary
             try
             {
                 PatientService.Validate(jmbg,name,surname,birthdate,email,password);
-                PatientService.Create(jmbg, name, surname, birthdate, gender, email, password);
+                PatientRepository.Create(jmbg, name, surname, birthdate, gender, email, password);
                 DataTable patientTable = (DataTable)parent.patientsTable.DataSource;
                 DataRow newRow = patientTable.NewRow();
                 newRow["JMBG"] = jmbg;
@@ -52,7 +53,7 @@ namespace Klinika.GUI.Secretary
                 patientTable.Rows.Add(newRow);
                 patientTable.AcceptChanges();
                 MessageBox.Show("Patient successfully added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Hide();
+                Hide();
             }
             catch (FieldEmptyException)
             {

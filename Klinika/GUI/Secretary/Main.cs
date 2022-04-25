@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Klinika.Services;
 using Klinika.Data;
+using Klinika.Repositories;
 
 namespace Klinika.GUI.Secretary
 {
@@ -28,10 +29,10 @@ namespace Klinika.GUI.Secretary
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            DataTable patients = PatientService.Read();
+            DataTable patients = PatientRepository.GetAll();
             if (patients != null)
             {
-                patientsTable.DataSource = PatientService.Read();
+                patientsTable.DataSource = patients;
                 patientsTable.ClearSelection();
             }
             
@@ -56,8 +57,8 @@ namespace Klinika.GUI.Secretary
             if(deletionConfirmation == DialogResult.Yes)
             {
                 string email = patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
-                int ID = PatientService.EmailIDPairs[email];
-                PatientService.Delete(ID,email);
+                int ID = PatientRepository.EmailIDPairs[email];
+                PatientRepository.Delete(ID,email);
                 int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
                 patientsTable.Rows.RemoveAt(selectedRowNumber);
                 MessageBox.Show("Patient successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);

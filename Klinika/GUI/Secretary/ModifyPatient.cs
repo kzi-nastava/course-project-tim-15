@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Klinika.Exceptions;
+using Klinika.Repositories;
 using Klinika.Services;
 
 namespace Klinika.GUI.Secretary
@@ -35,7 +36,7 @@ namespace Klinika.GUI.Secretary
             try
             {
                 PatientService.Validate(jmbg, name, surname, birthdate, email, password,true);
-                PatientService.Modify(selectedID,jmbg, name, surname, birthdate, gender, email, password);
+                PatientRepository.Modify(selectedID,jmbg, name, surname, birthdate, gender, email, password);
                 DataTable patientTable = (DataTable)parent.patientsTable.DataSource;
                 int selectedRowIndex = parent.patientsTable.SelectedRows[0].Index;
                 DataRow selectedRow = patientTable.Rows[selectedRowIndex];
@@ -68,7 +69,7 @@ namespace Klinika.GUI.Secretary
         {
             string selectedEmail = parent.patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
             (int id, string jmbg, string name, string surname, DateTime birthdate, char gender, string password) =
-            PatientService.GetSingle(selectedEmail);
+            PatientRepository.GetSingle(selectedEmail);
             JMBGField.Text = jmbg;
             nameField.Text = name;
             surnameField.Text = surname;
