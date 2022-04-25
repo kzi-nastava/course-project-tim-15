@@ -34,7 +34,7 @@ namespace Klinika.Repositories
                 }
                 DatabaseConnection.GetInstance().database.Close();
             }
-            catch(SqlException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show(ex.Message);
             }

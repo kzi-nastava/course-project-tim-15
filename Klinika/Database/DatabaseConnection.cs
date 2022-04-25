@@ -12,7 +12,7 @@ namespace Klinika.Data
     {
         public SqlConnection database { get; }
         private static DatabaseConnection? singletonInstance;
-            
+
         private DatabaseConnection()
         {
             SqlConnectionStringBuilder credentials = new SqlConnectionStringBuilder();
@@ -26,8 +26,8 @@ namespace Klinika.Data
 
         public static DatabaseConnection GetInstance()
         {
-            if(singletonInstance == null) 
-            { 
+            if (singletonInstance == null)
+            {
                 singletonInstance = new DatabaseConnection();
             }
             return singletonInstance;
