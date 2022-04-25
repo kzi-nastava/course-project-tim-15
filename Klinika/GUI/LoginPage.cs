@@ -61,5 +61,10 @@ namespace Klinika
                 passwordField.Text = "";
             }
         }
+
+        private void LoginPage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
