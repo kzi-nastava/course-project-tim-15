@@ -19,11 +19,11 @@ namespace Klinika.Repositories
         private UserRepository()
         {
             users = new Dictionary<string, User>();
-            string getUserCredentialsQuery = "SELECT Email, Password, UserType.Name as UserType, IsBlocked FROM [User] JOIN [UserType] ON [User].UserType = [UserType].ID";
+            string getCredentialsQuery = "SELECT Email, Password, UserType.Name as UserType, IsBlocked FROM [User] JOIN [UserType] ON [User].UserType = [UserType].ID WHERE [User].IsDeleted = 0";
 
-            SqlCommand getUserCredentials = new SqlCommand(getUserCredentialsQuery, SQLConnection.GetInstance().databaseConnection);
+            SqlCommand getCredentials = new SqlCommand(getCredentialsQuery, SQLConnection.GetInstance().databaseConnection);
             SQLConnection.GetInstance().databaseConnection.Open();
-            using (SqlDataReader reader = getUserCredentials.ExecuteReader())
+            using (SqlDataReader reader = getCredentials.ExecuteReader())
             {
                 while (reader.Read())
                 {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Klinika.Roles;
 using Klinika.Repositories;
+using Klinika.Exceptions;
 
 namespace Klinika.Services
 {
@@ -18,12 +19,12 @@ namespace Klinika.Services
 
             if (string.IsNullOrEmpty(email))
             {
-                throw new EmailEmptyException("Email left empty!");
+                throw new FieldEmptyException("Email left empty!");
             }
 
             else if (string.IsNullOrEmpty(password)) {
 
-                throw new PasswordEmptyException("Password left empty!");
+                throw new FieldEmptyException("Password left empty!");
             }
 
             else if (!instance.users.ContainsKey(email))
