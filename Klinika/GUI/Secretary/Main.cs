@@ -28,8 +28,13 @@ namespace Klinika.GUI.Secretary
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            patientsTable.DataSource = PatientService.Read();
-            patientsTable.ClearSelection();
+            DataTable patients = PatientService.Read();
+            if (patients != null)
+            {
+                patientsTable.DataSource = PatientService.Read();
+                patientsTable.ClearSelection();
+            }
+            
             updatePatientButton.Enabled = false;
             deletePatientButton.Enabled = false;
         }
@@ -55,8 +60,14 @@ namespace Klinika.GUI.Secretary
                 PatientService.Delete(ID,email);
                 int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
                 patientsTable.Rows.RemoveAt(selectedRowNumber);
+                MessageBox.Show("Patient successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
+        }
+
+        private void updatePatientButton_Click(object sender, EventArgs e)
+        {
+            new ModifyPatient(this).Show();
         }
     }
 }

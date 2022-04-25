@@ -20,18 +20,24 @@ namespace Klinika.Repositories
         {
             users = new Dictionary<string, User>();
             string getCredentialsQuery = "SELECT Email, Password, UserType.Name as UserType, IsBlocked FROM [User] JOIN [UserType] ON [User].UserType = [UserType].ID WHERE [User].IsDeleted = 0";
-
-            SqlCommand getCredentials = new SqlCommand(getCredentialsQuery, SQLConnection.GetInstance().databaseConnection);
-            SQLConnection.GetInstance().databaseConnection.Open();
-            using (SqlDataReader reader = getCredentials.ExecuteReader())
+            try
             {
-                while (reader.Read())
+                SqlCommand getCredentials = new SqlCommand(getCredentialsQuery, SQLConnection.GetInstance().databaseConnection);
+                SQLConnection.GetInstance().databaseConnection.Open();
+                using (SqlDataReader reader = getCredentials.ExecuteReader())
                 {
-                    User user = new User(reader["Email"].ToString(), reader["Password"].ToString(), reader["UserType"].ToString(), Convert.ToBoolean(reader["IsBlocked"]));
-                    users.TryAdd(user.Email, user);
+                    while (reader.Read())
+                    {
+                        User user = new User(reader["Email"].ToString(), reader["Password"].ToString(), reader["UserType"].ToString(), Convert.ToBoolean(reader["IsBlocked"]));
+                        users.TryAdd(user.Email, user);
+                    }
                 }
+                SQLConnection.GetInstance().databaseConnection.Close();
             }
-            SQLConnection.GetInstance().databaseConnection.Close();
+            catch(SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
         }
         public static UserRepository GetInstance()

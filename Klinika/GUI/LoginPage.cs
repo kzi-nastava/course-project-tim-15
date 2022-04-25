@@ -24,7 +24,7 @@ namespace Klinika
                 switch (loggingUser.Role)
                 {
                     case "Secretary":
-                        //new GUI.Secretary.mainWindow().Show();
+                        new GUI.Secretary.mainWindow().Show();
                         break;
                     case "Doctor":
                         //Show doctors window

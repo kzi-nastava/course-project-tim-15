@@ -14,10 +14,10 @@ namespace Klinika.GUI.Secretary
 {
     public partial class AddPatient : Form
     {
-        private mainWindow parentForm = null;
-        public AddPatient(mainWindow parentForm)
+        private mainWindow parent = null;
+        public AddPatient(mainWindow parent)
         {
-            this.parentForm = parentForm;
+            this.parent = parent;
             InitializeComponent();
         }
 
@@ -41,7 +41,7 @@ namespace Klinika.GUI.Secretary
             {
                 PatientService.Validate(jmbg,name,surname,birthdate,email,password);
                 PatientService.Create(jmbg, name, surname, birthdate, gender, email, password);
-                DataTable patientTable = (DataTable)parentForm.patientsTable.DataSource;
+                DataTable patientTable = (DataTable)parent.patientsTable.DataSource;
                 DataRow newRow = patientTable.NewRow();
                 newRow["JMBG"] = jmbg;
                 newRow["Name"] = name;
