@@ -97,6 +97,7 @@
             this.patientsTable.Name = "patientsTable";
             this.patientsTable.RowHeadersWidth = 51;
             this.patientsTable.RowTemplate.Height = 29;
+            this.patientsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.patientsTable.Size = new System.Drawing.Size(946, 401);
             this.patientsTable.TabIndex = 0;
             this.patientsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.patientsTable_RowEnter);
