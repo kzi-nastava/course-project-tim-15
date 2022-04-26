@@ -28,9 +28,9 @@ namespace Klinika.Repositories
             Appointments = new Dictionary<int, Appointment>();
             DataTable? retrievedAppointments = null;
 
-            string getAllQuerry = "SELECT ID, DoctorID, PatientID, DateTime, RoomID" +
-                                 "Completed, Type, Duration, Urgent, Description" +
-                                 $"FROM [MedicalAction] WHERE DateTime BETWEEN {start} AND {end}";
+            string getAllQuerry = "SELECT * " +
+                                  "FROM [MedicalAction] " +
+                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}';";
             try
             {
                 SqlDataAdapter adapter = new SqlDataAdapter(getAllQuerry, DatabaseConnection.GetInstance().database);
