@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.unblockButton = new System.Windows.Forms.Button();
+            this.blockButton = new System.Windows.Forms.Button();
             this.deletePatientButton = new System.Windows.Forms.Button();
             this.updatePatientButton = new System.Windows.Forms.Button();
             this.addPatientButton = new System.Windows.Forms.Button();
@@ -43,6 +45,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.unblockButton);
+            this.tabPage1.Controls.Add(this.blockButton);
             this.tabPage1.Controls.Add(this.deletePatientButton);
             this.tabPage1.Controls.Add(this.updatePatientButton);
             this.tabPage1.Controls.Add(this.addPatientButton);
@@ -55,10 +59,32 @@
             this.tabPage1.Text = "Patients";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // unblockButton
+            // 
+            this.unblockButton.Enabled = false;
+            this.unblockButton.Location = new System.Drawing.Point(683, 429);
+            this.unblockButton.Name = "unblockButton";
+            this.unblockButton.Size = new System.Drawing.Size(94, 29);
+            this.unblockButton.TabIndex = 5;
+            this.unblockButton.Text = "Unblock";
+            this.unblockButton.UseVisualStyleBackColor = true;
+            this.unblockButton.Click += new System.EventHandler(this.unblockButton_Click);
+            // 
+            // blockButton
+            // 
+            this.blockButton.Enabled = false;
+            this.blockButton.Location = new System.Drawing.Point(551, 429);
+            this.blockButton.Name = "blockButton";
+            this.blockButton.Size = new System.Drawing.Size(94, 29);
+            this.blockButton.TabIndex = 4;
+            this.blockButton.Text = "Block";
+            this.blockButton.UseVisualStyleBackColor = true;
+            this.blockButton.Click += new System.EventHandler(this.blockButton_Click);
+            // 
             // deletePatientButton
             // 
             this.deletePatientButton.Enabled = false;
-            this.deletePatientButton.Location = new System.Drawing.Point(568, 430);
+            this.deletePatientButton.Location = new System.Drawing.Point(419, 429);
             this.deletePatientButton.Name = "deletePatientButton";
             this.deletePatientButton.Size = new System.Drawing.Size(94, 29);
             this.deletePatientButton.TabIndex = 3;
@@ -69,7 +95,7 @@
             // updatePatientButton
             // 
             this.updatePatientButton.Enabled = false;
-            this.updatePatientButton.Location = new System.Drawing.Point(433, 430);
+            this.updatePatientButton.Location = new System.Drawing.Point(287, 429);
             this.updatePatientButton.Name = "updatePatientButton";
             this.updatePatientButton.Size = new System.Drawing.Size(94, 29);
             this.updatePatientButton.TabIndex = 2;
@@ -79,7 +105,7 @@
             // 
             // addPatientButton
             // 
-            this.addPatientButton.Location = new System.Drawing.Point(298, 430);
+            this.addPatientButton.Location = new System.Drawing.Point(155, 429);
             this.addPatientButton.Name = "addPatientButton";
             this.addPatientButton.Size = new System.Drawing.Size(94, 29);
             this.addPatientButton.TabIndex = 1;
@@ -100,7 +126,7 @@
             this.patientsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.patientsTable.Size = new System.Drawing.Size(946, 401);
             this.patientsTable.TabIndex = 0;
-            this.patientsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.patientsTable_RowEnter);
+            this.patientsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.patientsTable_CellClick);
             // 
             // patientsTab
             // 
@@ -161,5 +187,7 @@
         private TabPage tabPage2;
         private TabPage tabPage3;
         public DataGridView patientsTable;
+        private Button unblockButton;
+        private Button blockButton;
     }
 }

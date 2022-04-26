@@ -35,15 +35,6 @@ namespace Klinika.GUI.Secretary
                 patientsTable.DataSource = patients;
                 patientsTable.ClearSelection();
             }
-            
-            updatePatientButton.Enabled = false;
-            deletePatientButton.Enabled = false;
-        }
-
-        private void patientsTable_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            updatePatientButton.Enabled = true;
-            deletePatientButton.Enabled = true;
         }
 
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -70,5 +61,56 @@ namespace Klinika.GUI.Secretary
         {
             new ModifyPatient(this).Show();
         }
+
+        private void patientsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            updatePatientButton.Enabled = true;
+            deletePatientButton.Enabled = true;
+            if (Convert.ToBoolean(patientsTable.SelectedRows[0].Cells["Blocked"].Value) == true)
+            {
+                unblockButton.Enabled = true;
+                blockButton.Enabled = false;
+            }
+            else
+            {
+                unblockButton.Enabled = false;
+                blockButton.Enabled = true;
+            }
+        }
+
+        private void blockButton_Click(object sender, EventArgs e)
+        {
+            DialogResult blockingConfirmation = MessageBox.Show("Are you sure you want to block the selected patient?", "Block", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (blockingConfirmation == DialogResult.Yes)
+            {
+                string email = patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
+                int ID = PatientRepository.EmailIDPairs[email];
+                PatientRepository.Block(ID);
+                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
+                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["Blocked"] = true;
+                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["BlockedBy"] = "SEC";
+                MessageBox.Show("Patient successfully blocked!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                unblockButton.Enabled = true;
+                blockButton.Enabled = false;
+            }
+        }
+
+        private void unblockButton_Click(object sender, EventArgs e)
+        {
+            DialogResult unblockingConfirmation = MessageBox.Show("Are you sure you want to unblock the selected patient?", "Unblock", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (unblockingConfirmation == DialogResult.Yes)
+            {
+                string email = patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
+                int ID = PatientRepository.EmailIDPairs[email];
+                PatientRepository.Unblock(ID);
+                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
+                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["Blocked"] = false;
+                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["BlockedBy"] = "";
+                MessageBox.Show("Patient successfully unblocked!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                unblockButton.Enabled = false;
+                blockButton.Enabled = true;
+            }
+        }
+
     }
 }

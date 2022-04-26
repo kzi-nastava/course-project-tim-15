@@ -16,7 +16,7 @@ namespace Klinika.Repositories
         {
             EmailIDPairs = new Dictionary<string, int>();
             DataTable? retrievedPatients = null;
-            string getAllQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Email " +
+            string getAllQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Email, IsBlocked as Blocked, WhoBlocked as BlockedBy " +
                                       "FROM [User] " +
                                       "WHERE UserType = 1 AND IsDeleted = 0";
             try
@@ -185,6 +185,46 @@ namespace Klinika.Repositories
 
             return (id, jmbg, name, surname, birthdate, gender, password);
 
+        }
+
+
+        public static void Block(int id)
+        {
+            string blockQuery = "UPDATE [User] SET IsBlocked = 1, WhoBlocked = 'SEC' " +
+                                "WHERE ID = @ID";
+            SqlConnection database = DatabaseConnection.GetInstance().database;
+            try
+            {
+                SqlCommand block = new SqlCommand(blockQuery, database);
+                block.Parameters.AddWithValue("@ID", id);
+                database.Open();
+                block.ExecuteNonQuery();
+                database.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+        public static void Unblock(int id)
+        {
+            string blockQuery = "UPDATE [User] SET IsBlocked = 0, WhoBlocked = NULL " +
+                                "WHERE ID = @ID";
+            SqlConnection database = DatabaseConnection.GetInstance().database;
+            try
+            {
+                SqlCommand block = new SqlCommand(blockQuery, database);
+                block.Parameters.AddWithValue("@ID", id);
+                database.Open();
+                block.ExecuteNonQuery();
+                database.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
