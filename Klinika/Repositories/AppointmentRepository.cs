@@ -41,7 +41,8 @@ namespace Klinika.Repositories
                     Appointment appointment = new Appointment(Convert.ToInt32(row["ID"]), Convert.ToInt32(row["DoctorID"]), 
                             Convert.ToInt32(row["PatientID"]), Convert.ToDateTime(row["DateTime"].ToString()),
                             Convert.ToInt32(row["RoomID"]), Convert.ToBoolean(row["Completed"]),Convert.ToChar(row["Type"]), 
-                            Convert.ToInt32(row["Duration"]),Convert.ToBoolean(row["Urgent"]), row["Description"].ToString());
+                            Convert.ToInt32(row["Duration"]),Convert.ToBoolean(row["Urgent"]), row["Description"].ToString(),
+                            Convert.ToBoolean(row["IsDeleted"]));
                     Appointments.TryAdd(appointment.ID, appointment);
                 }
 
@@ -54,5 +55,25 @@ namespace Klinika.Repositories
             return retrievedAppointments;
         }
 
+        public static void Delete(int ID)
+        {
+            string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
+            try
+            {
+                SqlCommand delete = new SqlCommand(deleteQuerry, DatabaseConnection.GetInstance().database);
+                delete.Parameters.AddWithValue("@ID", ID);
+                DatabaseConnection.GetInstance().database.Open();
+                delete.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+                if (Appointments != null)
+                {
+                    Appointments.Remove(ID);
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
