@@ -8,6 +8,7 @@ using Klinika.Data;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using static Klinika.Roles.User;
 
 namespace Klinika.Repositories
 {
@@ -54,13 +55,14 @@ namespace Klinika.Repositories
 
             return retrievedAppointments;
         }
-        public static DataTable? GetAll(int doctorID)
+        public static DataTable? GetAll(int ID, RoleType role)
         {
             DataTable? retrievedAppointments = null;
 
+            string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction] " +
-                                  $"WHERE DateTime > '{DateTime.Now}' AND DoctorID = {doctorID}";
+                                  $"WHERE DateTime > '{DateTime.Now}' AND {roleToString} = {ID}";
             try
             {
                 SqlDataAdapter adapter = new SqlDataAdapter(getAllQuerry, DatabaseConnection.GetInstance().database);
@@ -74,7 +76,7 @@ namespace Klinika.Repositories
                             Convert.ToInt32(row["Duration"]), Convert.ToBoolean(row["Urgent"]), row["Description"].ToString(),
                             Convert.ToBoolean(row["IsDeleted"]));
                 }
-
+                
             }
             catch (Exception ex)
             {
