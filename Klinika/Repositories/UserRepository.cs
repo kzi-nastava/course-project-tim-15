@@ -19,7 +19,7 @@ namespace Klinika.Repositories
         private UserRepository()
         {
             users = new Dictionary<string, User>();
-            string getCredentialsQuery = "SELECT Email, Password, UserType.Name as UserType, IsBlocked FROM [User] JOIN [UserType] ON [User].UserType = [UserType].ID WHERE [User].IsDeleted = 0";
+            string getCredentialsQuery = "SELECT [User].ID, Email, Password, UserType.Name as UserType, IsBlocked FROM [User] JOIN [UserType] ON [User].UserType = [UserType].ID WHERE [User].IsDeleted = 0";
             try
             {
                 SqlCommand getCredentials = new SqlCommand(getCredentialsQuery, DatabaseConnection.GetInstance().database);
@@ -28,7 +28,7 @@ namespace Klinika.Repositories
                 {
                     while (retrieved.Read())
                     {
-                        User user = new User(retrieved["Email"].ToString(), retrieved["Password"].ToString(), retrieved["UserType"].ToString(), Convert.ToBoolean(retrieved["IsBlocked"]));
+                        User user = new User(Convert.ToInt32(retrieved["ID"]), retrieved["Email"].ToString(), retrieved["Password"].ToString(), retrieved["UserType"].ToString(), Convert.ToBoolean(retrieved["IsBlocked"]));
                         users.TryAdd(user.Email, user);
                     }
                 }
