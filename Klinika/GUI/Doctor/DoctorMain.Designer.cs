@@ -58,11 +58,16 @@
             // 
             // AllAppointmentsTable
             // 
+            this.AllAppointmentsTable.AllowUserToAddRows = false;
+            this.AllAppointmentsTable.AllowUserToDeleteRows = false;
+            this.AllAppointmentsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.AllAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.AllAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.AllAppointmentsTable.Location = new System.Drawing.Point(6, 6);
             this.AllAppointmentsTable.Name = "AllAppointmentsTable";
             this.AllAppointmentsTable.RowHeadersWidth = 51;
             this.AllAppointmentsTable.RowTemplate.Height = 29;
+            this.AllAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AllAppointmentsTable.Size = new System.Drawing.Size(920, 415);
             this.AllAppointmentsTable.TabIndex = 0;
             // 
@@ -72,8 +77,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 536);
             this.Controls.Add(this.MainTabControl);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "DoctorMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DoctorMain";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DoctorMainFormClosing);
             this.Load += new System.EventHandler(this.DoctorMainLoad);
             this.MainTabControl.ResumeLayout(false);
             this.AllAppointmentsTab.ResumeLayout(false);

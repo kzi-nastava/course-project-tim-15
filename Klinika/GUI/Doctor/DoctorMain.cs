@@ -23,19 +23,60 @@ namespace Klinika.GUI.Doctor
 
         private void DoctorMainLoad(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("LOAD");
-            DataTable allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
-            if (AllAppointmentsTable != null)
+            DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
+            if (allAppointments != null)
             {
-                allAppointments.Columns.Add("test");
-                foreach(DataRow row in allAppointments.Rows)
-                {
-                    row["test"] = "test";
-                }
+                FillTableWithPatientData(allAppointments);
+                FixAppointmentTypeField(allAppointments);
+                allAppointments.Columns.Remove("DoctorID");
+                allAppointments.Columns.Remove("PatientID");
+                allAppointments.Columns.Remove("RoomID");
+                allAppointments.Columns.Remove("Completed");
+                allAppointments.Columns.Remove("IsDeleted");
+                allAppointments.Columns.Remove("Description");
+
                 AllAppointmentsTable.DataSource = allAppointments;
+
+                AllAppointmentsTable.Columns["ID"].Width = 50;
+                AllAppointmentsTable.Columns["DateTime"].MinimumWidth = 150;
+
                 AllAppointmentsTable.ClearSelection();
             }
 
+        }
+        private void FixAppointmentTypeField(DataTable dt)
+        {
+            foreach (DataRow row in dt.Rows)
+            {
+                switch (row["Type"])
+                {
+                    case "O":
+                        row["Type"] = "Operation";
+                        break;
+                    default:
+                        row["Type"] = "Examination";
+                        break;
+                }
+            }
+        }
+        private void FillTableWithPatientData(DataTable dt)
+        {
+            dt.Columns.Add("Patient Name");
+            dt.Columns["Patient Name"].SetOrdinal(1);
+            foreach (DataRow row in dt.Rows)
+            {
+                row["Patient Name"] = GetPatientName(Convert.ToInt32(row["PatientID"]));
+            }
+        }
+        private string GetPatientName(int ID)
+        {
+            var patient = UserRepository.GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
+            return $"{patient.Name} {patient.Surname}";
+        }
+
+        private void DoctorMainFormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
