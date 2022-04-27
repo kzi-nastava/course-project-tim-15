@@ -18,12 +18,12 @@ namespace Klinika.Repositories
         /// <summary>
         /// Returns all appointmets of requested day in format "yyyy-MM-dd"
         /// </summary>
-        /// <param name="date"></param>
+        /// <param name="requestedDate"></param>
         /// <returns></returns>
-        public static DataTable? GetAll(string date)
+        public static DataTable? GetAll(string requestedDate, int days = 1)
         {
-            DateTime start = DateTime.ParseExact($"{date} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-            DateTime end = start.AddDays(1);
+            DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+            DateTime end = start.AddDays(days);
 
             Appointments = new Dictionary<int, Appointment>();
             DataTable? retrievedAppointments = null;
@@ -105,6 +105,46 @@ namespace Klinika.Repositories
                     Appointments = new Dictionary<int, Appointment>();
                 }
                 Appointments.TryAdd(appointment.ID, appointment);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        public static void Modify(Appointment appointment)
+        {
+            string createQuery = "UPDATE [MedicalAction] SET " +
+                "DoctorID = @DoctorID, " +
+                "PatientID = @PatientID, " +
+                "DateTime = @DateTime, " +
+                "RoomID = @RoomID, " +
+                "Completed = @Completed, " +
+                "Type = @Type, " +
+                "Duration = @Duration, " +
+                "Urgent = @Urgent, " +
+                "Description = @Description, " +
+                "IsDeleted = @IsDeleted " +
+                "WHERE ID = @ID";
+
+            SqlCommand modify = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
+            modify.Parameters.AddWithValue("@ID", appointment.ID);
+            modify.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
+            modify.Parameters.AddWithValue("@PatientID", appointment.PatientID);
+            modify.Parameters.AddWithValue("@DateTime", appointment.DateTime.Date);
+            modify.Parameters.AddWithValue("@RoomID", appointment.RoomID);
+            modify.Parameters.AddWithValue("@Completed", appointment.Completed);
+            modify.Parameters.AddWithValue("@Type", appointment.Type);
+            modify.Parameters.AddWithValue("@Duration", appointment.Duration);
+            modify.Parameters.AddWithValue("@Urgent", appointment.Urgent);
+            modify.Parameters.AddWithValue("@Description", appointment.Description);
+            modify.Parameters.AddWithValue("@IsDeleted", appointment.IsDeleted);
+
+            try
+            {
+                DatabaseConnection.GetInstance().database.Open();
+                modify.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
             }
             catch (SqlException ex)
             {
