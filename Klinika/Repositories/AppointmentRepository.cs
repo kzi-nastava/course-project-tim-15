@@ -75,5 +75,41 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
+
+        public static void Create(Appointment appointment)
+        {
+            string createQuery = "INSERT INTO [MedicalAction] " +
+                "(DoctorID,PatientID,DateTime,RoomID,Completed,Type,Duration,Urgent,Description,IsDeleted) " +
+                "OUTPUT INSERTED.ID " +
+                "VALUES (@DoctorID,@PatientID,@DateTime,@RoomID,@Completed,@Type,@Duration,@Urgent,@Description,@IsDeleted)";
+
+            SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
+            create.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
+            create.Parameters.AddWithValue("@PatientID", appointment.PatientID);
+            create.Parameters.AddWithValue("@DateTime", appointment.DateTime.Date);
+            create.Parameters.AddWithValue("@RoomID", appointment.RoomID);
+            create.Parameters.AddWithValue("@Completed", appointment.Completed);
+            create.Parameters.AddWithValue("@Type", appointment.Type);
+            create.Parameters.AddWithValue("@Duration", appointment.Duration);
+            create.Parameters.AddWithValue("@Urgent", appointment.Urgent);
+            create.Parameters.AddWithValue("@Description", appointment.Description);
+            create.Parameters.AddWithValue("@IsDeleted", appointment.IsDeleted);
+
+            try
+            {
+                DatabaseConnection.GetInstance().database.Open();
+                appointment.ID = (int)create.ExecuteScalar();
+                DatabaseConnection.GetInstance().database.Close();
+                if(Appointments == null)
+                {
+                    Appointments = new Dictionary<int, Appointment>();
+                }
+                Appointments.TryAdd(appointment.ID, appointment);
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
