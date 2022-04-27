@@ -19,6 +19,7 @@
         }
         #endregion
         #region [ --- VARIABLES --- ]
+        public int ID { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
@@ -27,8 +28,9 @@
         #endregion
 
         #region [ --- CONSTRUCTORS --- ]
-        public User (string email, string password, string role, bool isBlocked)
+        public User (int id, string email, string password, string role, bool isBlocked)
         {
+            ID = id;
             Email = email;
             Password = password;
             Role = role;

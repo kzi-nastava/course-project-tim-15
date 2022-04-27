@@ -54,6 +54,35 @@ namespace Klinika.Repositories
 
             return retrievedAppointments;
         }
+        public static DataTable? GetAll(int doctorID)
+        {
+            DataTable? retrievedAppointments = null;
+
+            string getAllQuerry = "SELECT * " +
+                                  "FROM [MedicalAction] " +
+                                  $"WHERE DateTime > '{DateTime.Now}' AND DoctorID = {doctorID}";
+            try
+            {
+                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuerry, DatabaseConnection.GetInstance().database);
+                retrievedAppointments = new DataTable();
+                adapter.Fill(retrievedAppointments);
+                foreach (DataRow row in retrievedAppointments.Rows)
+                {
+                    Appointment appointment = new Appointment(Convert.ToInt32(row["ID"]), Convert.ToInt32(row["DoctorID"]),
+                            Convert.ToInt32(row["PatientID"]), Convert.ToDateTime(row["DateTime"].ToString()),
+                            Convert.ToInt32(row["RoomID"]), Convert.ToBoolean(row["Completed"]), Convert.ToChar(row["Type"]),
+                            Convert.ToInt32(row["Duration"]), Convert.ToBoolean(row["Urgent"]), row["Description"].ToString(),
+                            Convert.ToBoolean(row["IsDeleted"]));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return retrievedAppointments;
+        }
 
         public static void Delete(int ID)
         {
