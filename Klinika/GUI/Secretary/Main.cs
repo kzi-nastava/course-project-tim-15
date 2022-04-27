@@ -112,5 +112,6 @@ namespace Klinika.GUI.Secretary
             }
         }
 
+
     }
 }
