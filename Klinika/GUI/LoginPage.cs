@@ -27,7 +27,7 @@ namespace Klinika
                         new GUI.Secretary.mainWindow().Show();
                         break;
                     case "Doctor":
-                        new GUI.Doctor.DoctorMain().Show();
+                        new GUI.Doctor.DoctorMain(loggingUser).Show();
                         break;
                     case "Manager":
                         //Show managers window

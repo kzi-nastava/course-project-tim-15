@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Klinika.Roles;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,10 @@ namespace Klinika.GUI.Doctor
 {
     public partial class DoctorMain : Form
     {
-        public DoctorMain()
+        public DoctorMain(User doctor)
         {
             InitializeComponent();
+            
         }
 
         private void DoctorMainLoad(object sender, EventArgs e)
