@@ -36,16 +36,16 @@
             this.addPatientButton = new System.Windows.Forms.Button();
             this.patientsTable = new System.Windows.Forms.DataGridView();
             this.tabs = new System.Windows.Forms.TabControl();
-            this.modificationRequests = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.button4 = new System.Windows.Forms.Button();
+            this.requests = new System.Windows.Forms.TabPage();
+            this.denyButton = new System.Windows.Forms.Button();
+            this.allowButton = new System.Windows.Forms.Button();
             this.detailsButton = new System.Windows.Forms.Button();
             this.requestsTable = new System.Windows.Forms.DataGridView();
-            this.denyButton = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.patients.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.patientsTable)).BeginInit();
             this.tabs.SuspendLayout();
-            this.modificationRequests.SuspendLayout();
+            this.requests.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -137,47 +137,48 @@
             // tabs
             // 
             this.tabs.Controls.Add(this.patients);
-            this.tabs.Controls.Add(this.modificationRequests);
+            this.tabs.Controls.Add(this.requests);
             this.tabs.Controls.Add(this.tabPage3);
             this.tabs.Location = new System.Drawing.Point(12, 21);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
             this.tabs.Size = new System.Drawing.Size(954, 520);
             this.tabs.TabIndex = 3;
+            this.tabs.SelectedIndexChanged += new System.EventHandler(this.tabs_SelectedIndexChanged);
             // 
-            // modificationRequests
+            // requests
             // 
-            this.modificationRequests.Controls.Add(this.denyButton);
-            this.modificationRequests.Controls.Add(this.button4);
-            this.modificationRequests.Controls.Add(this.detailsButton);
-            this.modificationRequests.Controls.Add(this.requestsTable);
-            this.modificationRequests.Location = new System.Drawing.Point(4, 29);
-            this.modificationRequests.Name = "modificationRequests";
-            this.modificationRequests.Padding = new System.Windows.Forms.Padding(3);
-            this.modificationRequests.Size = new System.Drawing.Size(946, 487);
-            this.modificationRequests.TabIndex = 1;
-            this.modificationRequests.Text = "Requests";
-            this.modificationRequests.UseVisualStyleBackColor = true;
+            this.requests.Controls.Add(this.denyButton);
+            this.requests.Controls.Add(this.allowButton);
+            this.requests.Controls.Add(this.detailsButton);
+            this.requests.Controls.Add(this.requestsTable);
+            this.requests.Location = new System.Drawing.Point(4, 29);
+            this.requests.Name = "requests";
+            this.requests.Padding = new System.Windows.Forms.Padding(3);
+            this.requests.Size = new System.Drawing.Size(946, 487);
+            this.requests.TabIndex = 1;
+            this.requests.Text = "Requests";
+            this.requests.UseVisualStyleBackColor = true;
             // 
-            // tabPage3
+            // denyButton
             // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 29);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(946, 487);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.denyButton.Enabled = false;
+            this.denyButton.Location = new System.Drawing.Point(549, 437);
+            this.denyButton.Name = "denyButton";
+            this.denyButton.Size = new System.Drawing.Size(94, 29);
+            this.denyButton.TabIndex = 9;
+            this.denyButton.Text = "Deny";
+            this.denyButton.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // allowButton
             // 
-            this.button4.Enabled = false;
-            this.button4.Location = new System.Drawing.Point(417, 437);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(94, 29);
-            this.button4.TabIndex = 8;
-            this.button4.Text = "Allow";
-            this.button4.UseVisualStyleBackColor = true;
+            this.allowButton.Enabled = false;
+            this.allowButton.Location = new System.Drawing.Point(417, 437);
+            this.allowButton.Name = "allowButton";
+            this.allowButton.Size = new System.Drawing.Size(94, 29);
+            this.allowButton.TabIndex = 8;
+            this.allowButton.Text = "Allow";
+            this.allowButton.UseVisualStyleBackColor = true;
             // 
             // detailsButton
             // 
@@ -202,16 +203,17 @@
             this.requestsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.requestsTable.Size = new System.Drawing.Size(946, 401);
             this.requestsTable.TabIndex = 6;
+            this.requestsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.requestsTable_CellClick);
             // 
-            // denyButton
+            // tabPage3
             // 
-            this.denyButton.Enabled = false;
-            this.denyButton.Location = new System.Drawing.Point(549, 437);
-            this.denyButton.Name = "denyButton";
-            this.denyButton.Size = new System.Drawing.Size(94, 29);
-            this.denyButton.TabIndex = 9;
-            this.denyButton.Text = "Deny";
-            this.denyButton.UseVisualStyleBackColor = true;
+            this.tabPage3.Location = new System.Drawing.Point(4, 29);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(946, 487);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // mainWindow
             // 
@@ -227,7 +229,7 @@
             this.patients.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.patientsTable)).EndInit();
             this.tabs.ResumeLayout(false);
-            this.modificationRequests.ResumeLayout(false);
+            this.requests.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).EndInit();
             this.ResumeLayout(false);
 
@@ -240,13 +242,13 @@
         private Button updatePatientButton;
         private Button addPatientButton;
         private TabControl tabs;
-        private TabPage modificationRequests;
+        private TabPage requests;
         private TabPage tabPage3;
         public DataGridView patientsTable;
         private Button unblockButton;
         private Button blockButton;
         private Button denyButton;
-        private Button button4;
+        private Button allowButton;
         private Button detailsButton;
         public DataGridView requestsTable;
     }

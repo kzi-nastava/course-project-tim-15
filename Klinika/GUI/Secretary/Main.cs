@@ -112,6 +112,46 @@ namespace Klinika.GUI.Secretary
             }
         }
 
+        private void tabs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(tabs.SelectedTab == requests)
+            {
+                requestsTable.DataSource = RequestsRepository.GetAll();
+                requestsTable.ClearSelection();
+            }
+        }
 
+        private void requestsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+            bool isModification = requestsTable.SelectedRows[0].Cells["RequestType"].Value.ToString() == "Modify" ? true:false;
+            
+            if(string.IsNullOrEmpty(requestsTable.SelectedRows[0].Cells["Approved"].Value.ToString()))
+            {
+                if (isModification)
+                {
+                    detailsButton.Enabled = true;
+                }
+                else
+                {
+                    detailsButton.Enabled = false;
+                }
+
+                allowButton.Enabled = true;
+                denyButton.Enabled = true;
+            }
+            else
+            {
+                bool isApproved = Convert.ToBoolean(requestsTable.SelectedRows[0].Cells["Approved"].Value);
+                if (isModification)
+                {
+                    detailsButton.Enabled = true;
+                }
+                else
+                {
+                    detailsButton.Enabled = false;
+                }
+            }
+        }
     }
 }
