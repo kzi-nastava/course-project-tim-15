@@ -92,11 +92,16 @@
             // 
             // YourAppointmentsTable
             // 
+            this.YourAppointmentsTable.AllowUserToAddRows = false;
+            this.YourAppointmentsTable.AllowUserToDeleteRows = false;
+            this.YourAppointmentsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.YourAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.YourAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.YourAppointmentsTable.Location = new System.Drawing.Point(6, 6);
             this.YourAppointmentsTable.Name = "YourAppointmentsTable";
             this.YourAppointmentsTable.RowHeadersWidth = 51;
             this.YourAppointmentsTable.RowTemplate.Height = 29;
+            this.YourAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.YourAppointmentsTable.Size = new System.Drawing.Size(950, 440);
             this.YourAppointmentsTable.TabIndex = 0;
             // 
@@ -180,11 +185,15 @@
             // 
             // OccupiedAppointmentsTable
             // 
+            this.OccupiedAppointmentsTable.AllowUserToAddRows = false;
+            this.OccupiedAppointmentsTable.AllowUserToDeleteRows = false;
+            this.OccupiedAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.OccupiedAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.OccupiedAppointmentsTable.Location = new System.Drawing.Point(6, 48);
             this.OccupiedAppointmentsTable.Name = "OccupiedAppointmentsTable";
             this.OccupiedAppointmentsTable.RowHeadersWidth = 51;
             this.OccupiedAppointmentsTable.RowTemplate.Height = 29;
+            this.OccupiedAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.OccupiedAppointmentsTable.Size = new System.Drawing.Size(950, 398);
             this.OccupiedAppointmentsTable.TabIndex = 0;
             // 
@@ -194,8 +203,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(997, 563);
             this.Controls.Add(this.MainTabControl);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "PatientMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PatientMain";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PatientMainFormClosing);
+            this.Load += new System.EventHandler(this.PatientMainLoad);
             this.MainTabControl.ResumeLayout(false);
             this.YourAppointmentsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.YourAppointmentsTable)).EndInit();

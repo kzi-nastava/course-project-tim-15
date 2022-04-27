@@ -33,7 +33,7 @@ namespace Klinika
                         //Show managers window
                         break;
                     default:
-                        new GUI.Patient.PatientMain().Show();
+                        new GUI.Patient.PatientMain(loggingUser).Show();
                         break;
                 }
                 this.Hide();
