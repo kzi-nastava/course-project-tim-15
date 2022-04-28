@@ -9,21 +9,31 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Klinika.Repositories;
 using Klinika.Roles;
+using Klinika.Models;
 
 namespace Klinika.GUI.Patient
 {
     public partial class PatientMain : Form
     {
         private User Patient { get; set; }
+        private List<Appointment> Appointments { get; set; }
         public PatientMain(User patient)
         {
             InitializeComponent();
             Patient = patient;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void setAppoitments(DataTable dataTable)
         {
-
+            Appointments = new List<Appointment>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Appointments.Add(new Appointment(Convert.ToInt32(row["ID"]), Convert.ToInt32(row["DoctorID"]),
+                            Convert.ToInt32(row["PatientID"]), Convert.ToDateTime(row["DateTime"].ToString()),
+                            Convert.ToInt32(row["RoomID"]), Convert.ToBoolean(row["Completed"]), Convert.ToChar(row["Type"]),
+                            Convert.ToInt32(row["Duration"]), Convert.ToBoolean(row["Urgent"]), row["Description"].ToString(),
+                            Convert.ToBoolean(row["IsDeleted"])));
+            }
         }
 
         private void PatientMainLoad(object sender, EventArgs e)
@@ -31,6 +41,7 @@ namespace Klinika.GUI.Patient
             DataTable? allAppointments = AppointmentRepository.GetAll(Patient.ID, User.RoleType.PATIENT);
             if (allAppointments != null)
             {
+                setAppoitments(allAppointments);
                 FillTableWithDoctorData(allAppointments);
                 FillAppointmentTypeName(allAppointments);
 
@@ -83,6 +94,30 @@ namespace Klinika.GUI.Patient
         private void PatientMainFormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void DeleteAppointment_Click(object sender, EventArgs e)
+        {
+            DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete selected appointment?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if(deleteConfirmation == DialogResult.Yes)
+            { 
+                int ID = Convert.ToInt32(YourAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
+                var toDelete = Appointments.Where(x => x.ID == ID).FirstOrDefault();
+
+                System.Diagnostics.Debug.WriteLine(DateTime.Now.AddDays(1).Date.ToString());
+
+                if (DateTime.Now.AddDays(1).Date >= toDelete.DateTime.Date)
+                {
+                    DialogResult deniedDelete = MessageBox.Show("You can't delete this appointment.", "Denied Delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    AppointmentRepository.Delete(toDelete.ID);
+
+                    PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 'D', "", true);
+                    PatientRequestRepository.Create(patientRequest);
+                }
+            }
         }
     }
 }
