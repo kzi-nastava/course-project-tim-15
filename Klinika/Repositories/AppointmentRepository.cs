@@ -14,7 +14,7 @@ namespace Klinika.Repositories
 {
     internal class AppointmentRepository
     {
-        public static List<Appointment> Appointments { get; set; }
+        public List<Appointment> Appointments { get; set; }
 
         #region Singleton
         private static AppointmentRepository? Instance;
@@ -22,6 +22,10 @@ namespace Klinika.Repositories
         {
             if(Instance == null) Instance = new AppointmentRepository();
             return Instance;
+        }
+        public T CheckNull<T>(object obj)
+        {
+            return obj == DBNull.Value ? default(T) : (T)obj;
         }
         public AppointmentRepository()
         {
@@ -36,11 +40,18 @@ namespace Klinika.Repositories
                 {
                     while (retrieved.Read())
                     {
-                        Appointment appointment = new Appointment(Convert.ToInt32(retrieved["ID"]), Convert.ToInt32(retrieved["DoctorID"]),
-                                    Convert.ToInt32(retrieved["PatientID"]), Convert.ToDateTime(retrieved["DateTime"].ToString()),
-                                    Convert.ToInt32(retrieved["RoomID"]), Convert.ToBoolean(retrieved["Completed"]), Convert.ToChar(retrieved["Type"]),
-                                    Convert.ToInt32(retrieved["Duration"]), Convert.ToBoolean(retrieved["Urgent"]), retrieved["Description"].ToString(),
-                                    Convert.ToBoolean(retrieved["IsDeleted"]));
+                        Appointment appointment = new Appointment();
+                        appointment.PatientID = Convert.ToInt32(retrieved["ID"]);
+                        appointment.DoctorID = Convert.ToInt32(retrieved["DoctorID"]);
+                        appointment.PatientID = Convert.ToInt32(retrieved["PatientID"]);
+                        appointment.DateTime = Convert.ToDateTime(retrieved["DateTime"].ToString());
+                        appointment.RoomID = Convert.ToInt32(retrieved["RoomID"]);
+                        appointment.Completed = Convert.ToBoolean(retrieved["Completed"]);
+                        appointment.Type = Convert.ToChar(retrieved["Type"]);
+                        appointment.Duration = CheckNull<int>(retrieved["Duration"]);
+                        appointment.Urgent = CheckNull<bool>(retrieved["Urgent"]);
+                        appointment.Description = CheckNull<string>(retrieved["Description"]);
+                        appointment.IsDeleted = CheckNull<bool>(retrieved["IsDeleted"]);
                         Appointments.Add(appointment);
                     }
                 }
@@ -163,7 +174,7 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
-        public void Modify(Appointment appointment)
+        public static void Modify(Appointment appointment)
         {
             string createQuery = "UPDATE [MedicalAction] SET " +
                 "DoctorID = @DoctorID, " +
@@ -201,6 +212,21 @@ namespace Klinika.Repositories
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+        public bool IsOccupied(DateTime newAppointmentStart, int duration = 15)
+        {
+            var newAppointmentEnd = newAppointmentStart.AddMinutes(duration);
+
+            foreach (Appointment appointment in Appointments)
+            {
+                var start = appointment.DateTime;
+                var end = appointment.DateTime.AddMinutes(appointment.Duration);
+
+                if (!appointment.IsDeleted &&
+                    newAppointmentStart < end && start < newAppointmentEnd)
+                    return true;
+            }
+            return false;
         }
     }
 }
