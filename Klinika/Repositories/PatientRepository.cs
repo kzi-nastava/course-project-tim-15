@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Klinika.Data;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Data;
 
 namespace Klinika.Repositories
 {
@@ -16,7 +11,7 @@ namespace Klinika.Repositories
         {
             EmailIDPairs = new Dictionary<string, int>();
             DataTable? retrievedPatients = null;
-            string getAllQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Email " +
+            string getAllQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Email, IsBlocked as Blocked, WhoBlocked as BlockedBy " +
                                       "FROM [User] " +
                                       "WHERE UserType = 1 AND IsDeleted = 0";
             try
@@ -30,9 +25,9 @@ namespace Klinika.Repositories
                 }
                 retrievedPatients.Columns.Remove("ID");
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
 
             return retrievedPatients;
@@ -72,21 +67,21 @@ namespace Klinika.Repositories
                 modify.ExecuteNonQuery();
                 database.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
         }
 
 
         //Logical deletion
-        public static void Delete(int ID, string email)
+        public static void Delete(int id, string email)
         {
             string deleteQuery = "UPDATE [User] SET IsDeleted = 1 WHERE ID = @ID";
             try
             {
                 SqlCommand delete = new SqlCommand(deleteQuery, DatabaseConnection.GetInstance().database);
-                delete.Parameters.AddWithValue("@ID", ID);
+                delete.Parameters.AddWithValue("@ID", id);
                 DatabaseConnection.GetInstance().database.Open();
                 delete.ExecuteNonQuery();
                 DatabaseConnection.GetInstance().database.Close();
@@ -95,9 +90,9 @@ namespace Klinika.Repositories
                     EmailIDPairs.Remove(email);
                 }
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
         }
 
@@ -137,9 +132,9 @@ namespace Klinika.Repositories
                     EmailIDPairs.Add(email, createdID);
                 }
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
         }
 
@@ -178,13 +173,53 @@ namespace Klinika.Repositories
                 }
                 database.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
 
             return (id, jmbg, name, surname, birthdate, gender, password);
 
+        }
+
+
+        public static void Block(int id)
+        {
+            string blockQuery = "UPDATE [User] SET IsBlocked = 1, WhoBlocked = 'SEC' " +
+                                "WHERE ID = @ID";
+            SqlConnection database = DatabaseConnection.GetInstance().database;
+            try
+            {
+                SqlCommand block = new SqlCommand(blockQuery, database);
+                block.Parameters.AddWithValue("@ID", id);
+                database.Open();
+                block.ExecuteNonQuery();
+                database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
+
+        public static void Unblock(int id)
+        {
+            string blockQuery = "UPDATE [User] SET IsBlocked = 0, WhoBlocked = NULL " +
+                                "WHERE ID = @ID";
+            SqlConnection database = DatabaseConnection.GetInstance().database;
+            try
+            {
+                SqlCommand block = new SqlCommand(blockQuery, database);
+                block.Parameters.AddWithValue("@ID", id);
+                database.Open();
+                block.ExecuteNonQuery();
+                database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
         }
     }
 }

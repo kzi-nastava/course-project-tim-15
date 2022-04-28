@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Klinika.Services;
 using Klinika.Data;
 using Klinika.Repositories;
+using Klinika.Models;
 
 namespace Klinika.GUI.Secretary
 {
@@ -35,15 +36,6 @@ namespace Klinika.GUI.Secretary
                 patientsTable.DataSource = patients;
                 patientsTable.ClearSelection();
             }
-            
-            updatePatientButton.Enabled = false;
-            deletePatientButton.Enabled = false;
-        }
-
-        private void patientsTable_RowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            updatePatientButton.Enabled = true;
-            deletePatientButton.Enabled = true;
         }
 
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -70,5 +62,136 @@ namespace Klinika.GUI.Secretary
         {
             new ModifyPatient(this).Show();
         }
+
+        private void patientsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            updatePatientButton.Enabled = true;
+            deletePatientButton.Enabled = true;
+            if (Convert.ToBoolean(patientsTable.SelectedRows[0].Cells["Blocked"].Value) == true)
+            {
+                unblockButton.Enabled = true;
+                blockButton.Enabled = false;
+            }
+            else
+            {
+                unblockButton.Enabled = false;
+                blockButton.Enabled = true;
+            }
+        }
+
+        private void blockButton_Click(object sender, EventArgs e)
+        {
+            DialogResult blockingConfirmation = MessageBox.Show("Are you sure you want to block the selected patient?", "Block", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (blockingConfirmation == DialogResult.Yes)
+            {
+                string email = patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
+                int ID = PatientRepository.EmailIDPairs[email];
+                PatientRepository.Block(ID);
+                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
+                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["Blocked"] = true;
+                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["BlockedBy"] = "SEC";
+                MessageBox.Show("Patient successfully blocked!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                unblockButton.Enabled = true;
+                blockButton.Enabled = false;
+            }
+        }
+
+        private void unblockButton_Click(object sender, EventArgs e)
+        {
+            DialogResult unblockingConfirmation = MessageBox.Show("Are you sure you want to unblock the selected patient?", "Unblock", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (unblockingConfirmation == DialogResult.Yes)
+            {
+                string email = patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
+                int ID = PatientRepository.EmailIDPairs[email];
+                PatientRepository.Unblock(ID);
+                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
+                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["Blocked"] = false;
+                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["BlockedBy"] = "";
+                MessageBox.Show("Patient successfully unblocked!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                unblockButton.Enabled = false;
+                blockButton.Enabled = true;
+            }
+        }
+
+        private void tabs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(tabs.SelectedTab == requests)
+            {
+                requestsTable.DataSource = RequestRepository.GetAll();
+                requestsTable.ClearSelection();
+            }
+        }
+
+        private void requestsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+            bool isModification = requestsTable.SelectedRows[0].Cells["RequestType"].Value.ToString() == "Modify" ? true:false;
+            
+            if(string.IsNullOrEmpty(requestsTable.SelectedRows[0].Cells["Approved"].Value.ToString()))
+            {
+                if (isModification)
+                {
+                    detailsButton.Enabled = true;
+                }
+                else
+                {
+                    detailsButton.Enabled = false;
+                }
+
+                approveButton.Enabled = true;
+                denyButton.Enabled = true;
+            }
+
+        }
+
+        private void detailsButton_Click(object sender, EventArgs e)
+        {
+            new ModificationRequestDetails(this).Show();
+        }
+
+        private void approveButton_Click(object sender, EventArgs e)
+        {
+            DialogResult approveConfirmation = MessageBox.Show("Are you sure you want to approve selected request?", "Approve", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (approveConfirmation == DialogResult.Yes)
+            {
+                int requestID = Convert.ToInt32(requestsTable.SelectedRows[0].Cells["ID"].Value);
+                RequestRepository.Approve(requestID);
+                int selectedRequestIndex = requestsTable.SelectedRows[0].Index;
+                DataRow selectedRequest = ((DataTable)requestsTable.DataSource).Rows[selectedRequestIndex];
+                selectedRequest["Approved"] = true;
+                string requestType = requestsTable.SelectedRows[0].Cells["RequestType"].Value.ToString();
+                if(requestType.Equals("Modify"))
+                {
+                    PatientModificationRequest selected = RequestRepository.IdRequestPairs[requestID];
+                    selectedRequest["DateTime"] = selected.newAppointment;
+                    MedicalActionRepository.Modify(Convert.ToInt32(selectedRequest["ExaminationID"]), selected.newDoctorID, selected.newAppointment);
+                }
+                else
+                {
+                    MedicalActionRepository.Delete(Convert.ToInt32(selectedRequest["ExaminationID"]));
+                }
+                MessageBox.Show("Request successfully executed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                approveButton.Enabled = false;
+                denyButton.Enabled = false;
+                detailsButton.Enabled = false;
+            }
+        }
+
+        private void denyButton_Click(object sender, EventArgs e)
+        {
+            DialogResult denyConfirmation = MessageBox.Show("Are you sure you want to deny the selected request?", "Deny", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (denyConfirmation == DialogResult.Yes)
+            {
+                RequestRepository.Deny(Convert.ToInt32(requestsTable.SelectedRows[0].Cells["ID"].Value));
+                int selectedRequestIndex = requestsTable.SelectedRows[0].Index;
+                DataRow selectedRequest = ((DataTable)requestsTable.DataSource).Rows[selectedRequestIndex];
+                selectedRequest["Approved"] = false;
+                MessageBox.Show("Request successfully denied!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                approveButton.Enabled = false;
+                denyButton.Enabled = false;
+                detailsButton.Enabled = false;
+            }
+        }
     }
+
 }
