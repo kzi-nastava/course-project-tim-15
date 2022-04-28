@@ -199,7 +199,7 @@
             this.MinimizeBox = false;
             this.Name = "AppointmentDetails";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Add New Appointment";
+            this.Text = "Appointment Details";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AppointmentDetailsFormClosed);
             this.Load += new System.EventHandler(this.AddAppointmentLoad);
             this.groupBox1.ResumeLayout(false);
