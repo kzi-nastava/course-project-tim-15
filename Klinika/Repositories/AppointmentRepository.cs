@@ -14,7 +14,7 @@ namespace Klinika.Repositories
 {
     internal class AppointmentRepository
     {
-        public static List<Appointment> Appointments { get; set; }
+        public List<Appointment> Appointments { get; set; }
 
         #region Singleton
         private static AppointmentRepository? Instance;
