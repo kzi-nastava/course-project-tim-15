@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using Klinika.Services;
 using Klinika.Data;
 using Klinika.Repositories;
-using Klinika.Entities;
+using Klinika.Models;
 
 namespace Klinika.GUI.Secretary
 {

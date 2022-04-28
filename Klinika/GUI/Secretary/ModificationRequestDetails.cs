@@ -1,4 +1,4 @@
-﻿using Klinika.Entities;
+﻿using Klinika.Models;
 using Klinika.Repositories;
 using System;
 using System.Collections.Generic;

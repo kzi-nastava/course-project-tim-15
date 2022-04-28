@@ -1,5 +1,5 @@
 ﻿using Klinika.Data;
-using Klinika.Entities;
+using Klinika.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
