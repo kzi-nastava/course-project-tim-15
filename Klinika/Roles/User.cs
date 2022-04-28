@@ -17,6 +17,11 @@
             M,
             F
         }
+
+        public override string ToString()
+        {
+            return $"{Name} {Surname}";
+        }
         #endregion
         #region [ --- VARIABLES --- ]
         public int ID { get; set; }

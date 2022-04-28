@@ -30,6 +30,9 @@
         {
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.AllAppointmentsTab = new System.Windows.Forms.TabPage();
+            this.AddAppointmentButton = new System.Windows.Forms.Button();
+            this.DeleteAppointmentButton = new System.Windows.Forms.Button();
+            this.EditAppointmentButton = new System.Windows.Forms.Button();
             this.AllAppointmentsTable = new System.Windows.Forms.DataGridView();
             this.MainTabControl.SuspendLayout();
             this.AllAppointmentsTab.SuspendLayout();
@@ -47,6 +50,9 @@
             // 
             // AllAppointmentsTab
             // 
+            this.AllAppointmentsTab.Controls.Add(this.AddAppointmentButton);
+            this.AllAppointmentsTab.Controls.Add(this.DeleteAppointmentButton);
+            this.AllAppointmentsTab.Controls.Add(this.EditAppointmentButton);
             this.AllAppointmentsTab.Controls.Add(this.AllAppointmentsTable);
             this.AllAppointmentsTab.Location = new System.Drawing.Point(4, 29);
             this.AllAppointmentsTab.Name = "AllAppointmentsTab";
@@ -55,6 +61,36 @@
             this.AllAppointmentsTab.TabIndex = 0;
             this.AllAppointmentsTab.Text = "All Appointments";
             this.AllAppointmentsTab.UseVisualStyleBackColor = true;
+            // 
+            // AddAppointmentButton
+            // 
+            this.AddAppointmentButton.Location = new System.Drawing.Point(832, 444);
+            this.AddAppointmentButton.Name = "AddAppointmentButton";
+            this.AddAppointmentButton.Size = new System.Drawing.Size(94, 29);
+            this.AddAppointmentButton.TabIndex = 3;
+            this.AddAppointmentButton.Text = "Add";
+            this.AddAppointmentButton.UseVisualStyleBackColor = true;
+            this.AddAppointmentButton.Click += new System.EventHandler(this.AddAppointmentButtonClick);
+            // 
+            // DeleteAppointmentButton
+            // 
+            this.DeleteAppointmentButton.Enabled = false;
+            this.DeleteAppointmentButton.Location = new System.Drawing.Point(106, 444);
+            this.DeleteAppointmentButton.Name = "DeleteAppointmentButton";
+            this.DeleteAppointmentButton.Size = new System.Drawing.Size(94, 29);
+            this.DeleteAppointmentButton.TabIndex = 2;
+            this.DeleteAppointmentButton.Text = "Delete";
+            this.DeleteAppointmentButton.UseVisualStyleBackColor = true;
+            // 
+            // EditAppointmentButton
+            // 
+            this.EditAppointmentButton.Enabled = false;
+            this.EditAppointmentButton.Location = new System.Drawing.Point(6, 444);
+            this.EditAppointmentButton.Name = "EditAppointmentButton";
+            this.EditAppointmentButton.Size = new System.Drawing.Size(94, 29);
+            this.EditAppointmentButton.TabIndex = 1;
+            this.EditAppointmentButton.Text = "Edit";
+            this.EditAppointmentButton.UseVisualStyleBackColor = true;
             // 
             // AllAppointmentsTable
             // 
@@ -68,8 +104,9 @@
             this.AllAppointmentsTable.RowHeadersWidth = 51;
             this.AllAppointmentsTable.RowTemplate.Height = 29;
             this.AllAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.AllAppointmentsTable.Size = new System.Drawing.Size(920, 415);
+            this.AllAppointmentsTable.Size = new System.Drawing.Size(920, 432);
             this.AllAppointmentsTable.TabIndex = 0;
+            this.AllAppointmentsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.AllAppointmentsTableRowSelected);
             // 
             // DoctorMain
             // 
@@ -82,7 +119,7 @@
             this.MinimizeBox = false;
             this.Name = "DoctorMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DoctorMain";
+            this.Text = "Doctor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DoctorMainFormClosing);
             this.Load += new System.EventHandler(this.DoctorMainLoad);
             this.MainTabControl.ResumeLayout(false);
@@ -97,5 +134,8 @@
         private TabControl MainTabControl;
         private TabPage AllAppointmentsTab;
         private DataGridView AllAppointmentsTable;
+        private Button DeleteAppointmentButton;
+        private Button EditAppointmentButton;
+        private Button AddAppointmentButton;
     }
 }
