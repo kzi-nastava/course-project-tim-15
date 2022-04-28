@@ -15,7 +15,7 @@ namespace Klinika.GUI.Patient
 {
     public partial class PatientMain : Form
     {
-        private User Patient { get; set; }
+        public User Patient { get; }
         private List<Appointment> Appointments
         {
             get
@@ -31,11 +31,11 @@ namespace Klinika.GUI.Patient
 
         private void PatientMainLoad(object sender, EventArgs e)
         {
-            FillYourAppointmentTable();
-            FillDoctorComboBox();
+            FillPersonalAppointmentTable();
+            FillDoctorComboBox(DoctorComboBox);
         }
 
-        private void FillYourAppointmentTable()
+        private void FillPersonalAppointmentTable()
         {
             DataTable? allAppointments = AppointmentRepository.GetAll(Patient.ID, User.RoleType.PATIENT);
             if (allAppointments != null)
@@ -44,17 +44,18 @@ namespace Klinika.GUI.Patient
                 FillAppointmentTypeName(allAppointments);
 
                 allAppointments.Columns.Remove("DoctorID");
+                allAppointments.Columns.Remove("RoomID");
                 allAppointments.Columns.Remove("PatientID");
                 allAppointments.Columns.Remove("Completed");
                 allAppointments.Columns.Remove("IsDeleted");
                 allAppointments.Columns.Remove("Description");
 
-                YourAppointmentsTable.DataSource = allAppointments;
+                PersonalAppointmentsTable.DataSource = allAppointments;
 
-                YourAppointmentsTable.Columns["ID"].Width = 45;
-                YourAppointmentsTable.Columns["DateTime"].MinimumWidth = 150;
+                PersonalAppointmentsTable.Columns["ID"].Width = 45;
+                PersonalAppointmentsTable.Columns["DateTime"].MinimumWidth = 150;
 
-                YourAppointmentsTable.ClearSelection();
+                PersonalAppointmentsTable.ClearSelection();
             }
         }
 
@@ -62,14 +63,19 @@ namespace Klinika.GUI.Patient
         {
             foreach (DataRow row in dataTable.Rows)
             {
-                if (row["Type"].ToString() == "E")
-                {
-                    row["Type"] = "Examination";
-                }
-                else
-                {
-                    row["Type"] = "Operation";
-                }
+                row["Type"] = GetAppointmentTypeName(row["Type"].ToString());
+            }
+        }
+
+        private string GetAppointmentTypeName(string type)
+        {
+            if (type == "E")
+            {
+                return "Examination";
+            }
+            else
+            {
+                return "Operation";
             }
         }
 
@@ -79,9 +85,14 @@ namespace Klinika.GUI.Patient
             dataTable.Columns["Doctor Name"].SetOrdinal(1);
             foreach (DataRow row in dataTable.Rows)
             {
-                var doctor = GetDoctor(Convert.ToInt32(row["DoctorID"]));
-                row["Doctor Name"] = doctor.Name + " " + doctor.Surname;
+                row["Doctor Name"] = GetDoctorFullName(Convert.ToInt32(row["DoctorID"]));
             }
+        }
+
+        private string GetDoctorFullName (int doctorID)
+        {
+            var doctor = GetDoctor(doctorID);
+            return doctor.Name + " " + doctor.Surname;
         }
 
         private User? GetDoctor(int ID)
@@ -99,13 +110,12 @@ namespace Klinika.GUI.Patient
             Application.Exit();
         }
 
-        private void DeleteAppointment_Click(object sender, EventArgs e)
+        private void DeleteAppointmentClick(object sender, EventArgs e)
         {
             DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete selected appointment?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (deleteConfirmation == DialogResult.Yes)
             {
-                int ID = Convert.ToInt32(YourAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
-                System.Diagnostics.Debug.WriteLine(Appointments.Count());
+                int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
                 Appointment? toDelete = GetAppointment(ID);
 
                 if (DateTime.Now.AddDays(1).Date >= toDelete.DateTime.Date)
@@ -119,14 +129,15 @@ namespace Klinika.GUI.Patient
                     PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 'D', "", true);
                     PatientRequestRepository.Create(patientRequest);
 
-                    YourAppointmentsTable.Rows.RemoveAt(YourAppointmentsTable.SelectedRows[0].Index);
+                    PersonalAppointmentsTable.Rows.RemoveAt(PersonalAppointmentsTable.SelectedRows[0].Index);
                 }
             }
         }
 
-        private void FillDoctorComboBox()
+        public void FillDoctorComboBox(ComboBox comboBox)
         {
-            DoctorComboBox.Items.AddRange(GetDoctors());
+            comboBox.Items.AddRange(GetDoctors());
+            comboBox.SelectedIndex = 0;
         }
 
         private User[] GetDoctors()
@@ -141,30 +152,11 @@ namespace Klinika.GUI.Patient
 
         private void FillOccupiedAppointmentsTable()
         {
-            DataTable? appointmets = AppointmentRepository.GetAll(AppointmentDatePicker.Value.ToString("yyyy-MM-dd"));
-
-            //foreach (DataRow row in dt.Rows)
-            //{
-            //    if(Convert.ToInt32(row["DoctorID"]) == doctorID)
-            //    {
-            //        //appointmets.Rows.Remove(row);
-            //        appointmets.Rows.Add(new DataRow(row));
-            //    }
-            //}
+            int doctorID = (DoctorComboBox.SelectedItem as User).ID;
+            DataTable? appointmets = AppointmentRepository.GetAll(AppointmentDatePicker.Value.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
 
             if (appointmets != null)
             {
-                if (DoctorComboBox.SelectedItem != null)
-                {
-                    int doctorID = (DoctorComboBox.SelectedItem as User).ID;
-                    for (int i = appointmets.Rows.Count - 1; i >= 0; i--)
-                    {
-                        DataRow dr = appointmets.Rows[i];
-                        if (Convert.ToInt32(dr["DoctorID"]) != doctorID)
-                            dr.Delete();
-                    }
-                    appointmets.AcceptChanges();
-                }
 
                 FillTableWithDoctorData(appointmets);
                 FillAppointmentTypeName(appointmets);
@@ -185,5 +177,43 @@ namespace Klinika.GUI.Patient
                 OccupiedAppointmentsTable.ClearSelection();
             }
         }
+
+        private void ScheduleButtonClick(object sender, EventArgs e)
+        {
+            new PersonalAppointment(this, null).Show();
+        }
+
+        private void ModifyButtonClick(object sender, EventArgs e)
+        {
+            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
+            Appointment? toModify = GetAppointment(ID);
+            new PersonalAppointment(this, toModify).Show();
+        }
+        public void InsertRowIntoPersonalAppointmentsTable(Appointment appointment)
+        {
+            DataTable? dataTable = PersonalAppointmentsTable.DataSource as DataTable;
+            DataRow dataRow = dataTable.NewRow();
+            dataRow[0] = appointment.ID.ToString();
+            dataRow[1] = GetDoctorFullName(appointment.DoctorID);
+            dataRow[2] = appointment.DateTime;
+            dataRow[3] = GetAppointmentTypeName(appointment.Type.ToString());
+            dataRow[4] = appointment.Duration.ToString();
+            dataRow[5] = appointment.Urgent;
+            dataTable.Rows.Add(dataRow);
+        }
+
+        public void InsertRowIntoOccupiedTable(Appointment appointment)
+        {
+            DataTable? dataTable = OccupiedAppointmentsTable.DataSource as DataTable;
+            DataRow dataRow = dataTable.NewRow();
+            dataRow[0] = appointment.ID.ToString();
+            dataRow[1] = GetDoctorFullName(appointment.DoctorID);
+            dataRow[2] = appointment.DoctorID.ToString();
+            dataRow[3] = appointment.DateTime;
+            dataRow[4] = appointment.Duration.ToString();
+            dataTable.Rows.Add(dataRow);
+        }
+
+        
     }
 }

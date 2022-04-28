@@ -69,16 +69,17 @@ namespace Klinika.Repositories
         /// </summary>
         /// <param name="requestedDate"></param>
         /// <returns></returns>
-        public static DataTable? GetAll(string requestedDate, int days = 1)
+        public static DataTable? GetAll(string requestedDate, int ID, RoleType role, int days = 1)
         {
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
 
             DataTable? retrievedAppointments = null;
 
+            string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction] " +
-                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}' " +
+                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}' AND {roleToString} = {ID} " +
                                   $"AND IsDeleted = 0";
             try
             {
@@ -153,7 +154,7 @@ namespace Klinika.Repositories
             SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
             create.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
             create.Parameters.AddWithValue("@PatientID", appointment.PatientID);
-            create.Parameters.AddWithValue("@DateTime", appointment.DateTime.Date);
+            create.Parameters.AddWithValue("@DateTime", appointment.DateTime);
             create.Parameters.AddWithValue("@RoomID", appointment.RoomID);
             create.Parameters.AddWithValue("@Completed", appointment.Completed);
             create.Parameters.AddWithValue("@Type", appointment.Type);
@@ -193,7 +194,7 @@ namespace Klinika.Repositories
             modify.Parameters.AddWithValue("@ID", appointment.ID);
             modify.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
             modify.Parameters.AddWithValue("@PatientID", appointment.PatientID);
-            modify.Parameters.AddWithValue("@DateTime", appointment.DateTime.Date);
+            modify.Parameters.AddWithValue("@DateTime", appointment.DateTime);
             modify.Parameters.AddWithValue("@RoomID", appointment.RoomID);
             modify.Parameters.AddWithValue("@Completed", appointment.Completed);
             modify.Parameters.AddWithValue("@Type", appointment.Type);
