@@ -8,17 +8,23 @@ namespace Klinika.Entities
 {
     internal class PatientModificationRequest
     {
-        int doctorID { get; set; }
+        public int oldDoctorID { get; set; }
+        public int newDoctorID { get; set; }
+        public DateTime oldAppointment { get; set; }
+        public DateTime newAppointment { get; set; }
+        public string changesMadeDescription { get; set; }
 
-        DateTime appointment { get; set; }
-        string changesMadeDescription { get; set; }
 
-        public PatientModificationRequest(int doctorID,DateTime appointment,string changesMadeDescription)
+        public PatientModificationRequest(int doctorID,DateTime oldAppointment,string changesMadeDescription)
         {
-            this.doctorID = doctorID;
-            this.appointment = appointment;
+            this.oldDoctorID = doctorID;
+            this.oldAppointment = oldAppointment;
             this.changesMadeDescription = changesMadeDescription;
+            string[] tokens = changesMadeDescription.Split(';');
+            newAppointment = DateTime.Parse(tokens[0].Split('=')[1]);
+            newDoctorID = Convert.ToInt32(tokens[1].Split('=')[1]);
         }
+
 
     }
 }

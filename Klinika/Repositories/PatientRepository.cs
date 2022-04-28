@@ -80,13 +80,13 @@ namespace Klinika.Repositories
 
 
         //Logical deletion
-        public static void Delete(int ID, string email)
+        public static void Delete(int id, string email)
         {
             string deleteQuery = "UPDATE [User] SET IsDeleted = 1 WHERE ID = @ID";
             try
             {
                 SqlCommand delete = new SqlCommand(deleteQuery, DatabaseConnection.GetInstance().database);
-                delete.Parameters.AddWithValue("@ID", ID);
+                delete.Parameters.AddWithValue("@ID", id);
                 DatabaseConnection.GetInstance().database.Open();
                 delete.ExecuteNonQuery();
                 DatabaseConnection.GetInstance().database.Close();

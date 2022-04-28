@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Klinika.Services;
 using Klinika.Data;
 using Klinika.Repositories;
+using Klinika.Entities;
 
 namespace Klinika.GUI.Secretary
 {
@@ -116,7 +117,7 @@ namespace Klinika.GUI.Secretary
         {
             if(tabs.SelectedTab == requests)
             {
-                requestsTable.DataSource = RequestsRepository.GetAll();
+                requestsTable.DataSource = RequestRepository.GetAll();
                 requestsTable.ClearSelection();
             }
         }
@@ -137,21 +138,60 @@ namespace Klinika.GUI.Secretary
                     detailsButton.Enabled = false;
                 }
 
-                allowButton.Enabled = true;
+                approveButton.Enabled = true;
                 denyButton.Enabled = true;
             }
-            else
+
+        }
+
+        private void detailsButton_Click(object sender, EventArgs e)
+        {
+            new ModificationRequestDetails(this).Show();
+        }
+
+        private void approveButton_Click(object sender, EventArgs e)
+        {
+            DialogResult approveConfirmation = MessageBox.Show("Are you sure you want to approve selected request?", "Approve", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (approveConfirmation == DialogResult.Yes)
             {
-                bool isApproved = Convert.ToBoolean(requestsTable.SelectedRows[0].Cells["Approved"].Value);
-                if (isModification)
+                int requestID = Convert.ToInt32(requestsTable.SelectedRows[0].Cells["ID"].Value);
+                RequestRepository.Approve(requestID);
+                int selectedRequestIndex = requestsTable.SelectedRows[0].Index;
+                DataRow selectedRequest = ((DataTable)requestsTable.DataSource).Rows[selectedRequestIndex];
+                selectedRequest["Approved"] = true;
+                string requestType = requestsTable.SelectedRows[0].Cells["RequestType"].Value.ToString();
+                if(requestType.Equals("Modify"))
                 {
-                    detailsButton.Enabled = true;
+                    PatientModificationRequest selected = RequestRepository.IdRequestPairs[requestID];
+                    selectedRequest["DateTime"] = selected.newAppointment;
+                    MedicalActionRepository.Modify(Convert.ToInt32(selectedRequest["ExaminationID"]), selected.newDoctorID, selected.newAppointment);
                 }
                 else
                 {
-                    detailsButton.Enabled = false;
+                    MedicalActionRepository.Delete(Convert.ToInt32(selectedRequest["ExaminationID"]));
                 }
+                MessageBox.Show("Request successfully executed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                approveButton.Enabled = false;
+                denyButton.Enabled = false;
+                detailsButton.Enabled = false;
+            }
+        }
+
+        private void denyButton_Click(object sender, EventArgs e)
+        {
+            DialogResult denyConfirmation = MessageBox.Show("Are you sure you want to deny the selected request?", "Deny", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (denyConfirmation == DialogResult.Yes)
+            {
+                RequestRepository.Deny(Convert.ToInt32(requestsTable.SelectedRows[0].Cells["ID"].Value));
+                int selectedRequestIndex = requestsTable.SelectedRows[0].Index;
+                DataRow selectedRequest = ((DataTable)requestsTable.DataSource).Rows[selectedRequestIndex];
+                selectedRequest["Approved"] = false;
+                MessageBox.Show("Request successfully denied!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                approveButton.Enabled = false;
+                denyButton.Enabled = false;
+                detailsButton.Enabled = false;
             }
         }
     }
+
 }

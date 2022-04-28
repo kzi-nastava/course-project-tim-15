@@ -38,7 +38,7 @@
             this.tabs = new System.Windows.Forms.TabControl();
             this.requests = new System.Windows.Forms.TabPage();
             this.denyButton = new System.Windows.Forms.Button();
-            this.allowButton = new System.Windows.Forms.Button();
+            this.approveButton = new System.Windows.Forms.Button();
             this.detailsButton = new System.Windows.Forms.Button();
             this.requestsTable = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -149,7 +149,7 @@
             // requests
             // 
             this.requests.Controls.Add(this.denyButton);
-            this.requests.Controls.Add(this.allowButton);
+            this.requests.Controls.Add(this.approveButton);
             this.requests.Controls.Add(this.detailsButton);
             this.requests.Controls.Add(this.requestsTable);
             this.requests.Location = new System.Drawing.Point(4, 29);
@@ -169,16 +169,18 @@
             this.denyButton.TabIndex = 9;
             this.denyButton.Text = "Deny";
             this.denyButton.UseVisualStyleBackColor = true;
+            this.denyButton.Click += new System.EventHandler(this.denyButton_Click);
             // 
-            // allowButton
+            // approveButton
             // 
-            this.allowButton.Enabled = false;
-            this.allowButton.Location = new System.Drawing.Point(417, 437);
-            this.allowButton.Name = "allowButton";
-            this.allowButton.Size = new System.Drawing.Size(94, 29);
-            this.allowButton.TabIndex = 8;
-            this.allowButton.Text = "Allow";
-            this.allowButton.UseVisualStyleBackColor = true;
+            this.approveButton.Enabled = false;
+            this.approveButton.Location = new System.Drawing.Point(417, 437);
+            this.approveButton.Name = "approveButton";
+            this.approveButton.Size = new System.Drawing.Size(94, 29);
+            this.approveButton.TabIndex = 8;
+            this.approveButton.Text = "Approve";
+            this.approveButton.UseVisualStyleBackColor = true;
+            this.approveButton.Click += new System.EventHandler(this.approveButton_Click);
             // 
             // detailsButton
             // 
@@ -189,6 +191,7 @@
             this.detailsButton.TabIndex = 7;
             this.detailsButton.Text = "Details";
             this.detailsButton.UseVisualStyleBackColor = true;
+            this.detailsButton.Click += new System.EventHandler(this.detailsButton_Click);
             // 
             // requestsTable
             // 
@@ -248,7 +251,7 @@
         private Button unblockButton;
         private Button blockButton;
         private Button denyButton;
-        private Button allowButton;
+        private Button approveButton;
         private Button detailsButton;
         public DataGridView requestsTable;
     }

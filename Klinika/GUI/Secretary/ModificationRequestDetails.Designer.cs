@@ -37,12 +37,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.oldDoctorField = new System.Windows.Forms.TextBox();
-            this.newDoctor = new System.Windows.Forms.TextBox();
+            this.newDoctorField = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // oldAppointment
             // 
-            this.oldAppointment.CustomFormat = "MM/dd/yyyy hh:mm";
+            this.oldAppointment.CustomFormat = "MM/dd/yyyy HH:mm";
             this.oldAppointment.Enabled = false;
             this.oldAppointment.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.oldAppointment.Location = new System.Drawing.Point(208, 30);
@@ -79,7 +79,7 @@
             // 
             // newAppointment
             // 
-            this.newAppointment.CustomFormat = "MM/dd/yyyy hh:mm";
+            this.newAppointment.CustomFormat = "MM/dd/yyyy HH:mm";
             this.newAppointment.Enabled = false;
             this.newAppointment.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.newAppointment.Location = new System.Drawing.Point(208, 121);
@@ -122,20 +122,20 @@
             this.oldDoctorField.Size = new System.Drawing.Size(268, 27);
             this.oldDoctorField.TabIndex = 10;
             // 
-            // newDoctor
+            // newDoctorField
             // 
-            this.newDoctor.Location = new System.Drawing.Point(208, 309);
-            this.newDoctor.Name = "newDoctor";
-            this.newDoctor.ReadOnly = true;
-            this.newDoctor.Size = new System.Drawing.Size(268, 27);
-            this.newDoctor.TabIndex = 11;
+            this.newDoctorField.Location = new System.Drawing.Point(208, 309);
+            this.newDoctorField.Name = "newDoctorField";
+            this.newDoctorField.ReadOnly = true;
+            this.newDoctorField.Size = new System.Drawing.Size(268, 27);
+            this.newDoctorField.TabIndex = 11;
             // 
             // ModificationRequestDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(549, 375);
-            this.Controls.Add(this.newDoctor);
+            this.Controls.Add(this.newDoctorField);
             this.Controls.Add(this.oldDoctorField);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
@@ -147,6 +147,7 @@
             this.Controls.Add(this.oldAppointment);
             this.Name = "ModificationRequestDetails";
             this.Text = "Details";
+            this.Load += new System.EventHandler(this.ModificationRequestDetails_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -163,6 +164,6 @@
         private Label label5;
         private Label label6;
         private TextBox oldDoctorField;
-        private TextBox newDoctor;
+        private TextBox newDoctorField;
     }
 }
