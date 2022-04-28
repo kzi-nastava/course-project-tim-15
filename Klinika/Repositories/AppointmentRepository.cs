@@ -41,7 +41,7 @@ namespace Klinika.Repositories
                     while (retrieved.Read())
                     {
                         Appointment appointment = new Appointment();
-                        appointment.PatientID = Convert.ToInt32(retrieved["ID"]);
+                        appointment.ID = Convert.ToInt32(retrieved["ID"]);
                         appointment.DoctorID = Convert.ToInt32(retrieved["DoctorID"]);
                         appointment.PatientID = Convert.ToInt32(retrieved["PatientID"]);
                         appointment.DateTime = Convert.ToDateTime(retrieved["DateTime"].ToString());
@@ -153,7 +153,7 @@ namespace Klinika.Repositories
             SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
             create.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
             create.Parameters.AddWithValue("@PatientID", appointment.PatientID);
-            create.Parameters.AddWithValue("@DateTime", appointment.DateTime.Date);
+            create.Parameters.AddWithValue("@DateTime", appointment.DateTime);
             create.Parameters.AddWithValue("@RoomID", appointment.RoomID);
             create.Parameters.AddWithValue("@Completed", appointment.Completed);
             create.Parameters.AddWithValue("@Type", appointment.Type);
@@ -193,7 +193,7 @@ namespace Klinika.Repositories
             modify.Parameters.AddWithValue("@ID", appointment.ID);
             modify.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
             modify.Parameters.AddWithValue("@PatientID", appointment.PatientID);
-            modify.Parameters.AddWithValue("@DateTime", appointment.DateTime.Date);
+            modify.Parameters.AddWithValue("@DateTime", appointment.DateTime);
             modify.Parameters.AddWithValue("@RoomID", appointment.RoomID);
             modify.Parameters.AddWithValue("@Completed", appointment.Completed);
             modify.Parameters.AddWithValue("@Type", appointment.Type);
@@ -213,7 +213,7 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
-        public bool IsOccupied(DateTime newAppointmentStart, int duration = 15)
+        public bool IsOccupied(DateTime newAppointmentStart, int duration = 15, int id = -1)
         {
             var newAppointmentEnd = newAppointmentStart.AddMinutes(duration);
 
@@ -222,7 +222,7 @@ namespace Klinika.Repositories
                 var start = appointment.DateTime;
                 var end = appointment.DateTime.AddMinutes(appointment.Duration);
 
-                if (!appointment.IsDeleted &&
+                if (!appointment.IsDeleted && appointment.ID != id &&
                     newAppointmentStart < end && start < newAppointmentEnd)
                     return true;
             }

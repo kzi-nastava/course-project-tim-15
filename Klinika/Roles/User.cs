@@ -1,6 +1,6 @@
 ﻿namespace Klinika.Roles
 {
-    internal class User
+    public class User
     {
         #region Consts
         public enum RoleType
