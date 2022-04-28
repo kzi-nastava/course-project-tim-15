@@ -11,11 +11,9 @@ namespace Klinika.Models
         public int ID { get; set; }
         public decimal Height { get; set; }
         public decimal Weight { get; set; }
-        public string BloodType { get; set; }
+        public string? BloodType { get; set; }
+        public List<Anamnesis> Anamneses { get; set; }
 
-        public MedicalRecord()
-        {
-
-        }
+        public MedicalRecord() { }
     }
 }

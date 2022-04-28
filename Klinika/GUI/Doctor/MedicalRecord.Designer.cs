@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.PatientNameLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -36,14 +37,18 @@
             this.HeightLabel = new System.Windows.Forms.Label();
             this.WeightLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.AnamnesesTable = new System.Windows.Forms.DataGridView();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AnamnesesTable)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // PatientNameLabel
             // 
             this.PatientNameLabel.AutoSize = true;
             this.PatientNameLabel.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PatientNameLabel.Location = new System.Drawing.Point(12, 9);
+            this.PatientNameLabel.Location = new System.Drawing.Point(20, 9);
             this.PatientNameLabel.Name = "PatientNameLabel";
             this.PatientNameLabel.Size = new System.Drawing.Size(50, 20);
             this.PatientNameLabel.TabIndex = 0;
@@ -118,22 +123,61 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Information";
             // 
+            // AnamnesesTable
+            // 
+            this.AnamnesesTable.AllowUserToAddRows = false;
+            this.AnamnesesTable.AllowUserToDeleteRows = false;
+            this.AnamnesesTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.AnamnesesTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.AnamnesesTable.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.AnamnesesTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.AnamnesesTable.DefaultCellStyle = dataGridViewCellStyle1;
+            this.AnamnesesTable.Location = new System.Drawing.Point(8, 22);
+            this.AnamnesesTable.Name = "AnamnesesTable";
+            this.AnamnesesTable.ReadOnly = true;
+            this.AnamnesesTable.RowTemplate.Height = 25;
+            this.AnamnesesTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.AnamnesesTable.Size = new System.Drawing.Size(580, 371);
+            this.AnamnesesTable.TabIndex = 8;
+            this.AnamnesesTable.SelectionChanged += new System.EventHandler(this.AnamnesesTableSelectionChanged);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.AnamnesesTable);
+            this.groupBox2.Location = new System.Drawing.Point(20, 135);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(596, 403);
+            this.groupBox2.TabIndex = 9;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Anamneses";
+            // 
             // MedicalRecord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(416, 450);
+            this.ClientSize = new System.Drawing.Size(634, 555);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.PatientNameLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MedicalRecord";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MedicalRecord";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MedicalRecord_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MedicalRecordFormClosing);
             this.Load += new System.EventHandler(this.MedicalRecordLoad);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AnamnesesTable)).EndInit();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -149,5 +193,7 @@
         private Label HeightLabel;
         private Label WeightLabel;
         private GroupBox groupBox1;
+        private DataGridView AnamnesesTable;
+        private GroupBox groupBox2;
     }
 }

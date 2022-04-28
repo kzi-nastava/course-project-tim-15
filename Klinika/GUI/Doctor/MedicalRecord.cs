@@ -1,4 +1,5 @@
-﻿using Klinika.Repositories;
+﻿using Klinika.Models;
+using Klinika.Repositories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,10 +29,37 @@ namespace Klinika.GUI.Doctor
             BloodTypeLabel.Text = Record.BloodType;
             HeightLabel.Text = $"{Record.Height}cm";
             WeightLabel.Text = $"{Record.Weight}kg";
+            FillAnamnesesTable();
         }
-        private void MedicalRecord_FormClosing(object sender, FormClosingEventArgs e)
+        private void FillAnamnesesTable()
+        {
+            DataTable anamnesesData = new DataTable();
+            anamnesesData.Columns.Add("ID");
+            anamnesesData.Columns.Add("Description");
+            anamnesesData.Columns.Add("Symptoms");
+            anamnesesData.Columns.Add("Conclusion");
+            
+            foreach (Anamnesis anamnesis in Record.Anamneses)
+            {
+                DataRow newRow = anamnesesData.NewRow();
+                newRow["ID"] = anamnesis.ID;
+                newRow["Description"] = anamnesis.Description;
+                newRow["Symptoms"] = anamnesis.Symptoms;
+                newRow["Conclusion"] = anamnesis.Conclusion;
+                anamnesesData.Rows.Add(newRow);
+            }
+            AnamnesesTable.DataSource = anamnesesData;
+
+            AnamnesesTable.ClearSelection();
+
+        }
+        private void MedicalRecordFormClosing(object sender, FormClosingEventArgs e)
         {
             Parent.Enabled = true;
+        }
+        private void AnamnesesTableSelectionChanged(object sender, EventArgs e)
+        {
+            AnamnesesTable.ClearSelection();
         }
     }
 }
