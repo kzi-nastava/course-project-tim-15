@@ -33,6 +33,9 @@ namespace Klinika.GUI.Patient
         {
             FillPersonalAppointmentTable();
             FillDoctorComboBox(DoctorComboBox);
+            AppointmentDatePicker.MinDate = DateTime.Now;
+            ModifyButton.Enabled = false;
+            DeleteButton.Enabled = false;
         }
 
         private void FillPersonalAppointmentTable()
@@ -214,6 +217,29 @@ namespace Klinika.GUI.Patient
             dataTable.Rows.Add(dataRow);
         }
 
-        
+        public void ModifyAppointmentTable(Appointment appointment)
+        {
+            DataTable? dt = PersonalAppointmentsTable.DataSource as DataTable;
+            PersonalAppointmentsTable.SelectedRows[0].SetValues(appointment.ID.ToString(),
+                GetDoctorFullName(appointment.DoctorID),
+                appointment.DateTime,
+                GetAppointmentTypeName(appointment.Type.ToString()),
+                appointment.Duration.ToString(),
+                appointment.Urgent);
+        }
+
+        private void PersonalAppointmentsTableRowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            ModifyButton.Enabled = true;
+            DeleteButton.Enabled = true;
+        }
+
+        private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if ((sender as TabControl).SelectedIndex == 1)
+            {
+                OccupiedAppointmentsTable.DataSource = new DataTable();
+            }
+        }
     }
 }

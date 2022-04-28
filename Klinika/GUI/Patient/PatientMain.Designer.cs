@@ -30,7 +30,7 @@
         {
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.YourAppointmentsTab = new System.Windows.Forms.TabPage();
-            this.DeleteAppointment = new System.Windows.Forms.Button();
+            this.DeleteButton = new System.Windows.Forms.Button();
             this.ModifyButton = new System.Windows.Forms.Button();
             this.PersonalAppointmentsTable = new System.Windows.Forms.DataGridView();
             this.NewAppointmentTab = new System.Windows.Forms.TabPage();
@@ -58,10 +58,11 @@
             this.MainTabControl.SelectedIndex = 0;
             this.MainTabControl.Size = new System.Drawing.Size(973, 539);
             this.MainTabControl.TabIndex = 0;
+            this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControlSelectedIndexChanged);
             // 
             // YourAppointmentsTab
             // 
-            this.YourAppointmentsTab.Controls.Add(this.DeleteAppointment);
+            this.YourAppointmentsTab.Controls.Add(this.DeleteButton);
             this.YourAppointmentsTab.Controls.Add(this.ModifyButton);
             this.YourAppointmentsTab.Controls.Add(this.PersonalAppointmentsTable);
             this.YourAppointmentsTab.Location = new System.Drawing.Point(4, 29);
@@ -72,15 +73,15 @@
             this.YourAppointmentsTab.Text = "Your Appointments";
             this.YourAppointmentsTab.UseVisualStyleBackColor = true;
             // 
-            // DeleteAppointment
+            // DeleteButton
             // 
-            this.DeleteAppointment.Location = new System.Drawing.Point(513, 461);
-            this.DeleteAppointment.Name = "DeleteAppointment";
-            this.DeleteAppointment.Size = new System.Drawing.Size(94, 29);
-            this.DeleteAppointment.TabIndex = 2;
-            this.DeleteAppointment.Text = "Delete";
-            this.DeleteAppointment.UseVisualStyleBackColor = true;
-            this.DeleteAppointment.Click += new System.EventHandler(this.DeleteAppointmentClick);
+            this.DeleteButton.Location = new System.Drawing.Point(513, 461);
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Size = new System.Drawing.Size(94, 29);
+            this.DeleteButton.TabIndex = 2;
+            this.DeleteButton.Text = "Delete";
+            this.DeleteButton.UseVisualStyleBackColor = true;
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteAppointmentClick);
             // 
             // ModifyButton
             // 
@@ -107,6 +108,7 @@
             this.PersonalAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.PersonalAppointmentsTable.Size = new System.Drawing.Size(950, 440);
             this.PersonalAppointmentsTable.TabIndex = 0;
+            this.PersonalAppointmentsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.PersonalAppointmentsTableRowEnter);
             // 
             // NewAppointmentTab
             // 
@@ -234,7 +236,7 @@
         private TabControl MainTabControl;
         private TabPage YourAppointmentsTab;
         private TabPage NewAppointmentTab;
-        private Button DeleteAppointment;
+        private Button DeleteButton;
         private Button ModifyButton;
         private DataGridView PersonalAppointmentsTable;
         private Button ScheduleButton;

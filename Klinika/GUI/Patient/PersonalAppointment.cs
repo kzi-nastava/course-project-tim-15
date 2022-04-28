@@ -12,11 +12,8 @@ namespace Klinika.GUI.Patient
         public PersonalAppointment(PatientMain parent, Appointment appointment)
         {
             InitializeComponent();
-            parent.Enabled = false;
-            parent.FillDoctorComboBox(DoctorComboBox);
             Parent = parent;
             Appointment = appointment;
-            SetAppointmentDetails();
         }
 
         private void SetAppointmentDetails()
@@ -68,14 +65,19 @@ namespace Klinika.GUI.Patient
             Appointment.IsDeleted = false;
         }
 
+        private void ModifyAppointment()
+        {
+            Appointment.DoctorID = (DoctorComboBox.SelectedItem as User).ID;
+            Appointment.DateTime = MergeDate();
+        }
 
         private void ConfirmeButtonClick(object sender, EventArgs e)
         {
             if (Appointment == null)
             {
-                if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate()))
+                CreateAppointment();
+                if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
                 {
-                    CreateAppointment();
                     AppointmentRepository.GetInstance().Create(Appointment);
                     Parent.InsertRowIntoPersonalAppointmentsTable(Appointment);
                     Parent.InsertRowIntoOccupiedTable(Appointment);
@@ -89,8 +91,27 @@ namespace Klinika.GUI.Patient
             }
             else
             {
-                // TODO Modify
+                ModifyAppointment();
+                if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
+                {
+                    AppointmentRepository.Modify(Appointment); // TODO Modify appoitment in list
+                    Parent.ModifyAppointmentTable(Appointment);
+                    Parent.Enabled = true;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("This time is occupied!", "Denied Create", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
+        }
+
+        private void PersonalAppointmentLoad(object sender, EventArgs e)
+        {
+            Parent.Enabled = false;
+            Parent.FillDoctorComboBox(DoctorComboBox);
+            DatePicker.MinDate = DateTime.Now;
+            SetAppointmentDetails();
         }
     }
 }

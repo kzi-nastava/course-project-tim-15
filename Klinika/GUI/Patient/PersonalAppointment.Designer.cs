@@ -118,6 +118,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Appointment";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PersonalAppointmentClosing);
+            this.Load += new System.EventHandler(this.PersonalAppointmentLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
 
