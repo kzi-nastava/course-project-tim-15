@@ -69,16 +69,17 @@ namespace Klinika.Repositories
         /// </summary>
         /// <param name="requestedDate"></param>
         /// <returns></returns>
-        public static DataTable? GetAll(string requestedDate, int days = 1)
+        public static DataTable? GetAll(string requestedDate, int ID, RoleType role, int days = 1)
         {
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
 
             DataTable? retrievedAppointments = null;
 
+            string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction] " +
-                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}' " +
+                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}' AND {roleToString} = {ID} " +
                                   $"AND IsDeleted = 0";
             try
             {

@@ -27,8 +27,8 @@ namespace Klinika.GUI.Doctor
 
         private void AddAppointmentLoad(object sender, EventArgs e)
         {
-            DatePicker.MinDate = DateTime.Now;
             Parent.Enabled = false;
+            DatePicker.MinDate = DateTime.Now;
             PatientPicker.Items.AddRange(GetPatients());
             if (ToEdit == null)
             {
