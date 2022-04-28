@@ -35,7 +35,7 @@
             this.YourAppointmentsTable = new System.Windows.Forms.DataGridView();
             this.NewAppointmentTab = new System.Windows.Forms.TabPage();
             this.ScheduleButton = new System.Windows.Forms.Button();
-            this.FindButton = new System.Windows.Forms.Button();
+            this.FindAppointmentsButton = new System.Windows.Forms.Button();
             this.DoctorLabel = new System.Windows.Forms.Label();
             this.DoctorComboBox = new System.Windows.Forms.ComboBox();
             this.DateLabel = new System.Windows.Forms.Label();
@@ -109,7 +109,7 @@
             // NewAppointmentTab
             // 
             this.NewAppointmentTab.Controls.Add(this.ScheduleButton);
-            this.NewAppointmentTab.Controls.Add(this.FindButton);
+            this.NewAppointmentTab.Controls.Add(this.FindAppointmentsButton);
             this.NewAppointmentTab.Controls.Add(this.DoctorLabel);
             this.NewAppointmentTab.Controls.Add(this.DoctorComboBox);
             this.NewAppointmentTab.Controls.Add(this.DateLabel);
@@ -133,14 +133,15 @@
             this.ScheduleButton.Text = "Schedule";
             this.ScheduleButton.UseVisualStyleBackColor = true;
             // 
-            // FindButton
+            // FindAppointmentsButton
             // 
-            this.FindButton.Location = new System.Drawing.Point(718, 459);
-            this.FindButton.Name = "FindButton";
-            this.FindButton.Size = new System.Drawing.Size(94, 29);
-            this.FindButton.TabIndex = 6;
-            this.FindButton.Text = "Find";
-            this.FindButton.UseVisualStyleBackColor = true;
+            this.FindAppointmentsButton.Location = new System.Drawing.Point(718, 459);
+            this.FindAppointmentsButton.Name = "FindAppointmentsButton";
+            this.FindAppointmentsButton.Size = new System.Drawing.Size(94, 29);
+            this.FindAppointmentsButton.TabIndex = 6;
+            this.FindAppointmentsButton.Text = "Find";
+            this.FindAppointmentsButton.UseVisualStyleBackColor = true;
+            this.FindAppointmentsButton.Click += new System.EventHandler(this.FindAppointmentsButtonClick);
             // 
             // DoctorLabel
             // 
@@ -153,6 +154,7 @@
             // 
             // DoctorComboBox
             // 
+            this.DoctorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DoctorComboBox.FormattingEnabled = true;
             this.DoctorComboBox.Location = new System.Drawing.Point(528, 460);
             this.DoctorComboBox.Name = "DoctorComboBox";
@@ -188,6 +190,7 @@
             // 
             this.OccupiedAppointmentsTable.AllowUserToAddRows = false;
             this.OccupiedAppointmentsTable.AllowUserToDeleteRows = false;
+            this.OccupiedAppointmentsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.OccupiedAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.OccupiedAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.OccupiedAppointmentsTable.Location = new System.Drawing.Point(6, 48);
@@ -231,7 +234,7 @@
         private Button ModifyButton;
         private DataGridView YourAppointmentsTable;
         private Button ScheduleButton;
-        private Button FindButton;
+        private Button FindAppointmentsButton;
         private Label DoctorLabel;
         private ComboBox DoctorComboBox;
         private Label DateLabel;

@@ -41,7 +41,7 @@ namespace Klinika.Repositories
                     while (retrieved.Read())
                     {
                         Appointment appointment = new Appointment();
-                        appointment.PatientID = Convert.ToInt32(retrieved["ID"]);
+                        appointment.ID = Convert.ToInt32(retrieved["ID"]);
                         appointment.DoctorID = Convert.ToInt32(retrieved["DoctorID"]);
                         appointment.PatientID = Convert.ToInt32(retrieved["PatientID"]);
                         appointment.DateTime = Convert.ToDateTime(retrieved["DateTime"].ToString());
@@ -213,7 +213,7 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
-        public bool IsOccupied(DateTime newAppointmentStart, int duration = 15)
+        public bool IsOccupied(DateTime newAppointmentStart, int duration = 15, int id = -1)
         {
             var newAppointmentEnd = newAppointmentStart.AddMinutes(duration);
 
@@ -222,7 +222,7 @@ namespace Klinika.Repositories
                 var start = appointment.DateTime;
                 var end = appointment.DateTime.AddMinutes(appointment.Duration);
 
-                if (!appointment.IsDeleted &&
+                if (!appointment.IsDeleted && appointment.ID != id &&
                     newAppointmentStart < end && start < newAppointmentEnd)
                     return true;
             }
