@@ -15,7 +15,7 @@ namespace Klinika.GUI.Doctor
 {
     public partial class DoctorMain : Form
     {
-        private User Doctor;
+        public User Doctor { get; }
         private List<Appointment> Appointments
         {
             get
@@ -30,6 +30,28 @@ namespace Klinika.GUI.Doctor
         }
 
         #region All Appointments
+        public void InsertIntoAppointmentsTable(Appointment appointment)
+        {
+            DataTable? dt = AllAppointmentsTable.DataSource as DataTable;
+            DataRow dataRow = dt.NewRow();
+            dataRow[0] = appointment.ID.ToString();
+            dataRow[1] = GetPatientName(appointment.PatientID);
+            dataRow[2] = appointment.DateTime.ToString();
+            dataRow[3] = GetTypeFullName(appointment.Type);
+            dataRow[4] = appointment.Duration.ToString();
+            dataRow[5] = appointment.Urgent;
+            dt.Rows.Add(dataRow);
+        }
+        public void UpdateAppointmentTable(Appointment appointment)
+        {
+            DataTable? dt = AllAppointmentsTable.DataSource as DataTable;
+            AllAppointmentsTable.SelectedRows[0].SetValues(appointment.ID.ToString(),
+                GetPatientName(appointment.PatientID),
+                appointment.DateTime.ToString(),
+                GetTypeFullName(appointment.Type),
+                appointment.Duration.ToString(),
+                appointment.Urgent);
+        }
         private void FillAllAppointmentsTable()
         {
             DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
@@ -56,15 +78,17 @@ namespace Klinika.GUI.Doctor
         {
             foreach (DataRow row in dt.Rows)
             {
-                switch (row["Type"])
-                {
-                    case "O":
-                        row["Type"] = "Operation";
-                        break;
-                    default:
-                        row["Type"] = "Examination";
-                        break;
-                }
+                row["Type"] = GetTypeFullName(Convert.ToChar(row["Type"]));
+            }
+        }
+        private string GetTypeFullName(char type)
+        {
+            switch (type)
+            {
+                case 'O':
+                    return "Operation";
+                default:
+                    return "Examination";
             }
         }
         private void FillTableWithPatientData(DataTable dt)
@@ -86,6 +110,26 @@ namespace Klinika.GUI.Doctor
             EditAppointmentButton.Enabled = true;
             DeleteAppointmentButton.Enabled = true;
         }
+        private void AddAppointmentButtonClick(object sender, EventArgs e)
+        {
+            new AppointmentDetails(this).Show();
+        }
+        private void DeleteAppointmentButtonClick(object sender, EventArgs e)
+        {
+            DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete the selected appointment? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (deleteConfirmation == DialogResult.Yes)
+            {
+                int toDeleteID = Convert.ToInt32(AllAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
+                AppointmentRepository.GetInstance().Delete(toDeleteID);
+                AllAppointmentsTable.Rows.RemoveAt(AllAppointmentsTable.CurrentRow.Index);
+            }
+        }
+        private void EditAppointmentButtonClick(object sender, EventArgs e)
+        {
+            int toEditID = Convert.ToInt32(AllAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
+            var toEdit = Appointments.Where(x => x.ID == toEditID).FirstOrDefault();
+            new AppointmentDetails(this, toEdit).Show();
+        }
         #endregion
 
         private void DoctorMainLoad(object sender, EventArgs e)
@@ -98,11 +142,6 @@ namespace Klinika.GUI.Doctor
         private void DoctorMainFormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
-        }
-
-        private void AddAppointmentButtonClick(object sender, EventArgs e)
-        {
-            new AddAppointment(this).Show();
         }
     }
 }

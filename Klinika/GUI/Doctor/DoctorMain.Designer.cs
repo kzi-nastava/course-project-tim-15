@@ -42,10 +42,11 @@
             // MainTabControl
             // 
             this.MainTabControl.Controls.Add(this.AllAppointmentsTab);
-            this.MainTabControl.Location = new System.Drawing.Point(12, 12);
+            this.MainTabControl.Location = new System.Drawing.Point(10, 9);
+            this.MainTabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(940, 512);
+            this.MainTabControl.Size = new System.Drawing.Size(822, 384);
             this.MainTabControl.TabIndex = 0;
             // 
             // AllAppointmentsTab
@@ -54,19 +55,21 @@
             this.AllAppointmentsTab.Controls.Add(this.DeleteAppointmentButton);
             this.AllAppointmentsTab.Controls.Add(this.EditAppointmentButton);
             this.AllAppointmentsTab.Controls.Add(this.AllAppointmentsTable);
-            this.AllAppointmentsTab.Location = new System.Drawing.Point(4, 29);
+            this.AllAppointmentsTab.Location = new System.Drawing.Point(4, 24);
+            this.AllAppointmentsTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.AllAppointmentsTab.Name = "AllAppointmentsTab";
-            this.AllAppointmentsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.AllAppointmentsTab.Size = new System.Drawing.Size(932, 479);
+            this.AllAppointmentsTab.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.AllAppointmentsTab.Size = new System.Drawing.Size(814, 356);
             this.AllAppointmentsTab.TabIndex = 0;
             this.AllAppointmentsTab.Text = "All Appointments";
             this.AllAppointmentsTab.UseVisualStyleBackColor = true;
             // 
             // AddAppointmentButton
             // 
-            this.AddAppointmentButton.Location = new System.Drawing.Point(832, 444);
+            this.AddAppointmentButton.Location = new System.Drawing.Point(728, 333);
+            this.AddAppointmentButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.AddAppointmentButton.Name = "AddAppointmentButton";
-            this.AddAppointmentButton.Size = new System.Drawing.Size(94, 29);
+            this.AddAppointmentButton.Size = new System.Drawing.Size(82, 22);
             this.AddAppointmentButton.TabIndex = 3;
             this.AddAppointmentButton.Text = "Add";
             this.AddAppointmentButton.UseVisualStyleBackColor = true;
@@ -75,22 +78,26 @@
             // DeleteAppointmentButton
             // 
             this.DeleteAppointmentButton.Enabled = false;
-            this.DeleteAppointmentButton.Location = new System.Drawing.Point(106, 444);
+            this.DeleteAppointmentButton.Location = new System.Drawing.Point(93, 333);
+            this.DeleteAppointmentButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.DeleteAppointmentButton.Name = "DeleteAppointmentButton";
-            this.DeleteAppointmentButton.Size = new System.Drawing.Size(94, 29);
+            this.DeleteAppointmentButton.Size = new System.Drawing.Size(82, 22);
             this.DeleteAppointmentButton.TabIndex = 2;
             this.DeleteAppointmentButton.Text = "Delete";
             this.DeleteAppointmentButton.UseVisualStyleBackColor = true;
+            this.DeleteAppointmentButton.Click += new System.EventHandler(this.DeleteAppointmentButtonClick);
             // 
             // EditAppointmentButton
             // 
             this.EditAppointmentButton.Enabled = false;
-            this.EditAppointmentButton.Location = new System.Drawing.Point(6, 444);
+            this.EditAppointmentButton.Location = new System.Drawing.Point(5, 333);
+            this.EditAppointmentButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.EditAppointmentButton.Name = "EditAppointmentButton";
-            this.EditAppointmentButton.Size = new System.Drawing.Size(94, 29);
+            this.EditAppointmentButton.Size = new System.Drawing.Size(82, 22);
             this.EditAppointmentButton.TabIndex = 1;
             this.EditAppointmentButton.Text = "Edit";
             this.EditAppointmentButton.UseVisualStyleBackColor = true;
+            this.EditAppointmentButton.Click += new System.EventHandler(this.EditAppointmentButtonClick);
             // 
             // AllAppointmentsTable
             // 
@@ -99,22 +106,24 @@
             this.AllAppointmentsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.AllAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.AllAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.AllAppointmentsTable.Location = new System.Drawing.Point(6, 6);
+            this.AllAppointmentsTable.Location = new System.Drawing.Point(5, 4);
+            this.AllAppointmentsTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.AllAppointmentsTable.Name = "AllAppointmentsTable";
             this.AllAppointmentsTable.RowHeadersWidth = 51;
             this.AllAppointmentsTable.RowTemplate.Height = 29;
             this.AllAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.AllAppointmentsTable.Size = new System.Drawing.Size(920, 432);
+            this.AllAppointmentsTable.Size = new System.Drawing.Size(805, 324);
             this.AllAppointmentsTable.TabIndex = 0;
             this.AllAppointmentsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.AllAppointmentsTableRowSelected);
             // 
             // DoctorMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 536);
+            this.ClientSize = new System.Drawing.Size(844, 402);
             this.Controls.Add(this.MainTabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DoctorMain";

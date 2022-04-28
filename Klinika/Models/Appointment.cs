@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Klinika.Models
 {
-    internal class Appointment
+    public class Appointment
     {
         public int ID { get; set; }
         public int DoctorID { get; set; }
