@@ -14,7 +14,44 @@ namespace Klinika.Repositories
 {
     internal class AppointmentRepository
     {
-        public static Dictionary<int, Appointment>? Appointments { get; set; }
+        public static List<Appointment>? Appointments { get; set; }
+
+        #region Singleton
+        private static AppointmentRepository? Instance;
+        public static AppointmentRepository GetInstance()
+        {
+            if(Instance == null) Instance = new AppointmentRepository();
+            return Instance;
+        }
+        public AppointmentRepository()
+        {
+            Appointments = new List<Appointment>();
+            string getAllQuerry = "SELECT * " +
+                                  "FROM [MedicalAction]";
+            try
+            {
+                SqlCommand getAll = new SqlCommand(getAllQuerry, DatabaseConnection.GetInstance().database);
+                DatabaseConnection.GetInstance().database.Open();
+                using (SqlDataReader retrieved = getAll.ExecuteReader())
+                {
+                    while (retrieved.Read())
+                    {
+                        Appointment appointment = new Appointment(Convert.ToInt32(retrieved["ID"]), Convert.ToInt32(retrieved["DoctorID"]),
+                                    Convert.ToInt32(retrieved["PatientID"]), Convert.ToDateTime(retrieved["DateTime"].ToString()),
+                                    Convert.ToInt32(retrieved["RoomID"]), Convert.ToBoolean(retrieved["Completed"]), Convert.ToChar(retrieved["Type"]),
+                                    Convert.ToInt32(retrieved["Duration"]), Convert.ToBoolean(retrieved["Urgent"]), retrieved["Description"].ToString(),
+                                    Convert.ToBoolean(retrieved["IsDeleted"]));
+                        Appointments.Add(appointment);
+                    }
+                }
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Returns all appointmets of requested day in format "yyyy-MM-dd"
@@ -26,26 +63,17 @@ namespace Klinika.Repositories
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
 
-            Appointments = new Dictionary<int, Appointment>();
             DataTable? retrievedAppointments = null;
 
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction] " +
-                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}';";
+                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}' " +
+                                  $"AND IsDeleted = 0";
             try
             {
                 SqlDataAdapter adapter = new SqlDataAdapter(getAllQuerry, DatabaseConnection.GetInstance().database);
                 retrievedAppointments = new DataTable();
                 adapter.Fill(retrievedAppointments);
-                foreach (DataRow row in retrievedAppointments.Rows)
-                {
-                    Appointment appointment = new Appointment(Convert.ToInt32(row["ID"]), Convert.ToInt32(row["DoctorID"]), 
-                            Convert.ToInt32(row["PatientID"]), Convert.ToDateTime(row["DateTime"].ToString()),
-                            Convert.ToInt32(row["RoomID"]), Convert.ToBoolean(row["Completed"]),Convert.ToChar(row["Type"]), 
-                            Convert.ToInt32(row["Duration"]),Convert.ToBoolean(row["Urgent"]), row["Description"].ToString(),
-                            Convert.ToBoolean(row["IsDeleted"]));
-                    Appointments.TryAdd(appointment.ID, appointment);
-                }
 
             }
             catch (Exception ex) 
@@ -62,7 +90,8 @@ namespace Klinika.Repositories
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction] " +
-                                  $"WHERE DateTime > '{DateTime.Now}' AND {roleToString} = {ID}";
+                                  $"WHERE DateTime > '{DateTime.Now}' AND {roleToString} = {ID} " +
+                                  $"AND IsDeleted = 0";
             try
             {
                 SqlDataAdapter adapter = new SqlDataAdapter(getAllQuerry, DatabaseConnection.GetInstance().database);
@@ -85,7 +114,7 @@ namespace Klinika.Repositories
 
             return retrievedAppointments;
         }
-
+        
         public static void Delete(int ID)
         {
             string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
@@ -106,7 +135,6 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
-
         public static void Create(Appointment appointment)
         {
             string createQuery = "INSERT INTO [MedicalAction] " +
@@ -142,7 +170,6 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
-
         public static void Modify(Appointment appointment)
         {
             string createQuery = "UPDATE [MedicalAction] SET " +
