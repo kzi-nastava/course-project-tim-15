@@ -14,7 +14,7 @@ namespace Klinika.Repositories
 {
     internal class AppointmentRepository
     {
-        public static List<Appointment>? Appointments { get; set; }
+        public static List<Appointment> Appointments { get; set; }
 
         #region Singleton
         private static AppointmentRepository? Instance;
@@ -115,7 +115,7 @@ namespace Klinika.Repositories
             return retrievedAppointments;
         }
         
-        public static void Delete(int ID)
+        public void Delete(int ID)
         {
             string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
             try
@@ -125,17 +125,14 @@ namespace Klinika.Repositories
                 DatabaseConnection.GetInstance().database.Open();
                 delete.ExecuteNonQuery();
                 DatabaseConnection.GetInstance().database.Close();
-                if (Appointments != null)
-                {
-                    Appointments.Remove(ID);
-                }
+                Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
             }
             catch (SqlException ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-        public static void Create(Appointment appointment)
+        public void Create(Appointment appointment)
         {
             string createQuery = "INSERT INTO [MedicalAction] " +
                 "(DoctorID,PatientID,DateTime,RoomID,Completed,Type,Duration,Urgent,Description,IsDeleted) " +
@@ -159,18 +156,14 @@ namespace Klinika.Repositories
                 DatabaseConnection.GetInstance().database.Open();
                 appointment.ID = (int)create.ExecuteScalar();
                 DatabaseConnection.GetInstance().database.Close();
-                if(Appointments == null)
-                {
-                    Appointments = new Dictionary<int, Appointment>();
-                }
-                Appointments.TryAdd(appointment.ID, appointment);
+                Appointments.Add(appointment);
             }
             catch (SqlException ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-        public static void Modify(Appointment appointment)
+        public void Modify(Appointment appointment)
         {
             string createQuery = "UPDATE [MedicalAction] SET " +
                 "DoctorID = @DoctorID, " +
