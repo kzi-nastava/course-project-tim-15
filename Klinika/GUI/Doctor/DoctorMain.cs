@@ -16,24 +16,17 @@ namespace Klinika.GUI.Doctor
     public partial class DoctorMain : Form
     {
         private User Doctor;
-        private List<Appointment> Appointments;
-        private void SetAppointments(DataTable allAppointments)
+        private List<Appointment> Appointments
         {
-            foreach (DataRow row in allAppointments.Rows)
+            get
             {
-                Appointment appointment = new Appointment(Convert.ToInt32(row["ID"]), Convert.ToInt32(row["DoctorID"]),
-                        Convert.ToInt32(row["PatientID"]), Convert.ToDateTime(row["DateTime"].ToString()),
-                        Convert.ToInt32(row["RoomID"]), Convert.ToBoolean(row["Completed"]), Convert.ToChar(row["Type"]),
-                        Convert.ToInt32(row["Duration"]), Convert.ToBoolean(row["Urgent"]), row["Description"].ToString(),
-                        Convert.ToBoolean(row["IsDeleted"]));
-                Appointments.Add(appointment);
+                return AppointmentRepository.GetInstance().Appointments;
             }
         }
         public DoctorMain(User doctor)
         {
             InitializeComponent();
             Doctor = doctor;
-            Appointments = new List<Appointment>();
         }
 
         #region All Appointments
@@ -42,8 +35,6 @@ namespace Klinika.GUI.Doctor
             DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
             if (allAppointments != null)
             {
-                SetAppointments(allAppointments);
-
                 FillTableWithPatientData(allAppointments);
                 FixAppointmentTypeField(allAppointments);
                 allAppointments.Columns.Remove("DoctorID");
