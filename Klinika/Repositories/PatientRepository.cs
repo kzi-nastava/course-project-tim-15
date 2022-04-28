@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Klinika.Data;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Data;
 
 namespace Klinika.Repositories
 {
@@ -30,9 +25,9 @@ namespace Klinika.Repositories
                 }
                 retrievedPatients.Columns.Remove("ID");
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
 
             return retrievedPatients;
@@ -72,9 +67,9 @@ namespace Klinika.Repositories
                 modify.ExecuteNonQuery();
                 database.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
         }
 
@@ -95,9 +90,9 @@ namespace Klinika.Repositories
                     EmailIDPairs.Remove(email);
                 }
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
         }
 
@@ -137,9 +132,9 @@ namespace Klinika.Repositories
                     EmailIDPairs.Add(email, createdID);
                 }
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
         }
 
@@ -178,9 +173,9 @@ namespace Klinika.Repositories
                 }
                 database.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
 
             return (id, jmbg, name, surname, birthdate, gender, password);
@@ -201,9 +196,9 @@ namespace Klinika.Repositories
                 block.ExecuteNonQuery();
                 database.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
         }
 
@@ -221,9 +216,9 @@ namespace Klinika.Repositories
                 block.ExecuteNonQuery();
                 database.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
         }
     }

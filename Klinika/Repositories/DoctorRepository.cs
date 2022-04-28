@@ -31,9 +31,9 @@ namespace Klinika.Repositories
                 }
                 database.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException error)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(error.Message);
             }
 
             return nameSurname;
