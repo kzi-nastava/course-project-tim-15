@@ -20,6 +20,11 @@ namespace Klinika.Models
         public string? Description { get; set; }
         public bool IsDeleted { get; set; }
 
+        public Appointment()
+        {
+            DateTime = DateTime.Now;
+        }
+
         public Appointment (int id, int doctorID, int patientId, DateTime dateTime, int roomID,
                             bool completed, char type, int duration, bool urgent, string? description,
                             bool isDeleted)
