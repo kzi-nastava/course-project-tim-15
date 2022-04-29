@@ -13,6 +13,8 @@ namespace Klinika.Models
         public decimal Weight { get; set; }
         public string? BloodType { get; set; }
         public List<Anamnesis> Anamneses { get; set; }
+        public List<Disease> Diseases { get; set; }
+        public List<Allergen> Allergens { get; set; }
 
         public MedicalRecord() { }
     }

@@ -38,6 +38,7 @@
             this.ViewMedicalRecordButton = new System.Windows.Forms.Button();
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
             this.ScheduleTable = new System.Windows.Forms.DataGridView();
+            this.PreformeButton = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.AllAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).BeginInit();
@@ -126,6 +127,7 @@
             // 
             // ScheduleTab
             // 
+            this.ScheduleTab.Controls.Add(this.PreformeButton);
             this.ScheduleTab.Controls.Add(this.ViewMedicalRecordButton);
             this.ScheduleTab.Controls.Add(this.ScheduleDatePicker);
             this.ScheduleTab.Controls.Add(this.ScheduleTable);
@@ -172,6 +174,16 @@
             this.ScheduleTable.TabIndex = 0;
             this.ScheduleTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ScheduleTableRowSelected);
             // 
+            // PreformeButton
+            // 
+            this.PreformeButton.Location = new System.Drawing.Point(584, 330);
+            this.PreformeButton.Name = "PreformeButton";
+            this.PreformeButton.Size = new System.Drawing.Size(75, 23);
+            this.PreformeButton.TabIndex = 3;
+            this.PreformeButton.Text = "Preforme";
+            this.PreformeButton.UseVisualStyleBackColor = true;
+            this.PreformeButton.Click += new System.EventHandler(this.PreformeButtonClick);
+            // 
             // DoctorMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -208,5 +220,6 @@
         private DataGridView ScheduleTable;
         private DateTimePicker ScheduleDatePicker;
         private Button ViewMedicalRecordButton;
+        private Button PreformeButton;
     }
 }

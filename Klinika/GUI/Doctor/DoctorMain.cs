@@ -42,6 +42,7 @@ namespace Klinika.GUI.Doctor
             FillTableWithData(scheduledAppointments, ScheduleTable);
             ScheduleTable.ClearSelection();
             ViewMedicalRecordButton.Enabled = false;
+            PreformeButton.Enabled = false;
 
         }
         private void DoctorMainFormClosing(object sender, FormClosingEventArgs e)
@@ -166,6 +167,7 @@ namespace Klinika.GUI.Doctor
         private void ScheduleTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
             ViewMedicalRecordButton.Enabled = true;
+            PreformeButton.Enabled = true;
         }
         private void ViewMedicalRecordButtonClick(object sender, EventArgs e)
         {
@@ -175,5 +177,17 @@ namespace Klinika.GUI.Doctor
         }
         #endregion
 
+        #region Preforme
+        private void PreformeButtonClick(object sender, EventArgs e)
+        {
+            int appointmentID = Convert.ToInt32(ScheduleTable.SelectedRows[0].Cells["ID"].Value);
+            if(Appointments.Where(x => x.ID == appointmentID).FirstOrDefault().Type == 'O')
+            {
+                MessageBox.Show("This feature will be implemented soon");
+                return;
+            }
+            int patientID = Appointments.Where(x => x.ID == appointmentID).FirstOrDefault().PatientID;
+        }
+        #endregion
     }
 }
