@@ -36,6 +36,7 @@ namespace Klinika.GUI.Manager
 
         private void addButton_Click(object sender, EventArgs e)
         {
+            new AddRoom(this).Show();
         }
     }
 }

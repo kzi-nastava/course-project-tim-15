@@ -48,21 +48,16 @@ namespace Klinika.Repositories
         public static void Create(int type, int number)
         {
             string createQuery = "INSERT INTO [Room] " +
-                "(Type, Number) " +
-                "VALUES (@Type,@Number)";
-            SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-            create.Parameters.AddWithValue("@Type", type);
-            create.Parameters.AddWithValue("@Number", number);
+                "(Type, Number, IsDeleted) " +
+                "VALUES (@Type, @Number, 0)";
             try
             {
-                SqlConnection database = DatabaseConnection.GetInstance().database;
-                database.Open();
-                int createdID = (int)create.ExecuteScalar();
-                string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";
-                SqlCommand createMedicalRecord = new SqlCommand(createMedicalRecordQuery, database);
-                createMedicalRecord.Parameters.AddWithValue("@ID", createdID);
-                createMedicalRecord.ExecuteNonQuery();
-                database.Close();
+                SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
+                create.Parameters.AddWithValue("@Type", type);
+                create.Parameters.AddWithValue("@Number", number);
+                DatabaseConnection.GetInstance().database.Open();
+                create.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
             }
             catch (SqlException error)
             {
