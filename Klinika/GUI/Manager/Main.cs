@@ -29,9 +29,19 @@ namespace Klinika.GUI.Manager
             equipmentTable.Columns["ID"].Visible = false;
             equipmentTable.ClearSelection();
 
-            for (int i = 0; i < equipmentTable.Rows.Count; i++)
+            roomComboBox.Items.Add("");
+            equipmentComboBox.Items.Add("");
+            quantityComboBox.Items.Add("");
+            quantityComboBox.Items.Add("no available");
+            quantityComboBox.Items.Add("0-10");
+            quantityComboBox.Items.Add("10+");
+            for (int i = 0; i < equipmentTable.Rows.Count - 1; i++)
             {
+                if (!roomComboBox.Items.Contains(equipmentTable.Rows[i].Cells["Room Type"].Value.ToString()))
+                    roomComboBox.Items.Add(equipmentTable.Rows[i].Cells["Room Type"].Value.ToString());
 
+                if (!equipmentComboBox.Items.Contains(equipmentTable.Rows[i].Cells["Equipment Type"].Value.ToString()))
+                    equipmentComboBox.Items.Add(equipmentTable.Rows[i].Cells["Equipment Type"].Value.ToString());
             }
         }
 
@@ -72,12 +82,41 @@ namespace Klinika.GUI.Manager
             {
                 DataTable filtered = unfiltered;
                 filtered = filtered.AsEnumerable()
-                    .Where(row => row.Field<int>("Number").ToString().Contains(numberTextBox.Text.Trim())
-                    && row.Field<string>("Room Type").ToString().Contains(roomTypeTextBox.Text.Trim())
-                    && row.Field<string>("Equipment").ToString().Contains(equipmentTextBox.Text.Trim())
-                    && row.Field<string>("Equipment Type").ToString().Contains(typeTextBox.Text.Trim())
-                    && row.Field<int>("Quantity").ToString().Contains(quantityTextBox.Text.Trim())
+                    .Where(row => row.Field<int>("Number").ToString().Contains(numberTextBox.Text)
+                    && row.Field<string>("Room Type").ToString().Contains(roomTypeTextBox.Text)
+                    && row.Field<string>("Equipment").ToString().Contains(equipmentTextBox.Text)
+                    && row.Field<string>("Equipment Type").ToString().Contains(typeTextBox.Text)
+                    && row.Field<int>("Quantity").ToString().Contains(quantityTextBox.Text)
                     ).CopyToDataTable();
+                //MessageBox.Show(roomComboBox.SelectedText);
+                if (roomComboBox.SelectedText != "")
+                {
+                    filtered = filtered.AsEnumerable()
+                        .Where(row => row.Field<string>("Room Type").ToString() == roomComboBox.SelectedText).CopyToDataTable();
+                }
+                if (equipmentComboBox.SelectedText != "")
+                {
+                    filtered = filtered.AsEnumerable()
+                        .Where(row => row.Field<string>("Equipment Type").ToString() == equipmentComboBox.SelectedText).CopyToDataTable();
+                }
+                if (quantityComboBox.SelectedText != "")
+                {
+                    if (quantityComboBox.SelectedText == "no available")
+                    {
+                        filtered = filtered.AsEnumerable()
+                            .Where(row => row.Field<int>("Quantity") == 0).CopyToDataTable();
+                    }
+                    else if (quantityComboBox.SelectedText == "0-10")
+                    {
+                        filtered = filtered.AsEnumerable()
+                            .Where(row => row.Field<int>("Quantity") > 0 || row.Field<int>("Quantity") < 10).CopyToDataTable();
+                    }
+                    else if (quantityComboBox.SelectedText == "10+")
+                    {
+                        filtered = filtered.AsEnumerable()
+                            .Where(row => row.Field<int>("Quantity") >= 10).CopyToDataTable();
+                    }
+                }
                 equipmentTable.DataSource = filtered;
             }
             catch (System.InvalidOperationException ex)
@@ -107,6 +146,21 @@ namespace Klinika.GUI.Manager
         }
 
         private void quantityTextBox_TextChanged(object sender, EventArgs e)
+        {
+            filter();
+        }
+
+        private void roomComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            filter();
+        }
+
+        private void equipmentComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            filter();
+        }
+
+        private void quantityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             filter();
         }
