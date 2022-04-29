@@ -21,7 +21,6 @@ namespace Klinika.GUI.Patient
         {
             Parent.Enabled = false;
             Parent.FillDoctorComboBox(DoctorComboBox);
-            DatePicker.MinDate = DateTime.Now;
             SetAppointmentDetails();
         }
         private void PersonalAppointmentClosing(object sender, FormClosingEventArgs e)
@@ -33,28 +32,31 @@ namespace Klinika.GUI.Patient
         #region Click functions
         private void ConfirmeButtonClick(object sender, EventArgs e)
         {
-            if (Appointment == null)
+            if (Parent.IsDateValid(MergeDate()))
             {
-                if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate()))
+                if (Appointment == null)
                 {
-                    CreateAppointment();
-                    Close();
+                    if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate()))
+                    {
+                        CreateAppointment();
+                        Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("This time is occupied!", "Denied Create", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("This time is occupied!", "Denied Create", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-            }
-            else
-            {
-                if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
-                {
-                    ModifyAppointment();
-                    Close();
-                }
-                else
-                {
-                    MessageBox.Show("This time is occupied!", "Denied Modify", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
+                    {
+                        ModifyAppointment();
+                        Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("This time is occupied!", "Denied Modify", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
             }
         }
@@ -66,6 +68,7 @@ namespace Klinika.GUI.Patient
             if (Appointment == null)
             {
                 DatePicker.Enabled = false;
+               
                 DatePicker.Value = Parent.AppointmentDatePicker.Value;
                 DoctorComboBox.Enabled = false;
                 DoctorComboBox.SelectedIndex = Parent.DoctorComboBox.SelectedIndex;
@@ -103,9 +106,42 @@ namespace Klinika.GUI.Patient
         {
             Appointment.DoctorID = GetDoctorID();
             Appointment.DateTime = MergeDate();
-            AppointmentRepository.GetInstance().Modify(Appointment);
-            Parent.ModifyPersonalAppointmentTableRow(Appointment);
-            Parent.Enabled = true;
+
+            if (DateTime.Now.AddDays(2).Date >= Appointment.DateTime.Date)
+            {
+                DialogResult sendConfirmation = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
+                    "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (sendConfirmation == DialogResult.Yes)
+                {
+                    PatientRequest patientRequest = CreatePatientRequest(false);
+                    PatientRequestRepository.Create(patientRequest);
+                    Parent.Enabled = true;
+                }
+            }
+            else
+            {
+                PatientRequest patientRequest = CreatePatientRequest(true);
+                PatientRequestRepository.Create(patientRequest);
+                AppointmentRepository.GetInstance().Modify(Appointment);
+                Parent.ModifyPersonalAppointmentTableRow(Appointment);
+                Parent.Enabled = true;
+            }
+        }
+        private PatientRequest CreatePatientRequest(bool isApproved)
+        {
+            PatientRequest patientRequest = new PatientRequest();
+            patientRequest.PatientID = Appointment.PatientID;
+            patientRequest.MedicalActionID = Appointment.ID;
+            patientRequest.Type = 'M';
+            patientRequest.Description = GetFullRequestDescription();
+            patientRequest.Approved = isApproved;
+            return patientRequest;
+        }
+
+        private string GetFullRequestDescription()
+        {
+            return "DateTime=" + MergeDate().ToString() + ";DoctorID=" + GetDoctorID().ToString();
         }
         private int GetDoctorID()
         {
