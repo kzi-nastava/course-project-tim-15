@@ -5,14 +5,19 @@ using System.Data.SqlClient;
 namespace Klinika.Repositories
 {
     internal class RoomRepository
-    {
+    { 
         public static Dictionary<int, string>? types { get; set; }
+        //returns type ID form Name
+        public static int GetTypeId(string type)
+        {
+            return Repositories.RoomRepository.types.FirstOrDefault(x => x.Value == type).Key;
+        }
         public static DataTable GetAll()
         {
             types = new Dictionary<int, string>();
             DataTable? retrievedRooms = null;
             DataTable? retrievedTypes = null;
-            string getAllQuery = "SELECT [Room].ID, [RoomType].Name, [Room].Number " +
+            string getAllQuery = "SELECT [Room].ID, [RoomType].Name as Type, [Room].Number " +
                                       "FROM [Room] " +
                                       "INNER JOIN [RoomType] ON [Room].Type = [RoomType].ID " +
                                       "WHERE IsDeleted = 0";
@@ -75,6 +80,30 @@ namespace Klinika.Repositories
                 DatabaseConnection.GetInstance().database.Open();
                 delete.ExecuteNonQuery();
                 DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
+        internal static void Modify(int id, string type, int number)
+        {
+            string modifyQuery = "UPDATE [Room] " +
+                                 "SET Type = @Type, " +
+                                 "Number = @Number " +
+                                 "WHERE ID = @ID";
+
+            SqlCommand modify = new SqlCommand(modifyQuery, DatabaseConnection.GetInstance().database);
+            modify.Parameters.AddWithValue("@ID", id);
+            modify.Parameters.AddWithValue("@Type", GetTypeId(type));
+            modify.Parameters.AddWithValue("@Number", number);
+            try
+            {
+                SqlConnection database = DatabaseConnection.GetInstance().database;
+                database.Open();
+                modify.ExecuteNonQuery();
+                database.Close();
             }
             catch (SqlException error)
             {

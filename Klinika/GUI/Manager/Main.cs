@@ -38,5 +38,20 @@ namespace Klinika.GUI.Manager
         {
             new AddRoom(this).Show();
         }
+
+        private void modifyButton_Click(object sender, EventArgs e)
+        {
+            int[] selectedRoom = new int[3];
+            selectedRoom[0] = (int)roomsTable.SelectedRows[0].Cells["ID"].Value;
+            selectedRoom[1] = Repositories.RoomRepository.GetTypeId(roomsTable.SelectedRows[0].Cells["Type"].Value.ToString());
+            selectedRoom[2] = (int)roomsTable.SelectedRows[0].Cells["Number"].Value;
+            new ModifyRoom(this, selectedRoom).Show();
+        }
+
+        private void roomsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            deleteButton.Enabled = true;
+            modifyButton.Enabled = true;
+        }
     }
 }

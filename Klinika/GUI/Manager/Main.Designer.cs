@@ -66,6 +66,7 @@
             // 
             // deleteButton
             // 
+            this.deleteButton.Enabled = false;
             this.deleteButton.Location = new System.Drawing.Point(473, 342);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(94, 29);
@@ -76,12 +77,14 @@
             // 
             // modifyButton
             // 
+            this.modifyButton.Enabled = false;
             this.modifyButton.Location = new System.Drawing.Point(323, 342);
             this.modifyButton.Name = "modifyButton";
             this.modifyButton.Size = new System.Drawing.Size(94, 29);
             this.modifyButton.TabIndex = 2;
             this.modifyButton.Text = "Modify";
             this.modifyButton.UseVisualStyleBackColor = true;
+            this.modifyButton.Click += new System.EventHandler(this.modifyButton_Click);
             // 
             // addButton
             // 
@@ -103,6 +106,7 @@
             this.roomsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.roomsTable.Size = new System.Drawing.Size(756, 316);
             this.roomsTable.TabIndex = 0;
+            this.roomsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.roomsTable_CellClick);
             // 
             // tabPage2
             // 
