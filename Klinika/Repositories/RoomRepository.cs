@@ -69,5 +69,22 @@ namespace Klinika.Repositories
                 MessageBox.Show(error.Message);
             }
         }
+
+        public static void Delete(int id)
+        {
+            string deleteQuery = "UPDATE [Room] SET IsDeleted = 1 WHERE ID = @ID";
+            try
+            {
+                SqlCommand delete = new SqlCommand(deleteQuery, DatabaseConnection.GetInstance().database);
+                delete.Parameters.AddWithValue("@ID", id);
+                DatabaseConnection.GetInstance().database.Open();
+                delete.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
     }
 }
