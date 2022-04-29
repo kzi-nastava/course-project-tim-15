@@ -78,17 +78,6 @@ namespace Klinika.Repositories
             {
                 MessageBox.Show(ex.Message);
             }
-
-            var a = new Anamnesis
-            {
-                ID = 1,
-                MedicalActionID = 10,
-                Description = "Nekakav Opis",
-                Symptoms = "Glavobolja",
-                Conclusion = "Migrena"
-            };
-            anamneses.Add(a);
-
             return anamneses;
         }
     }
