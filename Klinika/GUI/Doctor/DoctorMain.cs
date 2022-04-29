@@ -61,18 +61,31 @@ namespace Klinika.GUI.Doctor
                 data.Columns.Remove("DoctorID");
                 data.Columns.Remove("PatientID");
                 data.Columns.Remove("RoomID");
-                data.Columns.Remove("Completed");
+                //data.Columns.Remove("Completed");
                 data.Columns.Remove("IsDeleted");
                 data.Columns.Remove("Description");
+
+                data.Columns["Completed"].SetOrdinal(6);
 
                 table.DataSource = data;
                 table.ClearSelection();
             }
         }
+        public void UpdateTableRow(Appointment appointment, DataGridView table)
+        {
+            DataTable? dt = table.DataSource as DataTable;
+            table.SelectedRows[0].SetValues(appointment.ID.ToString(),
+                GetPatientName(appointment.PatientID),
+                appointment.DateTime.ToString(),
+                GetTypeFullName(appointment.Type),
+                appointment.Duration.ToString(),
+                appointment.Urgent,
+                appointment.Completed);
+        }
         #endregion
 
         #region All Appointments
-        private void FillAllAppointmentsTable()
+        public void FillAllAppointmentsTable()
         {
             DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
             FillTableWithData(allAppointments, AllAppointmentsTable);
@@ -88,16 +101,6 @@ namespace Klinika.GUI.Doctor
             dataRow[4] = appointment.Duration.ToString();
             dataRow[5] = appointment.Urgent;
             dt.Rows.Add(dataRow);
-        }
-        public void UpdateAppointmentTable(Appointment appointment)
-        {
-            DataTable? dt = AllAppointmentsTable.DataSource as DataTable;
-            AllAppointmentsTable.SelectedRows[0].SetValues(appointment.ID.ToString(),
-                GetPatientName(appointment.PatientID),
-                appointment.DateTime.ToString(),
-                GetTypeFullName(appointment.Type),
-                appointment.Duration.ToString(),
-                appointment.Urgent);
         }
         private void FixAppointmentTypeField(DataTable dt)
         {
@@ -172,8 +175,9 @@ namespace Klinika.GUI.Doctor
         private void ViewMedicalRecordButtonClick(object sender, EventArgs e)
         {
             int appointmentID = Convert.ToInt32(ScheduleTable.SelectedRows[0].Cells["ID"].Value);
+            Appointment appointment = Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();
             int patientID = Appointments.Where(x => x.ID == appointmentID).FirstOrDefault().PatientID;
-            new MedicalRecord(this, patientID).Show();
+            new MedicalRecord(this, appointment).Show();
         }
         #endregion
 
@@ -181,12 +185,19 @@ namespace Klinika.GUI.Doctor
         private void PreformeButtonClick(object sender, EventArgs e)
         {
             int appointmentID = Convert.ToInt32(ScheduleTable.SelectedRows[0].Cells["ID"].Value);
-            if(Appointments.Where(x => x.ID == appointmentID).FirstOrDefault().Type == 'O')
+            Appointment appointment = Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();
+            if(appointment.Type == 'O')
             {
-                MessageBox.Show("This feature will be implemented soon");
+                MessageBox.Show("This feature will be implemented soon", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (appointment.Completed)
+            {
+                MessageBox.Show("This Appointment is already completed!", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             int patientID = Appointments.Where(x => x.ID == appointmentID).FirstOrDefault().PatientID;
+            new MedicalRecord(this, appointment, false).Show();
         }
         #endregion
     }

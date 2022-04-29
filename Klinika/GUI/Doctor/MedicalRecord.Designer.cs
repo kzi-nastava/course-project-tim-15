@@ -45,6 +45,14 @@
             this.DiseasesTable = new System.Windows.Forms.DataGridView();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.AllergensTable = new System.Windows.Forms.DataGridView();
+            this.AnamnesisGroup = new System.Windows.Forms.GroupBox();
+            this.FinishButton = new System.Windows.Forms.Button();
+            this.ConclusionTextBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.SymptomsTextBox = new System.Windows.Forms.TextBox();
+            this.DescriptionTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnamnesesTable)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -52,6 +60,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DiseasesTable)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AllergensTable)).BeginInit();
+            this.AnamnesisGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // PatientNameLabel
@@ -238,11 +247,90 @@
             this.AllergensTable.TabIndex = 10;
             this.AllergensTable.SelectionChanged += new System.EventHandler(this.TableSelectionChanged);
             // 
+            // AnamnesisGroup
+            // 
+            this.AnamnesisGroup.Controls.Add(this.FinishButton);
+            this.AnamnesisGroup.Controls.Add(this.ConclusionTextBox);
+            this.AnamnesisGroup.Controls.Add(this.label6);
+            this.AnamnesisGroup.Controls.Add(this.label5);
+            this.AnamnesisGroup.Controls.Add(this.SymptomsTextBox);
+            this.AnamnesisGroup.Controls.Add(this.DescriptionTextBox);
+            this.AnamnesisGroup.Controls.Add(this.label4);
+            this.AnamnesisGroup.Location = new System.Drawing.Point(200, 40);
+            this.AnamnesisGroup.Name = "AnamnesisGroup";
+            this.AnamnesisGroup.Size = new System.Drawing.Size(904, 89);
+            this.AnamnesisGroup.TabIndex = 12;
+            this.AnamnesisGroup.TabStop = false;
+            this.AnamnesisGroup.Text = "New Anamnesis";
+            this.AnamnesisGroup.Visible = false;
+            // 
+            // FinishButton
+            // 
+            this.FinishButton.Location = new System.Drawing.Point(820, 37);
+            this.FinishButton.Name = "FinishButton";
+            this.FinishButton.Size = new System.Drawing.Size(75, 43);
+            this.FinishButton.TabIndex = 6;
+            this.FinishButton.Text = "FINISH";
+            this.FinishButton.UseVisualStyleBackColor = true;
+            this.FinishButton.Click += new System.EventHandler(this.FinishButtonClick);
+            // 
+            // ConclusionTextBox
+            // 
+            this.ConclusionTextBox.Location = new System.Drawing.Point(552, 37);
+            this.ConclusionTextBox.Multiline = true;
+            this.ConclusionTextBox.Name = "ConclusionTextBox";
+            this.ConclusionTextBox.Size = new System.Drawing.Size(265, 43);
+            this.ConclusionTextBox.TabIndex = 5;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(552, 19);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(67, 15);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "Conclusion";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(281, 19);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(64, 15);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Symptoms";
+            // 
+            // SymptomsTextBox
+            // 
+            this.SymptomsTextBox.Location = new System.Drawing.Point(281, 37);
+            this.SymptomsTextBox.Multiline = true;
+            this.SymptomsTextBox.Name = "SymptomsTextBox";
+            this.SymptomsTextBox.Size = new System.Drawing.Size(265, 43);
+            this.SymptomsTextBox.TabIndex = 2;
+            // 
+            // DescriptionTextBox
+            // 
+            this.DescriptionTextBox.Location = new System.Drawing.Point(10, 37);
+            this.DescriptionTextBox.Multiline = true;
+            this.DescriptionTextBox.Name = "DescriptionTextBox";
+            this.DescriptionTextBox.Size = new System.Drawing.Size(265, 43);
+            this.DescriptionTextBox.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(10, 19);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(67, 15);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Description";
+            // 
             // MedicalRecord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1125, 555);
+            this.Controls.Add(this.AnamnesisGroup);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -264,6 +352,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.DiseasesTable)).EndInit();
             this.groupBox4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.AllergensTable)).EndInit();
+            this.AnamnesisGroup.ResumeLayout(false);
+            this.AnamnesisGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -285,5 +375,13 @@
         private DataGridView DiseasesTable;
         private GroupBox groupBox4;
         private DataGridView AllergensTable;
+        private GroupBox AnamnesisGroup;
+        private Button FinishButton;
+        private TextBox ConclusionTextBox;
+        private Label label6;
+        private Label label5;
+        private TextBox SymptomsTextBox;
+        private TextBox DescriptionTextBox;
+        private Label label4;
     }
 }

@@ -15,13 +15,18 @@ namespace Klinika.GUI.Doctor
     public partial class MedicalRecord : Form
     {
         private readonly DoctorMain Parent;
+        private Appointment Appointment;
         private Models.MedicalRecord Record;
-        public MedicalRecord(DoctorMain parent, int patientId)
+        public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
         {
             InitializeComponent();
             Parent = parent;
-            Record = MedicalRecordRepository.Get(patientId);
+            Appointment = appointment;
+            Record = MedicalRecordRepository.Get(appointment.PatientID);
+            if (!isPreview) ShowNewAnamnesisForm();
         }
+
+        #region View Record
         private void MedicalRecordLoad(object sender, EventArgs e)
         {
             Parent.Enabled = false;
@@ -108,6 +113,29 @@ namespace Klinika.GUI.Doctor
         {
             (sender as DataGridView).ClearSelection();
         }
+        #endregion
+
+        #region Add Anamnesis
+        private void ShowNewAnamnesisForm()
+        {
+            AnamnesisGroup.Visible = true;
+        }
+        private void FinishButtonClick(object sender, EventArgs e)
+        {
+            Anamnesis anamnesis = new Anamnesis();
+            anamnesis.Description = DescriptionTextBox.Text;
+            anamnesis.Symptoms = SymptomsTextBox.Text;
+            anamnesis.Conclusion = ConclusionTextBox.Text;
+            anamnesis.MedicalActionID = Appointment.ID;
+            anamnesis.ID = MedicalRecordRepository.CreateAnamnesis(anamnesis);
+            Appointment.Completed = true;
+            Appointment.Description = "Examination Finished";
+            AppointmentRepository.GetInstance().Modify(Appointment);
+            Parent.UpdateTableRow(Appointment, Parent.ScheduleTable);
+            Parent.FillAllAppointmentsTable();
+            Close();
+        }
+        #endregion
 
     }
 }

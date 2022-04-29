@@ -151,5 +151,31 @@ namespace Klinika.Repositories
             }
             return allergens;
         }
+
+        public static int CreateAnamnesis(Anamnesis anamnesis)
+        {
+            string createQuery = "INSERT INTO [Anamnesis] " +
+                    "(MedicalActionID,Description,Symptoms,Conclusion) " +
+                    "OUTPUT INSERTED.ID " +
+                    "VALUES (@MedicalActionID,@Description,@Symptoms,@Conclusion)";
+
+            SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
+            create.Parameters.AddWithValue("@MedicalActionID", anamnesis.MedicalActionID);
+            create.Parameters.AddWithValue("@Description", anamnesis.Description);
+            create.Parameters.AddWithValue("@Symptoms", anamnesis.Symptoms);
+            create.Parameters.AddWithValue("@Conclusion", anamnesis.Conclusion);
+
+            try
+            {
+                DatabaseConnection.GetInstance().database.Open();
+                anamnesis.ID = (int)create.ExecuteScalar();
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return anamnesis.ID;
+        }
     }
 }

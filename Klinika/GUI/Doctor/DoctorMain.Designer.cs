@@ -212,12 +212,12 @@
 
         private TabControl MainTabControl;
         private TabPage AllAppointmentsTab;
-        private DataGridView AllAppointmentsTable;
+        public DataGridView AllAppointmentsTable;
         private Button DeleteAppointmentButton;
         private Button EditAppointmentButton;
         private Button AddAppointmentButton;
         private TabPage ScheduleTab;
-        private DataGridView ScheduleTable;
+        public DataGridView ScheduleTable;
         private DateTimePicker ScheduleDatePicker;
         private Button ViewMedicalRecordButton;
         private Button PreformeButton;
