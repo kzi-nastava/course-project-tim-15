@@ -219,7 +219,7 @@ namespace Klinika.Repositories
         }
         public bool IsOccupied(DateTime newAppointmentStart, int duration = 15, int id = -1)
         {
-            var newAppointmentEnd = newAppointmentStart.AddMinutes(duration);
+            var newAppointmentEnd = newAppointmentStart.AddMinutes(duration); 
 
             foreach (Appointment appointment in Appointments)
             {
@@ -227,7 +227,7 @@ namespace Klinika.Repositories
                 var end = appointment.DateTime.AddMinutes(appointment.Duration);
 
                 if (!appointment.IsDeleted && appointment.ID != id &&
-                    newAppointmentStart < end && start < newAppointmentEnd)
+                    newAppointmentStart < end && start < newAppointmentEnd) 
                     return true;
             }
             return false;

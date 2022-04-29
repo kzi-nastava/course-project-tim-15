@@ -35,13 +35,9 @@ namespace Klinika.GUI.Patient
         {
             if (Appointment == null)
             {
-                CreateAppointment();
-                if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
+                if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate()))
                 {
-                    AppointmentRepository.GetInstance().Create(Appointment);
-                    Parent.InsertRowIntoPersonalAppointmentsTable(Appointment);
-                    Parent.InsertRowIntoOccupiedTable(Appointment);
-                    Parent.Enabled = true;
+                    CreateAppointment();
                     Close();
                 }
                 else
@@ -51,17 +47,14 @@ namespace Klinika.GUI.Patient
             }
             else
             {
-                ModifyAppointment();
                 if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
                 {
-                    AppointmentRepository.GetInstance().Modify(Appointment);
-                    Parent.ModifyPersonalAppointmentTableRow(Appointment);
-                    Parent.Enabled = true;
+                    ModifyAppointment();
                     Close();
                 }
                 else
                 {
-                    MessageBox.Show("This time is occupied!", "Denied Create", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("This time is occupied!", "Denied Modify", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }
@@ -91,7 +84,7 @@ namespace Klinika.GUI.Patient
         {
             Appointment = new Appointment();
             Appointment.ID = -1;
-            Appointment.DoctorID = (DoctorComboBox.SelectedItem as User).ID;
+            Appointment.DoctorID = GetDoctorID();
             Appointment.PatientID = Parent.Patient.ID;
             Appointment.DateTime = MergeDate();
             Appointment.RoomID = 1;
@@ -101,11 +94,22 @@ namespace Klinika.GUI.Patient
             Appointment.Urgent = false;
             Appointment.Description = "";
             Appointment.IsDeleted = false;
+            AppointmentRepository.GetInstance().Create(Appointment);
+            Parent.InsertRowIntoPersonalAppointmentsTable(Appointment);
+            Parent.InsertRowIntoOccupiedTable(Appointment);
+            Parent.Enabled = true;
         }
         private void ModifyAppointment()
         {
-            Appointment.DoctorID = (DoctorComboBox.SelectedItem as User).ID;
+            Appointment.DoctorID = GetDoctorID();
             Appointment.DateTime = MergeDate();
+            AppointmentRepository.GetInstance().Modify(Appointment);
+            Parent.ModifyPersonalAppointmentTableRow(Appointment);
+            Parent.Enabled = true;
+        }
+        private int GetDoctorID()
+        {
+            return (DoctorComboBox.SelectedItem as User).ID;
         }
         private DateTime MergeDate()
         {
