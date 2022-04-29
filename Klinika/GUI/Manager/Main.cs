@@ -19,6 +19,12 @@ namespace Klinika.GUI.Manager
 
         private void Main_Load(object sender, EventArgs e)
         {
+            roomsTable.DataSource = Repositories.RoomRepository.GetAll();
+            roomsTable.ClearSelection();
+        }
+
+        private void deleteButton_Click(object sender, EventArgs e)
+        {
 
         }
     }

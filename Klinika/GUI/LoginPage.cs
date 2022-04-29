@@ -30,7 +30,7 @@ namespace Klinika
                         //Show doctors window
                         break;
                     case "Manager":
-                        //Show managers window
+                        new GUI.Manager.Main().Show();
                         break;
                     default:
                         //Show patients window

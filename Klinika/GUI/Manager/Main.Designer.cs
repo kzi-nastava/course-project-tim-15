@@ -30,14 +30,14 @@
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.addButton = new System.Windows.Forms.Button();
-            this.modifyButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
+            this.modifyButton = new System.Windows.Forms.Button();
+            this.addButton = new System.Windows.Forms.Button();
+            this.roomsTable = new System.Windows.Forms.DataGridView();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
             this.SuspendLayout();
             // 
             // tabs
@@ -55,7 +55,7 @@
             this.tabPage1.Controls.Add(this.deleteButton);
             this.tabPage1.Controls.Add(this.modifyButton);
             this.tabPage1.Controls.Add(this.addButton);
-            this.tabPage1.Controls.Add(this.dataGridView1);
+            this.tabPage1.Controls.Add(this.roomsTable);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -64,34 +64,15 @@
             this.tabPage1.Text = "Rooms";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // deleteButton
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 29);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(768, 328);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Equipment";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 6);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 29;
-            this.dataGridView1.Size = new System.Drawing.Size(759, 316);
-            this.dataGridView1.TabIndex = 0;
-            // 
-            // addButton
-            // 
-            this.addButton.Location = new System.Drawing.Point(178, 342);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(94, 29);
-            this.addButton.TabIndex = 1;
-            this.addButton.Text = "Add New";
-            this.addButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Location = new System.Drawing.Point(473, 342);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(94, 29);
+            this.deleteButton.TabIndex = 3;
+            this.deleteButton.Text = "Delete";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
             // modifyButton
             // 
@@ -102,14 +83,35 @@
             this.modifyButton.Text = "Modify";
             this.modifyButton.UseVisualStyleBackColor = true;
             // 
-            // deleteButton
+            // addButton
             // 
-            this.deleteButton.Location = new System.Drawing.Point(473, 342);
-            this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(94, 29);
-            this.deleteButton.TabIndex = 3;
-            this.deleteButton.Text = "Delete";
-            this.deleteButton.UseVisualStyleBackColor = true;
+            this.addButton.Location = new System.Drawing.Point(178, 342);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(94, 29);
+            this.addButton.TabIndex = 1;
+            this.addButton.Text = "Add New";
+            this.addButton.UseVisualStyleBackColor = true;
+            // 
+            // roomsTable
+            // 
+            this.roomsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.roomsTable.Location = new System.Drawing.Point(6, 6);
+            this.roomsTable.Name = "roomsTable";
+            this.roomsTable.RowHeadersWidth = 51;
+            this.roomsTable.RowTemplate.Height = 29;
+            this.roomsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.roomsTable.Size = new System.Drawing.Size(756, 316);
+            this.roomsTable.TabIndex = 0;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(768, 393);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Equipment";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
@@ -122,7 +124,7 @@
             this.Load += new System.EventHandler(this.Main_Load);
             this.tabs.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -135,6 +137,6 @@
         private Button deleteButton;
         private Button modifyButton;
         private Button addButton;
-        private DataGridView dataGridView1;
+        private DataGridView roomsTable;
     }
 }
