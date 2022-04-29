@@ -21,7 +21,6 @@ namespace Klinika.GUI.Patient
         {
             Parent.Enabled = false;
             Parent.FillDoctorComboBox(DoctorComboBox);
-            DatePicker.MinDate = Parent.AppointmentDatePicker.MinDate;
             SetAppointmentDetails();
         }
         private void PersonalAppointmentClosing(object sender, FormClosingEventArgs e)
@@ -33,28 +32,31 @@ namespace Klinika.GUI.Patient
         #region Click functions
         private void ConfirmeButtonClick(object sender, EventArgs e)
         {
-            if (Appointment == null)
+            if (Parent.IsDateValid(MergeDate()))
             {
-                if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate()))
+                if (Appointment == null)
                 {
-                    CreateAppointment();
-                    Close();
+                    if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate()))
+                    {
+                        CreateAppointment();
+                        Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("This time is occupied!", "Denied Create", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("This time is occupied!", "Denied Create", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-            }
-            else
-            {
-                if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
-                {
-                    ModifyAppointment();
-                    Close();
-                }
-                else
-                {
-                    MessageBox.Show("This time is occupied!", "Denied Modify", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
+                    {
+                        ModifyAppointment();
+                        Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("This time is occupied!", "Denied Modify", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
             }
         }

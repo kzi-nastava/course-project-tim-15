@@ -26,7 +26,6 @@ namespace Klinika.GUI.Patient
         {
             FillPersonalAppointmentTable();
             FillDoctorComboBox(DoctorComboBox);
-            AppointmentDatePicker.MinDate = DateTime.Now;
             ModifyButton.Enabled = false;
             DeleteButton.Enabled = false;
         }
@@ -171,7 +170,10 @@ namespace Klinika.GUI.Patient
         }
         private void FindAppointmentsButtonClick(object sender, EventArgs e)
         {
-            FillOccupiedAppointmentsTable();
+            if (IsDateValid(AppointmentDatePicker.Value))
+            {
+                FillOccupiedAppointmentsTable();
+            }
         }
         private void ScheduleButtonClick(object sender, EventArgs e)
         {
@@ -236,6 +238,15 @@ namespace Klinika.GUI.Patient
                 ScheduleButton.Enabled = false;
                 OccupiedAppointmentsTable.DataSource = new DataTable();
             }
+        }
+        public bool IsDateValid (DateTime dateTime)
+        {
+            if (dateTime < DateTime.Now)
+            {
+                MessageBox.Show("Date is not valid!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
         }
         #endregion
     }
