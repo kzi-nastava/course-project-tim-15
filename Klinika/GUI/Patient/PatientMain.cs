@@ -115,6 +115,8 @@ namespace Klinika.GUI.Patient
                 OccupiedAppointmentsTable.Columns["DateTime"].MinimumWidth = 150;
 
                 OccupiedAppointmentsTable.ClearSelection();
+
+                ScheduleButton.Enabled = true;
             }
         }
         public void InsertRowIntoOccupiedTable(Appointment appointment)
@@ -131,6 +133,12 @@ namespace Klinika.GUI.Patient
         #endregion
 
         #region Click functions
+        private void ModifyButtonClick(object sender, EventArgs e)
+        {
+            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
+            Appointment? toModify = GetAppointment(ID);
+            new PersonalAppointment(this, toModify).Show();
+        }
         private void DeleteAppointmentClick(object sender, EventArgs e)
         {
             DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete selected appointment?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -161,12 +169,6 @@ namespace Klinika.GUI.Patient
         private void ScheduleButtonClick(object sender, EventArgs e)
         {
             new PersonalAppointment(this, null).Show();
-        }
-        private void ModifyButtonClick(object sender, EventArgs e)
-        {
-            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
-            Appointment? toModify = GetAppointment(ID);
-            new PersonalAppointment(this, toModify).Show();
         }
         #endregion
 
@@ -224,6 +226,7 @@ namespace Klinika.GUI.Patient
         {
             if ((sender as TabControl).SelectedIndex == 1)
             {
+                ScheduleButton.Enabled = false;
                 OccupiedAppointmentsTable.DataSource = new DataTable();
             }
         }

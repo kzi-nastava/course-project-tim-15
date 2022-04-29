@@ -14,6 +14,11 @@ namespace Klinika.Models
         public char Type { get; set; }
         public string? Description { get; set; }
         public bool Approved { get; set; }
+
+        public PatientRequest()
+        {
+            ID = -1;
+        }
         public PatientRequest(int id, int patientID, int medicalActionID, char type,
             string? description, bool approved)
         {
