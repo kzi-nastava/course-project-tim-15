@@ -27,8 +27,8 @@ namespace Klinika.GUI.Doctor
 
         private void AddAppointmentLoad(object sender, EventArgs e)
         {
-            DatePicker.MinDate = DateTime.Now;
             Parent.Enabled = false;
+            DatePicker.MinDate = DateTime.Now;
             PatientPicker.Items.AddRange(GetPatients());
             if (ToEdit == null)
             {
@@ -106,7 +106,7 @@ namespace Klinika.GUI.Doctor
                 return;
             }
             TransferDataFromUI(ToEdit, dateTime);
-            AppointmentRepository.Modify(ToEdit);
+            AppointmentRepository.GetInstance().Modify(ToEdit);
             Parent.Enabled = true;
             Parent.UpdateAppointmentTable(ToEdit);
             Close();

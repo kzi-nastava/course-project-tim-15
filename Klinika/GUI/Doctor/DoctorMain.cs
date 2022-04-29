@@ -23,13 +23,59 @@ namespace Klinika.GUI.Doctor
                 return AppointmentRepository.GetInstance().Appointments;
             }
         }
+
+        #region Form
         public DoctorMain(User doctor)
         {
             InitializeComponent();
             Doctor = doctor;
         }
+        private void DoctorMainLoad(object sender, EventArgs e)
+        {
+            // All Appointments Tab
+            FillAllAppointmentsTable();
+            EditAppointmentButton.Enabled = false;
+            DeleteAppointmentButton.Enabled = false;
+
+            // Schedule Tab
+            DataTable? scheduledAppointments = AppointmentRepository.GetAll(DateTime.Now.ToString("yyyy-MM-dd"), Doctor.ID, User.RoleType.DOCTOR, 3);
+            FillTableWithData(scheduledAppointments, ScheduleTable);
+            ScheduleTable.ClearSelection();
+            ViewMedicalRecordButton.Enabled = false;
+
+        }
+        private void DoctorMainFormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+        #endregion
+
+        #region Shared
+        private void FillTableWithData(DataTable? data, DataGridView table)
+        {
+            if (data != null)
+            {
+                FillTableWithPatientData(data);
+                FixAppointmentTypeField(data);
+                data.Columns.Remove("DoctorID");
+                data.Columns.Remove("PatientID");
+                data.Columns.Remove("RoomID");
+                data.Columns.Remove("Completed");
+                data.Columns.Remove("IsDeleted");
+                data.Columns.Remove("Description");
+
+                table.DataSource = data;
+                table.ClearSelection();
+            }
+        }
+        #endregion
 
         #region All Appointments
+        private void FillAllAppointmentsTable()
+        {
+            DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
+            FillTableWithData(allAppointments, AllAppointmentsTable);
+        }
         public void InsertIntoAppointmentsTable(Appointment appointment)
         {
             DataTable? dt = AllAppointmentsTable.DataSource as DataTable;
@@ -51,28 +97,6 @@ namespace Klinika.GUI.Doctor
                 GetTypeFullName(appointment.Type),
                 appointment.Duration.ToString(),
                 appointment.Urgent);
-        }
-        private void FillAllAppointmentsTable()
-        {
-            DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
-            if (allAppointments != null)
-            {
-                FillTableWithPatientData(allAppointments);
-                FixAppointmentTypeField(allAppointments);
-                allAppointments.Columns.Remove("DoctorID");
-                allAppointments.Columns.Remove("PatientID");
-                allAppointments.Columns.Remove("RoomID");
-                allAppointments.Columns.Remove("Completed");
-                allAppointments.Columns.Remove("IsDeleted");
-                allAppointments.Columns.Remove("Description");
-
-                AllAppointmentsTable.DataSource = allAppointments;
-
-                AllAppointmentsTable.Columns["ID"].Width = 50;
-                AllAppointmentsTable.Columns["DateTime"].MinimumWidth = 150;
-
-                AllAppointmentsTable.ClearSelection();
-            }
         }
         private void FixAppointmentTypeField(DataTable dt)
         {
@@ -100,7 +124,7 @@ namespace Klinika.GUI.Doctor
                 row["Patient Name"] = GetPatientName(Convert.ToInt32(row["PatientID"]));
             }
         }
-        private string GetPatientName(int ID)
+        public string GetPatientName(int ID)
         {
             var patient = UserRepository.GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
             return $"{patient.Name} {patient.Surname}";
@@ -132,16 +156,24 @@ namespace Klinika.GUI.Doctor
         }
         #endregion
 
-        private void DoctorMainLoad(object sender, EventArgs e)
+        #region Schedule
+        private void ScheduleDatePickerValueChanged(object sender, EventArgs e)
         {
-            FillAllAppointmentsTable();
-            EditAppointmentButton.Enabled = false;
-            DeleteAppointmentButton.Enabled = false;
+            var date = ScheduleDatePicker.Value.ToString("yyyy-MM-dd");
+            DataTable? scheduledAppointments = AppointmentRepository.GetAll(date, Doctor.ID, User.RoleType.DOCTOR, 3);
+            FillTableWithData(scheduledAppointments, ScheduleTable);
+        }
+        private void ScheduleTableRowSelected(object sender, DataGridViewCellEventArgs e)
+        {
+            ViewMedicalRecordButton.Enabled = true;
+        }
+        private void ViewMedicalRecordButtonClick(object sender, EventArgs e)
+        {
+            int appointmentID = Convert.ToInt32(ScheduleTable.SelectedRows[0].Cells["ID"].Value);
+            int patientID = Appointments.Where(x => x.ID == appointmentID).FirstOrDefault().PatientID;
+            new MedicalRecord(this, patientID).Show();
+        }
+        #endregion
 
-        }
-        private void DoctorMainFormClosing(object sender, FormClosingEventArgs e)
-        {
-            Application.Exit();
-        }
     }
 }
