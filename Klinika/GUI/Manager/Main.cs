@@ -15,6 +15,7 @@ namespace Klinika.GUI.Manager
         public DataTable unfiltered;
         public Main()
         {
+            unfiltered = new DataTable();
             InitializeComponent();
         }
 
@@ -28,6 +29,10 @@ namespace Klinika.GUI.Manager
             equipmentTable.Columns["ID"].Visible = false;
             equipmentTable.ClearSelection();
 
+            for (int i = 0; i < equipmentTable.Rows.Count; i++)
+            {
+
+            }
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -104,11 +109,6 @@ namespace Klinika.GUI.Manager
         private void quantityTextBox_TextChanged(object sender, EventArgs e)
         {
             filter();
-        }
-
-        private void searchButton_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

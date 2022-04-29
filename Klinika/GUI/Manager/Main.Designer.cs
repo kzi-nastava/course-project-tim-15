@@ -38,12 +38,14 @@
             this.roomTypeTextBox = new System.Windows.Forms.TextBox();
             this.toButton = new System.Windows.Forms.Button();
             this.fromButton = new System.Windows.Forms.Button();
-            this.searchButton = new System.Windows.Forms.Button();
             this.quantityTextBox = new System.Windows.Forms.TextBox();
             this.typeTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTextBox = new System.Windows.Forms.TextBox();
             this.numberTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTable = new System.Windows.Forms.DataGridView();
+            this.quantityComboBox = new System.Windows.Forms.ComboBox();
+            this.roomComboBox = new System.Windows.Forms.ComboBox();
+            this.equipmentComboBox = new System.Windows.Forms.ComboBox();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
@@ -122,10 +124,12 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.equipmentComboBox);
+            this.tabPage2.Controls.Add(this.roomComboBox);
+            this.tabPage2.Controls.Add(this.quantityComboBox);
             this.tabPage2.Controls.Add(this.roomTypeTextBox);
             this.tabPage2.Controls.Add(this.toButton);
             this.tabPage2.Controls.Add(this.fromButton);
-            this.tabPage2.Controls.Add(this.searchButton);
             this.tabPage2.Controls.Add(this.quantityTextBox);
             this.tabPage2.Controls.Add(this.typeTextBox);
             this.tabPage2.Controls.Add(this.equipmentTextBox);
@@ -149,7 +153,7 @@
             // 
             // toButton
             // 
-            this.toButton.Location = new System.Drawing.Point(276, 344);
+            this.toButton.Location = new System.Drawing.Point(530, 358);
             this.toButton.Name = "toButton";
             this.toButton.Size = new System.Drawing.Size(110, 29);
             this.toButton.TabIndex = 7;
@@ -158,22 +162,12 @@
             // 
             // fromButton
             // 
-            this.fromButton.Location = new System.Drawing.Point(133, 344);
+            this.fromButton.Location = new System.Drawing.Point(158, 358);
             this.fromButton.Name = "fromButton";
             this.fromButton.Size = new System.Drawing.Size(110, 29);
             this.fromButton.TabIndex = 6;
             this.fromButton.Text = "Select From";
             this.fromButton.UseVisualStyleBackColor = true;
-            // 
-            // searchButton
-            // 
-            this.searchButton.Location = new System.Drawing.Point(9, 344);
-            this.searchButton.Name = "searchButton";
-            this.searchButton.Size = new System.Drawing.Size(94, 29);
-            this.searchButton.TabIndex = 5;
-            this.searchButton.Text = "Search";
-            this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // quantityTextBox
             // 
@@ -216,8 +210,32 @@
             this.equipmentTable.RowHeadersWidth = 51;
             this.equipmentTable.RowTemplate.Height = 29;
             this.equipmentTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.equipmentTable.Size = new System.Drawing.Size(756, 271);
+            this.equipmentTable.Size = new System.Drawing.Size(756, 250);
             this.equipmentTable.TabIndex = 0;
+            // 
+            // quantityComboBox
+            // 
+            this.quantityComboBox.FormattingEnabled = true;
+            this.quantityComboBox.Location = new System.Drawing.Point(629, 304);
+            this.quantityComboBox.Name = "quantityComboBox";
+            this.quantityComboBox.Size = new System.Drawing.Size(133, 28);
+            this.quantityComboBox.TabIndex = 9;
+            // 
+            // roomComboBox
+            // 
+            this.roomComboBox.FormattingEnabled = true;
+            this.roomComboBox.Location = new System.Drawing.Point(199, 304);
+            this.roomComboBox.Name = "roomComboBox";
+            this.roomComboBox.Size = new System.Drawing.Size(148, 28);
+            this.roomComboBox.TabIndex = 10;
+            // 
+            // equipmentComboBox
+            // 
+            this.equipmentComboBox.FormattingEnabled = true;
+            this.equipmentComboBox.Location = new System.Drawing.Point(491, 304);
+            this.equipmentComboBox.Name = "equipmentComboBox";
+            this.equipmentComboBox.Size = new System.Drawing.Size(132, 28);
+            this.equipmentComboBox.TabIndex = 11;
             // 
             // Main
             // 
@@ -252,9 +270,11 @@
         private TextBox equipmentTextBox;
         private TextBox numberTextBox;
         private TextBox quantityTextBox;
-        private Button searchButton;
         private Button toButton;
         private Button fromButton;
         private TextBox roomTypeTextBox;
+        private ComboBox equipmentComboBox;
+        private ComboBox roomComboBox;
+        private ComboBox quantityComboBox;
     }
 }
