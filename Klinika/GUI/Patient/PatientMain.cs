@@ -147,9 +147,16 @@ namespace Klinika.GUI.Patient
                 int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
                 Appointment? toDelete = GetAppointment(ID);
 
-                if (DateTime.Now.AddDays(1).Date >= toDelete.DateTime.Date)
+                if (DateTime.Now.AddDays(2).Date >= toDelete.DateTime.Date)
                 {
-                    MessageBox.Show("You can't delete this appointment.", "Denied Delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    DialogResult sendRequest = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
+                    "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (sendRequest == DialogResult.Yes)
+                    {
+                        PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 'D', "", false);
+                        PatientRequestRepository.Create(patientRequest);
+                    }
                 }
                 else
                 {
