@@ -141,7 +141,7 @@ namespace Klinika.GUI.Patient
 
         private string GetFullRequestDescription()
         {
-            return "DateTime=" + MergeDate().ToString() + ";DoctorID=" + GetDoctorID().ToString();
+            return "DateTime=" + MergeDate().ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + GetDoctorID().ToString();
         }
         private int GetDoctorID()
         {
