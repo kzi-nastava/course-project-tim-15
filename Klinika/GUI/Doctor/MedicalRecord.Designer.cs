@@ -171,7 +171,7 @@
             this.MinimizeBox = false;
             this.Name = "MedicalRecord";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "MedicalRecord";
+            this.Text = "Medical Record";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MedicalRecordFormClosing);
             this.Load += new System.EventHandler(this.MedicalRecordLoad);
             this.groupBox1.ResumeLayout(false);
