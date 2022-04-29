@@ -46,6 +46,7 @@
             this.equipmentTextBox = new System.Windows.Forms.TextBox();
             this.numberTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTable = new System.Windows.Forms.DataGridView();
+            this.dateButton = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
@@ -124,6 +125,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.dateButton);
             this.tabPage2.Controls.Add(this.equipmentComboBox);
             this.tabPage2.Controls.Add(this.roomComboBox);
             this.tabPage2.Controls.Add(this.quantityComboBox);
@@ -186,6 +188,7 @@
             this.toButton.TabIndex = 7;
             this.toButton.Text = "Select To";
             this.toButton.UseVisualStyleBackColor = true;
+            this.toButton.Click += new System.EventHandler(this.toButton_Click);
             // 
             // fromButton
             // 
@@ -195,6 +198,7 @@
             this.fromButton.TabIndex = 6;
             this.fromButton.Text = "Select From";
             this.fromButton.UseVisualStyleBackColor = true;
+            this.fromButton.Click += new System.EventHandler(this.fromButton_Click);
             // 
             // quantityTextBox
             // 
@@ -240,6 +244,16 @@
             this.equipmentTable.Size = new System.Drawing.Size(756, 250);
             this.equipmentTable.TabIndex = 0;
             // 
+            // dateButton
+            // 
+            this.dateButton.Location = new System.Drawing.Point(336, 358);
+            this.dateButton.Name = "dateButton";
+            this.dateButton.Size = new System.Drawing.Size(139, 29);
+            this.dateButton.TabIndex = 12;
+            this.dateButton.Text = "Pick Transfer Date";
+            this.dateButton.UseVisualStyleBackColor = true;
+            this.dateButton.Click += new System.EventHandler(this.dateButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -279,5 +293,6 @@
         private ComboBox equipmentComboBox;
         private ComboBox roomComboBox;
         private ComboBox quantityComboBox;
+        private Button dateButton;
     }
 }

@@ -12,9 +12,11 @@ namespace Klinika.GUI.Manager
 {
     public partial class Main : Form
     {
+        public Models.EquipmentTransfer transfer;
         public DataTable unfiltered;
         public Main()
         {
+            transfer = new Models.EquipmentTransfer();
             unfiltered = new DataTable();
             InitializeComponent();
         }
@@ -22,7 +24,6 @@ namespace Klinika.GUI.Manager
         public void Main_Load(object sender, EventArgs e)
         {
             roomsTable.DataSource = Repositories.RoomRepository.GetAll();
-            roomsTable.ClearSelection();
             roomsTable.Columns["ID"].Visible = false;
             unfiltered = Repositories.EquipmentRepository.GetAll();
             equipmentTable.DataSource = unfiltered;
@@ -163,6 +164,24 @@ namespace Klinika.GUI.Manager
         private void quantityComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             filter();
+        }
+
+        private void fromButton_Click(object sender, EventArgs e)
+        {
+            transfer.fromId = (int)equipmentTable.SelectedRows[0].Cells["ID"].Value;
+            transfer.equipment = equipmentTable.SelectedRows[0].Cells["Equipment"].Value.ToString();
+            MessageBox.Show("Selected room and equipment to transfer!");
+        }
+
+        private void toButton_Click(object sender, EventArgs e)
+        {
+            transfer.toId = (int)roomsTable.SelectedRows[0].Cells["ID"].Value;
+            MessageBox.Show("Selected room from Rooms Tab! This can be changed.");
+        }
+
+        private void dateButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
