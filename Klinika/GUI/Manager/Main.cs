@@ -21,6 +21,11 @@ namespace Klinika.GUI.Manager
         {
             roomsTable.DataSource = Repositories.RoomRepository.GetAll();
             roomsTable.ClearSelection();
+            roomsTable.Columns["ID"].Visible = false;
+            equipmentTable.DataSource = Repositories.EquipmentRepository.GetAll();
+            equipmentTable.Columns["ID"].Visible = false;
+            equipmentTable.ClearSelection();
+
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -52,6 +57,11 @@ namespace Klinika.GUI.Manager
         {
             deleteButton.Enabled = true;
             modifyButton.Enabled = true;
+        }
+
+        private void filterButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
