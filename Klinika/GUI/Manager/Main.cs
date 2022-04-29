@@ -12,6 +12,7 @@ namespace Klinika.GUI.Manager
 {
     public partial class Main : Form
     {
+        public DataTable unfiltered;
         public Main()
         {
             InitializeComponent();
@@ -22,7 +23,8 @@ namespace Klinika.GUI.Manager
             roomsTable.DataSource = Repositories.RoomRepository.GetAll();
             roomsTable.ClearSelection();
             roomsTable.Columns["ID"].Visible = false;
-            equipmentTable.DataSource = Repositories.EquipmentRepository.GetAll();
+            unfiltered = Repositories.EquipmentRepository.GetAll();
+            equipmentTable.DataSource = unfiltered;
             equipmentTable.Columns["ID"].Visible = false;
             equipmentTable.ClearSelection();
 
@@ -59,7 +61,52 @@ namespace Klinika.GUI.Manager
             modifyButton.Enabled = true;
         }
 
-        private void filterButton_Click(object sender, EventArgs e)
+        protected void filter()
+        {
+            try
+            {
+                DataTable filtered = unfiltered;
+                filtered = filtered.AsEnumerable()
+                    .Where(row => row.Field<int>("Number").ToString().Contains(numberTextBox.Text.Trim())
+                    && row.Field<string>("Room Type").ToString().Contains(roomTypeTextBox.Text.Trim())
+                    && row.Field<string>("Equipment").ToString().Contains(equipmentTextBox.Text.Trim())
+                    && row.Field<string>("Equipment Type").ToString().Contains(typeTextBox.Text.Trim())
+                    && row.Field<int>("Quantity").ToString().Contains(quantityTextBox.Text.Trim())
+                    ).CopyToDataTable();
+                equipmentTable.DataSource = filtered;
+            }
+            catch (System.InvalidOperationException ex)
+            {
+                MessageBox.Show("This filter leaves the table empthy!");
+            }
+        }
+
+        private void numberTextBox_TextChanged(object sender, EventArgs e)
+        {
+            filter();
+        }
+
+        private void roomTypeTextBox_TextChanged(object sender, EventArgs e)
+        {
+            filter();
+        }
+
+        private void equipmentTextBox_TextChanged(object sender, EventArgs e)
+        {
+            filter();
+        }
+
+        private void typeTextBox_TextChanged(object sender, EventArgs e)
+        {
+            filter();
+        }
+
+        private void quantityTextBox_TextChanged(object sender, EventArgs e)
+        {
+            filter();
+        }
+
+        private void searchButton_Click(object sender, EventArgs e)
         {
 
         }

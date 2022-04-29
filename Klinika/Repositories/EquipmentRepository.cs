@@ -9,9 +9,11 @@ namespace Klinika.Repositories
         public static DataTable GetAll()
         {
             DataTable? retrievedEquipment = null;
-            string getAllQuery = "SELECT [Room].ID, [Room].Number, [Equipment].Name as Equipment, [EquipmentType].Name as 'Equipment Type', [RoomEquipment].Quantity " +
-                                      "FROM [RoomEquipment], [Room], [Equipment], [EquipmentType] " +
-                                      "WHERE [RoomEquipment].RoomID = [Room].ID AND [RoomEquipment].EquipmentID = [Equipment].ID AND [Equipment].TypeID = [EquipmentType].ID";
+            string getAllQuery = "SELECT [Room].ID, [Room].Number, [RoomType].Name as 'Room Type', [Equipment].Name as Equipment, " +
+                                 "[EquipmentType].Name as 'Equipment Type', [RoomEquipment].Quantity " +
+                                 "FROM [RoomEquipment], [Room], [Equipment], [EquipmentType], [RoomType] " +
+                                 "WHERE [RoomEquipment].RoomID = [Room].ID AND [RoomEquipment].EquipmentID = [Equipment].ID " +
+                                 "AND [Equipment].TypeID = [EquipmentType].ID AND [Room].Type = [RoomType].ID";
             try
             {
                 SqlConnection database = DatabaseConnection.GetInstance().database;

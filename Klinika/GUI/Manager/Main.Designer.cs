@@ -35,9 +35,10 @@
             this.addButton = new System.Windows.Forms.Button();
             this.roomsTable = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.roomTypeTextBox = new System.Windows.Forms.TextBox();
             this.toButton = new System.Windows.Forms.Button();
             this.fromButton = new System.Windows.Forms.Button();
-            this.filterButton = new System.Windows.Forms.Button();
+            this.searchButton = new System.Windows.Forms.Button();
             this.quantityTextBox = new System.Windows.Forms.TextBox();
             this.typeTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTextBox = new System.Windows.Forms.TextBox();
@@ -121,9 +122,10 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.roomTypeTextBox);
             this.tabPage2.Controls.Add(this.toButton);
             this.tabPage2.Controls.Add(this.fromButton);
-            this.tabPage2.Controls.Add(this.filterButton);
+            this.tabPage2.Controls.Add(this.searchButton);
             this.tabPage2.Controls.Add(this.quantityTextBox);
             this.tabPage2.Controls.Add(this.typeTextBox);
             this.tabPage2.Controls.Add(this.equipmentTextBox);
@@ -136,6 +138,14 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Equipment";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // roomTypeTextBox
+            // 
+            this.roomTypeTextBox.Location = new System.Drawing.Point(199, 15);
+            this.roomTypeTextBox.Name = "roomTypeTextBox";
+            this.roomTypeTextBox.Size = new System.Drawing.Size(148, 27);
+            this.roomTypeTextBox.TabIndex = 8;
+            this.roomTypeTextBox.TextChanged += new System.EventHandler(this.roomTypeTextBox_TextChanged);
             // 
             // toButton
             // 
@@ -155,43 +165,47 @@
             this.fromButton.Text = "Select From";
             this.fromButton.UseVisualStyleBackColor = true;
             // 
-            // filterButton
+            // searchButton
             // 
-            this.filterButton.Location = new System.Drawing.Point(9, 344);
-            this.filterButton.Name = "filterButton";
-            this.filterButton.Size = new System.Drawing.Size(94, 29);
-            this.filterButton.TabIndex = 5;
-            this.filterButton.Text = "Filter";
-            this.filterButton.UseVisualStyleBackColor = true;
-            this.filterButton.Click += new System.EventHandler(this.filterButton_Click);
+            this.searchButton.Location = new System.Drawing.Point(9, 344);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(94, 29);
+            this.searchButton.TabIndex = 5;
+            this.searchButton.Text = "Search";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // quantityTextBox
             // 
-            this.quantityTextBox.Location = new System.Drawing.Point(592, 15);
+            this.quantityTextBox.Location = new System.Drawing.Point(629, 15);
             this.quantityTextBox.Name = "quantityTextBox";
-            this.quantityTextBox.Size = new System.Drawing.Size(170, 27);
+            this.quantityTextBox.Size = new System.Drawing.Size(133, 27);
             this.quantityTextBox.TabIndex = 4;
+            this.quantityTextBox.TextChanged += new System.EventHandler(this.quantityTextBox_TextChanged);
             // 
             // typeTextBox
             // 
-            this.typeTextBox.Location = new System.Drawing.Point(412, 15);
+            this.typeTextBox.Location = new System.Drawing.Point(491, 15);
             this.typeTextBox.Name = "typeTextBox";
-            this.typeTextBox.Size = new System.Drawing.Size(174, 27);
+            this.typeTextBox.Size = new System.Drawing.Size(132, 27);
             this.typeTextBox.TabIndex = 3;
+            this.typeTextBox.TextChanged += new System.EventHandler(this.typeTextBox_TextChanged);
             // 
             // equipmentTextBox
             // 
-            this.equipmentTextBox.Location = new System.Drawing.Point(233, 15);
+            this.equipmentTextBox.Location = new System.Drawing.Point(353, 15);
             this.equipmentTextBox.Name = "equipmentTextBox";
-            this.equipmentTextBox.Size = new System.Drawing.Size(173, 27);
+            this.equipmentTextBox.Size = new System.Drawing.Size(132, 27);
             this.equipmentTextBox.TabIndex = 2;
+            this.equipmentTextBox.TextChanged += new System.EventHandler(this.equipmentTextBox_TextChanged);
             // 
             // numberTextBox
             // 
             this.numberTextBox.Location = new System.Drawing.Point(61, 15);
             this.numberTextBox.Name = "numberTextBox";
-            this.numberTextBox.Size = new System.Drawing.Size(166, 27);
+            this.numberTextBox.Size = new System.Drawing.Size(132, 27);
             this.numberTextBox.TabIndex = 1;
+            this.numberTextBox.TextChanged += new System.EventHandler(this.numberTextBox_TextChanged);
             // 
             // equipmentTable
             // 
@@ -238,8 +252,9 @@
         private TextBox equipmentTextBox;
         private TextBox numberTextBox;
         private TextBox quantityTextBox;
-        private Button filterButton;
+        private Button searchButton;
         private Button toButton;
         private Button fromButton;
+        private TextBox roomTypeTextBox;
     }
 }
