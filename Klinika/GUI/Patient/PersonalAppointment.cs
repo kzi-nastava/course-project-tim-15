@@ -134,15 +134,10 @@ namespace Klinika.GUI.Patient
             patientRequest.PatientID = Appointment.PatientID;
             patientRequest.MedicalActionID = Appointment.ID;
             patientRequest.Type = 'M';
-            patientRequest.Description = GetFullRequestDescription();
+            patientRequest.Description = Parent.GetFullRequestDescription(MergeDate(), GetDoctorID());
             patientRequest.Approved = isApproved;
             return patientRequest;
-        }
-
-        private string GetFullRequestDescription()
-        {
-            return "DateTime=" + MergeDate().ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + GetDoctorID().ToString();
-        }
+        }   
         private int GetDoctorID()
         {
             return (DoctorComboBox.SelectedItem as User).ID;

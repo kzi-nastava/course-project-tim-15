@@ -33,8 +33,17 @@ namespace Klinika
                         //Show managers window
                         break;
                     default:
-                        new GUI.Patient.PatientMain(loggingUser).Show();
-                        break;
+                        if(AppointmentRepository.GetPersonalCount(loggingUser.ID) > 5 || PatientRequestRepository.GetPersonalCount(loggingUser.ID) > 8)
+                        {
+                            loggingUser.IsBlocked = true;
+                            UserRepository.Block(loggingUser.ID); 
+                            throw new UserBlockedException("Your account is blocked because of trolling.");
+                        }
+                        else
+                        {
+                            new GUI.Patient.PatientMain(loggingUser).Show();
+                            break;
+                        }
                 }
                 this.Hide();
 

@@ -11,8 +11,7 @@ namespace Klinika.Repositories
 {
     internal class PatientRequestRepository
     {
-        List<PatientRequest>? patientRequests = new List<PatientRequest>();
-
+        private static List<string> Descriptions;
         public static void Create(PatientRequest patientRequest)
         {
             string createQuerry = "INSERT INTO [PatientRequest] " +
@@ -39,6 +38,48 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
 
+        }
+        
+        public static int GetPersonalCount(int ID)
+        {
+            DateTime startDate = DateTime.Now.AddDays(-30);
+            DateTime endDate = DateTime.Now;
+
+            Descriptions = new List<string>();
+            int counter = 0;
+
+            string getDescriptionsQuerry = "SELECT Description " +
+                                 "FROM [PatientRequest] " +
+                                 $"WHERE PatientID = {ID}";
+            try
+            {
+                SqlCommand getDescriptons = new SqlCommand(getDescriptionsQuerry, DatabaseConnection.GetInstance().database);
+                DatabaseConnection.GetInstance().database.Open();
+                using (SqlDataReader retrieved = getDescriptons.ExecuteReader())
+                {
+                    while (retrieved.Read())
+                    {
+                        string description = retrieved["Description"].ToString();
+                        Descriptions.Add(description);
+                    }
+                }
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            foreach (string description in Descriptions)
+            {
+                DateTime date = DateTime.ParseExact(description.Substring(9, 10), "yyyy-MM-dd",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+                if (date > startDate)
+                {
+                    counter += 1;
+                }
+            }
+            return counter;
         }
     }
 }
