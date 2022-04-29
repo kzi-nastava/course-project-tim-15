@@ -30,7 +30,7 @@ namespace Klinika.GUI.Doctor
         private void MedicalRecordLoad(object sender, EventArgs e)
         {
             Parent.Enabled = false;
-            PatientNameLabel.Text = Parent.GetPatientName(Record.ID);
+            PatientNameLabel.Text = Parent.GetPatientFullName(Record.ID);
             BloodTypeLabel.Text = Record.BloodType;
             HeightLabel.Text = $"{Record.Height}cm";
             WeightLabel.Text = $"{Record.Weight}kg";
@@ -45,7 +45,7 @@ namespace Klinika.GUI.Doctor
             anamnesesData.Columns.Add("Description");
             anamnesesData.Columns.Add("Symptoms");
             anamnesesData.Columns.Add("Conclusion");
-            
+
             foreach (Anamnesis anamnesis in Record.Anamneses)
             {
                 DataRow newRow = anamnesesData.NewRow();
@@ -122,6 +122,7 @@ namespace Klinika.GUI.Doctor
         }
         private void FinishButtonClick(object sender, EventArgs e)
         {
+            if (!VerifyForm()) return;
             Anamnesis anamnesis = new Anamnesis();
             anamnesis.Description = DescriptionTextBox.Text;
             anamnesis.Symptoms = SymptomsTextBox.Text;
@@ -134,6 +135,16 @@ namespace Klinika.GUI.Doctor
             Parent.UpdateTableRow(Appointment, Parent.ScheduleTable);
             Parent.FillAllAppointmentsTable();
             Close();
+        }
+        private bool VerifyForm()
+        {
+            if (DescriptionTextBox.Text.Trim() == "" || SymptomsTextBox.Text.Trim() == "" || ConclusionTextBox.Text.Trim() == "")
+            {
+                var msgBox = MessageBox.Show("Some fields are left empty. Are you sure you want to save it?", "Caution", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (msgBox == DialogResult.Yes) return true;
+                return false;
+            }
+            return true;
         }
         #endregion
 
