@@ -106,7 +106,7 @@ namespace Klinika.GUI.Doctor
                 return;
             }
             TransferDataFromUI(ToEdit, dateTime);
-            AppointmentRepository.Modify(ToEdit);
+            AppointmentRepository.GetInstance().Modify(ToEdit);
             Parent.Enabled = true;
             Parent.UpdateAppointmentTable(ToEdit);
             Close();

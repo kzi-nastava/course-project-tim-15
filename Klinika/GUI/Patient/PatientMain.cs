@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
-using Klinika.Models;
+using System.Data;
 
 namespace Klinika.GUI.Patient
 {
@@ -29,6 +21,7 @@ namespace Klinika.GUI.Patient
             Patient = patient;
         }
 
+        #region Loads and closing
         private void PatientMainLoad(object sender, EventArgs e)
         {
             FillPersonalAppointmentTable();
@@ -37,7 +30,13 @@ namespace Klinika.GUI.Patient
             ModifyButton.Enabled = false;
             DeleteButton.Enabled = false;
         }
+        private void PatientMainFormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+        #endregion
 
+        #region Personal Appointments Table
         private void FillPersonalAppointmentTable()
         {
             DataTable? allAppointments = AppointmentRepository.GetAll(Patient.ID, User.RoleType.PATIENT);
@@ -61,98 +60,36 @@ namespace Klinika.GUI.Patient
                 PersonalAppointmentsTable.ClearSelection();
             }
         }
-
-        private void FillAppointmentTypeName(DataTable dataTable)
+        public void InsertRowIntoPersonalAppointmentsTable(Appointment appointment)
         {
-            foreach (DataRow row in dataTable.Rows)
-            {
-                row["Type"] = GetAppointmentTypeName(row["Type"].ToString());
-            }
+            DataTable? dataTable = PersonalAppointmentsTable.DataSource as DataTable;
+            DataRow dataRow = dataTable.NewRow();
+            dataRow[0] = appointment.ID.ToString();
+            dataRow[1] = GetDoctorFullName(appointment.DoctorID);
+            dataRow[2] = appointment.DateTime;
+            dataRow[3] = GetAppointmentTypeName(appointment.Type.ToString());
+            dataRow[4] = appointment.Duration.ToString();
+            dataRow[5] = appointment.Urgent;
+            dataTable.Rows.Add(dataRow);
         }
-
-        private string GetAppointmentTypeName(string type)
+        public void ModifyPersonalAppointmentTableRow(Appointment appointment)
         {
-            if (type == "E")
-            {
-                return "Examination";
-            }
-            else
-            {
-                return "Operation";
-            }
+            DataTable? dt = PersonalAppointmentsTable.DataSource as DataTable;
+            PersonalAppointmentsTable.SelectedRows[0].SetValues(appointment.ID.ToString(),
+                GetDoctorFullName(appointment.DoctorID),
+                appointment.DateTime,
+                GetAppointmentTypeName(appointment.Type.ToString()),
+                appointment.Duration.ToString(),
+                appointment.Urgent);
         }
-
-        private void FillTableWithDoctorData(DataTable dataTable)
+        private void PersonalAppointmentsTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
-            dataTable.Columns.Add("Doctor Name");
-            dataTable.Columns["Doctor Name"].SetOrdinal(1);
-            foreach (DataRow row in dataTable.Rows)
-            {
-                row["Doctor Name"] = GetDoctorFullName(Convert.ToInt32(row["DoctorID"]));
-            }
+            ModifyButton.Enabled = true;
+            DeleteButton.Enabled = true;
         }
+        #endregion
 
-        private string GetDoctorFullName (int doctorID)
-        {
-            var doctor = GetDoctor(doctorID);
-            return doctor.Name + " " + doctor.Surname;
-        }
-
-        private User? GetDoctor(int ID)
-        {
-            return UserRepository.GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
-        }
-
-        private Appointment? GetAppointment(int ID)
-        {
-            return Appointments.Where(x => x.ID == ID).FirstOrDefault();
-        }
-
-        private void PatientMainFormClosing(object sender, FormClosingEventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void DeleteAppointmentClick(object sender, EventArgs e)
-        {
-            DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete selected appointment?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (deleteConfirmation == DialogResult.Yes)
-            {
-                int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
-                Appointment? toDelete = GetAppointment(ID);
-
-                if (DateTime.Now.AddDays(1).Date >= toDelete.DateTime.Date)
-                {
-                    MessageBox.Show("You can't delete this appointment.", "Denied Delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-                else
-                {
-                    AppointmentRepository.GetInstance().Delete(toDelete.ID);
-
-                    PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 'D', "", true);
-                    PatientRequestRepository.Create(patientRequest);
-
-                    PersonalAppointmentsTable.Rows.RemoveAt(PersonalAppointmentsTable.SelectedRows[0].Index);
-                }
-            }
-        }
-
-        public void FillDoctorComboBox(ComboBox comboBox)
-        {
-            comboBox.Items.AddRange(GetDoctors());
-            comboBox.SelectedIndex = 0;
-        }
-
-        private User[] GetDoctors()
-        {
-            return UserRepository.GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToArray();
-        }
-
-        private void FindAppointmentsButtonClick(object sender, EventArgs e)
-        {
-            FillOccupiedAppointmentsTable();
-        }
-
+        #region Occupied Appointment table
         private void FillOccupiedAppointmentsTable()
         {
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
@@ -180,31 +117,6 @@ namespace Klinika.GUI.Patient
                 OccupiedAppointmentsTable.ClearSelection();
             }
         }
-
-        private void ScheduleButtonClick(object sender, EventArgs e)
-        {
-            new PersonalAppointment(this, null).Show();
-        }
-
-        private void ModifyButtonClick(object sender, EventArgs e)
-        {
-            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
-            Appointment? toModify = GetAppointment(ID);
-            new PersonalAppointment(this, toModify).Show();
-        }
-        public void InsertRowIntoPersonalAppointmentsTable(Appointment appointment)
-        {
-            DataTable? dataTable = PersonalAppointmentsTable.DataSource as DataTable;
-            DataRow dataRow = dataTable.NewRow();
-            dataRow[0] = appointment.ID.ToString();
-            dataRow[1] = GetDoctorFullName(appointment.DoctorID);
-            dataRow[2] = appointment.DateTime;
-            dataRow[3] = GetAppointmentTypeName(appointment.Type.ToString());
-            dataRow[4] = appointment.Duration.ToString();
-            dataRow[5] = appointment.Urgent;
-            dataTable.Rows.Add(dataRow);
-        }
-
         public void InsertRowIntoOccupiedTable(Appointment appointment)
         {
             DataTable? dataTable = OccupiedAppointmentsTable.DataSource as DataTable;
@@ -216,24 +128,98 @@ namespace Klinika.GUI.Patient
             dataRow[4] = appointment.Duration.ToString();
             dataTable.Rows.Add(dataRow);
         }
+        #endregion
 
-        public void ModifyAppointmentTable(Appointment appointment)
+        #region Click functions
+        private void DeleteAppointmentClick(object sender, EventArgs e)
         {
-            DataTable? dt = PersonalAppointmentsTable.DataSource as DataTable;
-            PersonalAppointmentsTable.SelectedRows[0].SetValues(appointment.ID.ToString(),
-                GetDoctorFullName(appointment.DoctorID),
-                appointment.DateTime,
-                GetAppointmentTypeName(appointment.Type.ToString()),
-                appointment.Duration.ToString(),
-                appointment.Urgent);
-        }
+            DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete selected appointment?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (deleteConfirmation == DialogResult.Yes)
+            {
+                int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
+                Appointment? toDelete = GetAppointment(ID);
 
-        private void PersonalAppointmentsTableRowEnter(object sender, DataGridViewCellEventArgs e)
+                if (DateTime.Now.AddDays(1).Date >= toDelete.DateTime.Date)
+                {
+                    MessageBox.Show("You can't delete this appointment.", "Denied Delete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    AppointmentRepository.GetInstance().Delete(toDelete.ID);
+
+                    PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 'D', "", true);
+                    PatientRequestRepository.Create(patientRequest);
+
+                    PersonalAppointmentsTable.Rows.RemoveAt(PersonalAppointmentsTable.SelectedRows[0].Index);
+                }
+            }
+        }
+        private void FindAppointmentsButtonClick(object sender, EventArgs e)
         {
-            ModifyButton.Enabled = true;
-            DeleteButton.Enabled = true;
+            FillOccupiedAppointmentsTable();
         }
+        private void ScheduleButtonClick(object sender, EventArgs e)
+        {
+            new PersonalAppointment(this, null).Show();
+        }
+        private void ModifyButtonClick(object sender, EventArgs e)
+        {
+            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
+            Appointment? toModify = GetAppointment(ID);
+            new PersonalAppointment(this, toModify).Show();
+        }
+        #endregion
 
+        #region Helper functions
+        private void FillAppointmentTypeName(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                row["Type"] = GetAppointmentTypeName(row["Type"].ToString());
+            }
+        }
+        private void FillTableWithDoctorData(DataTable dataTable)
+        {
+            dataTable.Columns.Add("Doctor Name");
+            dataTable.Columns["Doctor Name"].SetOrdinal(1);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                row["Doctor Name"] = GetDoctorFullName(Convert.ToInt32(row["DoctorID"]));
+            }
+        }
+        private string GetAppointmentTypeName(string type)
+        {
+            if (type == "E")
+            {
+                return "Examination";
+            }
+            else
+            {
+                return "Operation";
+            }
+        }
+        private string GetDoctorFullName(int doctorID)
+        {
+            var doctor = GetDoctor(doctorID);
+            return doctor.Name + " " + doctor.Surname;
+        }
+        private User? GetDoctor(int ID)
+        {
+            return UserRepository.GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
+        }
+        private Appointment? GetAppointment(int ID)
+        {
+            return Appointments.Where(x => x.ID == ID).FirstOrDefault();
+        }
+        public void FillDoctorComboBox(ComboBox comboBox)
+        {
+            comboBox.Items.AddRange(GetDoctors());
+            comboBox.SelectedIndex = 0;
+        }
+        private User[] GetDoctors()
+        {
+            return UserRepository.GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToArray();
+        }
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
         {
             if ((sender as TabControl).SelectedIndex == 1)
@@ -241,5 +227,6 @@ namespace Klinika.GUI.Patient
                 OccupiedAppointmentsTable.DataSource = new DataTable();
             }
         }
+        #endregion
     }
 }

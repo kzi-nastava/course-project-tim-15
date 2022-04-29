@@ -108,7 +108,7 @@
             this.PersonalAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.PersonalAppointmentsTable.Size = new System.Drawing.Size(950, 440);
             this.PersonalAppointmentsTable.TabIndex = 0;
-            this.PersonalAppointmentsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.PersonalAppointmentsTableRowEnter);
+            this.PersonalAppointmentsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.PersonalAppointmentsTableRowSelected);
             // 
             // NewAppointmentTab
             // 
