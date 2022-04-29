@@ -174,7 +174,7 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
-        public static void Modify(Appointment appointment)
+        public void Modify(Appointment appointment)
         {
             string createQuery = "UPDATE [MedicalAction] SET " +
                 "DoctorID = @DoctorID, " +
@@ -207,6 +207,9 @@ namespace Klinika.Repositories
                 DatabaseConnection.GetInstance().database.Open();
                 modify.ExecuteNonQuery();
                 DatabaseConnection.GetInstance().database.Close();
+
+                Appointments.Remove(Appointments.Where(x => x.ID == appointment.ID).FirstOrDefault());
+                Appointments.Add(appointment);
             }
             catch (SqlException ex)
             {
