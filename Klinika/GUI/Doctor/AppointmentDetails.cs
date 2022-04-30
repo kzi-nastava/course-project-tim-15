@@ -16,29 +16,40 @@ namespace Klinika.GUI.Doctor
     public partial class AppointmentDetails : Form
     {
         private readonly DoctorMain Parent;
-        private Appointment? ToEdit;
+        private Appointment? Appointment;
 
+        #region Form
         public AppointmentDetails(DoctorMain parent, Appointment appointment = null)
         {
             InitializeComponent();
             Parent = parent;
-            ToEdit = appointment;
+            Appointment = appointment;
         }
-        private void AddAppointmentLoad(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             Parent.Enabled = false;
-            PatientPicker.Items.AddRange(GetPatients());
-            if (ToEdit == null)
+            PatientComboBox.Items.AddRange(GetPatients());
+
+            if (Appointment == null)
             {
                 DurationTextBox.Text = "15";
                 DurationTextBox.Enabled = false;
                 return;
             }
 
-            DatePicker.Value = ToEdit.DateTime;
-            TimePicker.Value = ToEdit.DateTime;
-            PatientPicker.SelectedIndex = PatientPicker.Items.IndexOf(UserRepository.GetInstance().Users.Where(x => x.ID == ToEdit.PatientID).FirstOrDefault());
-            if (ToEdit.Type == 'E')
+            FillFormWithAppointmentData();
+        }
+        private void ClosingForm(object sender, FormClosingEventArgs e)
+        {
+            Parent.Enabled = true;
+        }
+        private void FillFormWithAppointmentData()
+        {
+            DatePicker.Value = Appointment.DateTime;
+            TimePicker.Value = Appointment.DateTime;
+            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(UserRepository.GetInstance().Users.Where(x => x.ID == Appointment.PatientID).FirstOrDefault());
+            
+            if (Appointment.Type == 'E')
             {
                 ExaminationRadioButton.Checked = true;
                 OperationRadioButton.Checked = false;
@@ -50,14 +61,12 @@ namespace Klinika.GUI.Doctor
                 OperationRadioButton.Checked = true;
                 DurationTextBox.Enabled = true;
             }
-            IsUrgentCheckBox.Checked = ToEdit.Urgent;
-            DurationTextBox.Text = ToEdit.Duration.ToString();
-            SaveAppointmentButton.Text = "Save";
+
+            IsUrgentCheckBox.Checked = Appointment.Urgent;
+            DurationTextBox.Text = Appointment.Duration.ToString();
+            ConfirmButton.Text = "Save";
         }
-        private void AppointmentDetailsFormClosed(object sender, FormClosedEventArgs e)
-        {
-            Parent.Enabled = true;
-        }
+        #endregion
 
         private User[] GetPatients()
         {
@@ -65,7 +74,7 @@ namespace Klinika.GUI.Doctor
         }
         private void ExaminationRadioButtonCheckedChanged(object sender, EventArgs e)
         {
-            if((sender as RadioButton).Checked)
+            if(ExaminationRadioButton.Checked)
             {
                 DurationTextBox.Text = "15";
                 DurationTextBox.Enabled = false;
@@ -74,18 +83,23 @@ namespace Klinika.GUI.Doctor
             DurationTextBox.Text = "";
             DurationTextBox.Enabled = true;
         }
-        private void SaveAppointmentButtonClick(object sender, EventArgs e)
+        private void ConfirmButtonClick(object sender, EventArgs e)
         {
             var selectedDate = DatePicker.Value;
             var selectedTime = TimePicker.Value;
-            var dateTime = DateTime.Parse($"{selectedDate.Year}-{selectedDate.Month}-{selectedDate.Day} {selectedTime.Hour}:{selectedTime.Minute}");
-            if (!Validate(dateTime)) return;
-            if (ToEdit != null)
+            var selectedDateTime = DateTime.Parse($"{selectedDate.Year}-{selectedDate.Month}-{selectedDate.Day} {selectedTime.Hour}:{selectedTime.Minute}");
+            
+            if (!Validate(selectedDateTime))
             {
-                ModifyInDatabase(dateTime);
                 return;
             }
-            CreateInDatabase(dateTime);
+            
+            if (Appointment != null)
+            {
+                ModifyInDatabase(selectedDateTime);
+                return;
+            }
+            CreateInDatabase(selectedDateTime);
         }
         private bool Validate(DateTime dateTime)
         {
@@ -94,17 +108,39 @@ namespace Klinika.GUI.Doctor
                 MessageBox.Show("Please select valid date!", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            if(PatientPicker.SelectedIndex == -1)
+            if(PatientComboBox.SelectedIndex == -1)
             {
                 MessageBox.Show("Please select patient!", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+            if (AppointmentRepository.GetInstance().IsOccupied(dateTime, Convert.ToInt32(DurationTextBox.Text)))
+            {
+                MessageBox.Show("Already occupied", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
             return true;
+        }
+        private void CreateInDatabase(DateTime dateTime)
+        {
+            var appointment = new Appointment();
+            TransferDataFromUI(appointment, dateTime);
+            AppointmentRepository.GetInstance().Create(appointment);
+            Parent.Enabled = true;
+            Parent.InsertIntoAllAppointmentsTable(appointment);
+            Close();
+        }
+        private void ModifyInDatabase(DateTime dateTime)
+        {
+            TransferDataFromUI(Appointment, dateTime);
+            AppointmentRepository.GetInstance().Modify(Appointment);
+            Parent.Enabled = true;
+            Parent.UpdateTableRow(Appointment, Parent.AllAppointmentsTable);
+            Close();
         }
         private void TransferDataFromUI(Appointment appointment, DateTime dateTime)
         {
             appointment.DoctorID = Parent.Doctor.ID;
-            appointment.PatientID = (PatientPicker.SelectedItem as User).ID;
+            appointment.PatientID = (PatientComboBox.SelectedItem as User).ID;
             appointment.DateTime = dateTime;
             appointment.RoomID = 1;
             appointment.Completed = false;
@@ -113,33 +149,6 @@ namespace Klinika.GUI.Doctor
             appointment.Urgent = IsUrgentCheckBox.Checked;
             appointment.Description = "";
             appointment.IsDeleted = false;
-        }
-        private void CreateInDatabase(DateTime dateTime)
-        {
-            if (AppointmentRepository.GetInstance().IsOccupied(dateTime, Convert.ToInt32(DurationTextBox.Text)))
-            {
-                MessageBox.Show("Already occupied", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            var appointment = new Appointment();
-            TransferDataFromUI(appointment, dateTime);
-            AppointmentRepository.GetInstance().Create(appointment);
-            Parent.Enabled = true;
-            Parent.InsertIntoAppointmentsTable(appointment);
-            Close();
-        }
-        private void ModifyInDatabase(DateTime dateTime)
-        {
-            if (AppointmentRepository.GetInstance().IsOccupied(dateTime, Convert.ToInt32(DurationTextBox.Text), ToEdit.ID))
-            {
-                MessageBox.Show("Already occupied", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            TransferDataFromUI(ToEdit, dateTime);
-            AppointmentRepository.GetInstance().Modify(ToEdit);
-            Parent.Enabled = true;
-            Parent.UpdateTableRow(ToEdit, Parent.AllAppointmentsTable);
-            Close();
         }
 
     }

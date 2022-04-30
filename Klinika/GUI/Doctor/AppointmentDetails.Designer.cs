@@ -31,7 +31,7 @@
             this.TimePicker = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.PatientPicker = new System.Windows.Forms.ComboBox();
+            this.PatientComboBox = new System.Windows.Forms.ComboBox();
             this.ExaminationRadioButton = new System.Windows.Forms.RadioButton();
             this.OperationRadioButton = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
@@ -39,7 +39,7 @@
             this.DatePicker = new System.Windows.Forms.DateTimePicker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.DurationTextBox = new System.Windows.Forms.TextBox();
-            this.SaveAppointmentButton = new System.Windows.Forms.Button();
+            this.ConfirmButton = new System.Windows.Forms.Button();
             this.IsUrgentCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -72,17 +72,17 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Time";
             // 
-            // PatientPicker
+            // PatientComboBox
             // 
-            this.PatientPicker.DropDownHeight = 180;
-            this.PatientPicker.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.PatientPicker.FormattingEnabled = true;
-            this.PatientPicker.IntegralHeight = false;
-            this.PatientPicker.Location = new System.Drawing.Point(74, 57);
-            this.PatientPicker.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.PatientPicker.Name = "PatientPicker";
-            this.PatientPicker.Size = new System.Drawing.Size(133, 23);
-            this.PatientPicker.TabIndex = 3;
+            this.PatientComboBox.DropDownHeight = 180;
+            this.PatientComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.PatientComboBox.FormattingEnabled = true;
+            this.PatientComboBox.IntegralHeight = false;
+            this.PatientComboBox.Location = new System.Drawing.Point(74, 57);
+            this.PatientComboBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.PatientComboBox.Name = "PatientComboBox";
+            this.PatientComboBox.Size = new System.Drawing.Size(133, 23);
+            this.PatientComboBox.TabIndex = 3;
             // 
             // ExaminationRadioButton
             // 
@@ -157,16 +157,16 @@
             this.DurationTextBox.Size = new System.Drawing.Size(134, 23);
             this.DurationTextBox.TabIndex = 10;
             // 
-            // SaveAppointmentButton
+            // ConfirmButton
             // 
-            this.SaveAppointmentButton.Location = new System.Drawing.Point(126, 235);
-            this.SaveAppointmentButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.SaveAppointmentButton.Name = "SaveAppointmentButton";
-            this.SaveAppointmentButton.Size = new System.Drawing.Size(82, 22);
-            this.SaveAppointmentButton.TabIndex = 11;
-            this.SaveAppointmentButton.Text = "Create";
-            this.SaveAppointmentButton.UseVisualStyleBackColor = true;
-            this.SaveAppointmentButton.Click += new System.EventHandler(this.SaveAppointmentButtonClick);
+            this.ConfirmButton.Location = new System.Drawing.Point(126, 235);
+            this.ConfirmButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.ConfirmButton.Name = "ConfirmButton";
+            this.ConfirmButton.Size = new System.Drawing.Size(82, 22);
+            this.ConfirmButton.TabIndex = 11;
+            this.ConfirmButton.Text = "Create";
+            this.ConfirmButton.UseVisualStyleBackColor = true;
+            this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButtonClick);
             // 
             // IsUrgentCheckBox
             // 
@@ -184,14 +184,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(227, 277);
             this.Controls.Add(this.IsUrgentCheckBox);
-            this.Controls.Add(this.SaveAppointmentButton);
+            this.Controls.Add(this.ConfirmButton);
             this.Controls.Add(this.DurationTextBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.DatePicker);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.PatientPicker);
+            this.Controls.Add(this.PatientComboBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.TimePicker);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -201,8 +201,8 @@
             this.Name = "AppointmentDetails";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Appointment Details";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AppointmentDetailsFormClosed);
-            this.Load += new System.EventHandler(this.AddAppointmentLoad);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
+            this.Load += new System.EventHandler(this.LoadForm);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -215,7 +215,7 @@
         private DateTimePicker TimePicker;
         private Label label1;
         private Label label2;
-        private ComboBox PatientPicker;
+        private ComboBox PatientComboBox;
         private RadioButton ExaminationRadioButton;
         private RadioButton OperationRadioButton;
         private Label label3;
@@ -223,7 +223,7 @@
         private DateTimePicker DatePicker;
         private GroupBox groupBox1;
         private TextBox DurationTextBox;
-        private Button SaveAppointmentButton;
+        private Button ConfirmButton;
         private CheckBox IsUrgentCheckBox;
     }
 }

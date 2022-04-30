@@ -342,8 +342,8 @@
             this.Name = "MedicalRecord";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Medical Record";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MedicalRecordFormClosing);
-            this.Load += new System.EventHandler(this.MedicalRecordLoad);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
+            this.Load += new System.EventHandler(this.LoadForm);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnamnesesTable)).EndInit();

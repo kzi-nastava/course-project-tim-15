@@ -17,6 +17,7 @@ namespace Klinika.GUI.Doctor
         private readonly DoctorMain Parent;
         private Appointment Appointment;
         private Models.MedicalRecord Record;
+        #region Form
         public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
         {
             InitializeComponent();
@@ -25,18 +26,27 @@ namespace Klinika.GUI.Doctor
             Record = MedicalRecordRepository.Get(appointment.PatientID);
             if (!isPreview) ShowNewAnamnesisForm();
         }
-
-        #region View Record
-        private void MedicalRecordLoad(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             Parent.Enabled = false;
+            FillPatientMainData();
+            FillAnamnesesTable();
+            FillDiseasesTable();
+            FillAllergensTable();
+        }
+        private void ClosingForm(object sender, FormClosingEventArgs e)
+        {
+            Parent.Enabled = true;
+        }
+        #endregion
+
+        #region View Record
+        private void FillPatientMainData()
+        {
             PatientNameLabel.Text = Parent.GetPatientFullName(Record.ID);
             BloodTypeLabel.Text = Record.BloodType;
             HeightLabel.Text = $"{Record.Height}cm";
             WeightLabel.Text = $"{Record.Weight}kg";
-            FillAnamnesesTable();
-            FillDiseasesTable();
-            FillAllergensTable();
         }
         private void FillAnamnesesTable()
         {
@@ -59,7 +69,6 @@ namespace Klinika.GUI.Doctor
             AnamnesesTable.DataSource = anamnesesData;
             AnamnesesTable.Columns[0].Width = 30;
             AnamnesesTable.ClearSelection();
-
         }
         private void FillDiseasesTable()
         {
@@ -82,7 +91,6 @@ namespace Klinika.GUI.Doctor
             DiseasesTable.DataSource = diseasesData;
             DiseasesTable.Columns[0].Width = 30;
             DiseasesTable.ClearSelection();
-
         }
         private void FillAllergensTable()
         {
@@ -103,11 +111,6 @@ namespace Klinika.GUI.Doctor
             AllergensTable.DataSource = allergensData;
             AllergensTable.Columns[0].Width = 30;
             AllergensTable.ClearSelection();
-
-        }
-        private void MedicalRecordFormClosing(object sender, FormClosingEventArgs e)
-        {
-            Parent.Enabled = true;
         }
         private void TableSelectionChanged(object sender, EventArgs e)
         {
@@ -122,19 +125,27 @@ namespace Klinika.GUI.Doctor
         }
         private void FinishButtonClick(object sender, EventArgs e)
         {
-            if (!VerifyForm()) return;
+            if (!VerifyForm())
+            {
+                return;
+            }
+
+            CreateAnamanesisInDatabase();
+
+            Appointment.Completed = true;
+            AppointmentRepository.GetInstance().Modify(Appointment);
+
+            Parent.UpdateTableRow(Appointment, Parent.ScheduleTable);
+            Close();
+        }
+        private void CreateAnamanesisInDatabase()
+        {
             Anamnesis anamnesis = new Anamnesis();
             anamnesis.Description = DescriptionTextBox.Text;
             anamnesis.Symptoms = SymptomsTextBox.Text;
             anamnesis.Conclusion = ConclusionTextBox.Text;
             anamnesis.MedicalActionID = Appointment.ID;
             anamnesis.ID = MedicalRecordRepository.CreateAnamnesis(anamnesis);
-            Appointment.Completed = true;
-            Appointment.Description = "Examination Finished";
-            AppointmentRepository.GetInstance().Modify(Appointment);
-            Parent.UpdateTableRow(Appointment, Parent.ScheduleTable);
-            Parent.FillAllAppointmentsTable();
-            Close();
         }
         private bool VerifyForm()
         {

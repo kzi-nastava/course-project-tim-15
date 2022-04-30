@@ -198,8 +198,8 @@
             this.Name = "DoctorMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Doctor";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DoctorMainFormClosing);
-            this.Load += new System.EventHandler(this.DoctorMainLoad);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
+            this.Load += new System.EventHandler(this.LoadForm);
             this.MainTabControl.ResumeLayout(false);
             this.AllAppointmentsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).EndInit();

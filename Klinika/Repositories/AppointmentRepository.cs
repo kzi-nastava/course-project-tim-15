@@ -127,23 +127,6 @@ namespace Klinika.Repositories
             return retrievedAppointments;
         }
         
-        public void Delete(int ID)
-        {
-            string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
-            try
-            {
-                SqlCommand delete = new SqlCommand(deleteQuerry, DatabaseConnection.GetInstance().database);
-                delete.Parameters.AddWithValue("@ID", ID);
-                DatabaseConnection.GetInstance().database.Open();
-                delete.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-                Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
         public void Create(Appointment appointment)
         {
             string createQuery = "INSERT INTO [MedicalAction] " +
@@ -217,6 +200,24 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
+        public void Delete(int ID)
+        {
+            string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
+            try
+            {
+                SqlCommand delete = new SqlCommand(deleteQuerry, DatabaseConnection.GetInstance().database);
+                delete.Parameters.AddWithValue("@ID", ID);
+                DatabaseConnection.GetInstance().database.Open();
+                delete.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+                Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         public bool IsOccupied(DateTime newAppointmentStart, int duration = 15, int id = -1)
         {
             var newAppointmentEnd = newAppointmentStart.AddMinutes(duration); 
