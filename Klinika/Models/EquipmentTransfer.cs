@@ -9,6 +9,7 @@ namespace Klinika.Models
     public class EquipmentTransfer
     {
         public int fromId;
+        public int maxQuantity;
         public int toId;
         public int quantity;
         public string equipment;

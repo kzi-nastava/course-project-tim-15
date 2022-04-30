@@ -14,8 +14,12 @@ namespace Klinika.GUI.Manager
     {
         public Models.EquipmentTransfer transfer;
         public DataTable unfiltered;
+        public bool[] transferCheck;
         public Main()
         {
+            transferCheck = new bool[2];
+            transferCheck[0] = false;
+            transferCheck[1] = false;
             transfer = new Models.EquipmentTransfer();
             unfiltered = new DataTable();
             InitializeComponent();
@@ -185,18 +189,45 @@ namespace Klinika.GUI.Manager
         {
             transfer.fromId = (int)equipmentTable.SelectedRows[0].Cells["ID"].Value;
             transfer.equipment = equipmentTable.SelectedRows[0].Cells["Equipment"].Value.ToString();
-            MessageBox.Show("Selected room and equipment to transfer!");
+            transfer.maxQuantity = (int)equipmentTable.SelectedRows[0].Cells["Quantity"].Value;
+            
+            if (transfer.maxQuantity == 0)
+            {
+                MessageBox.Show("You must pick a row with not 0 quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                transferCheck[0] = false;
+            }
+            else
+            {
+                MessageBox.Show("Selected room and equipment to transfer!");
+                transferCheck[0] = true;
+            }
         }
 
         private void toButton_Click(object sender, EventArgs e)
         {
             transfer.toId = (int)roomsTable.SelectedRows[0].Cells["ID"].Value;
-            MessageBox.Show("Selected room from Rooms Tab! This can be changed.");
+            if (Services.ManagerServices.TransferReady(transfer))
+            {
+                MessageBox.Show("Selected room from Rooms Tab! This can be changed.");
+                transferCheck[1] = true;
+            }
+            else
+            {
+                MessageBox.Show("You must pick 2 different rooms.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                transferCheck[1] = false;
+            }
         }
 
         private void dateButton_Click(object sender, EventArgs e)
         {
-
+            if (transferCheck[0] && transferCheck[1])
+            {
+                new PickDate(this).Show();
+            }
+            else
+            {
+                MessageBox.Show("Invalid picks.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

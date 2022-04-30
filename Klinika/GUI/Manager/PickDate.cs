@@ -12,11 +12,9 @@ namespace Klinika.GUI.Manager
 {
     public partial class PickDate : Form
     {
-        Models.EquipmentTransfer transfer;
         GUI.Manager.Main main;
-        public PickDate(Models.EquipmentTransfer t, GUI.Manager.Main m)
+        public PickDate(GUI.Manager.Main m)
         {
-            transfer = t;
             main = m;
             InitializeComponent();
         }
