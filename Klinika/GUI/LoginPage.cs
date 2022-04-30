@@ -30,7 +30,7 @@ namespace Klinika
                         new GUI.Doctor.DoctorMain(loggingUser).Show();
                         break;
                     case "Manager":
-                        //Show managers window
+                        new GUI.Manager.Main().Show();
                         break;
                     default:
                         if(AppointmentRepository.GetPersonalCount(loggingUser.ID) > 8 || PatientRequestRepository.GetPersonalCount(loggingUser.ID) > 5)
