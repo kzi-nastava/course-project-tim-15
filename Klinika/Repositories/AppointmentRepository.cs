@@ -158,6 +158,24 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
+        public static void Modify(int id, int newDoctorID, DateTime newAppointment)
+        {
+            string modifyQuery = "UPDATE [MedicalAction] SET DoctorID = @DoctorID, DateTime = @DateTime WHERE ID = @ID";
+            try
+            {
+                SqlCommand modify = new SqlCommand(modifyQuery, DatabaseConnection.GetInstance().database);
+                modify.Parameters.AddWithValue("@ID", id);
+                modify.Parameters.AddWithValue("@DoctorID", newDoctorID);
+                modify.Parameters.AddWithValue("@DateTime", newAppointment);
+                DatabaseConnection.GetInstance().database.Open();
+                modify.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
         public void Modify(Appointment appointment)
         {
             string createQuery = "UPDATE [MedicalAction] SET " +
