@@ -15,21 +15,28 @@ namespace Klinika.GUI.Doctor
     public partial class MedicalRecord : Form
     {
         private readonly DoctorMain Parent;
+        private Appointment Appointment;
         private Models.MedicalRecord Record;
-        public MedicalRecord(DoctorMain parent, int patientId)
+        public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
         {
             InitializeComponent();
             Parent = parent;
-            Record = MedicalRecordRepository.Get(patientId);
+            Appointment = appointment;
+            Record = MedicalRecordRepository.Get(appointment.PatientID);
+            if (!isPreview) ShowNewAnamnesisForm();
         }
+
+        #region View Record
         private void MedicalRecordLoad(object sender, EventArgs e)
         {
             Parent.Enabled = false;
-            PatientNameLabel.Text = Parent.GetPatientName(Record.ID);
+            PatientNameLabel.Text = Parent.GetPatientFullName(Record.ID);
             BloodTypeLabel.Text = Record.BloodType;
             HeightLabel.Text = $"{Record.Height}cm";
             WeightLabel.Text = $"{Record.Weight}kg";
             FillAnamnesesTable();
+            FillDiseasesTable();
+            FillAllergensTable();
         }
         private void FillAnamnesesTable()
         {
@@ -38,7 +45,7 @@ namespace Klinika.GUI.Doctor
             anamnesesData.Columns.Add("Description");
             anamnesesData.Columns.Add("Symptoms");
             anamnesesData.Columns.Add("Conclusion");
-            
+
             foreach (Anamnesis anamnesis in Record.Anamneses)
             {
                 DataRow newRow = anamnesesData.NewRow();
@@ -48,18 +55,98 @@ namespace Klinika.GUI.Doctor
                 newRow["Conclusion"] = anamnesis.Conclusion;
                 anamnesesData.Rows.Add(newRow);
             }
-            AnamnesesTable.DataSource = anamnesesData;
 
+            AnamnesesTable.DataSource = anamnesesData;
+            AnamnesesTable.Columns[0].Width = 30;
             AnamnesesTable.ClearSelection();
+
+        }
+        private void FillDiseasesTable()
+        {
+            DataTable diseasesData = new DataTable();
+            diseasesData.Columns.Add("ID");
+            diseasesData.Columns.Add("Name");
+            diseasesData.Columns.Add("Description");
+            diseasesData.Columns.Add("Date");
+
+            foreach (Disease disease in Record.Diseases)
+            {
+                DataRow newRow = diseasesData.NewRow();
+                newRow["ID"] = disease.ID;
+                newRow["Name"] = disease.Name;
+                newRow["Description"] = disease.Description;
+                newRow["Date"] = disease.DateDiagnosed.ToString("yyyy/MM/dd");
+                diseasesData.Rows.Add(newRow);
+            }
+
+            DiseasesTable.DataSource = diseasesData;
+            DiseasesTable.Columns[0].Width = 30;
+            DiseasesTable.ClearSelection();
+
+        }
+        private void FillAllergensTable()
+        {
+            DataTable allergensData = new DataTable();
+            allergensData.Columns.Add("ID");
+            allergensData.Columns.Add("Name");
+            allergensData.Columns.Add("Type");
+
+            foreach (Allergen allergen in Record.Allergens)
+            {
+                DataRow newRow = allergensData.NewRow();
+                newRow["ID"] = allergen.ID;
+                newRow["Name"] = allergen.Name;
+                newRow["Type"] = allergen.Type;
+                allergensData.Rows.Add(newRow);
+            }
+
+            AllergensTable.DataSource = allergensData;
+            AllergensTable.Columns[0].Width = 30;
+            AllergensTable.ClearSelection();
 
         }
         private void MedicalRecordFormClosing(object sender, FormClosingEventArgs e)
         {
             Parent.Enabled = true;
         }
-        private void AnamnesesTableSelectionChanged(object sender, EventArgs e)
+        private void TableSelectionChanged(object sender, EventArgs e)
         {
-            AnamnesesTable.ClearSelection();
+            (sender as DataGridView).ClearSelection();
         }
+        #endregion
+
+        #region Add Anamnesis
+        private void ShowNewAnamnesisForm()
+        {
+            AnamnesisGroup.Visible = true;
+        }
+        private void FinishButtonClick(object sender, EventArgs e)
+        {
+            if (!VerifyForm()) return;
+            Anamnesis anamnesis = new Anamnesis();
+            anamnesis.Description = DescriptionTextBox.Text;
+            anamnesis.Symptoms = SymptomsTextBox.Text;
+            anamnesis.Conclusion = ConclusionTextBox.Text;
+            anamnesis.MedicalActionID = Appointment.ID;
+            anamnesis.ID = MedicalRecordRepository.CreateAnamnesis(anamnesis);
+            Appointment.Completed = true;
+            Appointment.Description = "Examination Finished";
+            AppointmentRepository.GetInstance().Modify(Appointment);
+            Parent.UpdateTableRow(Appointment, Parent.ScheduleTable);
+            Parent.FillAllAppointmentsTable();
+            Close();
+        }
+        private bool VerifyForm()
+        {
+            if (DescriptionTextBox.Text.Trim() == "" || SymptomsTextBox.Text.Trim() == "" || ConclusionTextBox.Text.Trim() == "")
+            {
+                var msgBox = MessageBox.Show("Some fields are left empty. Are you sure you want to save it?", "Caution", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (msgBox == DialogResult.Yes) return true;
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
     }
 }
