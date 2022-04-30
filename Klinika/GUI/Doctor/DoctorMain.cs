@@ -184,8 +184,8 @@ namespace Klinika.GUI.Doctor
         }
         #endregion
 
-        #region Preforme
-        private void PreformButtonClick(object sender, EventArgs e)
+        #region Perform
+        private void PerformButtonClick(object sender, EventArgs e)
         {
             int appointmentID = Convert.ToInt32(ScheduleTable.SelectedRows[0].Cells["ID"].Value);
             Appointment appointment = Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();

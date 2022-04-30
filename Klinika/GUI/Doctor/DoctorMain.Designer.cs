@@ -147,7 +147,7 @@
             this.PerformButton.TabIndex = 3;
             this.PerformButton.Text = "Perform";
             this.PerformButton.UseVisualStyleBackColor = true;
-            this.PerformButton.Click += new System.EventHandler(this.PreformButtonClick);
+            this.PerformButton.Click += new System.EventHandler(this.PerformButtonClick);
             // 
             // ViewMedicalRecordButton
             // 
