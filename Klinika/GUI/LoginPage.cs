@@ -33,7 +33,7 @@ namespace Klinika
                         //Show managers window
                         break;
                     default:
-                        if(AppointmentRepository.GetPersonalCount(loggingUser.ID) > 5 || PatientRequestRepository.GetPersonalCount(loggingUser.ID) > 8)
+                        if(AppointmentRepository.GetPersonalCount(loggingUser.ID) > 8 || PatientRequestRepository.GetPersonalCount(loggingUser.ID) > 5)
                         {
                             loggingUser.IsBlocked = true;
                             UserRepository.Block(loggingUser.ID); 
