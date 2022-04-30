@@ -131,7 +131,8 @@ namespace Klinika.GUI.Patient
                 return;
             }
 
-            AppointmentRepository.GetInstance().Delete(toDelete.ID);
+            AppointmentRepository.Delete(toDelete.ID);
+            AppointmentRepository.GetInstance().DeleteFromList(toDelete.ID);
             SendDeletePatientRequest(!needApproval, toDelete);
             PersonalAppointmentsTable.Rows.RemoveAt(PersonalAppointmentsTable.SelectedRows[0].Index);
         }

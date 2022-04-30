@@ -149,7 +149,8 @@ namespace Klinika.GUI.Doctor
             if (deleteConfirmation == DialogResult.Yes)
             {
                 int toDeleteID = Convert.ToInt32(AllAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
-                AppointmentRepository.GetInstance().Delete(toDeleteID);
+                AppointmentRepository.Delete(toDeleteID);
+                AppointmentRepository.GetInstance().DeleteFromList(toDeleteID);
                 AllAppointmentsTable.Rows.RemoveAt(AllAppointmentsTable.CurrentRow.Index);
             }
         }

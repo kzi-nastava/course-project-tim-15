@@ -168,7 +168,7 @@ namespace Klinika.GUI.Secretary
                 }
                 else
                 {
-                    AppointmentRepository.GetInstance().Delete(Convert.ToInt32(selectedRequest["ExaminationID"]));
+                    AppointmentRepository.Delete(Convert.ToInt32(selectedRequest["ExaminationID"]));
                 }
                 MessageBox.Show("Request successfully executed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 approveButton.Enabled = false;

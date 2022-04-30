@@ -15,6 +15,10 @@ namespace Klinika.Repositories
     internal class AppointmentRepository
     {
         public List<Appointment> Appointments { get; set; }
+        public void DeleteFromList(int ID)
+        {
+            Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
+        }
 
         #region Singleton
         private static AppointmentRepository? Instance;
@@ -218,7 +222,7 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
-        public void Delete(int ID)
+        public static void Delete(int ID)
         {
             string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
             try
@@ -228,7 +232,6 @@ namespace Klinika.Repositories
                 DatabaseConnection.GetInstance().database.Open();
                 delete.ExecuteNonQuery();
                 DatabaseConnection.GetInstance().database.Close();
-                Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
             }
             catch (SqlException ex)
             {
