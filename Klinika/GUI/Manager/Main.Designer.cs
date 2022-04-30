@@ -35,6 +35,7 @@
             this.addButton = new System.Windows.Forms.Button();
             this.roomsTable = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.dateButton = new System.Windows.Forms.Button();
             this.equipmentComboBox = new System.Windows.Forms.ComboBox();
             this.roomComboBox = new System.Windows.Forms.ComboBox();
             this.quantityComboBox = new System.Windows.Forms.ComboBox();
@@ -46,7 +47,6 @@
             this.equipmentTextBox = new System.Windows.Forms.TextBox();
             this.numberTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTable = new System.Windows.Forms.DataGridView();
-            this.dateButton = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
@@ -145,6 +145,16 @@
             this.tabPage2.Text = "Equipment";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // dateButton
+            // 
+            this.dateButton.Location = new System.Drawing.Point(336, 358);
+            this.dateButton.Name = "dateButton";
+            this.dateButton.Size = new System.Drawing.Size(139, 29);
+            this.dateButton.TabIndex = 12;
+            this.dateButton.Text = "Pick Transfer Date";
+            this.dateButton.UseVisualStyleBackColor = true;
+            this.dateButton.Click += new System.EventHandler(this.dateButton_Click);
+            // 
             // equipmentComboBox
             // 
             this.equipmentComboBox.FormattingEnabled = true;
@@ -161,7 +171,7 @@
             this.roomComboBox.Name = "roomComboBox";
             this.roomComboBox.Size = new System.Drawing.Size(131, 28);
             this.roomComboBox.TabIndex = 10;
-            this.roomComboBox.SelectedIndexChanged += new System.EventHandler(this.roomComboBox_SelectedIndexChanged);
+            this.roomComboBox.SelectedIndexChanged += new System.EventHandler(this.equipmentTextBox_TextChanged);
             // 
             // quantityComboBox
             // 
@@ -243,16 +253,6 @@
             this.equipmentTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.equipmentTable.Size = new System.Drawing.Size(756, 250);
             this.equipmentTable.TabIndex = 0;
-            // 
-            // dateButton
-            // 
-            this.dateButton.Location = new System.Drawing.Point(336, 358);
-            this.dateButton.Name = "dateButton";
-            this.dateButton.Size = new System.Drawing.Size(139, 29);
-            this.dateButton.TabIndex = 12;
-            this.dateButton.Text = "Pick Transfer Date";
-            this.dateButton.UseVisualStyleBackColor = true;
-            this.dateButton.Click += new System.EventHandler(this.dateButton_Click);
             // 
             // Main
             // 

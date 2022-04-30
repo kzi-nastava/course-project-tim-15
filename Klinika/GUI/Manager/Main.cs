@@ -44,6 +44,9 @@ namespace Klinika.GUI.Manager
                 if (!equipmentComboBox.Items.Contains(equipmentTable.Rows[i].Cells["Equipment Type"].Value.ToString()))
                     equipmentComboBox.Items.Add(equipmentTable.Rows[i].Cells["Equipment Type"].Value.ToString());
             }
+            roomComboBox.SelectedIndex = 0;
+            equipmentComboBox.SelectedIndex = 0;
+            quantityComboBox.SelectedIndex = 0;
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -89,35 +92,47 @@ namespace Klinika.GUI.Manager
                     && row.Field<string>("Equipment Type").ToString().Contains(typeTextBox.Text)
                     && row.Field<int>("Quantity").ToString().Contains(quantityTextBox.Text)
                     ).CopyToDataTable();
-                //MessageBox.Show(roomComboBox.SelectedText);
-                if (roomComboBox.SelectedText != "")
+
+                if (roomComboBox.SelectedIndex != -1)
                 {
-                    filtered = filtered.AsEnumerable()
-                        .Where(row => row.Field<string>("Room Type").ToString() == roomComboBox.SelectedText).CopyToDataTable();
-                }
-                if (equipmentComboBox.SelectedText != "")
-                {
-                    filtered = filtered.AsEnumerable()
-                        .Where(row => row.Field<string>("Equipment Type").ToString() == equipmentComboBox.SelectedText).CopyToDataTable();
-                }
-                if (quantityComboBox.SelectedText != "")
-                {
-                    if (quantityComboBox.SelectedText == "no available")
+                    if (roomComboBox.Items[roomComboBox.SelectedIndex].ToString() != "")
                     {
                         filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<int>("Quantity") == 0).CopyToDataTable();
-                    }
-                    else if (quantityComboBox.SelectedText == "0-10")
-                    {
-                        filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<int>("Quantity") > 0 || row.Field<int>("Quantity") < 10).CopyToDataTable();
-                    }
-                    else if (quantityComboBox.SelectedText == "10+")
-                    {
-                        filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<int>("Quantity") >= 10).CopyToDataTable();
+                            .Where(row => row.Field<string>("Room Type").ToString() == roomComboBox.Items[roomComboBox.SelectedIndex].ToString()).CopyToDataTable();
                     }
                 }
+
+                if (equipmentComboBox.SelectedIndex != -1)
+                {
+                    if (equipmentComboBox.Items[equipmentComboBox.SelectedIndex].ToString() != "")
+                    {
+                        filtered = filtered.AsEnumerable()
+                            .Where(row => row.Field<string>("Equipment Type").ToString() == equipmentComboBox.Items[equipmentComboBox.SelectedIndex].ToString()).CopyToDataTable();
+                    }
+                }
+
+                if (quantityComboBox.SelectedIndex != -1)
+                {
+                    if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() != "")
+                    {
+                        if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "no available")
+                        {
+                            filtered = filtered.AsEnumerable()
+                                .Where(row => row.Field<int>("Quantity") == 0).CopyToDataTable();
+                        }
+                        else if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "0-10")
+                        {
+                            filtered = filtered.AsEnumerable()
+                                .Where(row => row.Field<int>("Quantity") > 0 && row.Field<int>("Quantity") < 10).CopyToDataTable();
+                        }
+                        else if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "10+")
+                        {
+                            filtered = filtered.AsEnumerable()
+                                .Where(row => row.Field<int>("Quantity") >= 10).CopyToDataTable();
+                        }
+                    }
+                }
+
                 equipmentTable.DataSource = filtered;
             }
             catch (System.InvalidOperationException ex)
