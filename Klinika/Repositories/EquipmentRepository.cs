@@ -48,8 +48,8 @@ namespace Klinika.Repositories
         public static void TransferRequest(Models.EquipmentTransfer transfer)
         {
             string requestQuery = "INSERT INTO [EquipmentTransferRequest] " +
-                "(FromID, ToID, EquipmentID, Quantity, Date, MaxQuantity) " +
-                "VALUES (@FromID, @ToID, @EquipmentID, @Quantity, @Date, @MaxQuantity)";
+                "(FromID, ToID, EquipmentID, Quantity, Date, MaxQuantity, Done) " +
+                "VALUES (@FromID, @ToID, @EquipmentID, @Quantity, @Date, @MaxQuantity, 0)";
             try
             {
                 SqlCommand create = new SqlCommand(requestQuery, DatabaseConnection.GetInstance().database);
@@ -127,6 +127,12 @@ namespace Klinika.Repositories
             {
                 MessageBox.Show(error.Message);
             }
+        }
+
+        public static void CheckEquipmentTransfers()
+        {
+            string transfersQuery = "SELECT Quantity FROM [RoomEquipment] " +
+                "WHERE RoomID = @RoomID AND EquipmentID = @EquipmentID";
         }
     }
 }
