@@ -11,7 +11,6 @@ namespace Klinika.Repositories
 {
     internal class PatientRequestRepository
     {
-        private static List<string> Descriptions;
         public static void Create(PatientRequest patientRequest)
         {
             string createQuerry = "INSERT INTO [PatientRequest] " +
@@ -39,14 +38,27 @@ namespace Klinika.Repositories
             }
 
         }
-        
         public static int GetPersonalCount(int ID)
         {
             DateTime startDate = DateTime.Now.AddDays(-30);
-            DateTime endDate = DateTime.Now;
 
-            Descriptions = new List<string>();
+            var Descriptions = GetAllDescriptions(ID);
             int counter = 0;
+
+            foreach (string description in Descriptions)
+            {
+                DateTime date = DateTime.ParseExact(description.Substring(9, 10), "yyyy-MM-dd",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+                if (date > startDate)
+                {
+                    counter += 1;
+                }
+            }
+            return counter;
+        }
+        private static List<string> GetAllDescriptions(int ID)
+        {
+            var Descriptions = new List<string>();
 
             string getDescriptionsQuerry = "SELECT Description " +
                                  "FROM [PatientRequest] " +
@@ -69,17 +81,7 @@ namespace Klinika.Repositories
             {
                 MessageBox.Show(ex.Message);
             }
-
-            foreach (string description in Descriptions)
-            {
-                DateTime date = DateTime.ParseExact(description.Substring(9, 10), "yyyy-MM-dd",
-                                       System.Globalization.CultureInfo.InvariantCulture);
-                if (date > startDate)
-                {
-                    counter += 1;
-                }
-            }
-            return counter;
+            return Descriptions;
         }
     }
 }

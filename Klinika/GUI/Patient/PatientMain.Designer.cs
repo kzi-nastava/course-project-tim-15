@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.MainTabControl = new System.Windows.Forms.TabControl();
-            this.YourAppointmentsTab = new System.Windows.Forms.TabPage();
+            this.PersonalAppointmentsTab = new System.Windows.Forms.TabPage();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.ModifyButton = new System.Windows.Forms.Button();
             this.PersonalAppointmentsTable = new System.Windows.Forms.DataGridView();
@@ -43,7 +43,7 @@
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
             this.OccupiedAppointmentsTable = new System.Windows.Forms.DataGridView();
             this.MainTabControl.SuspendLayout();
-            this.YourAppointmentsTab.SuspendLayout();
+            this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
             this.NewAppointmentTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OccupiedAppointmentsTable)).BeginInit();
@@ -51,7 +51,7 @@
             // 
             // MainTabControl
             // 
-            this.MainTabControl.Controls.Add(this.YourAppointmentsTab);
+            this.MainTabControl.Controls.Add(this.PersonalAppointmentsTab);
             this.MainTabControl.Controls.Add(this.NewAppointmentTab);
             this.MainTabControl.Location = new System.Drawing.Point(12, 12);
             this.MainTabControl.Name = "MainTabControl";
@@ -60,18 +60,18 @@
             this.MainTabControl.TabIndex = 0;
             this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControlSelectedIndexChanged);
             // 
-            // YourAppointmentsTab
+            // PersonalAppointmentsTab
             // 
-            this.YourAppointmentsTab.Controls.Add(this.DeleteButton);
-            this.YourAppointmentsTab.Controls.Add(this.ModifyButton);
-            this.YourAppointmentsTab.Controls.Add(this.PersonalAppointmentsTable);
-            this.YourAppointmentsTab.Location = new System.Drawing.Point(4, 29);
-            this.YourAppointmentsTab.Name = "YourAppointmentsTab";
-            this.YourAppointmentsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.YourAppointmentsTab.Size = new System.Drawing.Size(965, 506);
-            this.YourAppointmentsTab.TabIndex = 0;
-            this.YourAppointmentsTab.Text = "Your Appointments";
-            this.YourAppointmentsTab.UseVisualStyleBackColor = true;
+            this.PersonalAppointmentsTab.Controls.Add(this.DeleteButton);
+            this.PersonalAppointmentsTab.Controls.Add(this.ModifyButton);
+            this.PersonalAppointmentsTab.Controls.Add(this.PersonalAppointmentsTable);
+            this.PersonalAppointmentsTab.Location = new System.Drawing.Point(4, 29);
+            this.PersonalAppointmentsTab.Name = "PersonalAppointmentsTab";
+            this.PersonalAppointmentsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.PersonalAppointmentsTab.Size = new System.Drawing.Size(965, 506);
+            this.PersonalAppointmentsTab.TabIndex = 0;
+            this.PersonalAppointmentsTab.Text = "Personal Appointments";
+            this.PersonalAppointmentsTab.UseVisualStyleBackColor = true;
             // 
             // DeleteButton
             // 
@@ -91,7 +91,7 @@
             this.ModifyButton.TabIndex = 1;
             this.ModifyButton.Text = "Modify";
             this.ModifyButton.UseVisualStyleBackColor = true;
-            this.ModifyButton.Click += new System.EventHandler(this.ModifyButtonClick);
+            this.ModifyButton.Click += new System.EventHandler(this.ModifyAppointmentClick);
             // 
             // PersonalAppointmentsTable
             // 
@@ -130,28 +130,28 @@
             // 
             // ScheduleButton
             // 
-            this.ScheduleButton.Location = new System.Drawing.Point(862, 459);
+            this.ScheduleButton.Location = new System.Drawing.Point(862, 460);
             this.ScheduleButton.Name = "ScheduleButton";
             this.ScheduleButton.Size = new System.Drawing.Size(94, 29);
             this.ScheduleButton.TabIndex = 7;
             this.ScheduleButton.Text = "Schedule";
             this.ScheduleButton.UseVisualStyleBackColor = true;
-            this.ScheduleButton.Click += new System.EventHandler(this.ScheduleButtonClick);
+            this.ScheduleButton.Click += new System.EventHandler(this.ScheduleAppointmentClick);
             // 
             // FindAppointmentsButton
             // 
-            this.FindAppointmentsButton.Location = new System.Drawing.Point(718, 459);
+            this.FindAppointmentsButton.Location = new System.Drawing.Point(695, 460);
             this.FindAppointmentsButton.Name = "FindAppointmentsButton";
             this.FindAppointmentsButton.Size = new System.Drawing.Size(94, 29);
             this.FindAppointmentsButton.TabIndex = 6;
             this.FindAppointmentsButton.Text = "Find";
             this.FindAppointmentsButton.UseVisualStyleBackColor = true;
-            this.FindAppointmentsButton.Click += new System.EventHandler(this.FindAppointmentsButtonClick);
+            this.FindAppointmentsButton.Click += new System.EventHandler(this.FindAppointmentsClick);
             // 
             // DoctorLabel
             // 
             this.DoctorLabel.AutoSize = true;
-            this.DoctorLabel.Location = new System.Drawing.Point(406, 466);
+            this.DoctorLabel.Location = new System.Drawing.Point(406, 464);
             this.DoctorLabel.Name = "DoctorLabel";
             this.DoctorLabel.Size = new System.Drawing.Size(116, 20);
             this.DoctorLabel.TabIndex = 5;
@@ -169,7 +169,7 @@
             // DateLabel
             // 
             this.DateLabel.AutoSize = true;
-            this.DateLabel.Location = new System.Drawing.Point(6, 466);
+            this.DateLabel.Location = new System.Drawing.Point(6, 463);
             this.DateLabel.Name = "DateLabel";
             this.DateLabel.Size = new System.Drawing.Size(102, 20);
             this.DateLabel.TabIndex = 3;
@@ -218,11 +218,11 @@
             this.MinimizeBox = false;
             this.Name = "PatientMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PatientMain";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PatientMainFormClosing);
-            this.Load += new System.EventHandler(this.PatientMainLoad);
+            this.Text = "Patient";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
+            this.Load += new System.EventHandler(this.LoadForm);
             this.MainTabControl.ResumeLayout(false);
-            this.YourAppointmentsTab.ResumeLayout(false);
+            this.PersonalAppointmentsTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).EndInit();
             this.NewAppointmentTab.ResumeLayout(false);
             this.NewAppointmentTab.PerformLayout();
@@ -234,7 +234,7 @@
         #endregion
 
         private TabControl MainTabControl;
-        private TabPage YourAppointmentsTab;
+        private TabPage PersonalAppointmentsTab;
         private TabPage NewAppointmentTab;
         private Button DeleteButton;
         private Button ModifyButton;

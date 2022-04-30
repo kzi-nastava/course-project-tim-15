@@ -9,68 +9,20 @@ namespace Klinika.GUI.Patient
     {
         private readonly PatientMain Parent;
         private Appointment? Appointment;
+
+        #region Form
         public PersonalAppointment(PatientMain parent, Appointment appointment)
         {
             InitializeComponent();
             Parent = parent;
             Appointment = appointment;
         }
-
-        #region Loads and closing
-        private void PersonalAppointmentLoad(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             Parent.Enabled = false;
             Parent.FillDoctorComboBox(DoctorComboBox);
             SetAppointmentDetails();
         }
-        private void PersonalAppointmentClosing(object sender, FormClosingEventArgs e)
-        {
-            Parent.Enabled = true;
-        }
-        #endregion
-
-        #region Click functions
-        private void ConfirmeButtonClick(object sender, EventArgs e)
-        {
-            if (Parent.IsDateValid(MergeDate()))
-            {
-                if (Appointment == null)
-                {
-                    if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate()))
-                    {
-                        DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (dialogResult == DialogResult.Yes)
-                        {
-                            CreateAppointment();
-                            Close();
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("This time is occupied!", "Denied Create", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    }
-                }
-                else
-                {
-                    if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
-                    {
-                        DialogResult dialogResult = MessageBox.Show("Are you sure you want to save the changes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                        if (dialogResult == DialogResult.Yes)
-                        {
-                            ModifyAppointment();
-                            Close();
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("This time is occupied!", "Denied Modify", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    }
-                }
-            }
-        }
-        #endregion
-
-        #region Helper functions
         private void SetAppointmentDetails()
         {
             if (Appointment == null)
@@ -91,13 +43,58 @@ namespace Klinika.GUI.Patient
                 DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(UserRepository.GetInstance().Users.Where(x => x.ID == Appointment.DoctorID).FirstOrDefault());
             }
         }
+        private void ClosingForm(object sender, FormClosingEventArgs e)
+        {
+            Parent.Enabled = true;
+        }
+        #endregion
+
+        #region Click functions
+        private void ConfirmeButtonClick(object sender, EventArgs e)
+        {
+            if (!Parent.IsDateValid(GetSelectedDateTime()))
+            {
+                return;
+            }
+            if (Appointment == null)
+            {
+                if (!AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime()))
+                {
+                    DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        CreateAppointment();
+                        Close();
+                    }
+                    return;
+                }
+            }
+            else
+            {
+                if (!AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), 15, Appointment.ID))
+                {
+                    DialogResult dialogResult = MessageBox.Show("Are you sure you want to save the changes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        ModifyAppointment();
+                        Close();
+                    }
+                    return;
+                }
+            }
+
+            MessageBox.Show("This time is occupied!", "Denied!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+        #endregion
+
+        #region Helper functions
         private void CreateAppointment()
         {
             Appointment = new Appointment();
             Appointment.ID = -1;
             Appointment.DoctorID = GetDoctorID();
             Appointment.PatientID = Parent.Patient.ID;
-            Appointment.DateTime = MergeDate();
+            Appointment.DateTime = GetSelectedDateTime();
             Appointment.RoomID = 1;
             Appointment.Completed = false;
             Appointment.Type = 'E';
@@ -108,49 +105,46 @@ namespace Klinika.GUI.Patient
             AppointmentRepository.GetInstance().Create(Appointment);
             Parent.InsertRowIntoPersonalAppointmentsTable(Appointment);
             Parent.InsertRowIntoOccupiedTable(Appointment);
-            Parent.Enabled = true;
         }
         private void ModifyAppointment()
         {
             Appointment.DoctorID = GetDoctorID();
-            Appointment.DateTime = MergeDate();
+            Appointment.DateTime = GetSelectedDateTime();
 
-            if (DateTime.Now.AddDays(2).Date >= Appointment.DateTime.Date)
+            bool needApproval = DateTime.Now.AddDays(2).Date >= Appointment.DateTime.Date;
+
+            if (needApproval)
             {
                 DialogResult sendConfirmation = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
                     "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (sendConfirmation == DialogResult.Yes)
                 {
-                    PatientRequest patientRequest = CreatePatientRequest(false);
-                    PatientRequestRepository.Create(patientRequest);
-                    Parent.Enabled = true;
+                    SendPatientRequest(!needApproval);
                 }
+
+                return;
             }
-            else
-            {
-                PatientRequest patientRequest = CreatePatientRequest(true);
-                PatientRequestRepository.Create(patientRequest);
-                AppointmentRepository.GetInstance().Modify(Appointment);
-                Parent.ModifyPersonalAppointmentTableRow(Appointment);
-                Parent.Enabled = true;
-            }
+
+            SendPatientRequest(!needApproval);
+            AppointmentRepository.GetInstance().Modify(Appointment);
+            Parent.ModifyPersonalAppointmentTableRow(Appointment);
         }
-        private PatientRequest CreatePatientRequest(bool isApproved)
+        private void SendPatientRequest(bool isApproved)
         {
             PatientRequest patientRequest = new PatientRequest();
             patientRequest.PatientID = Appointment.PatientID;
             patientRequest.MedicalActionID = Appointment.ID;
             patientRequest.Type = 'M';
-            patientRequest.Description = Parent.GetFullRequestDescription(MergeDate(), GetDoctorID());
+            patientRequest.Description = Parent.GetFullRequestDescription(GetSelectedDateTime(), GetDoctorID());
             patientRequest.Approved = isApproved;
-            return patientRequest;
+            PatientRequestRepository.Create(patientRequest);
         }   
         private int GetDoctorID()
         {
             return (DoctorComboBox.SelectedItem as User).ID;
         }
-        private DateTime MergeDate()
+        private DateTime GetSelectedDateTime()
         {
             var selectedDate = DatePicker.Value;
             var selectedTime = TimePicker.Value;

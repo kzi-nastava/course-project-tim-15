@@ -15,21 +15,29 @@ namespace Klinika.GUI.Patient
                 return AppointmentRepository.GetInstance().Appointments;
             }
         }
+
+        #region Form
         public PatientMain(User patient)
         {
             InitializeComponent();
             Patient = patient;
         }
-
-        #region Loads and closing
-        private void PatientMainLoad(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             FillPersonalAppointmentTable();
             FillDoctorComboBox(DoctorComboBox);
             ModifyButton.Enabled = false;
             DeleteButton.Enabled = false;
         }
-        private void PatientMainFormClosing(object sender, FormClosingEventArgs e)
+        private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if ((sender as TabControl).SelectedIndex == 1)
+            {
+                ScheduleButton.Enabled = false;
+                OccupiedAppointmentsTable.DataSource = new DataTable();
+            }
+        }
+        private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
         }
@@ -59,6 +67,13 @@ namespace Klinika.GUI.Patient
                 PersonalAppointmentsTable.ClearSelection();
             }
         }
+        private void FillAppointmentTypeName(DataTable dataTable)
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                row["Type"] = GetAppointmentTypeName(row["Type"].ToString());
+            }
+        }
         public void InsertRowIntoPersonalAppointmentsTable(Appointment appointment)
         {
             DataTable? dataTable = PersonalAppointmentsTable.DataSource as DataTable;
@@ -85,6 +100,40 @@ namespace Klinika.GUI.Patient
         {
             ModifyButton.Enabled = true;
             DeleteButton.Enabled = true;
+        }
+        private void ModifyAppointmentClick(object sender, EventArgs e)
+        {
+            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
+            Appointment? toModify = GetAppointment(ID);
+            new PersonalAppointment(this, toModify).Show();
+        }
+        private void DeleteAppointmentClick(object sender, EventArgs e)
+        {
+            if (!IsDeleteConfirmed())
+            {
+                return;
+            }
+
+            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
+            Appointment? toDelete = GetAppointment(ID);
+
+            bool needApproval = DateTime.Now.AddDays(2).Date >= toDelete.DateTime.Date;
+
+            if (needApproval)
+            {
+                DialogResult sendRequest = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
+                "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (sendRequest == DialogResult.Yes)
+                {
+                    SendDeletePatientRequest(!needApproval, toDelete);
+                }
+                return;
+            }
+
+            AppointmentRepository.GetInstance().Delete(toDelete.ID);
+            SendDeletePatientRequest(!needApproval, toDelete);
+            PersonalAppointmentsTable.Rows.RemoveAt(PersonalAppointmentsTable.SelectedRows[0].Index);
         }
         #endregion
 
@@ -129,77 +178,20 @@ namespace Klinika.GUI.Patient
             dataRow[4] = appointment.Duration.ToString();
             dataTable.Rows.Add(dataRow);
         }
-        #endregion
-
-        #region Click functions
-        private void ModifyButtonClick(object sender, EventArgs e)
-        {
-            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
-            Appointment? toModify = GetAppointment(ID);
-            new PersonalAppointment(this, toModify).Show();
-        }
-        private void DeleteAppointmentClick(object sender, EventArgs e)
-        {
-            DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete selected appointment?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (deleteConfirmation == DialogResult.Yes)
-            {
-                int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
-                Appointment? toDelete = GetAppointment(ID);
-
-                if (DateTime.Now.AddDays(2).Date >= toDelete.DateTime.Date)
-                {
-                    DialogResult sendRequest = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
-                    "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                    if (sendRequest == DialogResult.Yes)
-                    {
-                        PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 
-                            'D', GetFullRequestDescription(toDelete.DateTime, toDelete.DoctorID), false);
-                        PatientRequestRepository.Create(patientRequest);
-                    }
-                }
-                else
-                {
-                    AppointmentRepository.GetInstance().Delete(toDelete.ID);
-
-                    PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 
-                        'D', GetFullRequestDescription(toDelete.DateTime, toDelete.DoctorID), true);
-                    PatientRequestRepository.Create(patientRequest);
-
-                    PersonalAppointmentsTable.Rows.RemoveAt(PersonalAppointmentsTable.SelectedRows[0].Index);
-                }
-            }
-        }
-        private void FindAppointmentsButtonClick(object sender, EventArgs e)
+        private void FindAppointmentsClick(object sender, EventArgs e)
         {
             if (IsDateValid(AppointmentDatePicker.Value))
             {
                 FillOccupiedAppointmentsTable();
             }
         }
-        private void ScheduleButtonClick(object sender, EventArgs e)
+        private void ScheduleAppointmentClick(object sender, EventArgs e)
         {
             new PersonalAppointment(this, null).Show();
         }
         #endregion
 
         #region Helper functions
-        private void FillAppointmentTypeName(DataTable dataTable)
-        {
-            foreach (DataRow row in dataTable.Rows)
-            {
-                row["Type"] = GetAppointmentTypeName(row["Type"].ToString());
-            }
-        }
-        private void FillTableWithDoctorData(DataTable dataTable)
-        {
-            dataTable.Columns.Add("Doctor Name");
-            dataTable.Columns["Doctor Name"].SetOrdinal(1);
-            foreach (DataRow row in dataTable.Rows)
-            {
-                row["Doctor Name"] = GetDoctorFullName(Convert.ToInt32(row["DoctorID"]));
-            }
-        }
         private string GetAppointmentTypeName(string type)
         {
             if (type == "E")
@@ -209,6 +201,15 @@ namespace Klinika.GUI.Patient
             else
             {
                 return "Operation";
+            }
+        }
+        private void FillTableWithDoctorData(DataTable dataTable)
+        {
+            dataTable.Columns.Add("Doctor Full Name");
+            dataTable.Columns["Doctor Full Name"].SetOrdinal(1);
+            foreach (DataRow row in dataTable.Rows)
+            {
+                row["Doctor Full Name"] = GetDoctorFullName(Convert.ToInt32(row["DoctorID"]));
             }
         }
         private string GetDoctorFullName(int doctorID)
@@ -233,14 +234,6 @@ namespace Klinika.GUI.Patient
         {
             return UserRepository.GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToArray();
         }
-        private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if ((sender as TabControl).SelectedIndex == 1)
-            {
-                ScheduleButton.Enabled = false;
-                OccupiedAppointmentsTable.DataSource = new DataTable();
-            }
-        }
         public bool IsDateValid (DateTime dateTime)
         {
             if (dateTime < DateTime.Now)
@@ -249,6 +242,21 @@ namespace Klinika.GUI.Patient
                 return false;
             }
             return true;
+        }
+        public bool IsDeleteConfirmed()
+        {
+            DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete selected appointment?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (deleteConfirmation == DialogResult.Yes)
+            {
+                return true;
+            }
+            return false;
+        }
+        public void SendDeletePatientRequest(bool isApproved, Appointment toDelete)
+        {
+            PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID,
+                        'D', GetFullRequestDescription(toDelete.DateTime, toDelete.DoctorID), isApproved);
+            PatientRequestRepository.Create(patientRequest);
         }
         public string GetFullRequestDescription(DateTime dateTime, int doctorID)
         {
