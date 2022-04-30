@@ -35,7 +35,7 @@
             this.EditAppointmentButton = new System.Windows.Forms.Button();
             this.AllAppointmentsTable = new System.Windows.Forms.DataGridView();
             this.ScheduleTab = new System.Windows.Forms.TabPage();
-            this.PerformeButton = new System.Windows.Forms.Button();
+            this.PerformButton = new System.Windows.Forms.Button();
             this.ViewMedicalRecordButton = new System.Windows.Forms.Button();
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
             this.ScheduleTable = new System.Windows.Forms.DataGridView();
@@ -127,7 +127,7 @@
             // 
             // ScheduleTab
             // 
-            this.ScheduleTab.Controls.Add(this.PerformeButton);
+            this.ScheduleTab.Controls.Add(this.PerformButton);
             this.ScheduleTab.Controls.Add(this.ViewMedicalRecordButton);
             this.ScheduleTab.Controls.Add(this.ScheduleDatePicker);
             this.ScheduleTab.Controls.Add(this.ScheduleTable);
@@ -139,15 +139,15 @@
             this.ScheduleTab.Text = "Schedule";
             this.ScheduleTab.UseVisualStyleBackColor = true;
             // 
-            // PerformeButton
+            // PerformButton
             // 
-            this.PerformeButton.Location = new System.Drawing.Point(584, 330);
-            this.PerformeButton.Name = "PerformeButton";
-            this.PerformeButton.Size = new System.Drawing.Size(75, 23);
-            this.PerformeButton.TabIndex = 3;
-            this.PerformeButton.Text = "Perform";
-            this.PerformeButton.UseVisualStyleBackColor = true;
-            this.PerformeButton.Click += new System.EventHandler(this.PreformeButtonClick);
+            this.PerformButton.Location = new System.Drawing.Point(584, 330);
+            this.PerformButton.Name = "PerformButton";
+            this.PerformButton.Size = new System.Drawing.Size(75, 23);
+            this.PerformButton.TabIndex = 3;
+            this.PerformButton.Text = "Perform";
+            this.PerformButton.UseVisualStyleBackColor = true;
+            this.PerformButton.Click += new System.EventHandler(this.PreformButtonClick);
             // 
             // ViewMedicalRecordButton
             // 
@@ -221,6 +221,6 @@
         public DataGridView ScheduleTable;
         private DateTimePicker ScheduleDatePicker;
         private Button ViewMedicalRecordButton;
-        private Button PerformeButton;
+        private Button PerformButton;
     }
 }

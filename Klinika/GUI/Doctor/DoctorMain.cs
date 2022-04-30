@@ -42,7 +42,7 @@ namespace Klinika.GUI.Doctor
             FillTableWithData(scheduledAppointments, ScheduleTable);
             ScheduleTable.ClearSelection();
             ViewMedicalRecordButton.Enabled = false;
-            PerformeButton.Enabled = false;
+            PerformButton.Enabled = false;
 
         }
         private void DoctorMainFormClosing(object sender, FormClosingEventArgs e)
@@ -168,12 +168,12 @@ namespace Klinika.GUI.Doctor
             DataTable? scheduledAppointments = AppointmentRepository.GetAll(date, Doctor.ID, User.RoleType.DOCTOR, 3);
             FillTableWithData(scheduledAppointments, ScheduleTable);
             ScheduleTable.ClearSelection();
-            PerformeButton.Enabled = false;
+            PerformButton.Enabled = false;
         }
         private void ScheduleTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
             ViewMedicalRecordButton.Enabled = true;
-            PerformeButton.Enabled = true;
+            PerformButton.Enabled = true;
         }
         private void ViewMedicalRecordButtonClick(object sender, EventArgs e)
         {
@@ -185,7 +185,7 @@ namespace Klinika.GUI.Doctor
         #endregion
 
         #region Preforme
-        private void PreformeButtonClick(object sender, EventArgs e)
+        private void PreformButtonClick(object sender, EventArgs e)
         {
             int appointmentID = Convert.ToInt32(ScheduleTable.SelectedRows[0].Cells["ID"].Value);
             Appointment appointment = Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();
@@ -212,12 +212,12 @@ namespace Klinika.GUI.Doctor
                 Appointment appointment = Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();
                 if (!appointment.Completed && appointment.Type == 'E' && appointment.DateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
                 {
-                    PerformeButton.Enabled = true;
+                    PerformButton.Enabled = true;
                     return;
                 }
             }
             catch { }
-            PerformeButton.Enabled = false;
+            PerformButton.Enabled = false;
         }
     }
 }
