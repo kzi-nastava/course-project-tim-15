@@ -153,7 +153,8 @@ namespace Klinika.GUI.Patient
 
                     if (sendRequest == DialogResult.Yes)
                     {
-                        PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 'D', "", false);
+                        PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 
+                            'D', GetFullRequestDescription(toDelete.DateTime, toDelete.DoctorID), false);
                         PatientRequestRepository.Create(patientRequest);
                     }
                 }
@@ -161,7 +162,8 @@ namespace Klinika.GUI.Patient
                 {
                     AppointmentRepository.GetInstance().Delete(toDelete.ID);
 
-                    PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 'D', "", true);
+                    PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID, 
+                        'D', GetFullRequestDescription(toDelete.DateTime, toDelete.DoctorID), true);
                     PatientRequestRepository.Create(patientRequest);
 
                     PersonalAppointmentsTable.Rows.RemoveAt(PersonalAppointmentsTable.SelectedRows[0].Index);
@@ -247,6 +249,10 @@ namespace Klinika.GUI.Patient
                 return false;
             }
             return true;
+        }
+        public string GetFullRequestDescription(DateTime dateTime, int doctorID)
+        {
+            return "DateTime=" + dateTime.ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + doctorID.ToString();
         }
         #endregion
     }

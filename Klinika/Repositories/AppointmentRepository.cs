@@ -233,5 +233,33 @@ namespace Klinika.Repositories
             }
             return false;
         }
+        public static int GetPersonalCount (int ID)
+        {
+            DateTime startDate = DateTime.Now.AddDays(-30);
+            int counter = 0;
+
+            string getQuerry = "SELECT COUNT(*) as Number " +
+                "FROM [MedicalAction] " +
+                $"WHERE PatientID = {ID} AND DateTime > '{startDate.ToString("yyyy-MM-dd HH:mm:ss.000")}'";
+
+            try
+            {
+                SqlCommand get = new SqlCommand(getQuerry, DatabaseConnection.GetInstance().database);
+                DatabaseConnection.GetInstance().database.Open();
+                using (SqlDataReader retrieved = get.ExecuteReader())
+                {
+                    while (retrieved.Read())
+                    {
+                        counter = Convert.ToInt32(retrieved["Number"]);
+                    }
+                }
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return counter;
+        }
     }
 }
