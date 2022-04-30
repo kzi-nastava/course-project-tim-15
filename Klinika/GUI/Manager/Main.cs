@@ -53,5 +53,10 @@ namespace Klinika.GUI.Manager
             deleteButton.Enabled = true;
             modifyButton.Enabled = true;
         }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }
