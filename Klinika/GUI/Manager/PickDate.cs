@@ -26,8 +26,30 @@ namespace Klinika.GUI.Manager
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            main.transfer.quantity = int.Parse(quantityTextBox.Text);
-            //ADD DATE
+            if (!int.TryParse(quantityTextBox.Text.Trim(), out _))
+            {
+                MessageBox.Show("You must choose a number for quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else if (main.transfer.quantity == 0)
+            {
+                MessageBox.Show("You must choose a not 0 value for quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                main.transfer.quantity = int.Parse(quantityTextBox.Text);
+                main.transfer.transfer = dateTimePicker.Value;
+                if(main.transfer.transfer.Date == DateTime.Now.Date)
+                {
+                    Repositories.EquipmentRepository.Transfer(main.transfer);
+                }
+                else
+                {
+
+                }
+
+                main.Main_Load(null, EventArgs.Empty);
+                this.Close();
+            }
         }
     }
 }

@@ -12,9 +12,13 @@ namespace Klinika.Models
         public int maxQuantity;
         public int toId;
         public int quantity;
-        public string equipment;
+        public int equipment;
+        public DateTime transfer;
         public EquipmentTransfer()
         {
+            quantity = -1;
+            equipment = -1;
+            transfer = DateTime.Now;
             fromId = -1;
             toId = -1;
         }

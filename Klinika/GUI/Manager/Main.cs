@@ -31,7 +31,8 @@ namespace Klinika.GUI.Manager
             roomsTable.Columns["ID"].Visible = false;
             unfiltered = Repositories.EquipmentRepository.GetAll();
             equipmentTable.DataSource = unfiltered;
-            equipmentTable.Columns["ID"].Visible = false;
+            equipmentTable.Columns["EquipmentID"].Visible = false;
+            equipmentTable.Columns["RoomID"].Visible = false;
             equipmentTable.ClearSelection();
 
             roomComboBox.Items.Add("");
@@ -187,8 +188,8 @@ namespace Klinika.GUI.Manager
 
         private void fromButton_Click(object sender, EventArgs e)
         {
-            transfer.fromId = (int)equipmentTable.SelectedRows[0].Cells["ID"].Value;
-            transfer.equipment = equipmentTable.SelectedRows[0].Cells["Equipment"].Value.ToString();
+            transfer.fromId = (int)equipmentTable.SelectedRows[0].Cells["RoomID"].Value;
+            transfer.equipment = (int)equipmentTable.SelectedRows[0].Cells["EquipmentID"].Value;
             transfer.maxQuantity = (int)equipmentTable.SelectedRows[0].Cells["Quantity"].Value;
             
             if (transfer.maxQuantity == 0)
