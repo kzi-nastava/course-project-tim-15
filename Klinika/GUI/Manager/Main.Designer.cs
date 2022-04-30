@@ -145,6 +145,7 @@
             // 
             // equipmentComboBox
             // 
+            this.equipmentComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.equipmentComboBox.FormattingEnabled = true;
             this.equipmentComboBox.Location = new System.Drawing.Point(474, 304);
             this.equipmentComboBox.Name = "equipmentComboBox";
@@ -154,6 +155,7 @@
             // 
             // roomComboBox
             // 
+            this.roomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.roomComboBox.FormattingEnabled = true;
             this.roomComboBox.Location = new System.Drawing.Point(199, 304);
             this.roomComboBox.Name = "roomComboBox";
@@ -163,6 +165,7 @@
             // 
             // quantityComboBox
             // 
+            this.quantityComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.quantityComboBox.FormattingEnabled = true;
             this.quantityComboBox.Location = new System.Drawing.Point(615, 304);
             this.quantityComboBox.Name = "quantityComboBox";
