@@ -45,6 +45,30 @@ namespace Klinika.Repositories
             return retrievedEquipment;
         }
 
+        public static void TransferRequest(Models.EquipmentTransfer transfer)
+        {
+            string requestQuery = "INSERT INTO [EquipmentTransferRequest] " +
+                "(FromID, ToID, EquipmentID, Quantity, Date, MaxQuantity) " +
+                "VALUES (@FromID, @ToID, @EquipmentID, @Quantity, @Date, @MaxQuantity)";
+            try
+            {
+                SqlCommand create = new SqlCommand(requestQuery, DatabaseConnection.GetInstance().database);
+                create.Parameters.AddWithValue("@FromID", transfer.fromId);
+                create.Parameters.AddWithValue("@ToID", transfer.toId);
+                create.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+                create.Parameters.AddWithValue("@Quantity", transfer.quantity);
+                create.Parameters.AddWithValue("@Date", transfer.transfer.ToString("yyyy-mm-dd"));
+                create.Parameters.AddWithValue("@MaxQuantity", transfer.maxQuantity);
+                DatabaseConnection.GetInstance().database.Open();
+                create.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
         public static void Transfer(Models.EquipmentTransfer transfer)
         {
             string transferFromQuery = "UPDATE [RoomEquipment] " +

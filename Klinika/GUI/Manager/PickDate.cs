@@ -44,7 +44,7 @@ namespace Klinika.GUI.Manager
                 }
                 else
                 {
-
+                    Repositories.EquipmentRepository.TransferRequest(main.transfer);
                 }
 
                 main.Main_Load(null, EventArgs.Empty);
