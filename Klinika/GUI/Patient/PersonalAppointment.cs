@@ -38,8 +38,12 @@ namespace Klinika.GUI.Patient
                 {
                     if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate()))
                     {
-                        CreateAppointment();
-                        Close();
+                        DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            CreateAppointment();
+                            Close();
+                        }
                     }
                     else
                     {
@@ -50,8 +54,12 @@ namespace Klinika.GUI.Patient
                 {
                     if (!AppointmentRepository.GetInstance().IsOccupied(MergeDate(), 15, Appointment.ID))
                     {
-                        ModifyAppointment();
-                        Close();
+                        DialogResult dialogResult = MessageBox.Show("Are you sure you want to save the changes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            ModifyAppointment();
+                            Close();
+                        }
                     }
                     else
                     {
