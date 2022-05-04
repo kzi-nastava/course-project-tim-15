@@ -136,6 +136,11 @@ namespace Klinika.GUI.Doctor
 
             CreateAnamanesisInDatabase();
 
+            if (ReferCheckBox.Checked)
+            {
+                CreateReferalInDatabase();
+            }
+
             Appointment.Completed = true;
             AppointmentRepository.GetInstance().Modify(Appointment);
 
@@ -200,9 +205,6 @@ namespace Klinika.GUI.Doctor
             DoctorsComboBox.Enabled = false;
             DoctorsComboBox.SelectedIndex = -1;
         }
-
-        #endregion
-
         private void SpecializationsComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
             if(SpecializationsComboBox.SelectedIndex == -1)
@@ -213,5 +215,13 @@ namespace Klinika.GUI.Doctor
             FillDoctorsComboBox(selectedID);
             DoctorsComboBox.SelectedIndex = -1;
         }
+        private void CreateReferalInDatabase()
+        {
+            int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
+            int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).ID;
+            ReferalRepository.Create(Appointment.PatientID, specializationID, doctorID);
+        }
+        #endregion
+
     }
 }
