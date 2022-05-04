@@ -1,4 +1,6 @@
 ﻿using Klinika.Data;
+using Klinika.Models;
+using Klinika.Roles;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -37,6 +39,67 @@ namespace Klinika.Repositories
             }
 
             return nameSurname;
+        }
+
+        public static List<Specialization> GetSpecializations()
+        {
+            List<Specialization> specializations = new List<Specialization>();
+            
+            SqlConnection database = DatabaseConnection.GetInstance().database;
+            string getQuery = "SELECT * FROM [Specialization]";
+
+            try
+            {
+                SqlCommand get = new SqlCommand(getQuery, database);
+                database.Open();
+                using (SqlDataReader retrieved = get.ExecuteReader())
+                {
+                    while (retrieved.Read())
+                    {
+                        specializations.Add(new Specialization
+                        {
+                            ID = Convert.ToInt32(retrieved["ID"]),
+                            Name = retrieved["Name"].ToString()
+                        });
+                    }
+                }
+                database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+
+            return specializations;
+        }
+        public static List<int> GetSpecializedIDs(int specializationID)
+        {
+            List<int> doctors = new List<int>();
+
+            SqlConnection database = DatabaseConnection.GetInstance().database;
+            string getQuery = "SELECT UserID " +
+                "FROM [DoctorSpecialization] " +
+                $"WHERE SpecializationID = {specializationID}";
+
+            try
+            {
+                SqlCommand get = new SqlCommand(getQuery, database);
+                database.Open();
+                using (SqlDataReader retrieved = get.ExecuteReader())
+                {
+                    while (retrieved.Read())
+                    {
+                        doctors.Add(Convert.ToInt32(retrieved["UserID"]));
+                    }
+                }
+                database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+
+            return doctors;
         }
     }
 }
