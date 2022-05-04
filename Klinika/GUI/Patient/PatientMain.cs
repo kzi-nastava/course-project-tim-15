@@ -206,13 +206,11 @@ namespace Klinika.GUI.Patient
         {
 
             List<Appointment> appointments = AppointmentRepository.GetInstance().GetCompleted(Patient.ID);
-            //List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
 
             DataTable anamnesesData = new DataTable();
-            //anamnesesData.Columns.Add("ID Appointmen");
             anamnesesData.Columns.Add("Doctor");
+            anamnesesData.Columns.Add("Doctor Specialization");
             anamnesesData.Columns.Add("DateTime");
-            //anamnesesData.Columns.Add("ID");
             anamnesesData.Columns.Add("Description");
             anamnesesData.Columns.Add("Symptoms");
             anamnesesData.Columns.Add("Conclusion");
@@ -222,10 +220,9 @@ namespace Klinika.GUI.Patient
                 DataRow newRow = anamnesesData.NewRow();
                 Appointment appointment = appointments.Where(x => x.ID == anamnesis.MedicalActionID).FirstOrDefault();
 
-                //newRow["ID Appointmen"] = appointment.ID;
                 newRow["Doctor"] = GetDoctorFullName(appointment.DoctorID);
+                newRow["Doctor Specialization"] = DoctorRepository.getSpecialization(appointment.DoctorID);
                 newRow["DateTime"] = appointment.DateTime;
-                //newRow["ID"] = anamnesis.ID;
                 newRow["Description"] = anamnesis.Description;
                 newRow["Symptoms"] = anamnesis.Symptoms;
                 newRow["Conclusion"] = anamnesis.Conclusion;
@@ -249,7 +246,6 @@ namespace Klinika.GUI.Patient
             }
             FillMedicalRecordTable(searchedAnamneses);
         }
-
         private void ResetButton_Click(object sender, EventArgs e)
         {
             FillMedicalRecorTab();
@@ -328,8 +324,6 @@ namespace Klinika.GUI.Patient
         {
             return "DateTime=" + dateTime.ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + doctorID.ToString();
         }
-
         #endregion
-
     }
 }
