@@ -47,7 +47,7 @@ namespace Klinika.Repositories
             return record;
         }
          
-        private static List<Anamnesis> GetAnamneses(int patientID)
+        public static List<Anamnesis> GetAnamneses(int patientID)
         {
             List<Anamnesis> anamneses = new List<Anamnesis>();
 

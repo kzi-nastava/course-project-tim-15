@@ -36,6 +36,10 @@ namespace Klinika.GUI.Patient
                 ScheduleButton.Enabled = false;
                 OccupiedAppointmentsTable.DataSource = new DataTable();
             }
+            else if ((sender as TabControl).SelectedIndex == 2)
+            {
+                FillPatientRecordTable();
+            }
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -192,6 +196,41 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
+        #region Medical Record
+        private void FillPatientRecordTable()
+        {
+
+            List<Appointment> appointments = AppointmentRepository.GetInstance().GetCompleted(Patient.ID);
+            List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
+
+            DataTable anamnesesData = new DataTable();
+            //anamnesesData.Columns.Add("ID Appointmen");
+            anamnesesData.Columns.Add("Doctor");
+            anamnesesData.Columns.Add("DateTime");
+            //anamnesesData.Columns.Add("ID");
+            anamnesesData.Columns.Add("Description");
+            anamnesesData.Columns.Add("Symptoms");
+            anamnesesData.Columns.Add("Conclusion");
+
+            foreach (Anamnesis anamnesis in anamneses)
+            {
+                DataRow newRow = anamnesesData.NewRow();
+                Appointment appointment = appointments.Where(x => x.ID == anamnesis.MedicalActionID).FirstOrDefault();
+
+                //newRow["ID Appointmen"] = appointment.ID;
+                newRow["Doctor"] = GetDoctorFullName(appointment.DoctorID);
+                newRow["DateTime"] = appointment.DateTime;
+                //newRow["ID"] = anamnesis.ID;
+                newRow["Description"] = anamnesis.Description;
+                newRow["Symptoms"] = anamnesis.Symptoms;
+                newRow["Conclusion"] = anamnesis.Conclusion;
+                anamnesesData.Rows.Add(newRow);
+            }
+            MedicalRecordTable.DataSource = anamnesesData;
+        }
+
+        #endregion
+
         #region Helper functions
         private string GetAppointmentTypeName(string type)
         {
@@ -264,5 +303,6 @@ namespace Klinika.GUI.Patient
             return "DateTime=" + dateTime.ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + doctorID.ToString();
         }
         #endregion
+
     }
 }

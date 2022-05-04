@@ -130,7 +130,47 @@ namespace Klinika.Repositories
 
             return retrievedAppointments;
         }
-        
+        public List<Appointment> GetCompleted(int PatientID)
+        {
+            string getCompletedQuerry = "SELECT * " +
+                                        "FROM [MedicalAction] " +
+                                        $"WHERE PatientID = {PatientID} AND Completed = 1";
+
+            List<Appointment> appointments = new List<Appointment>();
+
+            try
+            {
+                SqlCommand getCompleted = new SqlCommand(getCompletedQuerry, DatabaseConnection.GetInstance().database);
+                DatabaseConnection.GetInstance().database.Open();
+                using (SqlDataReader retrieved = getCompleted.ExecuteReader())
+                {
+                    while (retrieved.Read())
+                    {
+                        Appointment appointment = new Appointment();
+                        appointment.ID = Convert.ToInt32(retrieved["ID"]);
+                        appointment.DoctorID = Convert.ToInt32(retrieved["DoctorID"]);
+                        appointment.PatientID = Convert.ToInt32(retrieved["PatientID"]);
+                        appointment.DateTime = Convert.ToDateTime(retrieved["DateTime"].ToString());
+                        appointment.RoomID = Convert.ToInt32(retrieved["RoomID"]);
+                        appointment.Completed = Convert.ToBoolean(retrieved["Completed"]);
+                        appointment.Type = Convert.ToChar(retrieved["Type"]);
+                        appointment.Duration = CheckNull<int>(retrieved["Duration"]);
+                        appointment.Urgent = CheckNull<bool>(retrieved["Urgent"]);
+                        appointment.Description = CheckNull<string>(retrieved["Description"]);
+                        appointment.IsDeleted = CheckNull<bool>(retrieved["IsDeleted"]);
+                        appointments.Add(appointment);
+                    }
+                }
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return appointments;
+        }
+
         public void Create(Appointment appointment)
         {
             string createQuery = "INSERT INTO [MedicalAction] " +
