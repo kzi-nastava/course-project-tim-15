@@ -249,6 +249,12 @@ namespace Klinika.GUI.Patient
             }
             FillMedicalRecordTable(searchedAnamneses);
         }
+
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            FillMedicalRecorTab();
+            SearchTextBox.Text = "";
+        }
         #endregion
 
         #region Helper functions
@@ -322,8 +328,8 @@ namespace Klinika.GUI.Patient
         {
             return "DateTime=" + dateTime.ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + doctorID.ToString();
         }
+
         #endregion
 
-        
     }
 }

@@ -48,6 +48,7 @@
             this.SearchTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.MedicalRecordTable = new System.Windows.Forms.DataGridView();
+            this.ResetButton = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
@@ -218,6 +219,7 @@
             // 
             // MedicalRecordTab
             // 
+            this.MedicalRecordTab.Controls.Add(this.ResetButton);
             this.MedicalRecordTab.Controls.Add(this.SearchButton);
             this.MedicalRecordTab.Controls.Add(this.SearchTextBox);
             this.MedicalRecordTab.Controls.Add(this.label1);
@@ -232,7 +234,7 @@
             // 
             // SearchButton
             // 
-            this.SearchButton.Location = new System.Drawing.Point(865, 471);
+            this.SearchButton.Location = new System.Drawing.Point(430, 471);
             this.SearchButton.Name = "SearchButton";
             this.SearchButton.Size = new System.Drawing.Size(94, 29);
             this.SearchButton.TabIndex = 3;
@@ -279,6 +281,16 @@
             this.MedicalRecordTable.RowTemplate.Height = 29;
             this.MedicalRecordTable.Size = new System.Drawing.Size(953, 455);
             this.MedicalRecordTable.TabIndex = 0;
+            // 
+            // ResetButton
+            // 
+            this.ResetButton.Location = new System.Drawing.Point(865, 471);
+            this.ResetButton.Name = "ResetButton";
+            this.ResetButton.Size = new System.Drawing.Size(94, 29);
+            this.ResetButton.TabIndex = 4;
+            this.ResetButton.Text = "Reset";
+            this.ResetButton.UseVisualStyleBackColor = true;
+            this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
             // 
             // PatientMain
             // 
@@ -328,5 +340,6 @@
         private Button SearchButton;
         private TextBox SearchTextBox;
         private Label label1;
+        private Button ResetButton;
     }
 }
