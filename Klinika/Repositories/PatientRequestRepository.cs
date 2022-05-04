@@ -97,16 +97,15 @@ namespace Klinika.Repositories
         public static void Create(PatientRequest patientRequest)
         {
             string createQuerry = "INSERT INTO [PatientRequest] " +
-                "(PatientID, MedicalActionID, Type, Description, Approved)" +
+                "(PatientID, MedicalActionID, Type, Description)" +
                 "OUTPUT INSERTED.ID " +
-                "VALUES (@PatientID, @MedicalActionID, @Type, @Description, @Approved)";
+                "VALUES (@PatientID, @MedicalActionID, @Type, @Description)";
 
             SqlCommand create = new SqlCommand(createQuerry, DatabaseConnection.GetInstance().database);
             create.Parameters.AddWithValue("@PatientID", patientRequest.PatientID);
             create.Parameters.AddWithValue("@MedicalActionID", patientRequest.MedicalActionID);
             create.Parameters.AddWithValue("@Type", patientRequest.Type);
             create.Parameters.AddWithValue("@Description", patientRequest.Description);
-            create.Parameters.AddWithValue("@Approved", patientRequest.Approved);
 
             try
             {
