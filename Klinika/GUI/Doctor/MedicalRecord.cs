@@ -1,5 +1,6 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
+using Klinika.Roles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,7 @@ namespace Klinika.GUI.Doctor
         private readonly DoctorMain Parent;
         private Appointment Appointment;
         private Models.MedicalRecord Record;
+
         #region Form
         public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
         {
@@ -33,6 +35,8 @@ namespace Klinika.GUI.Doctor
             FillAnamnesesTable();
             FillDiseasesTable();
             FillAllergensTable();
+            FillSpecializationsComboBox();
+            
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -132,6 +136,11 @@ namespace Klinika.GUI.Doctor
 
             CreateAnamanesisInDatabase();
 
+            if (ReferCheckBox.Checked)
+            {
+                CreateReferalInDatabase();
+            }
+
             Appointment.Completed = true;
             AppointmentRepository.GetInstance().Modify(Appointment);
 
@@ -156,6 +165,61 @@ namespace Klinika.GUI.Doctor
                 return false;
             }
             return true;
+        }
+        #endregion
+
+        #region Refer
+        private void FillSpecializationsComboBox()
+        {
+            var specializations = DoctorRepository.GetSpecializations().ToArray();
+            SpecializationsComboBox.Items.AddRange(specializations);
+        }
+        private void FillDoctorsComboBox(int specializationID)
+        {
+            DoctorsComboBox.Items.Clear();
+            DoctorsComboBox.Items.AddRange(GetSpecializedDoctors(specializationID));
+        }
+        private User[] GetSpecializedDoctors(int specializationID)
+        {
+            var doctorIDs = DoctorRepository.GetSpecializedIDs(specializationID).ToArray();
+            
+            var specializedDoctors = new List<User>();
+            foreach (int doctorID in doctorIDs)
+            {
+                var doctor = UserRepository.GetInstance().Users.FirstOrDefault(x => x.ID == doctorID);
+                specializedDoctors.Add(doctor);
+            }
+
+            return specializedDoctors.ToArray();
+        }
+        private void ReferCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            if((sender as CheckBox).Checked)
+            {
+                SpecializationsComboBox.Enabled = true;
+                DoctorsComboBox.Enabled = true;
+                return;
+            }
+            SpecializationsComboBox.Enabled = false;
+            SpecializationsComboBox.SelectedIndex = -1;
+            DoctorsComboBox.Enabled = false;
+            DoctorsComboBox.SelectedIndex = -1;
+        }
+        private void SpecializationsComboBox_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if(SpecializationsComboBox.SelectedIndex == -1)
+            {
+                return;
+            }
+            int selectedID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
+            FillDoctorsComboBox(selectedID);
+            DoctorsComboBox.SelectedIndex = -1;
+        }
+        private void CreateReferalInDatabase()
+        {
+            int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
+            int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).ID;
+            ReferalRepository.Create(Appointment.PatientID, specializationID, doctorID);
         }
         #endregion
 
