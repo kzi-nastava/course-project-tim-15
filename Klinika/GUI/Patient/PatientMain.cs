@@ -38,7 +38,7 @@ namespace Klinika.GUI.Patient
             }
             else if ((sender as TabControl).SelectedIndex == 2)
             {
-                FillPatientRecordTable();
+                FillMedicalRecorTab();
             }
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
@@ -195,13 +195,18 @@ namespace Klinika.GUI.Patient
             new PersonalAppointment(this, null).Show();
         }
         #endregion
-
+        
         #region Medical Record
-        private void FillPatientRecordTable()
+        private void FillMedicalRecorTab()
+        {
+            List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
+            FillMedicalRecordTable(anamneses);
+        }
+        private void FillMedicalRecordTable(List<Anamnesis> anamneses)
         {
 
             List<Appointment> appointments = AppointmentRepository.GetInstance().GetCompleted(Patient.ID);
-            List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
+            //List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
 
             DataTable anamnesesData = new DataTable();
             //anamnesesData.Columns.Add("ID Appointmen");
@@ -228,7 +233,22 @@ namespace Klinika.GUI.Patient
             }
             MedicalRecordTable.DataSource = anamnesesData;
         }
-
+        private void SearchClick(object sender, EventArgs e)
+        {
+            string searchParam = SearchTextBox.Text.ToUpper();
+            List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
+            List<Anamnesis> searchedAnamneses = new List<Anamnesis>();
+            foreach (Anamnesis anamnesis in anamneses)
+            {
+                if(anamnesis.Description.ToUpper().Contains(searchParam) || 
+                    anamnesis.Symptoms.ToUpper().Contains(searchParam) || 
+                    anamnesis.Conclusion.ToUpper().Contains(searchParam))
+                {
+                    searchedAnamneses.Add(anamnesis);
+                }
+            }
+            FillMedicalRecordTable(searchedAnamneses);
+        }
         #endregion
 
         #region Helper functions
@@ -304,5 +324,6 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
+        
     }
 }

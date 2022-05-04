@@ -44,10 +44,10 @@
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
             this.OccupiedAppointmentsTable = new System.Windows.Forms.DataGridView();
             this.MedicalRecordTab = new System.Windows.Forms.TabPage();
-            this.MedicalRecordTable = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
-            this.SearchTextBox = new System.Windows.Forms.TextBox();
             this.SearchButton = new System.Windows.Forms.Button();
+            this.SearchTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.MedicalRecordTable = new System.Windows.Forms.DataGridView();
             this.MainTabControl.SuspendLayout();
             this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
@@ -230,6 +230,32 @@
             this.MedicalRecordTab.Text = "Medical Record";
             this.MedicalRecordTab.UseVisualStyleBackColor = true;
             // 
+            // SearchButton
+            // 
+            this.SearchButton.Location = new System.Drawing.Point(865, 471);
+            this.SearchButton.Name = "SearchButton";
+            this.SearchButton.Size = new System.Drawing.Size(94, 29);
+            this.SearchButton.TabIndex = 3;
+            this.SearchButton.Text = "Search";
+            this.SearchButton.UseVisualStyleBackColor = true;
+            this.SearchButton.Click += new System.EventHandler(this.SearchClick);
+            // 
+            // SearchTextBox
+            // 
+            this.SearchTextBox.Location = new System.Drawing.Point(188, 471);
+            this.SearchTextBox.Name = "SearchTextBox";
+            this.SearchTextBox.Size = new System.Drawing.Size(218, 27);
+            this.SearchTextBox.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 474);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(176, 20);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Key word for Anamnesis: ";
+            // 
             // MedicalRecordTable
             // 
             this.MedicalRecordTable.AllowUserToAddRows = false;
@@ -253,31 +279,6 @@
             this.MedicalRecordTable.RowTemplate.Height = 29;
             this.MedicalRecordTable.Size = new System.Drawing.Size(953, 455);
             this.MedicalRecordTable.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 474);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(176, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Key word for Anamnesis: ";
-            // 
-            // SearchTextBox
-            // 
-            this.SearchTextBox.Location = new System.Drawing.Point(188, 471);
-            this.SearchTextBox.Name = "SearchTextBox";
-            this.SearchTextBox.Size = new System.Drawing.Size(218, 27);
-            this.SearchTextBox.TabIndex = 2;
-            // 
-            // SearchButton
-            // 
-            this.SearchButton.Location = new System.Drawing.Point(865, 471);
-            this.SearchButton.Name = "SearchButton";
-            this.SearchButton.Size = new System.Drawing.Size(94, 29);
-            this.SearchButton.TabIndex = 3;
-            this.SearchButton.Text = "Search";
-            this.SearchButton.UseVisualStyleBackColor = true;
             // 
             // PatientMain
             // 
