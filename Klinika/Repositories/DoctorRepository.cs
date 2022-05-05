@@ -101,5 +101,35 @@ namespace Klinika.Repositories
 
             return doctors;
         }
+        public static Specialization getSpecialization (int DoctorID)
+        {
+            string specializationQuerry = "SELECT [Specialization].ID, [Specialization].Name " +
+                                          "FROM [Specialization] JOIN [DoctorSpecialization] " +
+                                          "ON [Specialization].ID = [DoctorSpecialization].SpecializationID " +
+                                          $"WHERE [DoctorSpecialization].UserID = {DoctorID}";
+
+            Specialization specialization = new Specialization();
+
+            try
+            {
+                SqlCommand getAnamneses = new SqlCommand(specializationQuerry, DatabaseConnection.GetInstance().database);
+                DatabaseConnection.GetInstance().database.Open();
+                using (SqlDataReader retrieved = getAnamneses.ExecuteReader())
+                {
+                    while (retrieved.Read())
+                    {
+                        specialization.ID = Convert.ToInt32(retrieved["ID"]);
+                        specialization.Name = retrieved["Name"].ToString();
+                    }
+                }
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return specialization;
+        }
     }
 }

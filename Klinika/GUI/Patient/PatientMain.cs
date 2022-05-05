@@ -36,6 +36,10 @@ namespace Klinika.GUI.Patient
                 ScheduleButton.Enabled = false;
                 OccupiedAppointmentsTable.DataSource = new DataTable();
             }
+            else if ((sender as TabControl).SelectedIndex == 2)
+            {
+                FillMedicalRecorTab();
+            }
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -189,6 +193,63 @@ namespace Klinika.GUI.Patient
         private void ScheduleAppointmentClick(object sender, EventArgs e)
         {
             new PersonalAppointment(this, null).Show();
+        }
+        #endregion
+        
+        #region Medical Record
+        private void FillMedicalRecorTab()
+        {
+            List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
+            FillMedicalRecordTable(anamneses);
+        }
+        private void FillMedicalRecordTable(List<Anamnesis> anamneses)
+        {
+
+            List<Appointment> appointments = AppointmentRepository.GetInstance().GetCompleted(Patient.ID);
+
+            DataTable anamnesesData = new DataTable();
+            anamnesesData.Columns.Add("Doctor");
+            anamnesesData.Columns.Add("Doctor Specialization");
+            anamnesesData.Columns.Add("DateTime");
+            anamnesesData.Columns.Add("Description");
+            anamnesesData.Columns.Add("Symptoms");
+            anamnesesData.Columns.Add("Conclusion");
+
+            foreach (Anamnesis anamnesis in anamneses)
+            {
+                DataRow newRow = anamnesesData.NewRow();
+                Appointment appointment = appointments.Where(x => x.ID == anamnesis.MedicalActionID).FirstOrDefault();
+
+                newRow["Doctor"] = GetDoctorFullName(appointment.DoctorID);
+                newRow["Doctor Specialization"] = DoctorRepository.getSpecialization(appointment.DoctorID);
+                newRow["DateTime"] = appointment.DateTime;
+                newRow["Description"] = anamnesis.Description;
+                newRow["Symptoms"] = anamnesis.Symptoms;
+                newRow["Conclusion"] = anamnesis.Conclusion;
+                anamnesesData.Rows.Add(newRow);
+            }
+            MedicalRecordTable.DataSource = anamnesesData;
+        }
+        private void SearchClick(object sender, EventArgs e)
+        {
+            string searchParam = SearchTextBox.Text.ToUpper();
+            List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
+            List<Anamnesis> searchedAnamneses = new List<Anamnesis>();
+            foreach (Anamnesis anamnesis in anamneses)
+            {
+                if(anamnesis.Description.ToUpper().Contains(searchParam) || 
+                    anamnesis.Symptoms.ToUpper().Contains(searchParam) || 
+                    anamnesis.Conclusion.ToUpper().Contains(searchParam))
+                {
+                    searchedAnamneses.Add(anamnesis);
+                }
+            }
+            FillMedicalRecordTable(searchedAnamneses);
+        }
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            FillMedicalRecorTab();
+            SearchTextBox.Text = "";
         }
         #endregion
 
