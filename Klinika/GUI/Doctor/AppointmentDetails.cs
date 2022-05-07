@@ -113,7 +113,7 @@ namespace Klinika.GUI.Doctor
                 MessageBox.Show("Please select patient!", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            if (AppointmentRepository.GetInstance().IsOccupied(dateTime, Convert.ToInt32(DurationTextBox.Text)))
+            if (AppointmentRepository.GetInstance().IsOccupied(dateTime, Parent.Doctor.ID, Convert.ToInt32(DurationTextBox.Text)))
             {
                 MessageBox.Show("Already occupied", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;

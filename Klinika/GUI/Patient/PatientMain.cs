@@ -194,8 +194,12 @@ namespace Klinika.GUI.Patient
         {
             new PersonalAppointment(this, null).Show();
         }
+        private void RecommendClick(object sender, EventArgs e)
+        {
+            new AppointmentRecommendation(this).Show();
+        }
         #endregion
-        
+
         #region Medical Record
         private void FillMedicalRecorTab()
         {
@@ -325,5 +329,7 @@ namespace Klinika.GUI.Patient
             return "DateTime=" + dateTime.ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + doctorID.ToString();
         }
         #endregion
+
+        
     }
 }
