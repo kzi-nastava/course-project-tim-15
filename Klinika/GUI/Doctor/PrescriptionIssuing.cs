@@ -25,6 +25,8 @@ namespace Klinika.GUI.Doctor
         private void LoadForm(object sender, EventArgs e)
         {
             Parent.Enabled = false;
+            PrescriptionStartDatePicker.MinDate = DateTime.Now;
+            PrescriptionEndDatePicker.MinDate = DateTime.Now;
             FillPrescriptionTable();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)

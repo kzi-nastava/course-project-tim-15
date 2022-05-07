@@ -177,7 +177,7 @@
             this.MinimizeBox = false;
             this.Name = "PrescriptionIssuing";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PrescriptionIssuing";
+            this.Text = "Prescription Issuing";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
             this.Load += new System.EventHandler(this.LoadForm);
             this.groupBox1.ResumeLayout(false);
