@@ -22,6 +22,7 @@ namespace Klinika.Models
 
         public Appointment()
         {
+            DoctorID = -1;
             DateTime = DateTime.Now;
         }
 

@@ -250,7 +250,7 @@ namespace Klinika.GUI.Patient
             }
             FillMedicalRecordTable(searchedAnamneses);
         }
-        private void ResetButton_Click(object sender, EventArgs e)
+        private void ResetClick(object sender, EventArgs e)
         {
             FillMedicalRecorTab();
             SearchTextBox.Text = "";
@@ -278,7 +278,7 @@ namespace Klinika.GUI.Patient
                 row["Doctor Full Name"] = GetDoctorFullName(Convert.ToInt32(row["DoctorID"]));
             }
         }
-        private string GetDoctorFullName(int doctorID)
+        public string GetDoctorFullName(int doctorID)
         {
             var doctor = GetDoctor(doctorID);
             return doctor.Name + " " + doctor.Surname;

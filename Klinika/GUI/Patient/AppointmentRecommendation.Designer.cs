@@ -43,6 +43,7 @@
             this.RecommendedAppointmentTable = new System.Windows.Forms.DataGridView();
             this.CancelButton = new System.Windows.Forms.Button();
             this.ScheduleButton = new System.Windows.Forms.Button();
+            this.RecommendButton = new System.Windows.Forms.Button();
             this.TimeGroupBox.SuspendLayout();
             this.PriorityGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.RecommendedAppointmentTable)).BeginInit();
@@ -182,27 +183,39 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(298, 412);
+            this.CancelButton.Location = new System.Drawing.Point(346, 412);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(94, 29);
             this.CancelButton.TabIndex = 8;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
+            this.CancelButton.Click += new System.EventHandler(this.CancelClick);
             // 
             // ScheduleButton
             // 
-            this.ScheduleButton.Location = new System.Drawing.Point(159, 412);
+            this.ScheduleButton.Location = new System.Drawing.Point(231, 412);
             this.ScheduleButton.Name = "ScheduleButton";
             this.ScheduleButton.Size = new System.Drawing.Size(94, 29);
             this.ScheduleButton.TabIndex = 10;
             this.ScheduleButton.Text = "Schedule";
             this.ScheduleButton.UseVisualStyleBackColor = true;
             // 
+            // RecommendButton
+            // 
+            this.RecommendButton.Location = new System.Drawing.Point(102, 412);
+            this.RecommendButton.Name = "RecommendButton";
+            this.RecommendButton.Size = new System.Drawing.Size(108, 29);
+            this.RecommendButton.TabIndex = 11;
+            this.RecommendButton.Text = "Recommend";
+            this.RecommendButton.UseVisualStyleBackColor = true;
+            this.RecommendButton.Click += new System.EventHandler(this.RecommendClick);
+            // 
             // AppointmentRecommendation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(536, 453);
+            this.Controls.Add(this.RecommendButton);
             this.Controls.Add(this.ScheduleButton);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.RecommendedAppointmentTable);
@@ -245,5 +258,6 @@
         private DataGridView RecommendedAppointmentTable;
         private Button CancelButton;
         private Button ScheduleButton;
+        private Button RecommendButton;
     }
 }
