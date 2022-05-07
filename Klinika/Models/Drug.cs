@@ -12,6 +12,10 @@ namespace Klinika.Models
         public string? Name { get; set; }
         public string? Approved { get; set; }
         public List<Ingredient> Ingredients { get; set; }
+        public string GetIngredientsAsString()
+        {
+            return string.Join(", ", Ingredients.Select(x => x.Name));
+        }
 
         public Drug()
         {

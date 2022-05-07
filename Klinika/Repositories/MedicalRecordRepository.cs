@@ -152,8 +152,8 @@ namespace Klinika.Repositories
                         var IngredientID = Convert.ToInt32(retrieved["IngredientID"]);
                         IDs.Add(IngredientID);
                     }
-                    DatabaseConnection.GetInstance().database.Close();
                 }
+                DatabaseConnection.GetInstance().database.Close();
             }
             catch (SqlException ex)
             {

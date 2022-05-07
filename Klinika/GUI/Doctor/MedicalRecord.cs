@@ -17,7 +17,7 @@ namespace Klinika.GUI.Doctor
     {
         private readonly DoctorMain Parent;
         private Appointment Appointment;
-        private Models.MedicalRecord Record;
+        public Models.MedicalRecord Record;
 
         #region Form
         public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
@@ -236,8 +236,11 @@ namespace Klinika.GUI.Doctor
             PerscriptionButton.Enabled = false;
             PerscriptionHint.Visible = true;
         }
+        private void PerscriptionButtonClick(object sender, EventArgs e)
+        {
+            new PrescriptionIssuing(this).Show();
+        }
         #endregion
 
-        
     }
 }

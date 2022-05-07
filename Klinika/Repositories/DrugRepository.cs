@@ -37,15 +37,14 @@ namespace Klinika.Repositories
             GetDrugs();
         }
         #endregion
-
         private void GetIngredients()
         {
             string getIngredientsQuery = "SELECT * FROM [Ingredient]";
             try
             {
                 SqlCommand getIngredients = new SqlCommand(getIngredientsQuery, DatabaseConnection.GetInstance().database);
-                try { DatabaseConnection.GetInstance().database.Open(); } catch { }
-                
+                DatabaseConnection.GetInstance().database.Open();
+
                 using (SqlDataReader retrieved = getIngredients.ExecuteReader())
                 {
                     while (retrieved.Read())
@@ -114,7 +113,7 @@ namespace Klinika.Repositories
                         while (retrieved.Read())
                         {
                             var IngredientID = Convert.ToInt32(retrieved["IngredientID"]);
-                            var ingredient = Instance.Ingredients.Where(x => x.ID == IngredientID).FirstOrDefault();
+                            var ingredient = Ingredients.Where(x => x.ID == IngredientID).FirstOrDefault();
                             if (ingredient != null)
                             {
                                 drug.Ingredients.Add(ingredient);

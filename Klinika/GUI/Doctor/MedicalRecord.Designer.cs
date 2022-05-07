@@ -295,6 +295,7 @@
             this.PerscriptionButton.TabIndex = 10;
             this.PerscriptionButton.Text = "Issue Perscription";
             this.PerscriptionButton.UseVisualStyleBackColor = true;
+            this.PerscriptionButton.Click += new System.EventHandler(this.PerscriptionButtonClick);
             // 
             // DoctorsComboBox
             // 
