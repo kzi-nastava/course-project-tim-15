@@ -36,7 +36,7 @@
             this.FromTimePicker = new System.Windows.Forms.DateTimePicker();
             this.UntilLabel = new System.Windows.Forms.Label();
             this.LastDateLabel = new System.Windows.Forms.Label();
-            this.LastDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.DeadlineDatePicker = new System.Windows.Forms.DateTimePicker();
             this.PriorityGroupBox = new System.Windows.Forms.GroupBox();
             this.TimeRadioButton = new System.Windows.Forms.RadioButton();
             this.DoctorRadioButton = new System.Windows.Forms.RadioButton();
@@ -124,13 +124,13 @@
             this.LastDateLabel.TabIndex = 4;
             this.LastDateLabel.Text = "Last date: ";
             // 
-            // LastDatePicker
+            // DeadlineDatePicker
             // 
-            this.LastDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.LastDatePicker.Location = new System.Drawing.Point(367, 23);
-            this.LastDatePicker.Name = "LastDatePicker";
-            this.LastDatePicker.Size = new System.Drawing.Size(151, 27);
-            this.LastDatePicker.TabIndex = 5;
+            this.DeadlineDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DeadlineDatePicker.Location = new System.Drawing.Point(367, 23);
+            this.DeadlineDatePicker.Name = "DeadlineDatePicker";
+            this.DeadlineDatePicker.Size = new System.Drawing.Size(151, 27);
+            this.DeadlineDatePicker.TabIndex = 5;
             // 
             // PriorityGroupBox
             // 
@@ -220,7 +220,7 @@
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.RecommendedAppointmentTable);
             this.Controls.Add(this.PriorityGroupBox);
-            this.Controls.Add(this.LastDatePicker);
+            this.Controls.Add(this.DeadlineDatePicker);
             this.Controls.Add(this.LastDateLabel);
             this.Controls.Add(this.TimeGroupBox);
             this.Controls.Add(this.DoctorComboBox);
@@ -251,7 +251,7 @@
         private Label LastDateLabel;
         private DateTimePicker UntilTimePicker;
         private DateTimePicker FromTimePicker;
-        private DateTimePicker LastDatePicker;
+        private DateTimePicker DeadlineDatePicker;
         private GroupBox PriorityGroupBox;
         private RadioButton DoctorRadioButton;
         private RadioButton TimeRadioButton;

@@ -66,10 +66,10 @@ namespace Klinika.GUI.Patient
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
             DateTime fromTime = FromTimePicker.Value;
             DateTime untilTime = UntilTimePicker.Value;
-            DateTime lastDate = LastDatePicker.Value;
+            DateTime deadlineDate = DeadlineDatePicker.Value;
             char priority = DoctorRadioButton.Checked ? 'D' : 'T';
 
-            List<Appointment> recommended = AppointmentServices.GetRecommended(doctorID, fromTime, untilTime, lastDate, priority);
+            List<Appointment> recommended = AppointmentServices.GetRecommended(doctorID, fromTime, untilTime, deadlineDate, priority);
             FillRecommendedAppointmentTable(recommended);
         }
     }
