@@ -107,7 +107,21 @@ namespace Klinika.GUI.Doctor
             {
                 return;
             }
+            CreateInDatabase(selectedDrug);
             MessageBox.Show("Drug prescripted.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Close();
+        }
+        private void CreateInDatabase(Drug selectedDrug)
+        {
+            var prescription = new Prescription();
+            prescription.PatientID = Parent.Appointment.PatientID;
+            prescription.DrugID = selectedDrug.ID;
+            prescription.DateStarted = PrescriptionStartDatePicker.Value;
+            prescription.DateEnded = PrescriptionEndDatePicker.Value;
+            prescription.Interval = Convert.ToInt32(IntervalSpinner.Value);
+            prescription.Comment = CommentTextBox.Text;
+
+            DrugRepository.CreatePrescription(prescription);
         }
         #endregion
     }

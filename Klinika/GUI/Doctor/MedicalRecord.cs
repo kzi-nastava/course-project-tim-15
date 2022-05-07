@@ -16,7 +16,7 @@ namespace Klinika.GUI.Doctor
     public partial class MedicalRecord : Form
     {
         private readonly DoctorMain Parent;
-        private Appointment Appointment;
+        public Appointment Appointment;
         public Models.MedicalRecord Record;
 
         #region Form

@@ -37,6 +37,8 @@ namespace Klinika.Repositories
             GetDrugs();
         }
         #endregion
+
+        #region Drugs
         private void GetIngredients()
         {
             string getIngredientsQuery = "SELECT * FROM [Ingredient]";
@@ -128,5 +130,34 @@ namespace Klinika.Repositories
                 }
             }
         }
+        #endregion
+
+        #region Prescriptions
+        public static void CreatePrescription(Prescription prescription)
+        {
+            string createQuery = "INSERT INTO [Prescription] " +
+                "(PatientID,DrugID,DateStarted,DateEnded,Interval,Comment) " +
+                "VALUES (@PatientID,@DrugID,@DateStarted,@DateEnded,@Interval,@Comment)";
+
+            SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
+            create.Parameters.AddWithValue("@PatientID", prescription.PatientID);
+            create.Parameters.AddWithValue("@DrugID", prescription.DrugID);
+            create.Parameters.AddWithValue("@DateStarted", prescription.DateStarted);
+            create.Parameters.AddWithValue("@DateEnded", prescription.DateEnded);
+            create.Parameters.AddWithValue("@Interval", prescription.Interval);
+            create.Parameters.AddWithValue("@Comment", prescription.Comment);
+
+            try
+            {
+                DatabaseConnection.GetInstance().database.Open();
+                create.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        #endregion
     }
 }

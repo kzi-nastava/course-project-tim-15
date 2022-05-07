@@ -29,7 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.CommentTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.IntervalSpinner = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
@@ -39,7 +40,6 @@
             this.PrescriptionStartDatePicker = new System.Windows.Forms.DateTimePicker();
             this.DrugsTable = new System.Windows.Forms.DataGridView();
             this.PrescriptButton = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IntervalSpinner)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DrugsTable)).BeginInit();
@@ -48,7 +48,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.CommentTextBox);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.IntervalSpinner);
             this.groupBox1.Controls.Add(this.label3);
@@ -63,13 +63,22 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Instuctions";
             // 
-            // textBox1
+            // label5
             // 
-            this.textBox1.Location = new System.Drawing.Point(89, 112);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(229, 55);
-            this.textBox1.TabIndex = 7;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(215, 82);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(39, 15);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Hours";
+            // 
+            // CommentTextBox
+            // 
+            this.CommentTextBox.Location = new System.Drawing.Point(89, 112);
+            this.CommentTextBox.Multiline = true;
+            this.CommentTextBox.Name = "CommentTextBox";
+            this.CommentTextBox.Size = new System.Drawing.Size(229, 55);
+            this.CommentTextBox.TabIndex = 7;
             // 
             // label4
             // 
@@ -155,15 +164,6 @@
             this.PrescriptButton.UseVisualStyleBackColor = true;
             this.PrescriptButton.Click += new System.EventHandler(this.PrescriptButtonClick);
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(215, 82);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(39, 15);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Hours";
-            // 
             // PrescriptionIssuing
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -197,7 +197,7 @@
         private DateTimePicker PrescriptionStartDatePicker;
         private NumericUpDown IntervalSpinner;
         private Label label3;
-        private TextBox textBox1;
+        private TextBox CommentTextBox;
         private Label label4;
         private DataGridView DrugsTable;
         private Button PrescriptButton;
