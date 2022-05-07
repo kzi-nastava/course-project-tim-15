@@ -117,13 +117,29 @@ namespace Klinika.Repositories
             }
             return diseases;
         }
-        private static List<Allergen> GetAllergens(int patientID)
+        private static List<Ingredient> GetAllergens(int patientID)
         {
-            List<Allergen> allergens = new List<Allergen>();
+            List<Ingredient> allergens = new List<Ingredient>();
+            var ingredientsIDs = GetAllergensIds(patientID);
+
+            foreach(int id in ingredientsIDs)
+            {
+                var ingredient = DrugRepository.Instance.Ingredients.Where(x => x.ID == id).FirstOrDefault();
+                if (ingredient != null)
+                {
+                    allergens.Add(ingredient);
+                }
+            }
+
+            return allergens;
+        }
+        private static List<int> GetAllergensIds(int patientID)
+        {
+            List<int> IDs = new List<int>();
 
             string getAllergensQuerry =
-                "SELECT [Ingredient].ID, [Ingredient].Name, [Ingredient].Type, [PatientAllergen].PatientID " +
-                "FROM [Ingredient] JOIN [PatientAllergen] ON [Ingredient].ID = [PatientAllergen].IngredientID " +
+                "SELECT [PatientAllergen].IngredientID " +
+                "FROM [PatientAllergen] " +
                 $"WHERE [PatientAllergen].PatientID = {patientID}";
             try
             {
@@ -133,14 +149,8 @@ namespace Klinika.Repositories
                 {
                     while (retrieved.Read())
                     {
-                        var allergen = new Allergen
-                        {
-                            ID = Convert.ToInt32(retrieved["ID"]),
-                            PatientID = Convert.ToInt32(retrieved["PatientID"]),
-                            Name = CheckNull<string>(retrieved["Name"]),
-                            Type = CheckNull<string>(retrieved["Type"])
-                        };
-                        allergens.Add(allergen);
+                        var IngredientID = Convert.ToInt32(retrieved["IngredientID"]);
+                        IDs.Add(IngredientID);
                     }
                 }
                 DatabaseConnection.GetInstance().database.Close();
@@ -149,7 +159,7 @@ namespace Klinika.Repositories
             {
                 MessageBox.Show(ex.Message);
             }
-            return allergens;
+            return IDs;
         }
 
         public static int CreateAnamnesis(Anamnesis anamnesis)

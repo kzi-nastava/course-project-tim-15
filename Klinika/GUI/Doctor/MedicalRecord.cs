@@ -16,8 +16,8 @@ namespace Klinika.GUI.Doctor
     public partial class MedicalRecord : Form
     {
         private readonly DoctorMain Parent;
-        private Appointment Appointment;
-        private Models.MedicalRecord Record;
+        public Appointment Appointment;
+        public Models.MedicalRecord Record;
 
         #region Form
         public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
@@ -103,12 +103,12 @@ namespace Klinika.GUI.Doctor
             allergensData.Columns.Add("Name");
             allergensData.Columns.Add("Type");
 
-            foreach (Allergen allergen in Record.Allergens)
+            foreach (Ingredient ingredient in Record.Allergens)
             {
                 DataRow newRow = allergensData.NewRow();
-                newRow["ID"] = allergen.ID;
-                newRow["Name"] = allergen.Name;
-                newRow["Type"] = allergen.Type;
+                newRow["ID"] = ingredient.ID;
+                newRow["Name"] = ingredient.Name;
+                newRow["Type"] = ingredient.Type;
                 allergensData.Rows.Add(newRow);
             }
 
@@ -220,6 +220,25 @@ namespace Klinika.GUI.Doctor
             int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
             int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).ID;
             ReferalRepository.Create(Appointment.PatientID, specializationID, doctorID);
+        }
+        #endregion
+
+        #region Perscription
+        private void AnamnesisTextChanged(object sender, EventArgs e)
+        {
+            bool areAllFiledsFiled = DescriptionTextBox.Text != "" && SymptomsTextBox.Text != "" && ConclusionTextBox.Text != "";
+            if (areAllFiledsFiled)
+            {
+                PerscriptionButton.Enabled = true;
+                PerscriptionHint.Visible = false;
+                return;
+            }
+            PerscriptionButton.Enabled = false;
+            PerscriptionHint.Visible = true;
+        }
+        private void PerscriptionButtonClick(object sender, EventArgs e)
+        {
+            new PrescriptionIssuing(this).Show();
         }
         #endregion
 

@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Klinika.Models
 {
-    public class Allergen
+    public class Ingredient
     {
         public int ID { get; set; }
-        public int PatientID { get; set; }
         public string? Name { get; set; }
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
-        public Allergen() { }
+        public Ingredient() { }
     }
 }
