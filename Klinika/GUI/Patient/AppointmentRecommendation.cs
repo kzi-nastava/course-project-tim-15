@@ -1,4 +1,5 @@
 ﻿using Klinika.Models;
+using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
 using System;
@@ -44,6 +45,7 @@ namespace Klinika.GUI.Patient
         private void FillRecommendedAppointmentTable(List<Appointment> appointments = null)
         {
             DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("Doctor ID");
             dataTable.Columns.Add("Doctor");
             dataTable.Columns.Add("DateTime");
 
@@ -53,6 +55,7 @@ namespace Klinika.GUI.Patient
                 {
                     DataRow newRow = dataTable.NewRow();
 
+                    newRow["Doctor ID"] = appointment.DoctorID;
                     newRow["Doctor"] = Parent.GetDoctorFullName(appointment.DoctorID);
                     newRow["DateTime"] = appointment.DateTime;
                     dataTable.Rows.Add(newRow);
@@ -63,6 +66,11 @@ namespace Klinika.GUI.Patient
 
         private void RecommendClick(object sender, EventArgs e)
         {
+            if (!IsDateTimeDataValid())
+            {
+                MessageBox.Show("Time is not valid! Please enter valid time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
             DateTime fromTime = FromTimePicker.Value;
             DateTime untilTime = UntilTimePicker.Value;
@@ -71,6 +79,46 @@ namespace Klinika.GUI.Patient
 
             List<Appointment> recommended = AppointmentServices.GetRecommended(doctorID, fromTime, untilTime, deadlineDate, priority);
             FillRecommendedAppointmentTable(recommended);
+        }
+
+        private void RecommendedAppointmentTableRowSelected(object sender, DataGridViewCellEventArgs e)
+        {
+            ScheduleButton.Enabled = true;
+        }
+
+        private void ScheduleClick(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
+            {
+                CreateAppointment();
+                Close();
+            }
+        }
+
+        private void CreateAppointment()
+        {
+            int doctorID = Convert.ToInt32(RecommendedAppointmentTable.SelectedRows[0].Cells["Doctor ID"].Value);
+            DateTime dateTime = Convert.ToDateTime(RecommendedAppointmentTable.SelectedRows[0].Cells["DateTime"].Value);
+
+            Appointment appointment = new Appointment();
+            appointment.ID = -1;
+            appointment.DoctorID = doctorID;
+            appointment.PatientID = Parent.Patient.ID;
+            appointment.DateTime = dateTime;
+            appointment.RoomID = 1;
+            appointment.Completed = false;
+            appointment.Type = 'E';
+            appointment.Duration = 15;
+            appointment.Urgent = false;
+            appointment.Description = "";
+            appointment.IsDeleted = false;
+            AppointmentRepository.GetInstance().Create(appointment);
+            Parent.InsertRowIntoPersonalAppointmentsTable(appointment);
+        }
+        private bool IsDateTimeDataValid()
+        {
+            return FromTimePicker.Value < UntilTimePicker.Value && DeadlineDatePicker.Value > DateTime.Now;
         }
     }
 }

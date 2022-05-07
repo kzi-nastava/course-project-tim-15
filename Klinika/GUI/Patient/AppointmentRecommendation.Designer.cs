@@ -180,6 +180,7 @@
             this.RecommendedAppointmentTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.RecommendedAppointmentTable.Size = new System.Drawing.Size(515, 188);
             this.RecommendedAppointmentTable.TabIndex = 7;
+            this.RecommendedAppointmentTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.RecommendedAppointmentTableRowSelected);
             // 
             // CancelButton
             // 
@@ -199,6 +200,7 @@
             this.ScheduleButton.TabIndex = 10;
             this.ScheduleButton.Text = "Schedule";
             this.ScheduleButton.UseVisualStyleBackColor = true;
+            this.ScheduleButton.Click += new System.EventHandler(this.ScheduleClick);
             // 
             // RecommendButton
             // 
