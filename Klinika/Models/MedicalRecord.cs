@@ -14,8 +14,13 @@ namespace Klinika.Models
         public string? BloodType { get; set; }
         public List<Anamnesis> Anamneses { get; set; }
         public List<Disease> Diseases { get; set; }
-        public List<Allergen> Allergens { get; set; }
+        public List<Ingredient> Allergens { get; set; }
 
-        public MedicalRecord() { }
+        public MedicalRecord()
+        {
+            Anamneses = new List<Anamnesis>();
+            Diseases = new List<Disease>();
+            Allergens = new List<Ingredient>();
+        }
     }
 }

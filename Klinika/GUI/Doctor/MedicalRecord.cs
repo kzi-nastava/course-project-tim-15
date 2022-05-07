@@ -103,12 +103,12 @@ namespace Klinika.GUI.Doctor
             allergensData.Columns.Add("Name");
             allergensData.Columns.Add("Type");
 
-            foreach (Allergen allergen in Record.Allergens)
+            foreach (Ingredient ingredient in Record.Allergens)
             {
                 DataRow newRow = allergensData.NewRow();
-                newRow["ID"] = allergen.ID;
-                newRow["Name"] = allergen.Name;
-                newRow["Type"] = allergen.Type;
+                newRow["ID"] = ingredient.ID;
+                newRow["Name"] = ingredient.Name;
+                newRow["Type"] = ingredient.Type;
                 allergensData.Rows.Add(newRow);
             }
 
@@ -223,5 +223,21 @@ namespace Klinika.GUI.Doctor
         }
         #endregion
 
+        #region Perscription
+        private void AnamnesisTextChanged(object sender, EventArgs e)
+        {
+            bool areAllFiledsFiled = DescriptionTextBox.Text != "" && SymptomsTextBox.Text != "" && ConclusionTextBox.Text != "";
+            if (areAllFiledsFiled)
+            {
+                PerscriptionButton.Enabled = true;
+                PerscriptionHint.Visible = false;
+                return;
+            }
+            PerscriptionButton.Enabled = false;
+            PerscriptionHint.Visible = true;
+        }
+        #endregion
+
+        
     }
 }
