@@ -1,17 +1,20 @@
 ﻿using Klinika.Data;
 using System.Data;
 using System.Data.SqlClient;
+using Klinika.Roles;
 
 namespace Klinika.Repositories
 {
     internal class PatientRepository
     {
         public static Dictionary<string, int>? EmailIDPairs { get; set; }
+        public static Dictionary<int,Patient> IDPatientPairs { get; set; }
         public static DataTable GetAll()
         {
             EmailIDPairs = new Dictionary<string, int>();
+            IDPatientPairs = new Dictionary<int,Patient>();
             DataTable? retrievedPatients = null;
-            string getAllQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Email, IsBlocked as Blocked, WhoBlocked as BlockedBy " +
+            string getAllQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Email, Password, IsBlocked as Blocked, WhoBlocked as BlockedBy " +
                                       "FROM [User] " +
                                       "WHERE UserType = 1 AND IsDeleted = 0";
             try
@@ -21,9 +24,23 @@ namespace Klinika.Repositories
                 adapter.Fill(retrievedPatients);
                 foreach (DataRow patient in retrievedPatients.Rows)
                 {
-                    EmailIDPairs.Add(patient["Email"].ToString(), Convert.ToInt32(patient["ID"]));
+                    int id = Convert.ToInt32(patient["ID"]);
+                    string email = patient["Email"].ToString();
+                    string jmbg = patient["JMBG"].ToString();
+                    string name = patient["Name"].ToString();
+                    string surname = patient["Surname"].ToString();
+                    DateTime birthdate = DateTime.Parse(patient["Birthdate"].ToString());
+                    char gender = patient["Gender"].ToString()[0];
+                    string password = patient["Password"].ToString();
+
+                    EmailIDPairs.Add(email, id);
+
+                    Patient newPatient = new Patient(id, jmbg, name, surname, birthdate, gender, email, password);
+                    IDPatientPairs.Add(id, newPatient);
+
                 }
                 retrievedPatients.Columns.Remove("ID");
+                retrievedPatients.Columns.Remove("Password");
             }
             catch (SqlException error)
             {

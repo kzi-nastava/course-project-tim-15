@@ -120,6 +120,10 @@ namespace Klinika.GUI.Secretary
                 requestsTable.DataSource = PatientRequestRepository.GetAll();
                 requestsTable.ClearSelection();
             }
+            else if(tabs.SelectedTab == referrals)
+            {
+                SecretaryService.FillPatientSelectionList(patientSelection, PatientRepository.IDPatientPairs);
+            }
         }
 
         private void requestsTable_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -191,6 +195,16 @@ namespace Klinika.GUI.Secretary
                 denyButton.Enabled = false;
                 detailsButton.Enabled = false;
             }
+        }
+
+        private void patientSelection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            new ChooseReferal(this).Show();
+        }
+
+        private void scheduleButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
