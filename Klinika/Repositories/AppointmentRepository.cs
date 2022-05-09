@@ -78,6 +78,7 @@ namespace Klinika.Repositories
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
 
+
             DataTable? retrievedAppointments = null;
 
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
@@ -279,7 +280,7 @@ namespace Klinika.Repositories
             }
         }
 
-        public bool IsOccupied(DateTime newAppointmentStart, int duration = 15, int id = -1)
+        public bool IsOccupied(DateTime newAppointmentStart, int duration = 15, int id = -1,int doctorId = -1)
         {
             var newAppointmentEnd = newAppointmentStart.AddMinutes(duration); 
 
@@ -289,8 +290,13 @@ namespace Klinika.Repositories
                 var end = appointment.DateTime.AddMinutes(appointment.Duration);
 
                 if (!appointment.IsDeleted && appointment.ID != id &&
-                    newAppointmentStart < end && start < newAppointmentEnd) 
-                    return true;
+                    newAppointmentStart < end && start < newAppointmentEnd)
+
+                    if (doctorId == -1 || appointment.DoctorID == doctorId)
+                    {
+                        return true;
+                    }
+                    
             }
             return false;
         }
@@ -322,5 +328,7 @@ namespace Klinika.Repositories
             }
             return counter;
         }
+
+
     }
 }

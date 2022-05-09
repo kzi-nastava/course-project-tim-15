@@ -49,6 +49,14 @@
             Role = role;
             IsBlocked = isBlocked;
         }
+
+
+        public User(int id, string name,string surname)
+        {
+            ID = id;
+            Name = name;
+            Surname = surname;
+        }
         #endregion
 
 

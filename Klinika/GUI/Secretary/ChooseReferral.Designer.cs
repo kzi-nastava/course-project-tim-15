@@ -1,6 +1,6 @@
 ﻿namespace Klinika.GUI.Secretary
 {
-    partial class ChooseReferal
+    partial class ChooseReferral
     {
         /// <summary>
         /// Required designer variable.
@@ -46,6 +46,7 @@
             this.referralsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.referralsTable.Size = new System.Drawing.Size(776, 342);
             this.referralsTable.TabIndex = 1;
+            this.referralsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.referralsTable_CellClick);
             // 
             // chooseReferalButton
             // 
@@ -56,16 +57,17 @@
             this.chooseReferalButton.TabIndex = 2;
             this.chooseReferalButton.Text = "Choose referral";
             this.chooseReferalButton.UseVisualStyleBackColor = true;
+            this.chooseReferalButton.Click += new System.EventHandler(this.chooseReferalButton_Click);
             // 
-            // ChooseReferal
+            // ChooseReferral
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 445);
             this.Controls.Add(this.chooseReferalButton);
             this.Controls.Add(this.referralsTable);
-            this.Name = "ChooseReferal";
-            this.Text = "ChooseReferal";
+            this.Name = "ChooseReferral";
+            this.Text = "Choose Referral";
             this.Load += new System.EventHandler(this.ChooseReferal_Load);
             ((System.ComponentModel.ISupportInitialize)(this.referralsTable)).EndInit();
             this.ResumeLayout(false);

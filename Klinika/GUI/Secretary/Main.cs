@@ -12,11 +12,15 @@ using Klinika.Services;
 using Klinika.Data;
 using Klinika.Repositories;
 using Klinika.Models;
+using Klinika.Exceptions;
+using Klinika.Roles;
 
 namespace Klinika.GUI.Secretary
 {
     public partial class mainWindow : Form
     {
+
+        public int  chosenReferralID { get; set; }
         public mainWindow()
         {
             InitializeComponent();
@@ -199,12 +203,47 @@ namespace Klinika.GUI.Secretary
 
         private void patientSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            new ChooseReferal(this).Show();
+            new ChooseReferral(this).ShowDialog();
         }
 
         private void scheduleButton_Click(object sender, EventArgs e)
         {
+            try
+            {
+                
+                int doctorId = -1;
+                if (!string.IsNullOrEmpty(doctorField.Text))
+                {
+                    doctorId = SecretaryService.ExtractID(doctorField.Text);
+                }
+                DateTime appointmentStart = appointmentPicker.Value;
+              
+                SecretaryService.Validate(doctorId, appointmentStart);
+                ReferalRepository.MarkAsUsed(chosenReferralID);
+                int doctorID = SecretaryService.ExtractID(doctorField.Text);
+                int patientID = SecretaryService.ExtractID(patientSelection.SelectedItem.ToString());
+                DateTime chosenTime = appointmentPicker.Value;
+                chosenTime = chosenTime.AddSeconds(-chosenTime.Second);
+                Appointment newAppointment = new Appointment(-1, doctorID, patientID, chosenTime, 1, false, 'E', 15, false, "", false);
+                AppointmentRepository.GetInstance().Create(newAppointment);
+                MessageBox.Show("Appointment successfully scheduled!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (DateTimeInvalidException)
+            { }
 
+            catch(DoctorUnavailableException)
+            { }
+        }
+
+        private void findAvailableDoctorButton_Click(object sender, EventArgs e)
+        {
+            string chosenSpecialization = specializationField.Text;
+            DateTime chosenTime = appointmentPicker.Value;
+            Roles.Doctor suitableDoctor = DoctorService.GetSuitable(chosenSpecialization,chosenTime);
+            if(suitableDoctor != null)
+            {
+                doctorField.Text = suitableDoctor.ID + ". " + suitableDoctor.Name + " " + suitableDoctor.Surname;
+            }
         }
     }
 

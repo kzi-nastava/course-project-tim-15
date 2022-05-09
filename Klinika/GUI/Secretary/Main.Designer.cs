@@ -42,6 +42,9 @@
             this.detailsButton = new System.Windows.Forms.Button();
             this.requestsTable = new System.Windows.Forms.DataGridView();
             this.referrals = new System.Windows.Forms.TabPage();
+            this.specializationField = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.findAvailableDoctorButton = new System.Windows.Forms.Button();
             this.scheduleButton = new System.Windows.Forms.Button();
             this.appointmentPicker = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
@@ -218,6 +221,9 @@
             // 
             // referrals
             // 
+            this.referrals.Controls.Add(this.specializationField);
+            this.referrals.Controls.Add(this.label4);
+            this.referrals.Controls.Add(this.findAvailableDoctorButton);
             this.referrals.Controls.Add(this.scheduleButton);
             this.referrals.Controls.Add(this.appointmentPicker);
             this.referrals.Controls.Add(this.label3);
@@ -233,9 +239,37 @@
             this.referrals.Text = "Referrals";
             this.referrals.UseVisualStyleBackColor = true;
             // 
+            // specializationField
+            // 
+            this.specializationField.Location = new System.Drawing.Point(597, 222);
+            this.specializationField.Name = "specializationField";
+            this.specializationField.ReadOnly = true;
+            this.specializationField.Size = new System.Drawing.Size(246, 27);
+            this.specializationField.TabIndex = 11;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(486, 226);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(105, 20);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Specialization:";
+            // 
+            // findAvailableDoctorButton
+            // 
+            this.findAvailableDoctorButton.Enabled = false;
+            this.findAvailableDoctorButton.Location = new System.Drawing.Point(288, 413);
+            this.findAvailableDoctorButton.Name = "findAvailableDoctorButton";
+            this.findAvailableDoctorButton.Size = new System.Drawing.Size(208, 29);
+            this.findAvailableDoctorButton.TabIndex = 9;
+            this.findAvailableDoctorButton.Text = "Find available doctor";
+            this.findAvailableDoctorButton.UseVisualStyleBackColor = true;
+            this.findAvailableDoctorButton.Click += new System.EventHandler(this.findAvailableDoctorButton_Click);
+            // 
             // scheduleButton
             // 
-            this.scheduleButton.Location = new System.Drawing.Point(425, 423);
+            this.scheduleButton.Location = new System.Drawing.Point(534, 413);
             this.scheduleButton.Name = "scheduleButton";
             this.scheduleButton.Size = new System.Drawing.Size(94, 29);
             this.scheduleButton.TabIndex = 8;
@@ -246,16 +280,18 @@
             // appointmentPicker
             // 
             this.appointmentPicker.CustomFormat = "MM/dd/yyyy HH:mm";
+            this.appointmentPicker.Enabled = false;
             this.appointmentPicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.appointmentPicker.Location = new System.Drawing.Point(377, 231);
+            this.appointmentPicker.Location = new System.Drawing.Point(157, 224);
             this.appointmentPicker.Name = "appointmentPicker";
             this.appointmentPicker.Size = new System.Drawing.Size(250, 27);
             this.appointmentPicker.TabIndex = 5;
+            this.appointmentPicker.Value = new System.DateTime(2022, 5, 9, 15, 23, 18, 0);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(323, 236);
+            this.label3.Location = new System.Drawing.Point(103, 229);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(45, 20);
             this.label3.TabIndex = 4;
@@ -335,11 +371,14 @@
         private Button detailsButton;
         public DataGridView requestsTable;
         private Label label1;
-        private DateTimePicker appointmentPicker;
         private Label label3;
-        private TextBox doctorField;
         private Label label2;
         private Button scheduleButton;
         public ComboBox patientSelection;
+        public TextBox doctorField;
+        public DateTimePicker appointmentPicker;
+        public Button findAvailableDoctorButton;
+        public TextBox specializationField;
+        private Label label4;
     }
 }

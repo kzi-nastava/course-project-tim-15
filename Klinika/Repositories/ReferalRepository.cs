@@ -41,7 +41,7 @@ namespace Klinika.Repositories
             DataTable retrievedReferrals = null;
             string getReferralsQuery = "SELECT [Referal].ID, " +
                 "CAST([Referal].DoctorID AS varchar) + '. ' + [User].Name + ' ' + [User].Surname 'Doctor', " +
-                "[Specialization].Name 'Specialization', [Referal].Date 'Date issued' " +
+                "[Specialization].Name 'Specialization', [Referal].Date 'Date issued',[Referal].IsUsed 'Used' " +
                 "FROM [Referal]" +
                 "LEFT OUTER JOIN [DoctorSpecialization] ON [Referal].DoctorID = [DoctorSpecialization].UserID " +
                 "LEFT OUTER JOIN [User] ON [DoctorSpecialization].UserID = [User].ID " +
@@ -63,6 +63,30 @@ namespace Klinika.Repositories
             }
 
             return retrievedReferrals;
+        }
+
+
+        public static void MarkAsUsed(int referralID)
+        {
+            string markAsUsedQuerry = "UPDATE [Referal] " +
+                                      "SET IsUsed = 1 " +
+                                      "WHERE ID = @ID";
+
+            SqlCommand markAsRead = new SqlCommand(markAsUsedQuerry, DatabaseConnection.GetInstance().database);
+            markAsRead.Parameters.AddWithValue("@ID", referralID);
+
+
+            try
+            {
+                DatabaseConnection.GetInstance().database.Open();
+                markAsRead.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+            }
         }
     }
 }
