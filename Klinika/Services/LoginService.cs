@@ -15,7 +15,8 @@ namespace Klinika.Services
         public static User Validate(string email, string password)
         {
 
-            UserRepository instance = UserRepository.GetInstance();
+            Dictionary<string, User> allUsers = UserRepository.GetInstance().users;
+
 
             if (string.IsNullOrEmpty(email))
             {
@@ -27,22 +28,22 @@ namespace Klinika.Services
                 throw new FieldEmptyException("Password left empty!");
             }
 
-            else if (!instance.users.ContainsKey(email))
+            else if (!allUsers.ContainsKey(email))
             {
                 throw new EmailUnknownException("There is no user with specified email!");
             }
 
-            else if (!instance.users[email].Password.Equals(password))
+            else if (!allUsers[email].Password.Equals(password))
             {
                 throw new PasswordIncorrectException("Password does not match email!");
             }
 
-            else if (instance.users[email].IsBlocked == true)
+            else if (allUsers[email].IsBlocked == true)
             {
                 throw new UserBlockedException("The user is blocked!");
             }
 
-            return instance.users[email];
+            return allUsers[email];
 
 
         }

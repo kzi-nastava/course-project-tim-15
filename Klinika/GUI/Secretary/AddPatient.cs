@@ -31,29 +31,22 @@ namespace Klinika.GUI.Secretary
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            string jmbg = JMBGField.Text.Trim();
+            string jmbg = jmbgField.Text.Trim();
             string name = nameField.Text.Trim();
             string surname = surnameField.Text.Trim();
             DateTime birthdate = birthdatePicker.Value;
             string email = emailField.Text.Trim(); 
             string password = passwordField.Text.Trim();
             char gender = genderSelection.SelectedItem.ToString()[0];
+            Roles.Patient newPatient = new Roles.Patient(-1, jmbg, name, surname, birthdate, gender, email, password);
             try
             {
-                PatientService.Validate(jmbg,name,surname,birthdate,email,password);
-                PatientRepository.Create(jmbg, name, surname, birthdate, gender, email, password);
+                PatientService.Validate(newPatient);
+                PatientRepository.Create(newPatient);
                 DataTable patientTable = (DataTable)parent.patientsTable.DataSource;
-                DataRow newRow = patientTable.NewRow();
-                newRow["JMBG"] = jmbg;
-                newRow["Name"] = name;
-                newRow["Surname"] = surname;
-                newRow["Birthdate"] = birthdate.Date;
-                newRow["Gender"] = gender;
-                newRow["Email"] = email;
-                patientTable.Rows.Add(newRow);
-                patientTable.AcceptChanges();
-                MessageBox.Show("Patient successfully added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Hide();
+                SecretaryService.AddRowToPatientTable(ref patientTable, newPatient);
+                SecretaryService.ShowSuccessMessage("Patient successfully added!");
+                Close();
             }
             catch (FieldEmptyException)
             {
@@ -74,7 +67,7 @@ namespace Klinika.GUI.Secretary
 
             catch (JMBGFormatInvalidException)
             {
-                JMBGField.Text = "";
+                jmbgField.Text = "";
             }
         }
     }

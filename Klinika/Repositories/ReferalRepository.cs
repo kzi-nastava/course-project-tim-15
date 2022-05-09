@@ -11,6 +11,8 @@ namespace Klinika.Repositories
 {
     public class ReferalRepository
     {
+        private static SqlConnection database = DatabaseConnection.GetInstance().database;
+
         public static void Create(int _patientID, int _specializationID, int _doctorID)
         {
             string createQuerry = "INSERT INTO [Referal] " +
@@ -36,7 +38,7 @@ namespace Klinika.Repositories
         }
 
 
-        public static DataTable GetReferralsPerPatient(int patientId)
+        public static DataTable? GetReferralsPerPatient(int patientId)
         {
             DataTable retrievedReferrals = null;
             string getReferralsQuery = "SELECT [Referal].ID, " +
@@ -51,7 +53,7 @@ namespace Klinika.Repositories
             try
             {
                 
-                SqlDataAdapter adapter = new SqlDataAdapter(getReferralsQuery, DatabaseConnection.GetInstance().database);
+                SqlDataAdapter adapter = new SqlDataAdapter(getReferralsQuery, database);
                 adapter.SelectCommand.Parameters.AddWithValue("@patientID", patientId);
                 retrievedReferrals = new DataTable();
                 adapter.Fill(retrievedReferrals);
@@ -72,20 +74,21 @@ namespace Klinika.Repositories
                                       "SET IsUsed = 1 " +
                                       "WHERE ID = @ID";
 
-            SqlCommand markAsRead = new SqlCommand(markAsUsedQuerry, DatabaseConnection.GetInstance().database);
+            SqlCommand markAsRead = new SqlCommand(markAsUsedQuerry, database);
             markAsRead.Parameters.AddWithValue("@ID", referralID);
-
 
             try
             {
-                DatabaseConnection.GetInstance().database.Open();
+                database.Open();
                 markAsRead.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message);
+            }
+            finally
+            {
+                database.Close();
             }
         }
     }

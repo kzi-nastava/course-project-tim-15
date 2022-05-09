@@ -49,15 +49,15 @@ namespace Klinika.GUI.Secretary
 
         private void deletePatientButton_Click(object sender, EventArgs e)
         {
-            DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected patient? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult deletionConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to delete the selected patient? This action cannot be undone.");
             if(deletionConfirmation == DialogResult.Yes)
             {
-                string email = patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
-                int ID = PatientRepository.EmailIDPairs[email];
-                PatientRepository.Delete(ID,email);
+                string email = SecretaryService.GetCellValue(patientsTable,"Email").ToString();
+                int id = PatientRepository.EmailIDPairs[email];
+                PatientRepository.Delete(id,email);
                 int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
                 patientsTable.Rows.RemoveAt(selectedRowNumber);
-                MessageBox.Show("Patient successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SecretaryService.ShowSuccessMessage("Patient successfully deleted!");
             }
 
         }
@@ -71,7 +71,8 @@ namespace Klinika.GUI.Secretary
         {
             updatePatientButton.Enabled = true;
             deletePatientButton.Enabled = true;
-            if (Convert.ToBoolean(patientsTable.SelectedRows[0].Cells["Blocked"].Value) == true)
+            bool isBlocked = Convert.ToBoolean(SecretaryService.GetCellValue(patientsTable, "Blocked"));
+            if (isBlocked)
             {
                 unblockButton.Enabled = true;
                 blockButton.Enabled = false;
@@ -85,16 +86,17 @@ namespace Klinika.GUI.Secretary
 
         private void blockButton_Click(object sender, EventArgs e)
         {
-            DialogResult blockingConfirmation = MessageBox.Show("Are you sure you want to block the selected patient?", "Block", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult blockingConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to block the selected patient?");
             if (blockingConfirmation == DialogResult.Yes)
             {
-                string email = patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
-                int ID = PatientRepository.EmailIDPairs[email];
-                PatientRepository.Block(ID);
+                string email = SecretaryService.GetCellValue(patientsTable,"Email").ToString();
+                int id = PatientRepository.EmailIDPairs[email];
+                PatientRepository.Block(id);
                 int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
-                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["Blocked"] = true;
-                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["BlockedBy"] = "SEC";
-                MessageBox.Show("Patient successfully blocked!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DataRow blockedPatientRow = ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber];
+                blockedPatientRow["Blocked"] = true;
+                blockedPatientRow["BlockedBy"] = "SEC";
+                SecretaryService.ShowSuccessMessage("Patient successfully blocked!");
                 unblockButton.Enabled = true;
                 blockButton.Enabled = false;
             }
@@ -102,16 +104,17 @@ namespace Klinika.GUI.Secretary
 
         private void unblockButton_Click(object sender, EventArgs e)
         {
-            DialogResult unblockingConfirmation = MessageBox.Show("Are you sure you want to unblock the selected patient?", "Unblock", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult unblockingConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to unblock the selected patient?");
             if (unblockingConfirmation == DialogResult.Yes)
             {
-                string email = patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
-                int ID = PatientRepository.EmailIDPairs[email];
-                PatientRepository.Unblock(ID);
+                string email = SecretaryService.GetCellValue(patientsTable, "Email").ToString();
+                int id = PatientRepository.EmailIDPairs[email];
+                PatientRepository.Unblock(id);
                 int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
-                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["Blocked"] = false;
-                ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber]["BlockedBy"] = "";
-                MessageBox.Show("Patient successfully unblocked!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DataRow unblockedPatientRow = ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber];
+                unblockedPatientRow["Blocked"] = false;
+                unblockedPatientRow["BlockedBy"] = "";
+                SecretaryService.ShowSuccessMessage("Patient successfully unblocked!");
                 unblockButton.Enabled = false;
                 blockButton.Enabled = true;
             }
@@ -132,10 +135,11 @@ namespace Klinika.GUI.Secretary
 
         private void requestsTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+
+            string modificationType = SecretaryService.GetCellValue(requestsTable, "RequestType").ToString();
+            bool isModification = modificationType == "Modify" ? true:false;
             
-            bool isModification = requestsTable.SelectedRows[0].Cells["RequestType"].Value.ToString() == "Modify" ? true:false;
-            
-            if(string.IsNullOrEmpty(requestsTable.SelectedRows[0].Cells["Approved"].Value.ToString()))
+            if(string.IsNullOrEmpty(SecretaryService.GetCellValue(requestsTable,"Approved").ToString()))
             {
                 if (isModification)
                 {
@@ -159,26 +163,27 @@ namespace Klinika.GUI.Secretary
 
         private void approveButton_Click(object sender, EventArgs e)
         {
-            DialogResult approveConfirmation = MessageBox.Show("Are you sure you want to approve selected request?", "Approve", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult approveConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to approve the selected request?");
             if (approveConfirmation == DialogResult.Yes)
             {
-                int requestID = Convert.ToInt32(requestsTable.SelectedRows[0].Cells["ID"].Value);
+                int requestID = Convert.ToInt32(SecretaryService.GetCellValue(requestsTable,"ID"));
                 PatientRequestRepository.Approve(requestID);
                 int selectedRequestIndex = requestsTable.SelectedRows[0].Index;
                 DataRow selectedRequest = ((DataTable)requestsTable.DataSource).Rows[selectedRequestIndex];
                 selectedRequest["Approved"] = true;
-                string requestType = requestsTable.SelectedRows[0].Cells["RequestType"].Value.ToString();
-                if(requestType.Equals("Modify"))
+                string requestType = SecretaryService.GetCellValue(requestsTable, "RequestType").ToString();
+                int examinationId = Convert.ToInt32(selectedRequest["ExaminationID"]);
+                if (requestType.Equals("Modify"))
                 {
                     PatientModificationRequest selected = PatientRequestRepository.IdRequestPairs[requestID];
                     selectedRequest["DateTime"] = selected.newAppointment;
-                    AppointmentRepository.Modify(Convert.ToInt32(selectedRequest["ExaminationID"]), selected.newDoctorID, selected.newAppointment);
+                    AppointmentRepository.Modify(examinationId, selected.newDoctorID, selected.newAppointment);
                 }
                 else
                 {
-                    AppointmentRepository.Delete(Convert.ToInt32(selectedRequest["ExaminationID"]));
+                    AppointmentRepository.Delete(examinationId);
                 }
-                MessageBox.Show("Request successfully executed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SecretaryService.ShowSuccessMessage("Request successfully executed!");
                 approveButton.Enabled = false;
                 denyButton.Enabled = false;
                 detailsButton.Enabled = false;
@@ -187,14 +192,15 @@ namespace Klinika.GUI.Secretary
 
         private void denyButton_Click(object sender, EventArgs e)
         {
-            DialogResult denyConfirmation = MessageBox.Show("Are you sure you want to deny the selected request?", "Deny", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult denyConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to deny the selected request?");
             if (denyConfirmation == DialogResult.Yes)
             {
-                PatientRequestRepository.Deny(Convert.ToInt32(requestsTable.SelectedRows[0].Cells["ID"].Value));
+                int selectedRequestID = Convert.ToInt32(SecretaryService.GetCellValue(requestsTable, "ID"));
+                PatientRequestRepository.Deny(selectedRequestID);
                 int selectedRequestIndex = requestsTable.SelectedRows[0].Index;
                 DataRow selectedRequest = ((DataTable)requestsTable.DataSource).Rows[selectedRequestIndex];
                 selectedRequest["Approved"] = false;
-                MessageBox.Show("Request successfully denied!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SecretaryService.ShowSuccessMessage("Request successfully denied!");
                 approveButton.Enabled = false;
                 denyButton.Enabled = false;
                 detailsButton.Enabled = false;
@@ -218,7 +224,7 @@ namespace Klinika.GUI.Secretary
                 }
                 DateTime appointmentStart = appointmentPicker.Value;
               
-                SecretaryService.Validate(doctorId, appointmentStart);
+                ReferralService.Validate(doctorId, appointmentStart);
                 ReferalRepository.MarkAsUsed(chosenReferralID);
                 int doctorID = SecretaryService.ExtractID(doctorField.Text);
                 int patientID = SecretaryService.ExtractID(patientSelection.SelectedItem.ToString());
@@ -226,7 +232,7 @@ namespace Klinika.GUI.Secretary
                 chosenTime = chosenTime.AddSeconds(-chosenTime.Second);
                 Appointment newAppointment = new Appointment(-1, doctorID, patientID, chosenTime, 1, false, 'E', 15, false, "", false);
                 AppointmentRepository.GetInstance().Create(newAppointment);
-                MessageBox.Show("Appointment successfully scheduled!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SecretaryService.ShowSuccessMessage("Appointment successfully scheduled!");
             }
             catch (DateTimeInvalidException)
             { }
@@ -245,6 +251,7 @@ namespace Klinika.GUI.Secretary
                 doctorField.Text = suitableDoctor.ID + ". " + suitableDoctor.Name + " " + suitableDoctor.Surname;
             }
         }
+
     }
 
 }

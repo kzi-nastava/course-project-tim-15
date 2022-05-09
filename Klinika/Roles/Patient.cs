@@ -27,6 +27,7 @@ namespace Klinika.Roles
             this.jmbg = jmbg;
             this.birthdate = birthdate;
             this.gender = gender;
+            IsBlocked = false;
         }
     }
 }

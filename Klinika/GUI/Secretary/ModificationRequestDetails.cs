@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Klinika.Services;
 
 namespace Klinika.GUI.Secretary
 {
@@ -18,9 +19,8 @@ namespace Klinika.GUI.Secretary
         public ModificationRequestDetails(mainWindow parent)
         {
             InitializeComponent();
-            int requestID = Convert.ToInt32(parent.requestsTable.SelectedRows[0].Cells["ID"].Value);
+            int requestID = Convert.ToInt32(SecretaryService.GetCellValue(parent.requestsTable,"ID"));
             selected = PatientRequestRepository.IdRequestPairs[requestID];
-
         }
 
         private void ModificationRequestDetails_Load(object sender, EventArgs e)

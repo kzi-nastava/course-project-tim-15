@@ -28,27 +28,42 @@ namespace Klinika.Services
             return Convert.ToInt32(objectWithId.Split('.')[0]);
         }
 
-
-        public static void Validate(int doctorID, DateTime appointmentStart)
+        public static void AddRowToPatientTable(ref DataTable table,Patient newPatient)
         {
-
-
-            if (appointmentStart <= DateTime.Now)
-            {
-                throw new DateTimeInvalidException("Selected appointment time is incorrect!");
-            }
-
-            if (doctorID == -1)
-            {
-                throw new FieldEmptyException("Doctor is not selected!");
-            }
-
-            if(AppointmentRepository.GetInstance().IsOccupied(appointmentStart,15,-1,doctorID))
-            {
-                throw new DoctorUnavailableException("The selected doctor is not available at the selected time!");
-            }
+            DataRow newRow = table.NewRow();
+            ModifyRowOfPatientTable(ref newRow,newPatient);
+            table.Rows.Add(newRow);
+            table.AcceptChanges();
         }
 
+        public static void ModifyRowOfPatientTable(ref DataRow row,Patient patient)
+        {
+            row["JMBG"] = patient.jmbg;
+            row["Name"] = patient.Name;
+            row["Surname"] = patient.Surname;
+            row["Birthdate"] = patient.birthdate.Date;
+            row["Gender"] = patient.gender;
+            row["Email"] = patient.Email;
+            row["Blocked"] = patient.IsBlocked;
+
+        }
+
+        public static void ShowSuccessMessage(string message)
+        {
+            MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        public static  DialogResult ShowConfirmationMessage(string message)
+        {
+            return MessageBox.Show(message, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        }
+
+
+        public static object GetCellValue(DataGridView table,string columnName)
+        {
+            return table.SelectedRows[0].Cells[columnName].Value;
+        }
         
     }
 }

@@ -15,33 +15,47 @@ namespace Klinika.Repositories
         public Dictionary<string, User> users { get; }
         public List<User> Users { get; }
 
+        private static SqlConnection database = DatabaseConnection.GetInstance().database;
 
         private static UserRepository? singletonInstance;
         private UserRepository()
         {
             users = new Dictionary<string, User>();
             Users = new List<User>();
-            string getCredentialsQuery = "SELECT [User].ID, [User].Name, [User].Surname, Email, Password, UserType.Name as UserType, IsBlocked FROM [User] JOIN [UserType] ON [User].UserType = [UserType].ID WHERE [User].IsDeleted = 0";
+            string getCredentialsQuery = "SELECT [User].ID, [User].Name, [User].Surname, " +
+                "Email, Password, UserType.Name as UserType, IsBlocked " +
+                "FROM [User] " +
+                "JOIN [UserType] ON [User].UserType = [UserType].ID " +
+                "WHERE [User].IsDeleted = 0";
             try
             {
-                SqlCommand getCredentials = new SqlCommand(getCredentialsQuery, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
+                SqlCommand getCredentials = new SqlCommand(getCredentialsQuery, database);
+                database.Open();
                 using (SqlDataReader retrieved = getCredentials.ExecuteReader())
                 {
                     while (retrieved.Read())
                     {
-                        User user = new User(Convert.ToInt32(retrieved["ID"]), retrieved["Name"].ToString(), retrieved["Surname"].ToString(), 
-                            retrieved["Email"].ToString(), retrieved["Password"].ToString(), retrieved["UserType"].ToString(), 
-                            Convert.ToBoolean(retrieved["IsBlocked"]));
+                        int userID = Convert.ToInt32(retrieved["ID"]);
+                        string name = retrieved["Name"].ToString();
+                        string surname = retrieved["Surname"].ToString();
+                        string email = retrieved["Email"].ToString();
+                        string password = retrieved["Password"].ToString();
+                        string userType = retrieved["UserType"].ToString();
+                        bool isBlocked = Convert.ToBoolean(retrieved["IsBlocked"]);
+                        User user = new User(userID,name,surname,email,password,userType,isBlocked);
                         users.TryAdd(user.Email, user);
                         Users.Add(user);
                     }
                 }
-                DatabaseConnection.GetInstance().database.Close();
+                
             }
             catch (SqlException error)
             {
                 MessageBox.Show(error.Message);
+            }
+            finally
+            {
+                database.Close();
             }
 
         }

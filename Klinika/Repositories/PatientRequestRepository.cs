@@ -13,7 +13,9 @@ namespace Klinika.Repositories
     internal class PatientRequestRepository
     {
         public static Dictionary<int, PatientModificationRequest> IdRequestPairs { get; set; }
-        public static DataTable GetAll()
+
+        private static SqlConnection database = DatabaseConnection.GetInstance().database;
+        public static DataTable? GetAll()
         {
             DataTable? retrievedRequests = null;
             IdRequestPairs = new Dictionary<int, PatientModificationRequest>();
@@ -30,7 +32,7 @@ namespace Klinika.Repositories
                                  "LEFT JOIN [MedicalAction] ON [PatientRequest].MedicalActionID = [MedicalAction].ID";
             try
             {
-                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, DatabaseConnection.GetInstance().database);
+                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, database);
                 retrievedRequests = new DataTable();
                 adapter.Fill(retrievedRequests);
                 if (retrievedRequests.Rows.Count != 0)
@@ -39,11 +41,10 @@ namespace Klinika.Repositories
                     {
                         if (request["RequestType"].ToString() == "Modify")
                         {
-                            PatientModificationRequest modification = new PatientModificationRequest(
-                               Convert.ToInt32(request["DoctorID"]),
-                               DateTime.Parse(request["DateTime"].ToString()),
-                               request["Description"].ToString()
-                            );
+                            int doctorID = Convert.ToInt32(request["DoctorID"]);
+                            DateTime oldAppointment = DateTime.Parse(request["DateTime"].ToString());
+                            string changesToMake = request["Description"].ToString();
+                            PatientModificationRequest modification = new PatientModificationRequest(doctorID, oldAppointment, changesToMake);
                             IdRequestPairs.Add(Convert.ToInt32(request["ID"]), modification);
                         }
                     }

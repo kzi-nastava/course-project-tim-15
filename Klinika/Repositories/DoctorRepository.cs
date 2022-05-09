@@ -12,6 +12,8 @@ namespace Klinika.Repositories
 {
     internal class DoctorRepository
     {
+        private static SqlConnection database = DatabaseConnection.GetInstance().database;
+
         public static string GetNameSurname(int id)
         {
             SqlConnection database = DatabaseConnection.GetInstance().database;
@@ -31,11 +33,14 @@ namespace Klinika.Repositories
                         nameSurname = retrieved["Doctor"].ToString();
                     }
                 }
-                database.Close();
             }
             catch (SqlException error)
             {
                 MessageBox.Show(error.Message);
+            }
+            finally
+            {
+                database.Close();
             }
 
             return nameSurname;
@@ -143,7 +148,6 @@ namespace Klinika.Repositories
                                  "LEFT OUTER JOIN [Specialization] ON [DoctorSpecialization].SpecializationID = [Specialization].ID";
             try
             {
-                SqlConnection database = DatabaseConnection.GetInstance().database;
                 SqlCommand getAll = new SqlCommand(getAllQuery, database);
                 database.Open();
                 using (SqlDataReader retrieved = getAll.ExecuteReader())
@@ -160,11 +164,14 @@ namespace Klinika.Repositories
                         doctors.Add(doctor);
                     }
                 }
-                database.Close();
             }
             catch(SqlException error)
             {
                 MessageBox.Show(error.Message);
+            }
+            finally
+            {
+                database.Close();
             }
 
             return doctors;

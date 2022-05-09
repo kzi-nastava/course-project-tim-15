@@ -31,12 +31,14 @@ namespace Klinika.GUI.Secretary
 
         private void chooseReferalButton_Click(object sender, EventArgs e)
         {
-            string chosenDoctor = referralsTable.SelectedRows[0].Cells["Doctor"].Value.ToString();
-            string chosenSpecialization = referralsTable.SelectedRows[0].Cells["Specialization"].Value.ToString();
+            string chosenDoctor = SecretaryService.GetCellValue(referralsTable,"Doctor").ToString();
+            string chosenSpecialization = SecretaryService.GetCellValue(referralsTable,"Specialization").ToString();
+            int chosenreferralId = Convert.ToInt32(SecretaryService.GetCellValue(referralsTable,"ID"));
             parent.doctorField.Text = chosenDoctor;
             parent.specializationField.Text = chosenSpecialization;
-            parent.chosenReferralID = Convert.ToInt32(referralsTable.SelectedRows[0].Cells["ID"].Value);
+            parent.chosenReferralID = chosenreferralId;
             parent.appointmentPicker.Enabled = true;
+            parent.scheduleButton.Enabled = true;
             if (string.IsNullOrEmpty(chosenDoctor))
             {
                 parent.findAvailableDoctorButton.Enabled = true;
@@ -51,7 +53,7 @@ namespace Klinika.GUI.Secretary
 
         private void referralsTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            bool isUsed = Convert.ToBoolean(referralsTable.SelectedRows[0].Cells["Used"].Value);
+            bool isUsed = Convert.ToBoolean(SecretaryService.GetCellValue(referralsTable,"Used"));
             if (!isUsed)
             {
                 chooseReferalButton.Enabled = true;

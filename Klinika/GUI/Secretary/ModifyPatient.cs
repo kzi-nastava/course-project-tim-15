@@ -26,28 +26,24 @@ namespace Klinika.GUI.Secretary
 
         private void modifyButton_Click(object sender, EventArgs e)
         {
-            string jmbg = JMBGField.Text.Trim();
+            string jmbg = jmbgField.Text.Trim();
             string name = nameField.Text.Trim();
             string surname = surnameField.Text.Trim();
             DateTime birthdate = birthdatePicker.Value.Date;
             string email = emailField.Text;
             string password = passwordField.Text.Trim();
             char gender = genderSelection.SelectedItem.ToString()[0];
+            Roles.Patient modifiedPatient = new Roles.Patient(selectedID, jmbg, name, surname, birthdate, gender, email, password);
             try
             {
-                PatientService.Validate(jmbg, name, surname, birthdate, email, password,true);
-                PatientRepository.Modify(selectedID,jmbg, name, surname, birthdate, gender, email, password);
+                PatientService.Validate(modifiedPatient,isModification:true);
+                PatientRepository.Modify(modifiedPatient);
                 DataTable patientTable = (DataTable)parent.patientsTable.DataSource;
                 int selectedRowIndex = parent.patientsTable.SelectedRows[0].Index;
                 DataRow selectedRow = patientTable.Rows[selectedRowIndex];
-                selectedRow["JMBG"] = jmbg;
-                selectedRow["Name"] = name;
-                selectedRow["Surname"] = surname;
-                selectedRow["Birthdate"] = birthdate.Date;
-                selectedRow["Gender"] = gender;
-                selectedRow["Email"] = email;
+                SecretaryService.ModifyRowOfPatientTable(ref selectedRow, modifiedPatient);
                 patientTable.AcceptChanges();
-                MessageBox.Show("Patient successfully modified!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                SecretaryService.ShowSuccessMessage("Patient successfully modified!");
                 Hide();
             }
             catch (FieldEmptyException)
@@ -61,33 +57,30 @@ namespace Klinika.GUI.Secretary
 
             catch (JMBGFormatInvalidException)
             {
-                JMBGField.Text = "";
+                jmbgField.Text = "";
             }
         }
 
         private void ModifyPatient_Load(object sender, EventArgs e)
         {
-            string selectedEmail = parent.patientsTable.SelectedRows[0].Cells["Email"].Value.ToString();
-            (int id, string jmbg, string name, string surname, DateTime birthdate, char gender, string password) =
-            PatientRepository.GetSingle(selectedEmail);
-            JMBGField.Text = jmbg;
-            nameField.Text = name;
-            surnameField.Text = surname;
-            birthdatePicker.Value = birthdate;
-            if(gender == 'F')
+            string selectedEmail = SecretaryService.GetCellValue(parent.patientsTable,"Email").ToString();
+            Roles.Patient selectedPatient = PatientRepository.GetSingle(selectedEmail);
+            jmbgField.Text = selectedPatient.jmbg;
+            nameField.Text = selectedPatient.Name;
+            surnameField.Text = selectedPatient.Surname;
+            birthdatePicker.Value = selectedPatient.birthdate;
+            if(selectedPatient.gender == 'F')
             {
                 genderSelection.SelectedItem = "Female";
-
             }
 
-            if (gender == 'M')
+            else
             {
                 genderSelection.SelectedItem = "Male";
-
             }
             emailField.Text = selectedEmail;
-            passwordField.Text = password;
-            selectedID = id;
+            passwordField.Text = selectedPatient.Password;
+            selectedID = selectedPatient.ID;
 
         }
 

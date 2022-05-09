@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Klinika.Data;
 using Klinika.Exceptions;
+using Klinika.GUI.Secretary;
 using Klinika.Repositories;
 
 namespace Klinika.Services
@@ -15,7 +16,7 @@ namespace Klinika.Services
     internal class PatientService
     {
 
-        public static bool IsValid(string email)
+        public static bool IsValidEmail(string email)
         {
             string pattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|" + 
                              @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)" +
@@ -24,61 +25,57 @@ namespace Klinika.Services
             return regex.IsMatch(email);
         }
 
-        public static void Validate(string JMBG,
-                                    string name,
-                                    string surname,
-                                    DateTime birthdate,
-                                    string email,
-                                    string password,
-                                    bool isModification = false)
+        public static void Validate(Roles.Patient patientInputData,bool isModification = false)
         {
-            if (string.IsNullOrEmpty(JMBG))
+
+            if (string.IsNullOrEmpty(patientInputData.jmbg))
             {
                 throw new FieldEmptyException("JMBG left empty!");
             }
 
-            else if (JMBG.Length != 13)
+            else if (patientInputData.jmbg.Length != 13)
             {
                 throw new JMBGFormatInvalidException("JMBG format is not valid!");
             }
 
-            else if (string.IsNullOrEmpty(name))
+            else if (string.IsNullOrEmpty(patientInputData.Name))
             {
                 throw new FieldEmptyException("Name left empty!");
             }
 
-            else if (string.IsNullOrEmpty(surname))
+            else if (string.IsNullOrEmpty(patientInputData.Surname))
             {
                 throw new FieldEmptyException("Surname left empty!");
             }
 
-            else if (birthdate > DateTime.Now)
+            else if (patientInputData.birthdate > DateTime.Now)
             {
                 throw new BirthdateInvalidException("Invalid birthdate!");
             }
 
-            else if (string.IsNullOrEmpty(email) && !isModification)
+            else if (string.IsNullOrEmpty(patientInputData.Email) && !isModification)
             {
                 throw new FieldEmptyException("Email left empty!");
             }
 
             else if (PatientRepository.EmailIDPairs != null &&
-                     PatientRepository.EmailIDPairs.ContainsKey(email) &&
+                     PatientRepository.EmailIDPairs.ContainsKey(patientInputData.Email) &&
                      !isModification)
             {
                 throw new ExistingEmailException("Email already in use!");
             }
 
-            else if (!IsValid(email) && !isModification)
+            else if (!IsValidEmail(patientInputData.Email) && !isModification)
             {
                 throw new EmailFormatInvalidException("Incorrect email format!");
             }
 
-            else if (string.IsNullOrEmpty(password))
+            else if (string.IsNullOrEmpty(patientInputData.Password))
             {
                 throw new FieldEmptyException("Password left empty!");
             }
-            else if (password.Length < 4)
+
+            else if (patientInputData.Password.Length < 4)
             {
                 throw new FieldEmptyException("Password is too short!");
             }

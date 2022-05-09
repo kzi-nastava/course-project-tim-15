@@ -269,6 +269,7 @@
             // 
             // scheduleButton
             // 
+            this.scheduleButton.Enabled = false;
             this.scheduleButton.Location = new System.Drawing.Point(534, 413);
             this.scheduleButton.Name = "scheduleButton";
             this.scheduleButton.Size = new System.Drawing.Size(94, 29);
@@ -373,12 +374,12 @@
         private Label label1;
         private Label label3;
         private Label label2;
-        private Button scheduleButton;
         public ComboBox patientSelection;
         public TextBox doctorField;
         public DateTimePicker appointmentPicker;
         public Button findAvailableDoctorButton;
         public TextBox specializationField;
         private Label label4;
+        public Button scheduleButton;
     }
 }
