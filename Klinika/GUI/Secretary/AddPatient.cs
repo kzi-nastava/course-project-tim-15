@@ -31,14 +31,15 @@ namespace Klinika.GUI.Secretary
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            string jmbg = jmbgField.Text.Trim();
-            string name = nameField.Text.Trim();
-            string surname = surnameField.Text.Trim();
-            DateTime birthdate = birthdatePicker.Value;
-            string email = emailField.Text.Trim(); 
-            string password = passwordField.Text.Trim();
-            char gender = genderSelection.SelectedItem.ToString()[0];
-            Roles.Patient newPatient = new Roles.Patient(-1, jmbg, name, surname, birthdate, gender, email, password);
+
+            Roles.Patient newPatient = new Roles.Patient(-1,
+                jmbgField.Text.Trim(),
+                nameField.Text.Trim(),
+                surnameField.Text.Trim(),
+                birthdatePicker.Value,
+                genderSelection.SelectedItem.ToString()[0],
+                emailField.Text.Trim(),
+                passwordField.Text.Trim());
             try
             {
                 PatientService.Validate(newPatient);

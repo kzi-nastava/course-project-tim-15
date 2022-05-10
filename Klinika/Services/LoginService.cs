@@ -45,9 +45,61 @@ namespace Klinika.Services
 
             return allUsers[email];
 
-
         }
 
+        public static void Login(String email, string password)
+        {
+            try
+            {
+                User loggingUser = Validate(email, password);
+                switch (loggingUser.Role)
+                {
+                    case "Secretary":
+                        new GUI.Secretary.mainWindow().Show();
+                        break;
+                    case "Doctor":
+                        new GUI.Doctor.DoctorMain(loggingUser).Show();
+                        break;
+                    case "Manager":
+                        new GUI.Manager.Main().Show();
+                        break;
+                    default:
+                        if (AppointmentRepository.GetPersonalCount(loggingUser.ID) > 8 || PatientRequestRepository.GetPersonalCount(loggingUser.ID) > 5)
+                        {
+                            loggingUser.IsBlocked = true;
+                            UserRepository.Block(loggingUser.ID);
+                            throw new UserBlockedException("Your account is blocked because of trolling.");
+                        }
+                        else
+                        {
+                            new GUI.Patient.PatientMain(loggingUser).Show();
+                            break;
+                        }
+                }
+                Close();
 
+            }
+            catch (FieldEmptyException)
+            {
+            }
+
+            catch (EmailUnknownException)
+            {
+                emailField.Text = "";
+                passwordField.Text = "";
+            }
+
+
+            catch (PasswordIncorrectException)
+            {
+                passwordField.Text = "";
+            }
+
+            catch (UserBlockedException)
+            {
+                emailField.Text = "";
+                passwordField.Text = "";
+            }
+        }
     }
 }
