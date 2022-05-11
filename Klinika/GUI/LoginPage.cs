@@ -15,7 +15,29 @@ namespace Klinika
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
-            LoginService.Login(emailField.Text.Trim(),passwordField.Text.Trim());
+            try
+            {
+                LoginService.Login(emailField.Text.Trim(), passwordField.Text.Trim());
+                Hide();
+            }
+            catch (FieldEmptyException) { }
+
+            catch (EmailUnknownException)
+            {
+                emailField.Text = "";
+                passwordField.Text = "";
+            }
+
+            catch (PasswordIncorrectException)
+            {
+                passwordField.Text = "";
+            }
+
+            catch (UserBlockedException)
+            {
+                emailField.Text = "";
+                passwordField.Text = "";
+            }
         }
 
         private void LoginPage_FormClosing(object sender, FormClosingEventArgs e)

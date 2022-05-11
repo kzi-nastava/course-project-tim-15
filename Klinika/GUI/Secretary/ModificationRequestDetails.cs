@@ -24,13 +24,17 @@ namespace Klinika.GUI.Secretary
         }
 
         private void ModificationRequestDetails_Load(object sender, EventArgs e)
-        { 
-          
+        {
+            FillFields();
+        }
+
+
+        private void FillFields()
+        {
             oldAppointment.Value = selected.oldAppointment;
             newAppointment.Value = selected.newAppointment;
             oldDoctorField.Text = DoctorRepository.GetNameSurname(selected.oldDoctorID);
             newDoctorField.Text = DoctorRepository.GetNameSurname(selected.newDoctorID);
-
         }
     }
 }

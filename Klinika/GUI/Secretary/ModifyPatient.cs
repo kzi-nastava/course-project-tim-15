@@ -15,7 +15,6 @@ namespace Klinika.GUI.Secretary
 {
     public partial class ModifyPatient : Form
     {
-
         private mainWindow parent;
         private int selectedID;
         public ModifyPatient(mainWindow parent)
@@ -26,50 +25,29 @@ namespace Klinika.GUI.Secretary
 
         private void modifyButton_Click(object sender, EventArgs e)
         {
-            string jmbg = jmbgField.Text.Trim();
-            string name = nameField.Text.Trim();
-            string surname = surnameField.Text.Trim();
-            DateTime birthdate = birthdatePicker.Value.Date;
-            string email = emailField.Text;
-            string password = passwordField.Text.Trim();
-            char gender = genderSelection.SelectedItem.ToString()[0];
-            Roles.Patient modifiedPatient = new Roles.Patient(selectedID, jmbg, name, surname, birthdate, gender, email, password);
-            try
-            {
-                PatientService.Validate(modifiedPatient,isModification:true);
-                PatientRepository.Modify(modifiedPatient);
-                DataTable patientTable = (DataTable)parent.patientsTable.DataSource;
-                int selectedRowIndex = parent.patientsTable.SelectedRows[0].Index;
-                DataRow selectedRow = patientTable.Rows[selectedRowIndex];
-                SecretaryService.ModifyRowOfPatientTable(ref selectedRow, modifiedPatient);
-                patientTable.AcceptChanges();
-                SecretaryService.ShowSuccessMessage("Patient successfully modified!");
-                Hide();
-            }
-            catch (FieldEmptyException)
-            {
-
-            }
-            catch (BirthdateInvalidException)
-            {
-
-            }
-
-            catch (JMBGFormatInvalidException)
-            {
-                jmbgField.Text = "";
-            }
+            Modify();            
         }
 
         private void ModifyPatient_Load(object sender, EventArgs e)
         {
-            string selectedEmail = SecretaryService.GetCellValue(parent.patientsTable,"Email").ToString();
+            ShowSelectedPatientData();
+        }
+
+        private void ShowSelectedPatientData()
+        {
+            string selectedEmail = SecretaryService.GetCellValue(parent.patientsTable, "Email").ToString();
             Roles.Patient selectedPatient = PatientRepository.GetSingle(selectedEmail);
+            SetFormFieldValues(selectedPatient);
+            selectedID = selectedPatient.ID;
+        }
+
+        private void SetFormFieldValues(Roles.Patient selectedPatient)
+        {
             jmbgField.Text = selectedPatient.jmbg;
             nameField.Text = selectedPatient.Name;
             surnameField.Text = selectedPatient.Surname;
             birthdatePicker.Value = selectedPatient.birthdate;
-            if(selectedPatient.gender == 'F')
+            if (selectedPatient.gender == 'F')
             {
                 genderSelection.SelectedItem = "Female";
             }
@@ -78,10 +56,38 @@ namespace Klinika.GUI.Secretary
             {
                 genderSelection.SelectedItem = "Male";
             }
-            emailField.Text = selectedEmail;
+            emailField.Text = selectedPatient.Email;
             passwordField.Text = selectedPatient.Password;
-            selectedID = selectedPatient.ID;
+        }
 
+
+        private void Modify()
+        {
+            Roles.Patient modifiedPatient = new Roles.Patient(
+                selectedID,
+                jmbgField.Text.Trim(),
+                nameField.Text.Trim(),
+                surnameField.Text.Trim(),
+                birthdatePicker.Value.Date,
+                genderSelection.SelectedItem.ToString()[0],
+                emailField.Text.Trim(),
+                passwordField.Text.Trim());
+            try
+            {
+                PatientRepository.Modify(modifiedPatient);
+            }
+            catch (FieldEmptyException) { }
+
+            catch (BirthdateInvalidException) { }
+
+            catch (JMBGFormatInvalidException)
+            {
+                jmbgField.Text = "";
+            }
+
+            parent.ModifyRowOfPatientTable(modifiedPatient);
+            SecretaryService.ShowSuccessMessage("Patient successfully modified!");
+            Close();
         }
 
     }

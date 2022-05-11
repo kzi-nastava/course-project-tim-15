@@ -34,12 +34,8 @@ namespace Klinika.GUI.Secretary
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            DataTable patients = PatientRepository.GetAll();
-            if (patients != null)
-            {
-                patientsTable.DataSource = patients;
-                patientsTable.ClearSelection();
-            }
+            SecretaryService.Fill(patientsTable, PatientRepository.GetAll());
+            patientsTable.ClearSelection();
         }
 
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -49,17 +45,7 @@ namespace Klinika.GUI.Secretary
 
         private void deletePatientButton_Click(object sender, EventArgs e)
         {
-            DialogResult deletionConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to delete the selected patient? This action cannot be undone.");
-            if(deletionConfirmation == DialogResult.Yes)
-            {
-                string email = SecretaryService.GetCellValue(patientsTable,"Email").ToString();
-                int id = PatientRepository.EmailIDPairs[email];
-                PatientRepository.Delete(id,email);
-                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
-                patientsTable.Rows.RemoveAt(selectedRowNumber);
-                SecretaryService.ShowSuccessMessage("Patient successfully deleted!");
-            }
-
+            DeletePatient();
         }
 
         private void updatePatientButton_Click(object sender, EventArgs e)
@@ -69,68 +55,22 @@ namespace Klinika.GUI.Secretary
 
         private void patientsTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            updatePatientButton.Enabled = true;
-            deletePatientButton.Enabled = true;
-            bool isBlocked = Convert.ToBoolean(SecretaryService.GetCellValue(patientsTable, "Blocked"));
-            if (isBlocked)
-            {
-                unblockButton.Enabled = true;
-                blockButton.Enabled = false;
-            }
-            else
-            {
-                unblockButton.Enabled = false;
-                blockButton.Enabled = true;
-            }
+            SetPatientTabButtonsStates(); 
         }
 
         private void blockButton_Click(object sender, EventArgs e)
         {
-            DialogResult blockingConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to block the selected patient?");
-            if (blockingConfirmation == DialogResult.Yes)
-            {
-                string email = SecretaryService.GetCellValue(patientsTable,"Email").ToString();
-                int id = PatientRepository.EmailIDPairs[email];
-                PatientRepository.Block(id);
-                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
-                DataRow blockedPatientRow = ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber];
-                blockedPatientRow["Blocked"] = true;
-                blockedPatientRow["BlockedBy"] = "SEC";
-                SecretaryService.ShowSuccessMessage("Patient successfully blocked!");
-                unblockButton.Enabled = true;
-                blockButton.Enabled = false;
-            }
+            BlockPatient();
         }
 
         private void unblockButton_Click(object sender, EventArgs e)
         {
-            DialogResult unblockingConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to unblock the selected patient?");
-            if (unblockingConfirmation == DialogResult.Yes)
-            {
-                string email = SecretaryService.GetCellValue(patientsTable, "Email").ToString();
-                int id = PatientRepository.EmailIDPairs[email];
-                PatientRepository.Unblock(id);
-                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
-                DataRow unblockedPatientRow = ((DataTable)patientsTable.DataSource).Rows[selectedRowNumber];
-                unblockedPatientRow["Blocked"] = false;
-                unblockedPatientRow["BlockedBy"] = "";
-                SecretaryService.ShowSuccessMessage("Patient successfully unblocked!");
-                unblockButton.Enabled = false;
-                blockButton.Enabled = true;
-            }
+            UnblockPatient();
         }
 
         private void tabs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(tabs.SelectedTab == requests)
-            {
-                requestsTable.DataSource = PatientRequestRepository.GetAll();
-                requestsTable.ClearSelection();
-            }
-            else if(tabs.SelectedTab == referrals)
-            {
-                SecretaryService.FillPatientSelectionList(patientSelection, PatientRepository.IDPatientPairs);
-            }
+            InitializeSelectedTab();
         }
 
         private void requestsTable_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -218,15 +158,15 @@ namespace Klinika.GUI.Secretary
             {
                 
                 int doctorId = -1;
-                if (!string.IsNullOrEmpty(doctorField.Text))
+                if (!string.IsNullOrEmpty(refferalTabDoctorField.Text))
                 {
-                    doctorId = SecretaryService.ExtractID(doctorField.Text);
+                    doctorId = SecretaryService.ExtractID(refferalTabDoctorField.Text);
                 }
                 DateTime appointmentStart = appointmentPicker.Value;
               
                 ReferralService.Validate(doctorId, appointmentStart);
                 ReferalRepository.MarkAsUsed(chosenReferralID);
-                int doctorID = SecretaryService.ExtractID(doctorField.Text);
+                int doctorID = SecretaryService.ExtractID(refferalTabDoctorField.Text);
                 int patientID = SecretaryService.ExtractID(patientSelection.SelectedItem.ToString());
                 DateTime chosenTime = appointmentPicker.Value;
                 chosenTime = chosenTime.AddSeconds(-chosenTime.Second);
@@ -248,10 +188,140 @@ namespace Klinika.GUI.Secretary
             Roles.Doctor suitableDoctor = DoctorService.GetSuitable(chosenSpecialization,chosenTime);
             if(suitableDoctor != null)
             {
-                doctorField.Text = suitableDoctor.ID + ". " + suitableDoctor.Name + " " + suitableDoctor.Surname;
+                refferalTabDoctorField.Text = suitableDoctor.ID + ". " + suitableDoctor.Name + " " + suitableDoctor.Surname;
             }
         }
 
-    }
+        public void SetRefferalFormFieldValues(ChosenReferral referral)
+        {
+            refferalTabDoctorField.Text = referral.chosenDoctor;
+            specializationField.Text = referral.chosenSpecialization;
+            chosenReferralID = referral.chosenReferralId;
+        }
+
+
+        public void SetReferralFormCommandStates()
+        {
+            string chosenDoctor = refferalTabDoctorField.Text;
+            appointmentPicker.Enabled = true;
+            scheduleButton.Enabled = true;
+            if (string.IsNullOrEmpty(chosenDoctor))
+            {
+                findAvailableDoctorButton.Enabled = true;
+            }
+            else
+            {
+                findAvailableDoctorButton.Enabled = false;
+            }
+        }
+
+
+        public void AddRowToPatientTable(Roles.Patient newPatient)
+        {
+            DataTable patients = (DataTable)patientsTable.DataSource;
+            DataRow newRow = patients.NewRow();
+            ModifyRowOfPatientTable(ref newRow, newPatient);
+            patientsTable.Rows.Add(newRow);
+            patients.AcceptChanges();
+        }
+
+        public void ModifyRowOfPatientTable(ref DataRow row, Roles.Patient patient)
+        {
+            row["JMBG"] = patient.jmbg;
+            row["Name"] = patient.Name;
+            row["Surname"] = patient.Surname;
+            row["Birthdate"] = patient.birthdate.Date;
+            row["Gender"] = patient.gender;
+            row["Email"] = patient.Email;
+            row["Blocked"] = patient.IsBlocked;
+            row["BlockedBy"] = patient.whoBlocked;
+
+        }
+
+        public void ModifyRowOfPatientTable(Roles.Patient patient)
+        {
+            DataTable patientsData = (DataTable)patientsTable.DataSource;
+            int selectedRowIndex = patientsTable.SelectedRows[0].Index;
+            DataRow selectedRow = patientsData.Rows[selectedRowIndex];
+            ModifyRowOfPatientTable(ref selectedRow, patient);  
+        }
+
+
+        private void DeletePatient()
+        {
+            DialogResult deletionConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to delete the selected patient? This action cannot be undone.");
+            if (deletionConfirmation == DialogResult.Yes)
+            {
+                string email = SecretaryService.GetCellValue(patientsTable, "Email").ToString();
+                PatientRepository.Delete(PatientRepository.EmailIDPairs[email], email);
+                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
+                patientsTable.Rows.RemoveAt(selectedRowNumber);
+                SecretaryService.ShowSuccessMessage("Patient successfully deleted!");
+            }
+        }
+
+        private void SetPatientTabButtonsStates()
+        {
+            updatePatientButton.Enabled = true;
+            deletePatientButton.Enabled = true;
+            bool isBlocked = Convert.ToBoolean(SecretaryService.GetCellValue(patientsTable, "Blocked"));
+            if (isBlocked)
+            {
+                unblockButton.Enabled = true;
+                blockButton.Enabled = false;
+            }
+            else
+            {
+                unblockButton.Enabled = false;
+                blockButton.Enabled = true;
+            }
+        }
+
+        private void BlockPatient()
+        {
+            DialogResult blockingConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to block the selected patient?");
+            if (blockingConfirmation == DialogResult.Yes)
+            {
+                string email = SecretaryService.GetCellValue(patientsTable, "Email").ToString();
+                int id = PatientRepository.EmailIDPairs[email];
+                
+                Roles.Patient toBlock = PatientRepository.IDPatientPairs[id];
+                toBlock.Block("SEC");
+                ModifyRowOfPatientTable(toBlock);
+                SecretaryService.ShowSuccessMessage("Patient successfully blocked!");
+                SetPatientTabButtonsStates();
+            }
+        }
+
+
+        private void UnblockPatient()
+        {
+            DialogResult unblockingConfirmation = SecretaryService.ShowConfirmationMessage("Are you sure you want to unblock the selected patient?");
+            if (unblockingConfirmation == DialogResult.Yes)
+            {
+                string email = SecretaryService.GetCellValue(patientsTable, "Email").ToString();
+                int id = PatientRepository.EmailIDPairs[email];
+                Roles.Patient toUnblock = PatientRepository.IDPatientPairs[id];
+                toUnblock.Unblock();
+                ModifyRowOfPatientTable(toUnblock);
+                SecretaryService.ShowSuccessMessage("Patient successfully unblocked!");
+                SetPatientTabButtonsStates();
+            }
+        }
+
+
+        private void InitializeSelectedTab()
+        {
+            if (tabs.SelectedTab == requests)
+            {
+                requestsTable.DataSource = PatientRequestRepository.GetAll();
+                requestsTable.ClearSelection();
+            }
+            else if (tabs.SelectedTab == referrals)
+            {
+                SecretaryService.FillPatientSelectionList(patientSelection, PatientRepository.IDPatientPairs);
+            }
+        }
+}
 
 }

@@ -11,7 +11,6 @@ namespace Klinika.Repositories
 {
     internal class MedicalRecordRepository
     {
-        private static SqlConnection database = DatabaseConnection.GetInstance().database;
         public static T CheckNull<T>(object obj)
         {
             return obj == DBNull.Value ? default(T) : (T)obj;
@@ -192,22 +191,8 @@ namespace Klinika.Repositories
 
         public static void Create(int patientID)
         {
-            try
-            {
-                string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";
-                SqlCommand createMedicalRecord = new SqlCommand(createMedicalRecordQuery, database);
-                createMedicalRecord.Parameters.AddWithValue("@ID",patientID);
-                database.Open();
-                createMedicalRecord.ExecuteNonQuery();
-            }
-            catch(SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-            finally
-            {
-                database.Close();
-            }
+            string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createMedicalRecordQuery, ("@ID", patientID));
         }
     }
 }

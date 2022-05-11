@@ -12,36 +12,21 @@ namespace Klinika.Repositories
 {
     internal class DoctorRepository
     {
-        private static SqlConnection database = DatabaseConnection.GetInstance().database;
-
         public static string GetNameSurname(int id)
         {
-            SqlConnection database = DatabaseConnection.GetInstance().database;
             string getQuery = "SELECT Name + ' ' + Surname AS 'Doctor' " +
                                      "FROM [User] " +
                                      "WHERE ID = @ID";
             string nameSurname = "";
-            try
+            SqlDataReader retrieved = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery, ("@ID", id));
+            DatabaseConnection.GetInstance().database.Open();
+
+            if (retrieved.Read())
             {
-                SqlCommand get = new SqlCommand(getQuery, database);
-                get.Parameters.AddWithValue("@ID", id);
-                database.Open();
-                using (SqlDataReader retrieved = get.ExecuteReader())
-                {
-                    if (retrieved.Read())
-                    {
-                        nameSurname = retrieved["Doctor"].ToString();
-                    }
-                }
+                nameSurname = retrieved["Doctor"].ToString();
             }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-            finally
-            {
-                database.Close();
-            }
+            
+            DatabaseConnection.GetInstance().database.Close();
 
             return nameSurname;
         }
@@ -146,36 +131,27 @@ namespace Klinika.Repositories
                                  "FROM [DoctorSpecialization] " +
                                  "LEFT OUTER JOIN [User] ON [DoctorSpecialization].UserID = [User].ID " +
                                  "LEFT OUTER JOIN [Specialization] ON [DoctorSpecialization].SpecializationID = [Specialization].ID";
-            try
+
+            SqlDataReader retrieved = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuery);
+            DatabaseConnection.GetInstance().database.Open();
+
+            while(retrieved.Read())
             {
-                SqlCommand getAll = new SqlCommand(getAllQuery, database);
-                database.Open();
-                using (SqlDataReader retrieved = getAll.ExecuteReader())
-                {
-                    while(retrieved.Read())
-                    {
-                        int specializationID = Convert.ToInt32(retrieved["SpecializationID"]);
-                        string specializationName = retrieved["Specialization"].ToString();
-                        int doctorID = Convert.ToInt32(retrieved["UserID"]);
-                        string doctorName = retrieved["Name"].ToString();
-                        string doctorSurname = retrieved["Surname"].ToString();
-                        Specialization specialization = new Specialization(specializationID, specializationName);
-                        Doctor doctor = new Doctor(doctorID, doctorName, doctorSurname, specialization);
-                        doctors.Add(doctor);
-                    }
-                }
+                Specialization specialization = new Specialization(
+                                                Convert.ToInt32(retrieved["SpecializationID"]),
+                                                retrieved["Specialization"].ToString());
+
+                Doctor doctor = new Doctor(
+                                Convert.ToInt32(retrieved["UserID"]),
+                                retrieved["Name"].ToString(),
+                                retrieved["Surname"].ToString(),
+                                specialization);
+                doctors.Add(doctor);
             }
-            catch(SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-            finally
-            {
-                database.Close();
-            }
+
+            DatabaseConnection.GetInstance().database.Close();
 
             return doctors;
         }
-
     }
 }

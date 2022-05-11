@@ -48,7 +48,7 @@
             this.scheduleButton = new System.Windows.Forms.Button();
             this.appointmentPicker = new System.Windows.Forms.DateTimePicker();
             this.label3 = new System.Windows.Forms.Label();
-            this.doctorField = new System.Windows.Forms.TextBox();
+            this.refferalTabDoctorField = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.patientSelection = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -227,7 +227,7 @@
             this.referrals.Controls.Add(this.scheduleButton);
             this.referrals.Controls.Add(this.appointmentPicker);
             this.referrals.Controls.Add(this.label3);
-            this.referrals.Controls.Add(this.doctorField);
+            this.referrals.Controls.Add(this.refferalTabDoctorField);
             this.referrals.Controls.Add(this.label2);
             this.referrals.Controls.Add(this.patientSelection);
             this.referrals.Controls.Add(this.label1);
@@ -298,13 +298,13 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Time:";
             // 
-            // doctorField
+            // refferalTabDoctorField
             // 
-            this.doctorField.Location = new System.Drawing.Point(597, 140);
-            this.doctorField.Name = "doctorField";
-            this.doctorField.ReadOnly = true;
-            this.doctorField.Size = new System.Drawing.Size(246, 27);
-            this.doctorField.TabIndex = 3;
+            this.refferalTabDoctorField.Location = new System.Drawing.Point(597, 140);
+            this.refferalTabDoctorField.Name = "refferalTabDoctorField";
+            this.refferalTabDoctorField.ReadOnly = true;
+            this.refferalTabDoctorField.Size = new System.Drawing.Size(246, 27);
+            this.refferalTabDoctorField.TabIndex = 3;
             // 
             // label2
             // 
@@ -375,7 +375,7 @@
         private Label label3;
         private Label label2;
         public ComboBox patientSelection;
-        public TextBox doctorField;
+        public TextBox refferalTabDoctorField;
         public DateTimePicker appointmentPicker;
         public Button findAvailableDoctorButton;
         public TextBox specializationField;

@@ -16,7 +16,6 @@ namespace Klinika.Services
             List<Doctor> allDoctors = DoctorRepository.GetAll();
             foreach (Doctor doctor in allDoctors)
             {
-                
                 if (doctor.specialization.Name.Equals(specialization) &&
                     !AppointmentRepository.GetInstance().IsOccupied(newAppointmentStart:from,doctorId:doctor.ID))
                 {

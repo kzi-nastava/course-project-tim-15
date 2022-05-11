@@ -28,33 +28,12 @@ namespace Klinika.Services
             return Convert.ToInt32(objectWithId.Split('.')[0]);
         }
 
-        public static void AddRowToPatientTable(ref DataTable table,Patient newPatient)
-        {
-            DataRow newRow = table.NewRow();
-            ModifyRowOfPatientTable(ref newRow,newPatient);
-            table.Rows.Add(newRow);
-            table.AcceptChanges();
-        }
-
-        public static void ModifyRowOfPatientTable(ref DataRow row,Patient patient)
-        {
-            row["JMBG"] = patient.jmbg;
-            row["Name"] = patient.Name;
-            row["Surname"] = patient.Surname;
-            row["Birthdate"] = patient.birthdate.Date;
-            row["Gender"] = patient.gender;
-            row["Email"] = patient.Email;
-            row["Blocked"] = patient.IsBlocked;
-
-        }
-
         public static void ShowSuccessMessage(string message)
         {
             MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-
-        public static  DialogResult ShowConfirmationMessage(string message)
+        public static DialogResult ShowConfirmationMessage(string message)
         {
             return MessageBox.Show(message, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
@@ -65,5 +44,10 @@ namespace Klinika.Services
             return table.SelectedRows[0].Cells[columnName].Value;
         }
         
+        public static void Fill(DataGridView table,DataTable data)
+        {
+            table.DataSource = data;
+            table.ClearSelection();
+        }
     }
 }

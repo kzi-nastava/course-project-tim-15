@@ -21,9 +21,6 @@ namespace Klinika.GUI.Secretary
             this.parent = parent;
             InitializeComponent();
         }
-
-       
-
         private void AddPatient_Load(object sender, EventArgs e)
         {
             genderSelection.SelectedIndex = 0;
@@ -31,36 +28,34 @@ namespace Klinika.GUI.Secretary
 
         private void addButton_Click(object sender, EventArgs e)
         {
-
-            Roles.Patient newPatient = new Roles.Patient(-1,
+            Add();
+        }
+        private void Add()
+        {
+            Roles.Patient newPatient = new Roles.Patient(
+                -1,
                 jmbgField.Text.Trim(),
                 nameField.Text.Trim(),
                 surnameField.Text.Trim(),
-                birthdatePicker.Value,
+                birthdatePicker.Value.Date,
                 genderSelection.SelectedItem.ToString()[0],
                 emailField.Text.Trim(),
                 passwordField.Text.Trim());
+
+
             try
             {
-                PatientService.Validate(newPatient);
-                PatientRepository.Create(newPatient);
-                DataTable patientTable = (DataTable)parent.patientsTable.DataSource;
-                SecretaryService.AddRowToPatientTable(ref patientTable, newPatient);
-                SecretaryService.ShowSuccessMessage("Patient successfully added!");
-                Close();
+                PatientService.Add(newPatient);
             }
-            catch (FieldEmptyException)
-            {
+            catch (FieldEmptyException) { }
 
-            }
-            catch (BirthdateInvalidException)
-            {
+            catch (BirthdateInvalidException) { }
 
-            }
             catch (ExistingEmailException)
             {
                 emailField.Text = "";
             }
+
             catch (EmailFormatInvalidException)
             {
                 emailField.Text = "";
@@ -70,6 +65,10 @@ namespace Klinika.GUI.Secretary
             {
                 jmbgField.Text = "";
             }
+
+            parent.AddRowToPatientTable(newPatient);
+            SecretaryService.ShowSuccessMessage("Patient successfully added!");
+            Close();
         }
     }
 }

@@ -11,8 +11,6 @@ namespace Klinika.Repositories
 {
     public class ReferalRepository
     {
-        private static SqlConnection database = DatabaseConnection.GetInstance().database;
-
         public static void Create(int _patientID, int _specializationID, int _doctorID)
         {
             string createQuerry = "INSERT INTO [Referal] " +
@@ -38,9 +36,8 @@ namespace Klinika.Repositories
         }
 
 
-        public static DataTable? GetReferralsPerPatient(int patientId)
+        public static DataTable GetReferralsPerPatient(int patientId)
         {
-            DataTable retrievedReferrals = null;
             string getReferralsQuery = "SELECT [Referal].ID, " +
                 "CAST([Referal].DoctorID AS varchar) + '. ' + [User].Name + ' ' + [User].Surname 'Doctor', " +
                 "[Specialization].Name 'Specialization', [Referal].Date 'Date issued',[Referal].IsUsed 'Used' " +
@@ -50,20 +47,8 @@ namespace Klinika.Repositories
                 "LEFT OUTER JOIN [Specialization] ON [Referal].SpecializationID = [Specialization].ID " +
                 "WHERE [Referal].PatientID = @patientID " +
                 "ORDER BY [Referal].Date DESC";
-            try
-            {
-                
-                SqlDataAdapter adapter = new SqlDataAdapter(getReferralsQuery, database);
-                adapter.SelectCommand.Parameters.AddWithValue("@patientID", patientId);
-                retrievedReferrals = new DataTable();
-                adapter.Fill(retrievedReferrals);
-            }
 
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-
+            DataTable retrievedReferrals = DatabaseConnection.GetInstance().CreateTableOfData(getReferralsQuery, ("@patientID", patientId));
             return retrievedReferrals;
         }
 
@@ -74,22 +59,7 @@ namespace Klinika.Repositories
                                       "SET IsUsed = 1 " +
                                       "WHERE ID = @ID";
 
-            SqlCommand markAsRead = new SqlCommand(markAsUsedQuerry, database);
-            markAsRead.Parameters.AddWithValue("@ID", referralID);
-
-            try
-            {
-                database.Open();
-                markAsRead.ExecuteNonQuery();
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message);
-            }
-            finally
-            {
-                database.Close();
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(markAsUsedQuerry, ("@ID", referralID));
         }
     }
 }

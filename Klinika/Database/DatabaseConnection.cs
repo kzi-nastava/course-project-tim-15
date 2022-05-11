@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,96 @@ namespace Klinika.Data
                 singletonInstance = new DatabaseConnection();
             }
             return singletonInstance;
+        }
+
+        private SqlCommand CreateCommand(string query, params (string, object)[] commandParameters)
+        {
+            SqlCommand command = database.CreateCommand();
+            command.CommandText = query;
+            command.CommandType = CommandType.Text;
+            foreach ((string, object) parameter in commandParameters)
+            {
+                command.Parameters.AddWithValue(parameter.Item1, parameter.Item2);
+            }
+            return command;
+        }
+
+        public void ExecuteNonQueryCommand(string query, params (string,object)[] commandParameters)
+        {
+            try
+            {
+                database.Open();
+                SqlCommand command = CreateCommand(query,commandParameters);
+                command.ExecuteNonQuery();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+            finally
+            {
+                database.Close();
+            }
+        }
+
+
+        public object? ExecuteNonQueryScalarCommand(string query, params (string, object)[] commandParameters)
+        {
+            object value = null;
+            try
+            {
+                database.Open();
+                SqlCommand command = CreateCommand(query, commandParameters);
+                value = command.ExecuteScalar();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+            finally
+            {
+                database.Close();
+            }
+            return value;
+        }
+
+        public DataTable CreateTableOfData(string query, params (string,object)[] commandParameters)
+        {
+            DataTable table = new DataTable();
+            try
+            {
+                SqlCommand command = CreateCommand(query,commandParameters);
+                SqlDataAdapter adapter = new SqlDataAdapter(command);
+                adapter.Fill(table);
+            }
+
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+
+            return table;
+        }
+
+
+        public SqlDataReader ExecuteSelectCommand(string query, params (string, object)[] commandParameters)
+        {
+            SqlDataReader retrieved = null;
+            try
+            {
+                database.Open();
+                SqlCommand command = CreateCommand(query, commandParameters);
+                retrieved = command.ExecuteReader();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+            finally
+            {
+                database.Close();
+            }
+            return retrieved;
         }
     }
 }
