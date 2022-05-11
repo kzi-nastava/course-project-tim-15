@@ -58,7 +58,7 @@ namespace Klinika.GUI.Patient
             }
             if (Appointment == null)
             {
-                if (!AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime()))
+                if (!AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetDoctorID()))
                 {
                     DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dialogResult == DialogResult.Yes)
@@ -71,7 +71,7 @@ namespace Klinika.GUI.Patient
             }
             else
             {
-                if (!AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), 15, Appointment.ID))
+                if (!AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetDoctorID(), 15, Appointment.ID))
                 {
                     DialogResult dialogResult = MessageBox.Show("Are you sure you want to save the changes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dialogResult == DialogResult.Yes)

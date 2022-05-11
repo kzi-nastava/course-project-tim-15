@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Klinika.Data;
 using Klinika.Models;
-using Klinika.Data;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -279,7 +274,7 @@ namespace Klinika.Repositories
             }
         }
 
-        public bool IsOccupied(DateTime newAppointmentStart, int duration = 15, int id = -1)
+        public bool IsOccupied(DateTime newAppointmentStart, int doctorID, int duration = 15, int appointmentID = -1)
         {
             var newAppointmentEnd = newAppointmentStart.AddMinutes(duration); 
 
@@ -288,7 +283,11 @@ namespace Klinika.Repositories
                 var start = appointment.DateTime;
                 var end = appointment.DateTime.AddMinutes(appointment.Duration);
 
-                if (!appointment.IsDeleted && appointment.ID != id &&
+                if (appointment.DoctorID != doctorID)
+                {
+                    continue;
+                }
+                if (!appointment.IsDeleted && appointment.ID != appointmentID &&
                     newAppointmentStart < end && start < newAppointmentEnd) 
                     return true;
             }

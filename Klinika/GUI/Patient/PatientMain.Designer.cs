@@ -28,13 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.PersonalAppointmentsTab = new System.Windows.Forms.TabPage();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.ModifyButton = new System.Windows.Forms.Button();
             this.PersonalAppointmentsTable = new System.Windows.Forms.DataGridView();
             this.NewAppointmentTab = new System.Windows.Forms.TabPage();
+            this.RecommendButton = new System.Windows.Forms.Button();
             this.ScheduleButton = new System.Windows.Forms.Button();
             this.FindAppointmentsButton = new System.Windows.Forms.Button();
             this.DoctorLabel = new System.Windows.Forms.Label();
@@ -44,11 +45,11 @@
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
             this.OccupiedAppointmentsTable = new System.Windows.Forms.DataGridView();
             this.MedicalRecordTab = new System.Windows.Forms.TabPage();
+            this.ResetButton = new System.Windows.Forms.Button();
             this.SearchButton = new System.Windows.Forms.Button();
             this.SearchTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.MedicalRecordTable = new System.Windows.Forms.DataGridView();
-            this.ResetButton = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
@@ -66,7 +67,7 @@
             this.MainTabControl.Location = new System.Drawing.Point(12, 12);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(973, 539);
+            this.MainTabControl.Size = new System.Drawing.Size(1093, 540);
             this.MainTabControl.TabIndex = 0;
             this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControlSelectedIndexChanged);
             // 
@@ -78,14 +79,14 @@
             this.PersonalAppointmentsTab.Location = new System.Drawing.Point(4, 29);
             this.PersonalAppointmentsTab.Name = "PersonalAppointmentsTab";
             this.PersonalAppointmentsTab.Padding = new System.Windows.Forms.Padding(3);
-            this.PersonalAppointmentsTab.Size = new System.Drawing.Size(965, 506);
+            this.PersonalAppointmentsTab.Size = new System.Drawing.Size(1085, 507);
             this.PersonalAppointmentsTab.TabIndex = 0;
             this.PersonalAppointmentsTab.Text = "Personal Appointments";
             this.PersonalAppointmentsTab.UseVisualStyleBackColor = true;
             // 
             // DeleteButton
             // 
-            this.DeleteButton.Location = new System.Drawing.Point(513, 461);
+            this.DeleteButton.Location = new System.Drawing.Point(589, 461);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(94, 29);
             this.DeleteButton.TabIndex = 2;
@@ -95,7 +96,7 @@
             // 
             // ModifyButton
             // 
-            this.ModifyButton.Location = new System.Drawing.Point(348, 461);
+            this.ModifyButton.Location = new System.Drawing.Point(450, 461);
             this.ModifyButton.Name = "ModifyButton";
             this.ModifyButton.Size = new System.Drawing.Size(94, 29);
             this.ModifyButton.TabIndex = 1;
@@ -116,12 +117,13 @@
             this.PersonalAppointmentsTable.RowHeadersWidth = 51;
             this.PersonalAppointmentsTable.RowTemplate.Height = 29;
             this.PersonalAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.PersonalAppointmentsTable.Size = new System.Drawing.Size(950, 440);
+            this.PersonalAppointmentsTable.Size = new System.Drawing.Size(1073, 437);
             this.PersonalAppointmentsTable.TabIndex = 0;
             this.PersonalAppointmentsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.PersonalAppointmentsTableRowSelected);
             // 
             // NewAppointmentTab
             // 
+            this.NewAppointmentTab.Controls.Add(this.RecommendButton);
             this.NewAppointmentTab.Controls.Add(this.ScheduleButton);
             this.NewAppointmentTab.Controls.Add(this.FindAppointmentsButton);
             this.NewAppointmentTab.Controls.Add(this.DoctorLabel);
@@ -133,14 +135,24 @@
             this.NewAppointmentTab.Location = new System.Drawing.Point(4, 29);
             this.NewAppointmentTab.Name = "NewAppointmentTab";
             this.NewAppointmentTab.Padding = new System.Windows.Forms.Padding(3);
-            this.NewAppointmentTab.Size = new System.Drawing.Size(965, 506);
+            this.NewAppointmentTab.Size = new System.Drawing.Size(1085, 507);
             this.NewAppointmentTab.TabIndex = 1;
             this.NewAppointmentTab.Text = "New Appointment";
             this.NewAppointmentTab.UseVisualStyleBackColor = true;
             // 
+            // RecommendButton
+            // 
+            this.RecommendButton.Location = new System.Drawing.Point(957, 459);
+            this.RecommendButton.Name = "RecommendButton";
+            this.RecommendButton.Size = new System.Drawing.Size(108, 29);
+            this.RecommendButton.TabIndex = 8;
+            this.RecommendButton.Text = "Recommend";
+            this.RecommendButton.UseVisualStyleBackColor = true;
+            this.RecommendButton.Click += new System.EventHandler(this.RecommendClick);
+            // 
             // ScheduleButton
             // 
-            this.ScheduleButton.Location = new System.Drawing.Point(862, 460);
+            this.ScheduleButton.Location = new System.Drawing.Point(857, 459);
             this.ScheduleButton.Name = "ScheduleButton";
             this.ScheduleButton.Size = new System.Drawing.Size(94, 29);
             this.ScheduleButton.TabIndex = 7;
@@ -188,7 +200,7 @@
             // TitleLabel
             // 
             this.TitleLabel.AutoSize = true;
-            this.TitleLabel.Location = new System.Drawing.Point(396, 13);
+            this.TitleLabel.Location = new System.Drawing.Point(470, 13);
             this.TitleLabel.Name = "TitleLabel";
             this.TitleLabel.Size = new System.Drawing.Size(170, 20);
             this.TitleLabel.TabIndex = 2;
@@ -214,7 +226,7 @@
             this.OccupiedAppointmentsTable.RowHeadersWidth = 51;
             this.OccupiedAppointmentsTable.RowTemplate.Height = 29;
             this.OccupiedAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.OccupiedAppointmentsTable.Size = new System.Drawing.Size(950, 398);
+            this.OccupiedAppointmentsTable.Size = new System.Drawing.Size(1073, 392);
             this.OccupiedAppointmentsTable.TabIndex = 0;
             // 
             // MedicalRecordTab
@@ -227,10 +239,20 @@
             this.MedicalRecordTab.Location = new System.Drawing.Point(4, 29);
             this.MedicalRecordTab.Name = "MedicalRecordTab";
             this.MedicalRecordTab.Padding = new System.Windows.Forms.Padding(3);
-            this.MedicalRecordTab.Size = new System.Drawing.Size(965, 506);
+            this.MedicalRecordTab.Size = new System.Drawing.Size(1085, 507);
             this.MedicalRecordTab.TabIndex = 2;
             this.MedicalRecordTab.Text = "Medical Record";
             this.MedicalRecordTab.UseVisualStyleBackColor = true;
+            // 
+            // ResetButton
+            // 
+            this.ResetButton.Location = new System.Drawing.Point(985, 471);
+            this.ResetButton.Name = "ResetButton";
+            this.ResetButton.Size = new System.Drawing.Size(94, 29);
+            this.ResetButton.TabIndex = 4;
+            this.ResetButton.Text = "Reset";
+            this.ResetButton.UseVisualStyleBackColor = true;
+            this.ResetButton.Click += new System.EventHandler(this.ResetClick);
             // 
             // SearchButton
             // 
@@ -244,7 +266,7 @@
             // 
             // SearchTextBox
             // 
-            this.SearchTextBox.Location = new System.Drawing.Point(188, 471);
+            this.SearchTextBox.Location = new System.Drawing.Point(188, 472);
             this.SearchTextBox.Name = "SearchTextBox";
             this.SearchTextBox.Size = new System.Drawing.Size(218, 27);
             this.SearchTextBox.TabIndex = 2;
@@ -254,9 +276,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 474);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(176, 20);
+            this.label1.Size = new System.Drawing.Size(172, 20);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Key word for Anamnesis: ";
+            this.label1.Text = "Keyword for Anamnesis: ";
             // 
             // MedicalRecordTable
             // 
@@ -266,37 +288,27 @@
             this.MedicalRecordTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.MedicalRecordTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.MedicalRecordTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.MedicalRecordTable.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.MedicalRecordTable.DefaultCellStyle = dataGridViewCellStyle3;
             this.MedicalRecordTable.Location = new System.Drawing.Point(6, 6);
             this.MedicalRecordTable.Name = "MedicalRecordTable";
             this.MedicalRecordTable.ReadOnly = true;
             this.MedicalRecordTable.RowHeadersWidth = 51;
             this.MedicalRecordTable.RowTemplate.Height = 29;
-            this.MedicalRecordTable.Size = new System.Drawing.Size(953, 455);
+            this.MedicalRecordTable.Size = new System.Drawing.Size(1073, 459);
             this.MedicalRecordTable.TabIndex = 0;
-            // 
-            // ResetButton
-            // 
-            this.ResetButton.Location = new System.Drawing.Point(865, 471);
-            this.ResetButton.Name = "ResetButton";
-            this.ResetButton.Size = new System.Drawing.Size(94, 29);
-            this.ResetButton.TabIndex = 4;
-            this.ResetButton.Text = "Reset";
-            this.ResetButton.UseVisualStyleBackColor = true;
-            this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
             // 
             // PatientMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(997, 563);
+            this.ClientSize = new System.Drawing.Size(1117, 564);
             this.Controls.Add(this.MainTabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -341,5 +353,6 @@
         private TextBox SearchTextBox;
         private Label label1;
         private Button ResetButton;
+        private Button RecommendButton;
     }
 }
