@@ -187,5 +187,12 @@ namespace Klinika.Repositories
             }
             return anamnesis.ID;
         }
+
+
+        public static void Create(int patientID)
+        {
+            string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createMedicalRecordQuery, ("@ID", patientID));
+        }
     }
 }

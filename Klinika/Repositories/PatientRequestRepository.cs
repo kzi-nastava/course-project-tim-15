@@ -13,9 +13,9 @@ namespace Klinika.Repositories
     internal class PatientRequestRepository
     {
         public static Dictionary<int, PatientModificationRequest> IdRequestPairs { get; set; }
-        public static DataTable GetAll()
+
+        public static DataTable? GetAll()
         {
-            DataTable? retrievedRequests = null;
             IdRequestPairs = new Dictionary<int, PatientModificationRequest>();
             string getAllQuery = "SELECT [PatientRequest].ID, [User].Name + ' ' + [User].Surname AS Patient, " +
                                  "[MedicalAction].ID AS ExaminationID, [MedicalAction].DoctorID, " +
@@ -28,70 +28,37 @@ namespace Klinika.Repositories
                                  "FROM [PatientRequest] LEFT JOIN [Patient] ON [PatientRequest].PatientID = [Patient].UserID " +
                                  "LEFT JOIN [User] ON [Patient].UserID = [User].ID " +
                                  "LEFT JOIN [MedicalAction] ON [PatientRequest].MedicalActionID = [MedicalAction].ID";
-            try
+            
+            DataTable retrievedRequests = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
+
+            if (retrievedRequests.Rows.Count != 0)
             {
-                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, DatabaseConnection.GetInstance().database);
-                retrievedRequests = new DataTable();
-                adapter.Fill(retrievedRequests);
-                if (retrievedRequests.Rows.Count != 0)
+                foreach (DataRow request in retrievedRequests.Rows)
                 {
-                    foreach (DataRow request in retrievedRequests.Rows)
+                    if (request["RequestType"].ToString() == "Modify")
                     {
-                        if (request["RequestType"].ToString() == "Modify")
-                        {
-                            PatientModificationRequest modification = new PatientModificationRequest(
-                               Convert.ToInt32(request["DoctorID"]),
-                               DateTime.Parse(request["DateTime"].ToString()),
-                               request["Description"].ToString()
-                            );
-                            IdRequestPairs.Add(Convert.ToInt32(request["ID"]), modification);
-                        }
+                        PatientModificationRequest modification = new PatientModificationRequest(
+                                                                    Convert.ToInt32(request["DoctorID"]),
+                                                                    DateTime.Parse(request["DateTime"].ToString()),
+                                                                    request["Description"].ToString());
+                        IdRequestPairs.Add(Convert.ToInt32(request["ID"]), modification);
                     }
                 }
-                retrievedRequests.Columns.Remove("DoctorID");
-                retrievedRequests.Columns.Remove("Description");
             }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-
+            retrievedRequests.Columns.Remove("DoctorID");
+            retrievedRequests.Columns.Remove("Description");
             return retrievedRequests;
         }
 
         public static void Approve(int id)
         {
             string approveQuery = "UPDATE [PatientRequest] SET Approved = 1 WHERE ID = @ID";
-            try
-            {
-                SqlCommand approve = new SqlCommand(approveQuery, DatabaseConnection.GetInstance().database);
-                approve.Parameters.AddWithValue("@ID", id);
-                DatabaseConnection.GetInstance().database.Open();
-                approve.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(approveQuery, ("@ID", id));
         }
         public static void Deny(int id)
         {
-            string approveQuery = "UPDATE [PatientRequest] SET Approved = 0 WHERE ID = @ID";
-            try
-            {
-                SqlCommand approve = new SqlCommand(approveQuery, DatabaseConnection.GetInstance().database);
-                approve.Parameters.AddWithValue("@ID", id);
-                DatabaseConnection.GetInstance().database.Open();
-                approve.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            string denyQuery = "UPDATE [PatientRequest] SET Approved = 0 WHERE ID = @ID";
+            DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(denyQuery, ("@ID", id));
         }
 
         public static void Create(PatientRequest patientRequest)
@@ -101,24 +68,13 @@ namespace Klinika.Repositories
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@PatientID, @MedicalActionID, @Type, @Description)";
 
-            SqlCommand create = new SqlCommand(createQuerry, DatabaseConnection.GetInstance().database);
-            create.Parameters.AddWithValue("@PatientID", patientRequest.PatientID);
-            create.Parameters.AddWithValue("@MedicalActionID", patientRequest.MedicalActionID);
-            create.Parameters.AddWithValue("@Type", patientRequest.Type);
-            create.Parameters.AddWithValue("@Description", patientRequest.Description);
-
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                patientRequest.ID = (int)create.ExecuteScalar();
-                DatabaseConnection.GetInstance().database.Close();
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
+            patientRequest.ID = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+                createQuerry,
+                ("@PatientID", patientRequest.PatientID),
+                ("@MedicalActionID", patientRequest.MedicalActionID),
+                ("@Type", patientRequest.Type),
+                ("@Description", patientRequest.Description)
+                );
         }
 
         public static int GetPersonalCount(int ID)

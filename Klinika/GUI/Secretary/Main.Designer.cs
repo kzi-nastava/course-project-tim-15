@@ -41,12 +41,23 @@
             this.approveButton = new System.Windows.Forms.Button();
             this.detailsButton = new System.Windows.Forms.Button();
             this.requestsTable = new System.Windows.Forms.DataGridView();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.referrals = new System.Windows.Forms.TabPage();
+            this.specializationField = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.findAvailableDoctorButton = new System.Windows.Forms.Button();
+            this.scheduleButton = new System.Windows.Forms.Button();
+            this.appointmentPicker = new System.Windows.Forms.DateTimePicker();
+            this.label3 = new System.Windows.Forms.Label();
+            this.refferalTabDoctorField = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.patientSelection = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.patients.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.patientsTable)).BeginInit();
             this.tabs.SuspendLayout();
             this.requests.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).BeginInit();
+            this.referrals.SuspendLayout();
             this.SuspendLayout();
             // 
             // patients
@@ -138,7 +149,7 @@
             // 
             this.tabs.Controls.Add(this.patients);
             this.tabs.Controls.Add(this.requests);
-            this.tabs.Controls.Add(this.tabPage3);
+            this.tabs.Controls.Add(this.referrals);
             this.tabs.Location = new System.Drawing.Point(12, 21);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
@@ -208,15 +219,119 @@
             this.requestsTable.TabIndex = 6;
             this.requestsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.requestsTable_CellClick);
             // 
-            // tabPage3
+            // referrals
             // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 29);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(946, 487);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.referrals.Controls.Add(this.specializationField);
+            this.referrals.Controls.Add(this.label4);
+            this.referrals.Controls.Add(this.findAvailableDoctorButton);
+            this.referrals.Controls.Add(this.scheduleButton);
+            this.referrals.Controls.Add(this.appointmentPicker);
+            this.referrals.Controls.Add(this.label3);
+            this.referrals.Controls.Add(this.refferalTabDoctorField);
+            this.referrals.Controls.Add(this.label2);
+            this.referrals.Controls.Add(this.patientSelection);
+            this.referrals.Controls.Add(this.label1);
+            this.referrals.Location = new System.Drawing.Point(4, 29);
+            this.referrals.Name = "referrals";
+            this.referrals.Padding = new System.Windows.Forms.Padding(3);
+            this.referrals.Size = new System.Drawing.Size(946, 487);
+            this.referrals.TabIndex = 2;
+            this.referrals.Text = "Referrals";
+            this.referrals.UseVisualStyleBackColor = true;
+            // 
+            // specializationField
+            // 
+            this.specializationField.Location = new System.Drawing.Point(597, 222);
+            this.specializationField.Name = "specializationField";
+            this.specializationField.ReadOnly = true;
+            this.specializationField.Size = new System.Drawing.Size(246, 27);
+            this.specializationField.TabIndex = 11;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(486, 226);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(105, 20);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Specialization:";
+            // 
+            // findAvailableDoctorButton
+            // 
+            this.findAvailableDoctorButton.Enabled = false;
+            this.findAvailableDoctorButton.Location = new System.Drawing.Point(288, 413);
+            this.findAvailableDoctorButton.Name = "findAvailableDoctorButton";
+            this.findAvailableDoctorButton.Size = new System.Drawing.Size(208, 29);
+            this.findAvailableDoctorButton.TabIndex = 9;
+            this.findAvailableDoctorButton.Text = "Find available doctor";
+            this.findAvailableDoctorButton.UseVisualStyleBackColor = true;
+            this.findAvailableDoctorButton.Click += new System.EventHandler(this.findAvailableDoctorButton_Click);
+            // 
+            // scheduleButton
+            // 
+            this.scheduleButton.Enabled = false;
+            this.scheduleButton.Location = new System.Drawing.Point(534, 413);
+            this.scheduleButton.Name = "scheduleButton";
+            this.scheduleButton.Size = new System.Drawing.Size(94, 29);
+            this.scheduleButton.TabIndex = 8;
+            this.scheduleButton.Text = "Schedule";
+            this.scheduleButton.UseVisualStyleBackColor = true;
+            this.scheduleButton.Click += new System.EventHandler(this.scheduleButton_Click);
+            // 
+            // appointmentPicker
+            // 
+            this.appointmentPicker.CustomFormat = "MM/dd/yyyy HH:mm";
+            this.appointmentPicker.Enabled = false;
+            this.appointmentPicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.appointmentPicker.Location = new System.Drawing.Point(157, 224);
+            this.appointmentPicker.Name = "appointmentPicker";
+            this.appointmentPicker.Size = new System.Drawing.Size(250, 27);
+            this.appointmentPicker.TabIndex = 5;
+            this.appointmentPicker.Value = new System.DateTime(2022, 5, 12, 18, 34, 29, 0);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(103, 229);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(45, 20);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Time:";
+            // 
+            // refferalTabDoctorField
+            // 
+            this.refferalTabDoctorField.Location = new System.Drawing.Point(597, 140);
+            this.refferalTabDoctorField.Name = "refferalTabDoctorField";
+            this.refferalTabDoctorField.ReadOnly = true;
+            this.refferalTabDoctorField.Size = new System.Drawing.Size(246, 27);
+            this.refferalTabDoctorField.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(534, 142);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(58, 20);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Doctor:";
+            // 
+            // patientSelection
+            // 
+            this.patientSelection.FormattingEnabled = true;
+            this.patientSelection.Location = new System.Drawing.Point(160, 139);
+            this.patientSelection.Name = "patientSelection";
+            this.patientSelection.Size = new System.Drawing.Size(247, 28);
+            this.patientSelection.TabIndex = 1;
+            this.patientSelection.SelectedIndexChanged += new System.EventHandler(this.patientSelection_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(97, 142);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(57, 20);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Patient:";
             // 
             // mainWindow
             // 
@@ -234,6 +349,8 @@
             this.tabs.ResumeLayout(false);
             this.requests.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).EndInit();
+            this.referrals.ResumeLayout(false);
+            this.referrals.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -246,7 +363,7 @@
         private Button addPatientButton;
         private TabControl tabs;
         private TabPage requests;
-        private TabPage tabPage3;
+        private TabPage referrals;
         public DataGridView patientsTable;
         private Button unblockButton;
         private Button blockButton;
@@ -254,5 +371,15 @@
         private Button approveButton;
         private Button detailsButton;
         public DataGridView requestsTable;
+        private Label label1;
+        private Label label3;
+        private Label label2;
+        public ComboBox patientSelection;
+        public TextBox refferalTabDoctorField;
+        public DateTimePicker appointmentPicker;
+        public Button findAvailableDoctorButton;
+        public TextBox specializationField;
+        private Label label4;
+        public Button scheduleButton;
     }
 }

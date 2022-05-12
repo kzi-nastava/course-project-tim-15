@@ -43,4 +43,17 @@ namespace Klinika.Exceptions
         public JMBGFormatInvalidException(string message) : base(message) { }
 
     }
+
+    public class DateTimeInvalidException : FormValidationException
+    {
+        public DateTimeInvalidException(string message) : base(message) { }
+
+    }
+
+
+    public class DoctorUnavailableException : FormValidationException
+    {
+        public DoctorUnavailableException(string message) : base(message) { }
+
+    }
 }

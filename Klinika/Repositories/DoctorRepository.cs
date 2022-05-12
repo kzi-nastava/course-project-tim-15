@@ -3,6 +3,7 @@ using Klinika.Models;
 using Klinika.Roles;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -14,30 +15,15 @@ namespace Klinika.Repositories
     {
         public static string GetNameSurname(int id)
         {
-            SqlConnection database = DatabaseConnection.GetInstance().database;
             string getQuery = "SELECT Name + ' ' + Surname AS 'Doctor' " +
                                      "FROM [User] " +
                                      "WHERE ID = @ID";
             string nameSurname = "";
-            try
+            DataTable allDoctors = DatabaseConnection.GetInstance().CreateTableOfData(getQuery, ("@ID", id));
+            foreach (DataRow doctor in allDoctors.Rows)
             {
-                SqlCommand get = new SqlCommand(getQuery, database);
-                get.Parameters.AddWithValue("@ID", id);
-                database.Open();
-                using (SqlDataReader retrieved = get.ExecuteReader())
-                {
-                    if (retrieved.Read())
-                    {
-                        nameSurname = retrieved["Doctor"].ToString();
-                    }
-                }
-                database.Close();
+                nameSurname = doctor["Doctor"].ToString();
             }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-
             return nameSurname;
         }
 
@@ -130,6 +116,35 @@ namespace Klinika.Repositories
             }
 
             return specialization;
+        }
+
+
+        public static List<Doctor> GetAll()
+        {
+            List<Doctor> doctors = new List<Doctor>();
+            string getAllQuery = "SELECT [DoctorSpecialization].UserID, [User].Name,[User].Surname, " +
+                                 "[DoctorSpecialization].SpecializationID,[Specialization].Name 'Specialization' " +
+                                 "FROM [DoctorSpecialization] " +
+                                 "LEFT OUTER JOIN [User] ON [DoctorSpecialization].UserID = [User].ID " +
+                                 "LEFT OUTER JOIN [Specialization] ON [DoctorSpecialization].SpecializationID = [Specialization].ID";
+
+            DataTable allDoctors = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
+
+            foreach(DataRow row in allDoctors.Rows)
+            {
+                Specialization specialization = new Specialization(
+                                                Convert.ToInt32(row["SpecializationID"]),
+                                                row["Specialization"].ToString());
+
+                Doctor doctor = new Doctor(
+                                Convert.ToInt32(row["UserID"]),
+                                row["Name"].ToString(),
+                                row["Surname"].ToString(),
+                                specialization);
+                doctors.Add(doctor);
+            }
+
+            return doctors;
         }
     }
 }

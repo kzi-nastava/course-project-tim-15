@@ -31,7 +31,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.genderSelection = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.JMBGField = new System.Windows.Forms.MaskedTextBox();
+            this.jmbgField = new System.Windows.Forms.MaskedTextBox();
             this.birthdatePicker = new System.Windows.Forms.DateTimePicker();
             this.nameField = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -53,7 +53,7 @@
             // 
             this.groupBox1.Controls.Add(this.genderSelection);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.JMBGField);
+            this.groupBox1.Controls.Add(this.jmbgField);
             this.groupBox1.Controls.Add(this.birthdatePicker);
             this.groupBox1.Controls.Add(this.nameField);
             this.groupBox1.Controls.Add(this.label4);
@@ -88,14 +88,14 @@
             this.label5.TabIndex = 10;
             this.label5.Text = "Gender:";
             // 
-            // JMBGField
+            // jmbgField
             // 
-            this.JMBGField.Location = new System.Drawing.Point(115, 43);
-            this.JMBGField.Mask = "0000000000000";
-            this.JMBGField.Name = "JMBGField";
-            this.JMBGField.Size = new System.Drawing.Size(206, 27);
-            this.JMBGField.TabIndex = 9;
-            this.JMBGField.ValidatingType = typeof(int);
+            this.jmbgField.Location = new System.Drawing.Point(115, 43);
+            this.jmbgField.Mask = "0000000000000";
+            this.jmbgField.Name = "jmbgField";
+            this.jmbgField.Size = new System.Drawing.Size(206, 27);
+            this.jmbgField.TabIndex = 9;
+            this.jmbgField.ValidatingType = typeof(int);
             // 
             // birthdatePicker
             // 
@@ -236,7 +236,7 @@
         private GroupBox groupBox1;
         private ComboBox genderSelection;
         private Label label5;
-        private MaskedTextBox JMBGField;
+        private MaskedTextBox jmbgField;
         private DateTimePicker birthdatePicker;
         private TextBox nameField;
         private Label label4;

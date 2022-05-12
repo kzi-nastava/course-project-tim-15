@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Klinika.Data;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace Klinika.Repositories
 {
@@ -15,33 +16,29 @@ namespace Klinika.Repositories
         public Dictionary<string, User> users { get; }
         public List<User> Users { get; }
 
-
         private static UserRepository? singletonInstance;
         private UserRepository()
         {
             users = new Dictionary<string, User>();
             Users = new List<User>();
-            string getCredentialsQuery = "SELECT [User].ID, [User].Name, [User].Surname, Email, Password, UserType.Name as UserType, IsBlocked FROM [User] JOIN [UserType] ON [User].UserType = [UserType].ID WHERE [User].IsDeleted = 0";
-            try
+            string getCredentialsQuery = "SELECT [User].ID, [User].Name, [User].Surname, " +
+                "Email, Password, UserType.Name as UserType, IsBlocked " +
+                "FROM [User] " +
+                "JOIN [UserType] ON [User].UserType = [UserType].ID " +
+                "WHERE [User].IsDeleted = 0";
+
+            DataTable allUsers = DatabaseConnection.GetInstance().CreateTableOfData(getCredentialsQuery);
+            foreach (DataRow row in allUsers.Rows)
             {
-                SqlCommand getCredentials = new SqlCommand(getCredentialsQuery, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = getCredentials.ExecuteReader())
-                {
-                    while (retrieved.Read())
-                    {
-                        User user = new User(Convert.ToInt32(retrieved["ID"]), retrieved["Name"].ToString(), retrieved["Surname"].ToString(), 
-                            retrieved["Email"].ToString(), retrieved["Password"].ToString(), retrieved["UserType"].ToString(), 
-                            Convert.ToBoolean(retrieved["IsBlocked"]));
-                        users.TryAdd(user.Email, user);
-                        Users.Add(user);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
+                User user = new User(Convert.ToInt32(row["ID"]),
+                                     row["Name"].ToString(),
+                                     row["Surname"].ToString(),
+                                     row["Email"].ToString(),
+                                     row["Password"].ToString(),
+                                     row["UserType"].ToString(),
+                                     Convert.ToBoolean(row["IsBlocked"]));
+                users.TryAdd(user.Email, user);
+                Users.Add(user);
             }
 
         }

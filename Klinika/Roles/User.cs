@@ -11,11 +11,6 @@
             MANAGER
         }
 
-        public enum GenderEnum
-        {
-            M,
-            F
-        }
         #endregion
 
         #region Variables
@@ -54,6 +49,24 @@
             Role = role;
             IsBlocked = isBlocked;
         }
+
+
+        public User(int id, string name,string surname)
+        {
+            ID = id;
+            Name = name;
+            Surname = surname;
+        }
         #endregion
+
+
+        public User(int id,string? name,string? surname, string email,string password)
+        {
+            ID = id;
+            Name = name;
+            Surname = surname;
+            Email = email;
+            Password = password;
+        }
     }
 }

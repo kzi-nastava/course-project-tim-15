@@ -73,6 +73,7 @@ namespace Klinika.Repositories
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
 
+
             DataTable? retrievedAppointments = null;
 
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
@@ -321,5 +322,7 @@ namespace Klinika.Repositories
             }
             return counter;
         }
+
+
     }
 }

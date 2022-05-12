@@ -1,47 +1,53 @@
 ﻿using Klinika.Data;
 using System.Data;
 using System.Data.SqlClient;
+using Klinika.Roles;
 
 namespace Klinika.Repositories
 {
     internal class PatientRepository
     {
         public static Dictionary<string, int>? EmailIDPairs { get; set; }
+        public static Dictionary<int,Patient> IDPatientPairs { get; set; }
+
+
         public static DataTable GetAll()
         {
             EmailIDPairs = new Dictionary<string, int>();
-            DataTable? retrievedPatients = null;
-            string getAllQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Email, IsBlocked as Blocked, WhoBlocked as BlockedBy " +
+            IDPatientPairs = new Dictionary<int,Patient>();
+
+            string getAllQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Email, Password, IsBlocked as Blocked, WhoBlocked as BlockedBy " +
                                       "FROM [User] " +
                                       "WHERE UserType = 1 AND IsDeleted = 0";
-            try
+
+            DataTable retrievedPatients = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
+            foreach (DataRow patient in retrievedPatients.Rows)
             {
-                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, DatabaseConnection.GetInstance().database);
-                retrievedPatients = new DataTable();
-                adapter.Fill(retrievedPatients);
-                foreach (DataRow patient in retrievedPatients.Rows)
-                {
-                    EmailIDPairs.Add(patient["Email"].ToString(), Convert.ToInt32(patient["ID"]));
-                }
+                int id = Convert.ToInt32(patient["ID"]);
+                string email = patient["Email"].ToString();
+                    
+                Patient newPatient = new Patient(id,
+                                                patient["JMBG"].ToString(),
+                                                patient["Name"].ToString(),
+                                                patient["Surname"].ToString(),
+                                                DateTime.Parse(patient["Birthdate"].ToString()),
+                                                patient["Gender"].ToString()[0],
+                                                email,
+                                                patient["Password"].ToString());
+
+                EmailIDPairs.Add(email, id);
+                IDPatientPairs.Add(id, newPatient);
+
+            }
                 retrievedPatients.Columns.Remove("ID");
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+                retrievedPatients.Columns.Remove("Password");
+
 
             return retrievedPatients;
 
         }
 
-        internal static void Modify(int id,
-                                    string jmbg,
-                                    string name,
-                                    string surname,
-                                    DateTime birthdate,
-                                    char gender,
-                                    string email,
-                                    string password)
+        internal static void Modify(Patient patient)
         {
             string modifyQuery = "UPDATE [User] " +
                                  "SET JMBG = @JMBG, " +
@@ -52,25 +58,15 @@ namespace Klinika.Repositories
                                  "Password = @Password " +
                                  "WHERE ID = @ID";
 
-            SqlCommand modify = new SqlCommand(modifyQuery, DatabaseConnection.GetInstance().database);
-            modify.Parameters.AddWithValue("@ID", id);
-            modify.Parameters.AddWithValue("@JMBG", jmbg);
-            modify.Parameters.AddWithValue("@Name", name);
-            modify.Parameters.AddWithValue("@Surname", surname);
-            modify.Parameters.AddWithValue("@Birthdate", birthdate.Date);
-            modify.Parameters.AddWithValue("@Gender", gender);
-            modify.Parameters.AddWithValue("@Password", password);
-            try
-            {
-                SqlConnection database = DatabaseConnection.GetInstance().database;
-                database.Open();
-                modify.ExecuteNonQuery();
-                database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuery,
+            ("@ID", patient.ID),
+            ("@JMBG", patient.jmbg),
+            ("@Name", patient.Name),
+            ("@Surname", patient.Surname),
+            ("@Birthdate", patient.birthdate.Date),
+            ("@Gender", patient.gender),
+            ("@Password", patient.Password)
+            ); 
         }
 
 
@@ -78,148 +74,75 @@ namespace Klinika.Repositories
         public static void Delete(int id, string email)
         {
             string deleteQuery = "UPDATE [User] SET IsDeleted = 1 WHERE ID = @ID";
-            try
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuery, ("@ID", id));
+            if (EmailIDPairs != null)
             {
-                SqlCommand delete = new SqlCommand(deleteQuery, DatabaseConnection.GetInstance().database);
-                delete.Parameters.AddWithValue("@ID", id);
-                DatabaseConnection.GetInstance().database.Open();
-                delete.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-                if (EmailIDPairs != null)
-                {
-                    EmailIDPairs.Remove(email);
-                }
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
+                EmailIDPairs.Remove(email);
             }
         }
 
-        public static void Create(string jmbg,
-                                  string name,
-                                  string surname,
-                                  DateTime birthdate,
-                                  char gender,
-                                  string email,
-                                  string password)
+        public static void Create(Patient newPatient)
         {
             string createQuery = "INSERT INTO [User] " +
                 "(JMBG,Name,Surname,Birthdate,Gender,Email,Password,UserType) " +
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@JMBG,@Name,@Surname,@Birthdate,@Gender,@Email,@Password,@UserType)";
-            SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-            create.Parameters.AddWithValue("@JMBG", jmbg);
-            create.Parameters.AddWithValue("@Name", name);
-            create.Parameters.AddWithValue("@Surname", surname);
-            create.Parameters.AddWithValue("@Birthdate", birthdate.Date);
-            create.Parameters.AddWithValue("@Gender", gender);
-            create.Parameters.AddWithValue("@Email", email);
-            create.Parameters.AddWithValue("@Password", password);
-            create.Parameters.AddWithValue("@UserType", 1);
-            try
+
+            int createdID = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+                createQuery,
+                ("@JMBG", newPatient.jmbg),
+                ("@Name", newPatient.Name),
+                ("@Surname", newPatient.Surname),
+                ("@Birthdate", newPatient.birthdate.Date),
+                ("@Gender", newPatient.gender),
+                ("@Email", newPatient.Email),
+                ("@Password", newPatient.Password),
+                ("@UserType", 1)
+                );
+            
+            MedicalRecordRepository.Create(createdID);
+
+            if (EmailIDPairs != null)
             {
-                SqlConnection database = DatabaseConnection.GetInstance().database;
-                database.Open();
-                int createdID = (int)create.ExecuteScalar();
-                string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";
-                SqlCommand createMedicalRecord = new SqlCommand(createMedicalRecordQuery, database);
-                createMedicalRecord.Parameters.AddWithValue("@ID", createdID);
-                createMedicalRecord.ExecuteNonQuery();
-                database.Close();
-                if (EmailIDPairs != null)
-                {
-                    EmailIDPairs.Add(email, createdID);
-                }
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
+                EmailIDPairs.Add(newPatient.Email, createdID);
             }
         }
-
-
-        public static (int id, string jmbg, string name, string surname, DateTime birthdate, char gender, string password)
-        GetSingle(string email)
+        public static Patient? GetSingle(string email)
         {
-            SqlConnection database = DatabaseConnection.GetInstance().database;
+
             string getSingleQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Password " +
                                      "FROM [User] " +
                                      "WHERE Email = @Email";
-            int id = 0;
-            string jmbg = "";
-            string name = "";
-            string surname = "";
-            DateTime birthdate = DateTime.Now;
-            char gender = 'x';
-            string password = "";
-            try
-            {
-                SqlCommand getSingle = new SqlCommand(getSingleQuery, database);
-                getSingle.Parameters.AddWithValue("@Email", email);
-                database.Open();
-                using (SqlDataReader patient = getSingle.ExecuteReader())
-                {
-                    if (patient.Read())
-                    {
-                        id = Convert.ToInt32(patient["ID"]);
-                        jmbg = patient["JMBG"].ToString();
-                        name = patient["Name"].ToString();
-                        surname = patient["Surname"].ToString();
-                        birthdate = DateTime.Parse(patient["Birthdate"].ToString());
-                        gender = patient["Gender"].ToString()[0];
-                        password = patient["Password"].ToString();
-                    }
-                }
-                database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            Patient patient = null;
+                
+            DataTable retrieved = DatabaseConnection.GetInstance().CreateTableOfData(getSingleQuery, ("@Email", email));
+            DataRow row = retrieved.Rows[0];
+            patient = new Patient(Convert.ToInt32(row["ID"]),
+                                    row["JMBG"].ToString(),
+                                    row["Name"].ToString(),
+                                    row["Surname"].ToString(),
+                                    DateTime.Parse(row["Birthdate"].ToString()),
+                                    row["Gender"].ToString()[0],
+                                    email,
+                                    row["Password"].ToString());
 
-            return (id, jmbg, name, surname, birthdate, gender, password);
-
+            return patient;
         }
-
 
         public static void Block(int id)
         {
             string blockQuery = "UPDATE [User] SET IsBlocked = 1, WhoBlocked = 'SEC' " +
                                 "WHERE ID = @ID";
-            SqlConnection database = DatabaseConnection.GetInstance().database;
-            try
-            {
-                SqlCommand block = new SqlCommand(blockQuery, database);
-                block.Parameters.AddWithValue("@ID", id);
-                database.Open();
-                block.ExecuteNonQuery();
-                database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-        }
 
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(blockQuery, ("@ID", id));
+
+        }
 
         public static void Unblock(int id)
         {
-            string blockQuery = "UPDATE [User] SET IsBlocked = 0, WhoBlocked = NULL " +
+            string unblockQuery = "UPDATE [User] SET IsBlocked = 0, WhoBlocked = NULL " +
                                 "WHERE ID = @ID";
-            SqlConnection database = DatabaseConnection.GetInstance().database;
-            try
-            {
-                SqlCommand block = new SqlCommand(blockQuery, database);
-                block.Parameters.AddWithValue("@ID", id);
-                database.Open();
-                block.ExecuteNonQuery();
-                database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(unblockQuery, ("@ID", id));
         }
     }
 }

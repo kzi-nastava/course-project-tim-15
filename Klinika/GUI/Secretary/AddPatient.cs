@@ -21,9 +21,6 @@ namespace Klinika.GUI.Secretary
             this.parent = parent;
             InitializeComponent();
         }
-
-       
-
         private void AddPatient_Load(object sender, EventArgs e)
         {
             genderSelection.SelectedIndex = 0;
@@ -31,42 +28,37 @@ namespace Klinika.GUI.Secretary
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            string jmbg = JMBGField.Text.Trim();
-            string name = nameField.Text.Trim();
-            string surname = surnameField.Text.Trim();
-            DateTime birthdate = birthdatePicker.Value;
-            string email = emailField.Text.Trim(); 
-            string password = passwordField.Text.Trim();
-            char gender = genderSelection.SelectedItem.ToString()[0];
+            Add();
+        }
+        private void Add()
+        {
+            Roles.Patient newPatient = new Roles.Patient(
+                -1,
+                jmbgField.Text.Trim(),
+                nameField.Text.Trim(),
+                surnameField.Text.Trim(),
+                birthdatePicker.Value.Date,
+                genderSelection.SelectedItem.ToString()[0],
+                emailField.Text.Trim(),
+                passwordField.Text.Trim());
+
+
             try
             {
-                PatientService.Validate(jmbg,name,surname,birthdate,email,password);
-                PatientRepository.Create(jmbg, name, surname, birthdate, gender, email, password);
-                DataTable patientTable = (DataTable)parent.patientsTable.DataSource;
-                DataRow newRow = patientTable.NewRow();
-                newRow["JMBG"] = jmbg;
-                newRow["Name"] = name;
-                newRow["Surname"] = surname;
-                newRow["Birthdate"] = birthdate.Date;
-                newRow["Gender"] = gender;
-                newRow["Email"] = email;
-                patientTable.Rows.Add(newRow);
-                patientTable.AcceptChanges();
-                MessageBox.Show("Patient successfully added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Hide();
+                PatientService.Add(newPatient);
+                parent.AddRowToPatientTable(newPatient);
+                SecretaryService.ShowSuccessMessage("Patient successfully added!");
+                Close();
             }
-            catch (FieldEmptyException)
-            {
+            catch (FieldEmptyException) { }
 
-            }
-            catch (BirthdateInvalidException)
-            {
+            catch (BirthdateInvalidException) { }
 
-            }
             catch (ExistingEmailException)
             {
                 emailField.Text = "";
             }
+
             catch (EmailFormatInvalidException)
             {
                 emailField.Text = "";
@@ -74,7 +66,7 @@ namespace Klinika.GUI.Secretary
 
             catch (JMBGFormatInvalidException)
             {
-                JMBGField.Text = "";
+                jmbgField.Text = "";
             }
         }
     }
