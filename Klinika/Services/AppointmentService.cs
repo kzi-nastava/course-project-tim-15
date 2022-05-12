@@ -24,7 +24,7 @@ namespace Klinika.Services
                 throw new FieldEmptyException("Doctor is not selected!");
             }
 
-            if (AppointmentRepository.GetInstance().IsOccupied(appointmentStart, 15, -1, doctorID))
+            if (AppointmentRepository.GetInstance().IsOccupied(appointmentStart,doctorID:doctorID))
             {
                 throw new DoctorUnavailableException("The selected doctor is not available at the selected time!");
             }
