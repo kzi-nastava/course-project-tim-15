@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Klinika.Data;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace Klinika.Repositories
 {
@@ -26,22 +27,19 @@ namespace Klinika.Repositories
                 "JOIN [UserType] ON [User].UserType = [UserType].ID " +
                 "WHERE [User].IsDeleted = 0";
 
-            SqlDataReader retrieved = DatabaseConnection.GetInstance().ExecuteSelectCommand(getCredentialsQuery);
-            DatabaseConnection.GetInstance().database.Open();
-
-            while (retrieved.Read())
+            DataTable allUsers = DatabaseConnection.GetInstance().CreateTableOfData(getCredentialsQuery);
+            foreach (DataRow row in allUsers.Rows)
             {
-                User user = new User(Convert.ToInt32(retrieved["ID"]),
-                                     retrieved["Name"].ToString(),
-                                     retrieved["Surname"].ToString(),
-                                     retrieved["Email"].ToString(),
-                                     retrieved["Password"].ToString(),
-                                     retrieved["UserType"].ToString(),
-                                     Convert.ToBoolean(retrieved["IsBlocked"]));
+                User user = new User(Convert.ToInt32(row["ID"]),
+                                     row["Name"].ToString(),
+                                     row["Surname"].ToString(),
+                                     row["Email"].ToString(),
+                                     row["Password"].ToString(),
+                                     row["UserType"].ToString(),
+                                     Convert.ToBoolean(row["IsBlocked"]));
                 users.TryAdd(user.Email, user);
                 Users.Add(user);
             }
-            DatabaseConnection.GetInstance().database.Close();
 
         }
         public static void Block(int ID)

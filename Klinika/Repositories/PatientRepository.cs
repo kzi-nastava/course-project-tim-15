@@ -115,20 +115,17 @@ namespace Klinika.Repositories
                                      "WHERE Email = @Email";
             Patient patient = null;
                 
-            SqlDataReader retrieved = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSingleQuery, ("@Email", email));
-            DatabaseConnection.GetInstance().database.Open();
-            if (retrieved.Read())
-            {
-                patient = new Patient(Convert.ToInt32(retrieved["ID"]),
-                                        retrieved["JMBG"].ToString(),
-                                        retrieved["Name"].ToString(),
-                                        retrieved["Surname"].ToString(),
-                                        DateTime.Parse(retrieved["Birthdate"].ToString()),
-                                        retrieved["Gender"].ToString()[0],
-                                        email,
-                                        retrieved["Password"].ToString());
-            }
-            DatabaseConnection.GetInstance().database.Close();
+            DataTable retrieved = DatabaseConnection.GetInstance().CreateTableOfData(getSingleQuery, ("@Email", email));
+            DataRow row = retrieved.Rows[0];
+            patient = new Patient(Convert.ToInt32(row["ID"]),
+                                    row["JMBG"].ToString(),
+                                    row["Name"].ToString(),
+                                    row["Surname"].ToString(),
+                                    DateTime.Parse(row["Birthdate"].ToString()),
+                                    row["Gender"].ToString()[0],
+                                    email,
+                                    row["Password"].ToString());
+
             return patient;
         }
 

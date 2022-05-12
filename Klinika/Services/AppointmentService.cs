@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Klinika.Exceptions;
+using Klinika.Models;
 using Klinika.Repositories;
 
 namespace Klinika.Services
 {
-    internal class ReferralService
+    internal class AppointmentService
     {
         public static void Validate(int doctorID, DateTime appointmentStart)
         {
@@ -28,5 +29,7 @@ namespace Klinika.Services
                 throw new DoctorUnavailableException("The selected doctor is not available at the selected time!");
             }
         }
+
+
     }
 }

@@ -46,6 +46,9 @@ namespace Klinika.GUI.Secretary
             try
             {
                 PatientService.Add(newPatient);
+                parent.AddRowToPatientTable(newPatient);
+                SecretaryService.ShowSuccessMessage("Patient successfully added!");
+                Close();
             }
             catch (FieldEmptyException) { }
 
@@ -65,10 +68,6 @@ namespace Klinika.GUI.Secretary
             {
                 jmbgField.Text = "";
             }
-
-            parent.AddRowToPatientTable(newPatient);
-            SecretaryService.ShowSuccessMessage("Patient successfully added!");
-            Close();
         }
     }
 }

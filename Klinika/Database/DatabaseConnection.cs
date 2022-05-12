@@ -104,14 +104,24 @@ namespace Klinika.Data
         }
 
 
-        public SqlDataReader ExecuteSelectCommand(string query, params (string, object)[] commandParameters)
+        public List<object> ExecuteSelectCommand(string query, params (string, object)[] commandParameters)
         {
-            SqlDataReader retrieved = null;
+            List<object> retrieved = new List<object>();
             try
             {
                 database.Open();
                 SqlCommand command = CreateCommand(query, commandParameters);
-                retrieved = command.ExecuteReader();
+                using(SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        object[] tempRow = new object[reader.FieldCount];
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            tempRow[i] = reader[i];
+                        }
+                    }
+                }
             }
             catch (SqlException error)
             {

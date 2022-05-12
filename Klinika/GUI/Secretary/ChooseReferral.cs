@@ -35,7 +35,7 @@ namespace Klinika.GUI.Secretary
 
         private void referralsTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            EnableChooseReferalButton();
+            SetButtonState();
         }
 
 
@@ -48,12 +48,16 @@ namespace Klinika.GUI.Secretary
         }
 
 
-        private void EnableChooseReferalButton()
+        private void SetButtonState()
         {
             bool isUsed = Convert.ToBoolean(SecretaryService.GetCellValue(referralsTable, "Used"));
             if (!isUsed)
             {
                 chooseReferalButton.Enabled = true;
+            }
+            else
+            {
+                chooseReferalButton.Enabled = false;
             }
         }
 
@@ -66,8 +70,8 @@ namespace Klinika.GUI.Secretary
                 Convert.ToInt32(SecretaryService.GetCellValue(referralsTable, "ID"))
             );
 
-            parent.SetRefferalFormFieldValues(referral);
-            parent.SetReferralFormCommandStates();
+            parent.SetRefferalTabFieldValues(referral);
+            parent.SetReferralTabCommandStates();
 
         }
     }

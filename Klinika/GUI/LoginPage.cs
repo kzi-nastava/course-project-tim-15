@@ -15,6 +15,21 @@ namespace Klinika
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
+            TryLogin();
+        }
+
+        private void LoginPage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void LoginPage_Load(object sender, EventArgs e)
+        {
+            Repositories.EquipmentRepository.CheckEquipmentTransfers();
+        }
+
+        private void TryLogin()
+        {
             try
             {
                 LoginService.Login(emailField.Text.Trim(), passwordField.Text.Trim());
@@ -38,16 +53,6 @@ namespace Klinika
                 emailField.Text = "";
                 passwordField.Text = "";
             }
-        }
-
-        private void LoginPage_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void LoginPage_Load(object sender, EventArgs e)
-        {
-            Repositories.EquipmentRepository.CheckEquipmentTransfers();
         }
     }
 }

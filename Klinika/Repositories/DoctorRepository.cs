@@ -3,6 +3,7 @@ using Klinika.Models;
 using Klinika.Roles;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -18,16 +19,11 @@ namespace Klinika.Repositories
                                      "FROM [User] " +
                                      "WHERE ID = @ID";
             string nameSurname = "";
-            SqlDataReader retrieved = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery, ("@ID", id));
-            DatabaseConnection.GetInstance().database.Open();
-
-            if (retrieved.Read())
+            DataTable allDoctors = DatabaseConnection.GetInstance().CreateTableOfData(getQuery, ("@ID", id));
+            foreach (DataRow doctor in allDoctors.Rows)
             {
-                nameSurname = retrieved["Doctor"].ToString();
+                nameSurname = doctor["Doctor"].ToString();
             }
-            
-            DatabaseConnection.GetInstance().database.Close();
-
             return nameSurname;
         }
 
@@ -132,24 +128,21 @@ namespace Klinika.Repositories
                                  "LEFT OUTER JOIN [User] ON [DoctorSpecialization].UserID = [User].ID " +
                                  "LEFT OUTER JOIN [Specialization] ON [DoctorSpecialization].SpecializationID = [Specialization].ID";
 
-            SqlDataReader retrieved = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuery);
-            DatabaseConnection.GetInstance().database.Open();
+            DataTable allDoctors = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
 
-            while(retrieved.Read())
+            foreach(DataRow row in allDoctors.Rows)
             {
                 Specialization specialization = new Specialization(
-                                                Convert.ToInt32(retrieved["SpecializationID"]),
-                                                retrieved["Specialization"].ToString());
+                                                Convert.ToInt32(row["SpecializationID"]),
+                                                row["Specialization"].ToString());
 
                 Doctor doctor = new Doctor(
-                                Convert.ToInt32(retrieved["UserID"]),
-                                retrieved["Name"].ToString(),
-                                retrieved["Surname"].ToString(),
+                                Convert.ToInt32(row["UserID"]),
+                                row["Name"].ToString(),
+                                row["Surname"].ToString(),
                                 specialization);
                 doctors.Add(doctor);
             }
-
-            DatabaseConnection.GetInstance().database.Close();
 
             return doctors;
         }
