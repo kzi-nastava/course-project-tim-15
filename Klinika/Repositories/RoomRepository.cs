@@ -50,6 +50,35 @@ namespace Klinika.Repositories
 
         }
 
+        public static List<Models.RoomComboBoxItem> GetRooms()
+        {
+            List<Models.RoomComboBoxItem> rooms = new List<Models.RoomComboBoxItem>();
+            DataTable? retrievedRooms = null;
+            string getAllQuery = "SELECT [Room].ID, [Room].Number " +
+                                      "FROM [Room] " +
+                                      "WHERE IsDeleted = 0";
+            try
+            {
+                SqlConnection database = DatabaseConnection.GetInstance().database;
+                database.Open();
+                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, database);
+                retrievedRooms = new DataTable();
+                adapter.Fill(retrievedRooms);
+                database.Close();
+
+                foreach (DataRow row in retrievedRooms.Rows)
+                {
+                    rooms.Add(new Models.RoomComboBoxItem(row["Number"].ToString(), row["ID"].ToString()));
+                }
+                rooms = rooms.OrderBy(x => x.text).ToList();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+            return rooms;
+        }
+
         public static void Create(int type, int number)
         {
             string createQuery = "INSERT INTO [Room] " +

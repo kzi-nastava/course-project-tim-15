@@ -30,6 +30,7 @@
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.renovateButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.modifyButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
@@ -40,14 +41,11 @@
             this.roomComboBox = new System.Windows.Forms.ComboBox();
             this.quantityComboBox = new System.Windows.Forms.ComboBox();
             this.roomTypeTextBox = new System.Windows.Forms.TextBox();
-            this.toButton = new System.Windows.Forms.Button();
-            this.fromButton = new System.Windows.Forms.Button();
             this.quantityTextBox = new System.Windows.Forms.TextBox();
             this.typeTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTextBox = new System.Windows.Forms.TextBox();
             this.numberTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTable = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
@@ -67,6 +65,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.renovateButton);
             this.tabPage1.Controls.Add(this.deleteButton);
             this.tabPage1.Controls.Add(this.modifyButton);
             this.tabPage1.Controls.Add(this.addButton);
@@ -79,10 +78,20 @@
             this.tabPage1.Text = "Rooms";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // renovateButton
+            // 
+            this.renovateButton.Location = new System.Drawing.Point(527, 342);
+            this.renovateButton.Name = "renovateButton";
+            this.renovateButton.Size = new System.Drawing.Size(94, 29);
+            this.renovateButton.TabIndex = 4;
+            this.renovateButton.Text = "Renovate";
+            this.renovateButton.UseVisualStyleBackColor = true;
+            this.renovateButton.Click += new System.EventHandler(this.renovateButton_Click);
+            // 
             // deleteButton
             // 
             this.deleteButton.Enabled = false;
-            this.deleteButton.Location = new System.Drawing.Point(473, 342);
+            this.deleteButton.Location = new System.Drawing.Point(371, 342);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(94, 29);
             this.deleteButton.TabIndex = 3;
@@ -93,7 +102,7 @@
             // modifyButton
             // 
             this.modifyButton.Enabled = false;
-            this.modifyButton.Location = new System.Drawing.Point(323, 342);
+            this.modifyButton.Location = new System.Drawing.Point(215, 342);
             this.modifyButton.Name = "modifyButton";
             this.modifyButton.Size = new System.Drawing.Size(94, 29);
             this.modifyButton.TabIndex = 2;
@@ -103,7 +112,7 @@
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(178, 342);
+            this.addButton.Location = new System.Drawing.Point(70, 342);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(94, 29);
             this.addButton.TabIndex = 1;
@@ -126,14 +135,11 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.button1);
             this.tabPage2.Controls.Add(this.dateButton);
             this.tabPage2.Controls.Add(this.equipmentComboBox);
             this.tabPage2.Controls.Add(this.roomComboBox);
             this.tabPage2.Controls.Add(this.quantityComboBox);
             this.tabPage2.Controls.Add(this.roomTypeTextBox);
-            this.tabPage2.Controls.Add(this.toButton);
-            this.tabPage2.Controls.Add(this.fromButton);
             this.tabPage2.Controls.Add(this.quantityTextBox);
             this.tabPage2.Controls.Add(this.typeTextBox);
             this.tabPage2.Controls.Add(this.equipmentTextBox);
@@ -149,11 +155,11 @@
             // 
             // dateButton
             // 
-            this.dateButton.Location = new System.Drawing.Point(336, 358);
+            this.dateButton.Location = new System.Drawing.Point(9, 304);
             this.dateButton.Name = "dateButton";
             this.dateButton.Size = new System.Drawing.Size(139, 29);
             this.dateButton.TabIndex = 12;
-            this.dateButton.Text = "Pick Transfer Data";
+            this.dateButton.Text = "Transfer";
             this.dateButton.UseVisualStyleBackColor = true;
             this.dateButton.Click += new System.EventHandler(this.dateButton_Click);
             // 
@@ -194,26 +200,6 @@
             this.roomTypeTextBox.Size = new System.Drawing.Size(131, 27);
             this.roomTypeTextBox.TabIndex = 8;
             this.roomTypeTextBox.TextChanged += new System.EventHandler(this.roomTypeTextBox_TextChanged);
-            // 
-            // toButton
-            // 
-            this.toButton.Location = new System.Drawing.Point(530, 358);
-            this.toButton.Name = "toButton";
-            this.toButton.Size = new System.Drawing.Size(110, 29);
-            this.toButton.TabIndex = 7;
-            this.toButton.Text = "Select To";
-            this.toButton.UseVisualStyleBackColor = true;
-            this.toButton.Click += new System.EventHandler(this.toButton_Click);
-            // 
-            // fromButton
-            // 
-            this.fromButton.Location = new System.Drawing.Point(158, 358);
-            this.fromButton.Name = "fromButton";
-            this.fromButton.Size = new System.Drawing.Size(110, 29);
-            this.fromButton.TabIndex = 6;
-            this.fromButton.Text = "Select From";
-            this.fromButton.UseVisualStyleBackColor = true;
-            this.fromButton.Click += new System.EventHandler(this.fromButton_Click);
             // 
             // quantityTextBox
             // 
@@ -259,16 +245,6 @@
             this.equipmentTable.Size = new System.Drawing.Size(756, 250);
             this.equipmentTable.TabIndex = 0;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(9, 304);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(124, 86);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Instructions";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -303,13 +279,11 @@
         private TextBox equipmentTextBox;
         private TextBox numberTextBox;
         private TextBox quantityTextBox;
-        private Button toButton;
-        private Button fromButton;
         private TextBox roomTypeTextBox;
         private ComboBox equipmentComboBox;
         private ComboBox roomComboBox;
         private ComboBox quantityComboBox;
         private Button dateButton;
-        private Button button1;
+        private Button renovateButton;
     }
 }
