@@ -275,6 +275,26 @@ namespace Klinika.Repositories
             }
         }
 
+
+        public bool IsOccupied(TimeSlot slot, int doctorID, int appointmentID = -1)
+        {
+
+            foreach (Appointment appointment in Appointments)
+            {
+                var start = appointment.DateTime;
+                var end = appointment.DateTime.AddMinutes(appointment.Duration);
+
+                if (appointment.DoctorID != doctorID)
+                {
+                    continue;
+                }
+                if (!appointment.IsDeleted && appointment.ID != appointmentID &&
+                    slot.from < end && start < slot.to)
+                    return true;
+            }
+            return false;
+        }
+
         public bool IsOccupied(DateTime newAppointmentStart, int doctorID, int duration = 15, int appointmentID = -1)
         {
             var newAppointmentEnd = newAppointmentStart.AddMinutes(duration); 

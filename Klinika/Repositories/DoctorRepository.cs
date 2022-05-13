@@ -13,6 +13,20 @@ namespace Klinika.Repositories
 {
     internal class DoctorRepository
     {
+
+        private static DoctorRepository? singletonInstance;
+        public  List<Doctor> doctors { get; }
+
+        private DoctorRepository()
+        {
+            doctors = GetAll();
+        }
+
+        public static DoctorRepository GetInstance()
+        {
+            if (singletonInstance == null) singletonInstance = new DoctorRepository();
+            return singletonInstance;
+        }
         public static string GetNameSurname(int id)
         {
             string getQuery = "SELECT Name + ' ' + Surname AS 'Doctor' " +
@@ -145,6 +159,36 @@ namespace Klinika.Repositories
             }
 
             return doctors;
+        }
+
+        public List<Specialization> GetAllAvailableSpecializations()
+        {
+            List<int> availableSpecializationsIds = new List<int>();
+            List<Specialization> available = new List<Specialization>();
+            foreach (Doctor doctor in doctors)
+            {
+                if (!availableSpecializationsIds.Contains(doctor.specialization.ID))
+                {
+                    availableSpecializationsIds.Add(doctor.specialization.ID);
+                    available.Add(doctor.specialization);
+                }
+            }
+
+            return available;
+        }
+
+
+        public Doctor? GetFirstUnoccupied(TimeSlot slot,int specializationId)
+        {
+            foreach(Doctor doctor in doctors)
+            {
+                if(doctor.specialization.ID == specializationId &&
+                   !AppointmentRepository.GetInstance().IsOccupied(slot, specializationId))
+                {
+                    return doctor;
+                }
+            }
+            return null;
         }
     }
 }

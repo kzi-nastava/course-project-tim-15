@@ -11,13 +11,13 @@ namespace Klinika.Services
 {
     internal class DoctorService
     {
-        public static Doctor? GetSuitable(string specialization,DateTime from)
+        public static Doctor? GetSuitable(int specializationId,TimeSlot slot)
         {
-            List<Doctor> allDoctors = DoctorRepository.GetAll();
+            List<Doctor> allDoctors = DoctorRepository.GetInstance().doctors; 
             foreach (Doctor doctor in allDoctors)
             {
-                if (doctor.specialization.Name.Equals(specialization) &&
-                    !AppointmentRepository.GetInstance().IsOccupied(newAppointmentStart:from,doctorID:doctor.ID))
+                if (doctor.specialization.ID == specializationId &&
+                    !AppointmentRepository.GetInstance().IsOccupied(newAppointmentStart:slot.from,doctorID:doctor.ID))
                 {
                     return doctor;
                 }

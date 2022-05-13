@@ -14,15 +14,6 @@ namespace Klinika.Services
     internal class SecretaryService
     {
 
-        public static void FillPatientSelectionList(ComboBox patientSelection,Dictionary<int,Patient> IDPatientPairs)
-        {
-            foreach(KeyValuePair<int,Patient> pair in IDPatientPairs)
-            {
-                string patient = pair.Key + ". " + pair.Value.Name + " " + pair.Value.Surname;
-                patientSelection.Items.Add(patient);
-            }
-        }
-
         public static int ExtractID(string objectWithId)
         {
             return Convert.ToInt32(objectWithId.Split('.')[0]);
@@ -38,7 +29,6 @@ namespace Klinika.Services
             return MessageBox.Show(message, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
 
-
         public static object GetCellValue(DataGridView table,string columnName)
         {
             return table.SelectedRows[0].Cells[columnName].Value;
@@ -48,6 +38,17 @@ namespace Klinika.Services
         {
             table.DataSource = data;
             table.ClearSelection();
+        }
+
+
+        public static void FillSpecializationSelectionList(ComboBox specializationSelection)
+        {
+            List<Specialization> available = DoctorRepository.GetInstance().GetAllAvailableSpecializations();
+
+            foreach(Specialization specialization in available)
+            {
+                specializationSelection.Items.Add(specialization.ID + ". " + specialization.Name);
+            }
         }
     }
 }
