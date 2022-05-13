@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.pickButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -41,14 +41,14 @@
             this.comboBox1.Size = new System.Drawing.Size(151, 28);
             this.comboBox1.TabIndex = 0;
             // 
-            // button1
+            // pickButton
             // 
-            this.button1.Location = new System.Drawing.Point(344, 279);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 29);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Pick";
-            this.button1.UseVisualStyleBackColor = true;
+            this.pickButton.Location = new System.Drawing.Point(344, 279);
+            this.pickButton.Name = "pickButton";
+            this.pickButton.Size = new System.Drawing.Size(94, 29);
+            this.pickButton.TabIndex = 1;
+            this.pickButton.Text = "Pick";
+            this.pickButton.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -65,7 +65,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.pickButton);
             this.Controls.Add(this.comboBox1);
             this.Name = "Merge";
             this.Text = "Merge";
@@ -77,7 +77,7 @@
         #endregion
 
         private ComboBox comboBox1;
-        private Button button1;
+        private Button pickButton;
         private Label label1;
     }
 }

@@ -49,6 +49,11 @@ namespace Klinika.GUI.Manager
                 MessageBox.Show("Can not transfer that much.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 ok = false;
             }
+            else if (int.Parse(quantityTextBox.Text.Trim()) <= 0)
+            {
+                MessageBox.Show("Can not transfer that much.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ok = false;
+            }
             return ok;
         }
 
