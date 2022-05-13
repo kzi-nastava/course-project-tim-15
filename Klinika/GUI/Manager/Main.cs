@@ -251,5 +251,10 @@ namespace Klinika.GUI.Manager
         {
             Application.Exit();
         }
+
+        private void renovateButton_Click(object sender, EventArgs e)
+        {
+            (int)roomsTable.SelectedRows[0].Cells["ID"].Value;
+        }
     }
 }

@@ -30,6 +30,7 @@
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.renovateButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.modifyButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
@@ -64,6 +65,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.renovateButton);
             this.tabPage1.Controls.Add(this.deleteButton);
             this.tabPage1.Controls.Add(this.modifyButton);
             this.tabPage1.Controls.Add(this.addButton);
@@ -76,10 +78,20 @@
             this.tabPage1.Text = "Rooms";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // renovateButton
+            // 
+            this.renovateButton.Location = new System.Drawing.Point(527, 342);
+            this.renovateButton.Name = "renovateButton";
+            this.renovateButton.Size = new System.Drawing.Size(94, 29);
+            this.renovateButton.TabIndex = 4;
+            this.renovateButton.Text = "Renovate";
+            this.renovateButton.UseVisualStyleBackColor = true;
+            this.renovateButton.Click += new System.EventHandler(this.renovateButton_Click);
+            // 
             // deleteButton
             // 
             this.deleteButton.Enabled = false;
-            this.deleteButton.Location = new System.Drawing.Point(473, 342);
+            this.deleteButton.Location = new System.Drawing.Point(371, 342);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(94, 29);
             this.deleteButton.TabIndex = 3;
@@ -90,7 +102,7 @@
             // modifyButton
             // 
             this.modifyButton.Enabled = false;
-            this.modifyButton.Location = new System.Drawing.Point(323, 342);
+            this.modifyButton.Location = new System.Drawing.Point(215, 342);
             this.modifyButton.Name = "modifyButton";
             this.modifyButton.Size = new System.Drawing.Size(94, 29);
             this.modifyButton.TabIndex = 2;
@@ -100,7 +112,7 @@
             // 
             // addButton
             // 
-            this.addButton.Location = new System.Drawing.Point(178, 342);
+            this.addButton.Location = new System.Drawing.Point(70, 342);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(94, 29);
             this.addButton.TabIndex = 1;
@@ -272,5 +284,6 @@
         private ComboBox roomComboBox;
         private ComboBox quantityComboBox;
         private Button dateButton;
+        private Button renovateButton;
     }
 }
