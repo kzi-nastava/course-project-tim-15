@@ -33,7 +33,6 @@ namespace Klinika.GUI.Manager
 
             FillTables();
             FillComboBox();
-            FillComboBox();
         }
 
         private void FillComboBox()
@@ -215,72 +214,42 @@ namespace Klinika.GUI.Manager
             filter();
         }
 
-        private void fromButton_Click(object sender, EventArgs e)
+        private void setFrom()
         {
             try
             {
                 transfer.fromId = (int)equipmentTable.SelectedRows[0].Cells["RoomID"].Value;
                 transfer.equipment = (int)equipmentTable.SelectedRows[0].Cells["EquipmentID"].Value;
                 transfer.maxQuantity = (int)equipmentTable.SelectedRows[0].Cells["Quantity"].Value;
-
-                if (transfer.maxQuantity == 0)
-                {
-                    MessageBox.Show("You must pick a row with not 0 quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    transferCheck[0] = false;
-                }
-                else
-                {
-                    MessageBox.Show("Selected room and equipment to transfer!");
-                    transferCheck[0] = true;
-                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Select a room first");
             }
         }
 
-        private void toButton_Click(object sender, EventArgs e)
+        private bool checkFrom()
         {
-            transfer.toId = (int)roomsTable.SelectedRows[0].Cells["ID"].Value;
-            if (Services.ManagerServices.TransferReady(transfer))
+            bool ok = true;
+            if (transfer.maxQuantity == 0)
             {
-                MessageBox.Show("Selected room from Rooms Tab! This can be changed.");
-                transferCheck[1] = true;
+                MessageBox.Show("You must pick a row with not 0 quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ok = false;
             }
-            else
-            {
-                MessageBox.Show("You must pick 2 different rooms.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                transferCheck[1] = false;
-            }
+            return ok;
         }
-
         private void dateButton_Click(object sender, EventArgs e)
         {
-            if (transferCheck[0] && transferCheck[1])
+            setFrom();
+            if (checkFrom())
             {
                 new PickDate(this).Show();
-            }
-            else
-            {
-                MessageBox.Show("Invalid picks.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Heavy refactoring and reorganisation is needed on this page. " +
-                "All functionalitis are here, but for now this is how to use them:\n" +
-                "1) Select a room and in the same time equipment to be transfered from the Table on this Tab\n" +
-                "2) Click the \"Select From\" buttom\n" +
-                "3) Select a room for the equipment to be transfered to in the Rooms tab of the form\n" +
-                "4) Click the \"Select To\" buttom\n on the Equipment Tab\n" +
-                "5) Click the \"Pick Transfer Data\" button and than fill out the form");
         }
     }
 }

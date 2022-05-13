@@ -40,14 +40,11 @@
             this.roomComboBox = new System.Windows.Forms.ComboBox();
             this.quantityComboBox = new System.Windows.Forms.ComboBox();
             this.roomTypeTextBox = new System.Windows.Forms.TextBox();
-            this.toButton = new System.Windows.Forms.Button();
-            this.fromButton = new System.Windows.Forms.Button();
             this.quantityTextBox = new System.Windows.Forms.TextBox();
             this.typeTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTextBox = new System.Windows.Forms.TextBox();
             this.numberTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTable = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
@@ -126,14 +123,11 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.button1);
             this.tabPage2.Controls.Add(this.dateButton);
             this.tabPage2.Controls.Add(this.equipmentComboBox);
             this.tabPage2.Controls.Add(this.roomComboBox);
             this.tabPage2.Controls.Add(this.quantityComboBox);
             this.tabPage2.Controls.Add(this.roomTypeTextBox);
-            this.tabPage2.Controls.Add(this.toButton);
-            this.tabPage2.Controls.Add(this.fromButton);
             this.tabPage2.Controls.Add(this.quantityTextBox);
             this.tabPage2.Controls.Add(this.typeTextBox);
             this.tabPage2.Controls.Add(this.equipmentTextBox);
@@ -149,11 +143,11 @@
             // 
             // dateButton
             // 
-            this.dateButton.Location = new System.Drawing.Point(336, 358);
+            this.dateButton.Location = new System.Drawing.Point(9, 304);
             this.dateButton.Name = "dateButton";
             this.dateButton.Size = new System.Drawing.Size(139, 29);
             this.dateButton.TabIndex = 12;
-            this.dateButton.Text = "Pick Transfer Data";
+            this.dateButton.Text = "Transfer";
             this.dateButton.UseVisualStyleBackColor = true;
             this.dateButton.Click += new System.EventHandler(this.dateButton_Click);
             // 
@@ -194,26 +188,6 @@
             this.roomTypeTextBox.Size = new System.Drawing.Size(131, 27);
             this.roomTypeTextBox.TabIndex = 8;
             this.roomTypeTextBox.TextChanged += new System.EventHandler(this.roomTypeTextBox_TextChanged);
-            // 
-            // toButton
-            // 
-            this.toButton.Location = new System.Drawing.Point(530, 358);
-            this.toButton.Name = "toButton";
-            this.toButton.Size = new System.Drawing.Size(110, 29);
-            this.toButton.TabIndex = 7;
-            this.toButton.Text = "Select To";
-            this.toButton.UseVisualStyleBackColor = true;
-            this.toButton.Click += new System.EventHandler(this.toButton_Click);
-            // 
-            // fromButton
-            // 
-            this.fromButton.Location = new System.Drawing.Point(158, 358);
-            this.fromButton.Name = "fromButton";
-            this.fromButton.Size = new System.Drawing.Size(110, 29);
-            this.fromButton.TabIndex = 6;
-            this.fromButton.Text = "Select From";
-            this.fromButton.UseVisualStyleBackColor = true;
-            this.fromButton.Click += new System.EventHandler(this.fromButton_Click);
             // 
             // quantityTextBox
             // 
@@ -259,16 +233,6 @@
             this.equipmentTable.Size = new System.Drawing.Size(756, 250);
             this.equipmentTable.TabIndex = 0;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(9, 304);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(124, 86);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Instructions";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -303,13 +267,10 @@
         private TextBox equipmentTextBox;
         private TextBox numberTextBox;
         private TextBox quantityTextBox;
-        private Button toButton;
-        private Button fromButton;
         private TextBox roomTypeTextBox;
         private ComboBox equipmentComboBox;
         private ComboBox roomComboBox;
         private ComboBox quantityComboBox;
         private Button dateButton;
-        private Button button1;
     }
 }

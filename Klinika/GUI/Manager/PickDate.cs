@@ -22,27 +22,43 @@ namespace Klinika.GUI.Manager
         private void PickDate_Load(object sender, EventArgs e)
         {
             dateTimePicker.MinDate = DateTime.Now;
+            List<Models.RoomComboBoxItem> rooms = Repositories.RoomRepository.GetRooms();
+            foreach (Models.RoomComboBoxItem room in rooms)
+            {
+                if(int.Parse(room.value.ToString()) != main.transfer.fromId)
+                    roomComboBox.Items.Add(room);
+            }
+            roomComboBox.SelectedIndex = 0;
         }
 
-        private void startButton_Click(object sender, EventArgs e)
+        private bool TransferReady()
         {
+            bool ok = true;
             if (!int.TryParse(quantityTextBox.Text.Trim(), out _))
             {
                 MessageBox.Show("You must choose a number for quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ok = false;
             }
             else if (main.transfer.quantity == 0)
             {
                 MessageBox.Show("You must choose a not 0 value for quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ok = false;
             }
-            else if(int.Parse(quantityTextBox.Text.Trim()) > main.transfer.maxQuantity)
+            else if (int.Parse(quantityTextBox.Text.Trim()) > main.transfer.maxQuantity)
             {
                 MessageBox.Show("Can not transfer that much.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ok = false;
             }
-            else
+            return ok;
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            if (TransferReady())
             {
                 main.transfer.quantity = int.Parse(quantityTextBox.Text);
                 main.transfer.transfer = dateTimePicker.Value.Date;
-                if(main.transfer.transfer.Date == DateTime.Now.Date)
+                if (main.transfer.transfer.Date == DateTime.Now.Date)
                 {
                     Repositories.EquipmentRepository.Transfer(main.transfer);
                 }
@@ -54,6 +70,11 @@ namespace Klinika.GUI.Manager
                 main.Main_Load(null, EventArgs.Empty);
                 this.Close();
             }
+        }
+
+        private void roomComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            main.transfer.toId = int.Parse(((Models.RoomComboBoxItem)roomComboBox.Items[roomComboBox.SelectedIndex]).value.ToString());
         }
     }
 }
