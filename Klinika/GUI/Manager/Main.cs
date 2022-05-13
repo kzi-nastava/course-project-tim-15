@@ -31,21 +31,13 @@ namespace Klinika.GUI.Manager
             roomComboBox.Items.Clear();
             quantityComboBox.Items.Clear();
 
-            DataTable rooms = Repositories.RoomRepository.GetAll();
-            DataRow storage = rooms.NewRow();
-            storage["ID"] = 0;
-            storage["Type"] = "Storage";
-            storage["Number"] = 0;
-            rooms.Rows.Add(storage);
-            roomsTable.DataSource = rooms;
-            roomsTable.Columns["ID"].Visible = false;
+            FillTables();
+            FillComboBox();
+            FillComboBox();
+        }
 
-            unfiltered = Repositories.EquipmentRepository.GetAll();
-            equipmentTable.DataSource = unfiltered;
-            equipmentTable.Columns["EquipmentID"].Visible = false;
-            equipmentTable.Columns["RoomID"].Visible = false;
-            equipmentTable.ClearSelection();
-
+        private void FillComboBox()
+        {
             roomComboBox.Items.Add("");
             equipmentComboBox.Items.Add("");
             quantityComboBox.Items.Add("");
@@ -63,6 +55,24 @@ namespace Klinika.GUI.Manager
             roomComboBox.SelectedIndex = 0;
             equipmentComboBox.SelectedIndex = 0;
             quantityComboBox.SelectedIndex = 0;
+        }
+
+        private void FillTables()
+        {
+            DataTable rooms = Repositories.RoomRepository.GetAll();
+            DataRow storage = rooms.NewRow();
+            storage["ID"] = 0;
+            storage["Type"] = "Storage";
+            storage["Number"] = 0;
+            rooms.Rows.Add(storage);
+            roomsTable.DataSource = rooms;
+            roomsTable.Columns["ID"].Visible = false;
+
+            unfiltered = Repositories.EquipmentRepository.GetAll();
+            equipmentTable.DataSource = unfiltered;
+            equipmentTable.Columns["EquipmentID"].Visible = false;
+            equipmentTable.Columns["RoomID"].Visible = false;
+            equipmentTable.ClearSelection();
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
