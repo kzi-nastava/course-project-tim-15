@@ -25,6 +25,16 @@ namespace Klinika.Models
         {
             DoctorID = -1;
             DateTime = DateTime.Now;
+            IsDeleted = false;
+            Completed = false;
+            RoomID = 1;
+        }
+        public Appointment(DateTime dateTime)
+        {
+            DateTime = dateTime;
+            IsDeleted = false;
+            Completed = false;
+            RoomID = 1;
         }
 
         public Appointment (int id, int doctorID, int patientId, DateTime dateTime, int roomID,
@@ -59,5 +69,6 @@ namespace Klinika.Models
         {
             return AppointmentService.GetTypeFullName(Type);
         }
+
     }
 }
