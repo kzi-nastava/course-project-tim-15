@@ -56,7 +56,7 @@ namespace Klinika.Services
         }
 
         #region Recomended Appointments
-        public static List<Appointment> FindRecommended(int doctorID, DateSlot timeSlot, DateTime deadlineDate, char priority)
+        public static List<Appointment> FindRecommended(int doctorID, TimeSlot timeSlot, DateTime deadlineDate, char priority)
         {
             Appointment bestMatch = FindClosestMatch(doctorID, timeSlot, deadlineDate);
 
@@ -84,7 +84,7 @@ namespace Klinika.Services
 
             return recommended;
         }
-        private static Appointment FindClosestMatch(int doctorID, DateSlot timeSlot, DateTime deadlineDate)
+        private static Appointment FindClosestMatch(int doctorID, TimeSlot timeSlot, DateTime deadlineDate)
         {
             Appointment best = new Appointment();
 
@@ -111,7 +111,7 @@ namespace Klinika.Services
             }
             return best;
         }
-        private static Appointment FindBestMatch(DateSlot timeSlot, List<Appointment> doctorAppointments)
+        private static Appointment FindBestMatch(TimeSlot timeSlot, List<Appointment> doctorAppointments)
         {
             Appointment bestMatch = new Appointment();
 
@@ -138,7 +138,7 @@ namespace Klinika.Services
             }
             return bestMatch;
         }
-        private static bool IsDoctorAvailable(int doctorID, DateSlot timeSlot, DateTime day)
+        private static bool IsDoctorAvailable(int doctorID, TimeSlot timeSlot, DateTime day)
         {
             DateTime start = new DateTime(day.Year, day.Month, day.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
             DateTime end = new DateTime(day.Year, day.Month, day.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
@@ -169,7 +169,7 @@ namespace Klinika.Services
 
             return secondMinutes > firstMinutes;
         }
-        private static Appointment FindClosestAvailable(List<Appointment> available, DateSlot timeSlot)
+        private static Appointment FindClosestAvailable(List<Appointment> available, TimeSlot timeSlot)
         {
             Appointment best = available[0];
             for (int i = 1; i < available.Count; i++)

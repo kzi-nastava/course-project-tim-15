@@ -54,7 +54,7 @@ namespace Klinika.Models
             IsDeleted = isDeleted;
         }
 
-        public bool IsBetween(DateSlot timeSlot, int offsetMin = 0)
+        public bool IsBetween(TimeSlot timeSlot, int offsetMin = 0)
         {
             DateTime start = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
             DateTime end = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
