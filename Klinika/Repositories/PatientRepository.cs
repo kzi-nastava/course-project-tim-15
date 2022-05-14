@@ -9,8 +9,6 @@ namespace Klinika.Repositories
     {
         public static Dictionary<string, int>? EmailIDPairs { get; set; }
         public static Dictionary<int,Patient> IDPatientPairs { get; set; }
-
-
         public static void FillPatientSelectionList(ComboBox patientSelection)
         {
             foreach (KeyValuePair<int, Patient> pair in IDPatientPairs)
@@ -18,7 +16,6 @@ namespace Klinika.Repositories
                 patientSelection.Items.Add(pair.Value.GetIdAndFullName());
             }
         }
-
         public static DataTable GetAll()
         {
             EmailIDPairs = new Dictionary<string, int>();
@@ -76,7 +73,6 @@ namespace Klinika.Repositories
             ("@Password", patient.Password)
             ); 
         }
-
 
         //Logical deletion
         public static void Delete(int id, string email)

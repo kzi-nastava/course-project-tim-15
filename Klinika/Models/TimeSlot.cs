@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Klinika.Models
 {
-    internal class TimeSlot
+    public class TimeSlot
     {
         public DateTime from { get; set; }
         public DateTime to { get; set; }

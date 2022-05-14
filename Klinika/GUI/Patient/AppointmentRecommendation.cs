@@ -23,13 +23,13 @@ namespace Klinika.GUI.Patient
         {
             InitializeComponent();
             Parent = parent;
+        }
+        private void LoadForm(object sender, EventArgs e)
+        {
             Parent.FillDoctorComboBox(DoctorComboBox);
             ScheduleButton.Enabled = false;
             DoctorRadioButton.Checked = true;
             FillRecommendedAppointmentTable();
-        }
-        private void LoadForm(object sender, EventArgs e)
-        {
             Parent.Enabled = false;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
@@ -56,47 +56,42 @@ namespace Klinika.GUI.Patient
                     DataRow newRow = dataTable.NewRow();
 
                     newRow["Doctor ID"] = appointment.DoctorID;
-                    newRow["Doctor"] = Parent.GetDoctorFullName(appointment.DoctorID);
+                    newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
                     newRow["DateTime"] = appointment.DateTime;
                     dataTable.Rows.Add(newRow);
                 }
             }
             RecommendedAppointmentTable.DataSource = dataTable;
         }
-
         private void RecommendClick(object sender, EventArgs e)
         {
-            if (!IsDateTimeDataValid())
+            if (!IsDateValid())
             {
                 MessageBox.Show("Time is not valid! Please enter valid time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            int doctorID = (DoctorComboBox.SelectedItem as User).ID;
-            DateTime fromTime = FromTimePicker.Value;
-            DateTime untilTime = UntilTimePicker.Value;
-            DateTime deadlineDate = DeadlineDatePicker.Value;
-            char priority = DoctorRadioButton.Checked ? 'D' : 'T';
 
-            List<Appointment> recommended = AppointmentServices.FindRecommended(doctorID, fromTime, untilTime, deadlineDate, priority);
+            int doctorID = (DoctorComboBox.SelectedItem as User).ID;
+            char priority = DoctorRadioButton.Checked ? 'D' : 'T';
+            TimeSlot timeSlot = new TimeSlot(FromTimePicker.Value, ToTimePicker.Value);
+
+            List<Appointment> recommended = AppointmentService.FindRecommended(doctorID, timeSlot, DeadlineDatePicker.Value, priority);
             FillRecommendedAppointmentTable(recommended);
         }
-
         private void RecommendedAppointmentTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
             ScheduleButton.Enabled = true;
         }
-
         private void ScheduleClick(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
-                CreateAppointment();
+                CreateInDatabase();
                 Close();
             }
         }
-
-        private void CreateAppointment()
+        private void CreateInDatabase()
         {
             int doctorID = Convert.ToInt32(RecommendedAppointmentTable.SelectedRows[0].Cells["Doctor ID"].Value);
             DateTime dateTime = Convert.ToDateTime(RecommendedAppointmentTable.SelectedRows[0].Cells["DateTime"].Value);
@@ -116,9 +111,9 @@ namespace Klinika.GUI.Patient
             AppointmentRepository.GetInstance().Create(appointment);
             Parent.InsertRowIntoPersonalAppointmentsTable(appointment);
         }
-        private bool IsDateTimeDataValid()
+        private bool IsDateValid()
         {
-            return FromTimePicker.Value < UntilTimePicker.Value && DeadlineDatePicker.Value > DateTime.Now;
+            return FromTimePicker.Value < ToTimePicker.Value && DeadlineDatePicker.Value > DateTime.Now;
         }
     }
 }

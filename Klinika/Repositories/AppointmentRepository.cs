@@ -28,109 +28,56 @@ namespace Klinika.Repositories
             if(Instance == null) Instance = new AppointmentRepository();
             return Instance;
         }
-        public T CheckNull<T>(object obj)
-        {
-            return obj == DBNull.Value ? default(T) : (T)obj;
-        }
         public AppointmentRepository()
         {
             Appointments = new List<Appointment>();
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction]";
-            try
+
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
+            foreach (object row in resoult)
             {
-                SqlCommand getAll = new SqlCommand(getAllQuerry, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = getAll.ExecuteReader())
+                var appointment = new Appointment
                 {
-                    while (retrieved.Read())
-                    {
-                        Appointment appointment = new Appointment();
-                        appointment.ID = Convert.ToInt32(retrieved["ID"]);
-                        appointment.DoctorID = Convert.ToInt32(retrieved["DoctorID"]);
-                        appointment.PatientID = Convert.ToInt32(retrieved["PatientID"]);
-                        appointment.DateTime = Convert.ToDateTime(retrieved["DateTime"].ToString());
-                        appointment.RoomID = Convert.ToInt32(retrieved["RoomID"]);
-                        appointment.Completed = Convert.ToBoolean(retrieved["Completed"]);
-                        appointment.Type = Convert.ToChar(retrieved["Type"]);
-                        appointment.Duration = CheckNull<int>(retrieved["Duration"]);
-                        appointment.Urgent = CheckNull<bool>(retrieved["Urgent"]);
-                        appointment.Description = CheckNull<string>(retrieved["Description"]);
-                        appointment.IsDeleted = CheckNull<bool>(retrieved["IsDeleted"]);
-                        Appointments.Add(appointment);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
+                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
+                    DoctorID = Convert.ToInt32(((object[])row)[1].ToString()),
+                    PatientID = Convert.ToInt32(((object[])row)[2].ToString()),
+                    DateTime = Convert.ToDateTime(((object[])row)[3].ToString()),
+                    RoomID = Convert.ToInt32(((object[])row)[4].ToString()),
+                    Completed = Convert.ToBoolean(((object[])row)[5].ToString()),
+                    Type = Convert.ToChar(((object[])row)[6].ToString()),
+                    Duration = DatabaseConnection.CheckNull<int>(((object[])row)[7]),
+                    Urgent = DatabaseConnection.CheckNull<bool>(((object[])row)[8]),
+                    Description = DatabaseConnection.CheckNull<string>(((object[])row)[9]),
+                    IsDeleted = DatabaseConnection.CheckNull<bool>(((object[])row)[10])
+                };
+                Appointments.Add(appointment);
             }
         }
         #endregion
 
-        /// <summary>
-        /// Returns all appointmets of requested day in format "yyyy-MM-dd"
-        /// </summary>
-        /// <param name="requestedDate"></param>
-        /// <returns></returns>
         public static DataTable? GetAll(string requestedDate, int ID, RoleType role, int days = 1)
         {
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
-
-
-            DataTable? retrievedAppointments = null;
 
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction] " +
                                   $"WHERE DateTime BETWEEN '{start}' AND '{end}' AND {roleToString} = {ID} " +
                                   $"AND IsDeleted = 0";
-            try
-            {
-                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuerry, DatabaseConnection.GetInstance().database);
-                retrievedAppointments = new DataTable();
-                adapter.Fill(retrievedAppointments);
-
-            }
-            catch (Exception ex) 
-            { 
-                MessageBox.Show(ex.Message);
-            }
-
-            return retrievedAppointments;
+            
+            return DatabaseConnection.GetInstance().CreateTableOfData(getAllQuerry);
         }
         public static DataTable? GetAll(int ID, RoleType role)
         {
-            DataTable? retrievedAppointments = null;
-
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction] " +
                                   $"WHERE DateTime > '{DateTime.Now}' AND {roleToString} = {ID} " +
                                   $"AND IsDeleted = 0";
-            try
-            {
-                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuerry, DatabaseConnection.GetInstance().database);
-                retrievedAppointments = new DataTable();
-                adapter.Fill(retrievedAppointments);
-                foreach (DataRow row in retrievedAppointments.Rows)
-                {
-                    Appointment appointment = new Appointment(Convert.ToInt32(row["ID"]), Convert.ToInt32(row["DoctorID"]),
-                            Convert.ToInt32(row["PatientID"]), Convert.ToDateTime(row["DateTime"].ToString()),
-                            Convert.ToInt32(row["RoomID"]), Convert.ToBoolean(row["Completed"]), Convert.ToChar(row["Type"]),
-                            Convert.ToInt32(row["Duration"]), Convert.ToBoolean(row["Urgent"]), row["Description"].ToString(),
-                            Convert.ToBoolean(row["IsDeleted"]));
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
 
-            return retrievedAppointments;
+            return DatabaseConnection.GetInstance().CreateTableOfData(getAllQuerry);
         }
         public List<Appointment> GetCompleted(int PatientID)
         {
@@ -140,34 +87,24 @@ namespace Klinika.Repositories
 
             List<Appointment> appointments = new List<Appointment>();
 
-            try
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getCompletedQuerry);
+            foreach(object row in resoult)
             {
-                SqlCommand getCompleted = new SqlCommand(getCompletedQuerry, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = getCompleted.ExecuteReader())
+                var appointment = new Appointment
                 {
-                    while (retrieved.Read())
-                    {
-                        Appointment appointment = new Appointment();
-                        appointment.ID = Convert.ToInt32(retrieved["ID"]);
-                        appointment.DoctorID = Convert.ToInt32(retrieved["DoctorID"]);
-                        appointment.PatientID = Convert.ToInt32(retrieved["PatientID"]);
-                        appointment.DateTime = Convert.ToDateTime(retrieved["DateTime"].ToString());
-                        appointment.RoomID = Convert.ToInt32(retrieved["RoomID"]);
-                        appointment.Completed = Convert.ToBoolean(retrieved["Completed"]);
-                        appointment.Type = Convert.ToChar(retrieved["Type"]);
-                        appointment.Duration = CheckNull<int>(retrieved["Duration"]);
-                        appointment.Urgent = CheckNull<bool>(retrieved["Urgent"]);
-                        appointment.Description = CheckNull<string>(retrieved["Description"]);
-                        appointment.IsDeleted = CheckNull<bool>(retrieved["IsDeleted"]);
-                        appointments.Add(appointment);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
+                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
+                    DoctorID = Convert.ToInt32(((object[])row)[1].ToString()),
+                    PatientID = Convert.ToInt32(((object[])row)[2].ToString()),
+                    DateTime = Convert.ToDateTime(((object[])row)[3].ToString()),
+                    RoomID = Convert.ToInt32(((object[])row)[4].ToString()),
+                    Completed = Convert.ToBoolean(((object[])row)[5].ToString()),
+                    Type = Convert.ToChar(((object[])row)[6].ToString()),
+                    Duration = DatabaseConnection.CheckNull<int>(((object[])row)[7]),
+                    Urgent = DatabaseConnection.CheckNull<bool>(((object[])row)[8]),
+                    Description = DatabaseConnection.CheckNull<string>(((object[])row)[9]),
+                    IsDeleted = DatabaseConnection.CheckNull<bool>(((object[])row)[10])
+                };
+                appointments.Add(appointment);
             }
 
             return appointments;
@@ -243,7 +180,6 @@ namespace Klinika.Repositories
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuerry, ("@ID", ID));
         }
 
-
         public bool IsAvailable(TimeSlot slot, int doctorID,TimeSlot toFit)
         {
             List<Appointment> doctorsAppointments = new List<Appointment>();
@@ -298,35 +234,16 @@ namespace Klinika.Repositories
             }
             return false;
         }
-        public static int GetPersonalCount (int ID)
+        public static int GetScheduledAppointmentsCount (int ID)
         {
             DateTime startDate = DateTime.Now.AddDays(-30);
-            int counter = 0;
 
             string getQuerry = "SELECT COUNT(*) as Number " +
                 "FROM [MedicalAction] " +
                 $"WHERE PatientID = {ID} AND DateTime > '{startDate.ToString("yyyy-MM-dd HH:mm:ss.000")}'";
 
-            try
-            {
-                SqlCommand get = new SqlCommand(getQuerry, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = get.ExecuteReader())
-                {
-                    while (retrieved.Read())
-                    {
-                        counter = Convert.ToInt32(retrieved["Number"]);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            return counter;
+            var selection = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuerry);
+            return Convert.ToInt32(((object[])selection[0])[0]);
         }
-
-
     }
 }

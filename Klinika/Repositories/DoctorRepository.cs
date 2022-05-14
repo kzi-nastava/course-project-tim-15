@@ -99,31 +99,17 @@ namespace Klinika.Repositories
         }
         public static Specialization getSpecialization (int DoctorID)
         {
-            string specializationQuerry = "SELECT [Specialization].ID, [Specialization].Name " +
+            string getSpecializationQuerry = "SELECT [Specialization].ID, [Specialization].Name " +
                                           "FROM [Specialization] JOIN [DoctorSpecialization] " +
                                           "ON [Specialization].ID = [DoctorSpecialization].SpecializationID " +
                                           $"WHERE [DoctorSpecialization].UserID = {DoctorID}";
 
-            Specialization specialization = new Specialization();
-
-            try
+            var selection = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSpecializationQuerry);
+            Specialization specialization = new Specialization
             {
-                SqlCommand getAnamneses = new SqlCommand(specializationQuerry, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = getAnamneses.ExecuteReader())
-                {
-                    while (retrieved.Read())
-                    {
-                        specialization.ID = Convert.ToInt32(retrieved["ID"]);
-                        specialization.Name = retrieved["Name"].ToString();
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+                ID = Convert.ToInt32(((object[])selection[0])[0]),
+                Name = ((object[])selection[0])[1].ToString()
+            };
 
             return specialization;
         }

@@ -75,5 +75,13 @@ namespace Klinika.Repositories
         {
             return GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.PATIENT.ToString()).ToArray();
         }
+        public static List<User> GetDoctors()
+        {
+             return GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToList();
+        }
+        public static User? GetDoctor(int ID)
+        {
+            return GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
+        }
     }
 }

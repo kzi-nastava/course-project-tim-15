@@ -55,7 +55,7 @@ namespace Klinika.Services
                 row["Patient Full Name"] = PatientService.GetFullName(Convert.ToInt32(row["PatientID"]));
             }
         }
-        private static void FillAppointmentTypeField(DataTable dt)
+        public static void FillAppointmentTypeField(DataTable dt)
         {
             foreach (DataRow row in dt.Rows)
             {
@@ -77,6 +77,11 @@ namespace Klinika.Services
             int id = AppointmentService.GetSelectedID(table);
             AppointmentService.Delete(id);
             table.Rows.RemoveAt(table.CurrentRow.Index);
+        }
+        public static string GetFullName(int doctorID)
+        {
+            var doctor = UserRepository.GetDoctor(doctorID);
+            return doctor.ToString();
         }
     }
 }
