@@ -139,5 +139,39 @@ namespace Klinika.Repositories
                 MessageBox.Show(error.Message);
             }
         }
+
+        internal static void SimpleRenovate(Models.Renovation renovation)
+        {
+            string createQuery = "INSERT INTO [Renovations] " +
+                "(RoomID, StartDate, EndDate, Advanced) " +
+                "VALUES (@RoomID, @StartDate, @EndDate, 0)";
+            try
+            {
+                SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
+                create.Parameters.AddWithValue("@RoomID", renovation.id);
+                create.Parameters.AddWithValue("@StartDate", renovation.from.ToString("yyyy-MM-dd"));
+                create.Parameters.AddWithValue("@EndDate", renovation.to.ToString("yyyy-MM-dd"));
+                DatabaseConnection.GetInstance().database.Open();
+                create.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
+        public static bool Renovate(Models.Renovation renovation)
+        {
+            bool success = Services.RoomServices.DateValid(renovation);
+            if (success)
+            {
+                if (renovation.advanced == 0)
+                {
+                    SimpleRenovate(renovation);
+                }
+            }
+            return success;
+        }
     }
 }

@@ -12,9 +12,11 @@ namespace Klinika.GUI.Manager
 {
     public partial class Split : Form
     {
-        public Split()
+        Renovation renovation;
+        public Split(Renovation r)
         {
             InitializeComponent();
+            renovation = r;
         }
     }
 }

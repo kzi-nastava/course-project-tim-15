@@ -25,6 +25,8 @@ namespace Klinika.GUI.Manager
         private void Renovation_Load(object sender, EventArgs e)
         {
             noneRadio.Select();
+            fromDateTimePicker.MinDate = DateTime.Now;
+            toDateTimePicker.MinDate = DateTime.Now;
         }
 
         public bool CheckForm()
@@ -51,10 +53,22 @@ namespace Klinika.GUI.Manager
                 else if (mergeRadio.Checked)
                 {
                     renovation.advanced = 1;
+                    new Merge(this).Show();
                 }
                 else if (splitRadio.Checked)
                 {
                     renovation.advanced = 2;
+                    new Split(this).Show();
+                }
+                if (Repositories.RoomRepository.Renovate(renovation))
+                {
+                    MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    main.Main_Load(null, EventArgs.Empty);
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Can not renovate at this time!.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
