@@ -20,5 +20,15 @@ namespace Klinika.Services
         {
             return "DateTime=" + dateTime.ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + doctorID.ToString();
         }
+        public static void SendModify(bool isApproved, Appointment appointment, string description)
+        {
+            PatientRequest patientRequest = new PatientRequest();
+            patientRequest.PatientID = appointment.PatientID;
+            patientRequest.MedicalActionID = appointment.ID;
+            patientRequest.Type = 'M';
+            patientRequest.Description = description;
+            patientRequest.Approved = isApproved;
+            PatientRequestRepository.Create(patientRequest);
+        }
     }
 }
