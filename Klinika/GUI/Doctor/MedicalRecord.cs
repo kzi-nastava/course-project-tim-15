@@ -135,6 +135,5 @@ namespace Klinika.GUI.Doctor
             new PrescriptionIssuing(this).Show();
         }
         #endregion
-
     }
 }
