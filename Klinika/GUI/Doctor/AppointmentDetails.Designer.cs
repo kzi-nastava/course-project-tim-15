@@ -203,18 +203,18 @@
 
         #endregion
 
-        private DateTimePicker TimePicker;
+        internal DateTimePicker TimePicker;
         private Label label1;
         private Label label2;
-        private ComboBox PatientComboBox;
-        private RadioButton ExaminationRadioButton;
+        internal ComboBox PatientComboBox;
+        internal RadioButton ExaminationRadioButton;
         private RadioButton OperationRadioButton;
         private Label label3;
         private Label label4;
-        private DateTimePicker DatePicker;
+        internal DateTimePicker DatePicker;
         private GroupBox groupBox1;
-        private TextBox DurationTextBox;
+        internal TextBox DurationTextBox;
         private Button ConfirmButton;
-        private CheckBox IsUrgentCheckBox;
+        internal CheckBox IsUrgentCheckBox;
     }
 }

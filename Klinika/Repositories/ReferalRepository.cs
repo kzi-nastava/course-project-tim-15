@@ -14,25 +14,16 @@ namespace Klinika.Repositories
         public static void Create(int _patientID, int _specializationID, int _doctorID)
         {
             string createQuerry = "INSERT INTO [Referal] " +
-                "(PatientID, DoctorID, SpecializationID) " +
-                $"VALUES (@PatientID, @DoctorID, @SpecializationID)";
+                "(PatientID, DoctorID, SpecializationID, IsUsed, Date) " +
+                $"VALUES (@PatientID, @DoctorID, @SpecializationID, @IsUsed, @Date)";
 
-            SqlCommand create = new SqlCommand(createQuerry, DatabaseConnection.GetInstance().database);
-            create.Parameters.AddWithValue("@PatientID", _patientID);
-            create.Parameters.AddWithValue("@DoctorID", _doctorID == -1 ? Convert.DBNull : _doctorID);
-            create.Parameters.AddWithValue("@SpecializationID", _specializationID);
-
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                create.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                createQuerry,
+                ("@PatientID", _patientID),
+                ("@DoctorID", _doctorID == -1 ? Convert.DBNull : _doctorID),
+                ("@SpecializationID", _specializationID),
+                ("IsUsed", false),
+                ("Date", DateTime.Now));
         }
 
 

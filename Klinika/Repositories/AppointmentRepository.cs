@@ -174,51 +174,34 @@ namespace Klinika.Repositories
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@DoctorID,@PatientID,@DateTime,@RoomID,@Completed,@Type,@Duration,@Urgent,@Description,@IsDeleted)";
 
-            SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-            create.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
-            create.Parameters.AddWithValue("@PatientID", appointment.PatientID);
-            create.Parameters.AddWithValue("@DateTime", appointment.DateTime);
-            create.Parameters.AddWithValue("@RoomID", appointment.RoomID);
-            create.Parameters.AddWithValue("@Completed", appointment.Completed);
-            create.Parameters.AddWithValue("@Type", appointment.Type);
-            create.Parameters.AddWithValue("@Duration", appointment.Duration);
-            create.Parameters.AddWithValue("@Urgent", appointment.Urgent);
-            create.Parameters.AddWithValue("@Description", appointment.Description);
-            create.Parameters.AddWithValue("@IsDeleted", appointment.IsDeleted);
+            appointment.ID = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+                createQuery,
+                ("@DoctorID", appointment.DoctorID),
+                ("@PatientID", appointment.PatientID),
+                ("@DateTime", appointment.DateTime),
+                ("@RoomID", appointment.RoomID),
+                ("@Completed", appointment.Completed),
+                ("@Type", appointment.Type),
+                ("@Duration", appointment.Duration),
+                ("@Urgent", appointment.Urgent),
+                ("@Description", appointment.Description),
+                ("@IsDeleted", appointment.IsDeleted));
 
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                appointment.ID = (int)create.ExecuteScalar();
-                DatabaseConnection.GetInstance().database.Close();
-                Appointments.Add(appointment);
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            Appointments.Add(appointment);
         }
         public static void Modify(int id, int newDoctorID, DateTime newAppointment)
         {
             string modifyQuery = "UPDATE [MedicalAction] SET DoctorID = @DoctorID, DateTime = @DateTime WHERE ID = @ID";
-            try
-            {
-                SqlCommand modify = new SqlCommand(modifyQuery, DatabaseConnection.GetInstance().database);
-                modify.Parameters.AddWithValue("@ID", id);
-                modify.Parameters.AddWithValue("@DoctorID", newDoctorID);
-                modify.Parameters.AddWithValue("@DateTime", newAppointment);
-                DatabaseConnection.GetInstance().database.Open();
-                modify.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                modifyQuery,
+                ("@DoctorID", newDoctorID),
+                ("@DateTime", newAppointment),
+                ("@ID", id));
         }
         public void Modify(Appointment appointment)
         {
-            string createQuery = "UPDATE [MedicalAction] SET " +
+            string modifyQuery = "UPDATE [MedicalAction] SET " +
                 "DoctorID = @DoctorID, " +
                 "PatientID = @PatientID, " +
                 "DateTime = @DateTime, " +
@@ -231,48 +214,27 @@ namespace Klinika.Repositories
                 "IsDeleted = @IsDeleted " +
                 "WHERE ID = @ID";
 
-            SqlCommand modify = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-            modify.Parameters.AddWithValue("@ID", appointment.ID);
-            modify.Parameters.AddWithValue("@DoctorID", appointment.DoctorID);
-            modify.Parameters.AddWithValue("@PatientID", appointment.PatientID);
-            modify.Parameters.AddWithValue("@DateTime", appointment.DateTime);
-            modify.Parameters.AddWithValue("@RoomID", appointment.RoomID);
-            modify.Parameters.AddWithValue("@Completed", appointment.Completed);
-            modify.Parameters.AddWithValue("@Type", appointment.Type);
-            modify.Parameters.AddWithValue("@Duration", appointment.Duration);
-            modify.Parameters.AddWithValue("@Urgent", appointment.Urgent);
-            modify.Parameters.AddWithValue("@Description", appointment.Description);
-            modify.Parameters.AddWithValue("@IsDeleted", appointment.IsDeleted);
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                modifyQuery,
+                ("@ID", appointment.ID),
+                ("@DoctorID", appointment.DoctorID),
+                ("@PatientID", appointment.PatientID),
+                ("@DateTime", appointment.DateTime),
+                ("@RoomID", appointment.RoomID),
+                ("@Completed", appointment.Completed),
+                ("@Type", appointment.Type),
+                ("@Duration", appointment.Duration),
+                ("@Urgent", appointment.Urgent),
+                ("@Description", appointment.Description),
+                ("@IsDeleted", appointment.IsDeleted));
 
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                modify.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-
-                Appointments.Remove(Appointments.Where(x => x.ID == appointment.ID).FirstOrDefault());
-                Appointments.Add(appointment);
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            Appointments.Remove(Appointments.Where(x => x.ID == appointment.ID).FirstOrDefault());
+            Appointments.Add(appointment);
         }
         public static void Delete(int ID)
         {
             string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
-            try
-            {
-                SqlCommand delete = new SqlCommand(deleteQuerry, DatabaseConnection.GetInstance().database);
-                delete.Parameters.AddWithValue("@ID", ID);
-                DatabaseConnection.GetInstance().database.Open();
-                delete.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuerry, ("@ID", ID));
         }
 
         public bool IsOccupied(DateTime newAppointmentStart, int doctorID, int duration = 15, int appointmentID = -1)

@@ -71,5 +71,9 @@ namespace Klinika.Repositories
             return singletonInstance;
         }
 
+        public static User[] GetPatients()
+        {
+            return GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.PATIENT.ToString()).ToArray();
+        }
     }
 }

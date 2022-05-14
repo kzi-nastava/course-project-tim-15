@@ -120,6 +120,7 @@ namespace Klinika.Data
                         {
                             tempRow[i] = reader[i];
                         }
+                        retrieved.Add(tempRow);
                     }
                 }
             }
@@ -132,6 +133,11 @@ namespace Klinika.Data
                 database.Close();
             }
             return retrieved;
+        }
+
+        public static T CheckNull<T>(object obj)
+        {
+            return obj == DBNull.Value ? default(T) : (T)obj;
         }
     }
 }

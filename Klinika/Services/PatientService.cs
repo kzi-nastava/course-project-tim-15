@@ -28,6 +28,11 @@ namespace Klinika.Services
             newPatient.Validate();
             PatientRepository.Create(newPatient);
         }
+        public static string GetFullName(int ID)
+        {
+            var patient = UserRepository.GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
+            return $"{patient.Name} {patient.Surname}";
+        }
 
     }
 }
