@@ -193,13 +193,13 @@
         private GroupBox groupBox1;
         private Label label2;
         private Label label1;
-        private DateTimePicker PrescriptionEndDatePicker;
-        private DateTimePicker PrescriptionStartDatePicker;
-        private NumericUpDown IntervalSpinner;
+        internal DateTimePicker PrescriptionEndDatePicker;
+        internal DateTimePicker PrescriptionStartDatePicker;
+        internal NumericUpDown IntervalSpinner;
         private Label label3;
-        private TextBox CommentTextBox;
+        internal TextBox CommentTextBox;
         private Label label4;
-        private DataGridView DrugsTable;
+        internal DataGridView DrugsTable;
         private Button PrescriptButton;
         private Label label5;
     }

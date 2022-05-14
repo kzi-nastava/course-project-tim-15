@@ -16,7 +16,7 @@ namespace Klinika.GUI.Doctor
 {
     public partial class AppointmentDetails : Form
     {
-        public readonly DoctorMain Parent;
+        internal readonly DoctorMain Parent;
         private Appointment? Appointment;
         private readonly AppointmentDetailsService Service;
 
