@@ -254,7 +254,7 @@ namespace Klinika.GUI.Manager
 
         private void renovateButton_Click(object sender, EventArgs e)
         {
-            //(int)roomsTable.SelectedRows[0].Cells["ID"].Value;
+            new Renovation((int)roomsTable.SelectedRows[0].Cells["ID"].Value, this).Show();
         }
     }
 }
