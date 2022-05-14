@@ -26,6 +26,7 @@ namespace Klinika
         private void LoginPage_Load(object sender, EventArgs e)
         {
             Repositories.EquipmentRepository.CheckEquipmentTransfers();
+            Repositories.RoomRepository.CheckRenovations();
         }
 
         private void TryLogin()
