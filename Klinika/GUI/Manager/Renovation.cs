@@ -12,7 +12,7 @@ namespace Klinika.GUI.Manager
 {
     public partial class Renovation : Form
     {
-        Main main;
+        public Main main;
         Models.Renovation renovation;
         public Renovation(int id, Main m)
         {
@@ -49,6 +49,12 @@ namespace Klinika.GUI.Manager
                 if (noneRadio.Checked)
                 {
                     renovation.advanced = 0;
+                    if (Repositories.RoomRepository.Renovate(renovation))
+                    {
+                        MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        main.Main_Load(null, EventArgs.Empty);
+                        this.Close();
+                    }
                 }
                 else if (mergeRadio.Checked)
                 {
@@ -58,14 +64,10 @@ namespace Klinika.GUI.Manager
                 else if (splitRadio.Checked)
                 {
                     renovation.advanced = 2;
-                    new Split(this).Show();
-                }
-                if (Repositories.RoomRepository.Renovate(renovation))
-                {
-                    MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    main.Main_Load(null, EventArgs.Empty);
+                    new Split(renovation).Show();
                     this.Close();
                 }
+                
                 else
                 {
                     MessageBox.Show("Can not renovate at this time!.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);

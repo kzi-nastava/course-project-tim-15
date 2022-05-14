@@ -144,13 +144,14 @@ namespace Klinika.Repositories
         {
             string createQuery = "INSERT INTO [Renovations] " +
                 "(RoomID, StartDate, EndDate, Advanced) " +
-                "VALUES (@RoomID, @StartDate, @EndDate, 0)";
+                "VALUES (@RoomID, @StartDate, @EndDate, @Advanced)";
             try
             {
                 SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
                 create.Parameters.AddWithValue("@RoomID", renovation.id);
                 create.Parameters.AddWithValue("@StartDate", renovation.from.ToString("yyyy-MM-dd"));
                 create.Parameters.AddWithValue("@EndDate", renovation.to.ToString("yyyy-MM-dd"));
+                create.Parameters.AddWithValue("@Advanced", renovation.advanced);
                 DatabaseConnection.GetInstance().database.Open();
                 create.ExecuteNonQuery();
                 DatabaseConnection.GetInstance().database.Close();
@@ -158,6 +159,70 @@ namespace Klinika.Repositories
             catch (SqlException error)
             {
                 MessageBox.Show(error.Message);
+            }
+        }
+
+        internal static void SplitRenovation(Models.Renovation renovation, int renovationId)
+        {
+            string createQuery = "INSERT INTO [RenovationsAdvanced] " +
+                "(ID, Type, FirstID, SecondID, SecondType, SecondNumber) " +
+                "VALUES (@ID, @Type, @FirstID, @SecondID, @SecondType, @SecondNumber)";
+            try
+            {
+                SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
+                create.Parameters.AddWithValue("@ID", renovationId);
+                create.Parameters.AddWithValue("@Type", 1);
+                create.Parameters.AddWithValue("@FirstID", renovation.id);
+                create.Parameters.AddWithValue("@SecondID", 0);
+                create.Parameters.AddWithValue("@SecondType", renovation.secondType);
+                create.Parameters.AddWithValue("@SecondNumber", renovation.secondNumber);
+                DatabaseConnection.GetInstance().database.Open();
+                create.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
+        internal static int FindRenovation(Models.Renovation renovation)
+        {
+            int id = 0;
+            DataTable? foundRenovation = null;
+            string findQuery = "SELECT [Renovations].ID " +
+                                      "FROM [Renovations] " +
+                                      "WHERE RoomID = @RoomID AND StartDate = @StartDate AND EndDate = @EndDate";
+            try
+            {
+                DatabaseConnection.GetInstance().database.Open();
+                SqlCommand find = new SqlCommand(findQuery, DatabaseConnection.GetInstance().database);
+                find.Parameters.AddWithValue("@RoomID", renovation.id.ToString());
+                find.Parameters.AddWithValue("@StartDate", renovation.from.ToString("yyyy-MM-dd"));
+                find.Parameters.AddWithValue("@EndDate", renovation.to.ToString("yyyy-MM-dd"));
+                SqlDataReader reader = find.ExecuteReader();
+                reader.Read();
+                id = int.Parse(reader["ID"].ToString());
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+
+            return id;
+        }
+
+        internal static void AdvancedRenovation(Models.Renovation renovation)
+        {
+            SimpleRenovate(renovation);
+            if(renovation.advanced == 1)
+            {
+
+            }
+            else if(renovation.advanced == 2)
+            {
+                SplitRenovation(renovation, FindRenovation(renovation));
             }
         }
 
@@ -169,6 +234,10 @@ namespace Klinika.Repositories
                 if (renovation.advanced == 0)
                 {
                     SimpleRenovate(renovation);
+                }
+                else
+                {
+                    AdvancedRenovation(renovation);
                 }
             }
             return success;
