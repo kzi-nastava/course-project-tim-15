@@ -46,31 +46,39 @@ namespace Klinika.GUI.Manager
             {
                 renovation.from = fromDateTimePicker.Value.Date;
                 renovation.to = toDateTimePicker.Value.Date;
-                if (noneRadio.Checked)
+                if(!Services.RoomServices.IsRoomRenovating(renovation.id, renovation.from, renovation.to))
                 {
-                    renovation.advanced = 0;
-                    if (Repositories.RoomRepository.Renovate(renovation))
+                    if (noneRadio.Checked)
                     {
-                        MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        main.Main_Load(null, EventArgs.Empty);
+                        renovation.advanced = 0;
+                        if (Repositories.RoomRepository.Renovate(renovation))
+                        {
+                            MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            main.Main_Load(null, EventArgs.Empty);
+                            this.Close();
+                        }
+                    }
+                    else if (mergeRadio.Checked)
+                    {
+                        renovation.advanced = 1;
+                        new Merge(renovation).Show();
                         this.Close();
                     }
+                    else if (splitRadio.Checked)
+                    {
+                        renovation.advanced = 2;
+                        new Split(renovation).Show();
+                        this.Close();
+                    }
+
+                    else
+                    {
+                        MessageBox.Show("Can not renovate at this time!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
-                else if (mergeRadio.Checked)
-                {
-                    renovation.advanced = 1;
-                    new Merge(this).Show();
-                }
-                else if (splitRadio.Checked)
-                {
-                    renovation.advanced = 2;
-                    new Split(renovation).Show();
-                    this.Close();
-                }
-                
                 else
                 {
-                    MessageBox.Show("Can not renovate at this time!.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Can not renovate at this time!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }

@@ -189,7 +189,6 @@ namespace Klinika.Repositories
         internal static int FindRenovation(Models.Renovation renovation)
         {
             int id = 0;
-            DataTable? foundRenovation = null;
             string findQuery = "SELECT [Renovations].ID " +
                                       "FROM [Renovations] " +
                                       "WHERE RoomID = @RoomID AND StartDate = @StartDate AND EndDate = @EndDate";
@@ -212,13 +211,59 @@ namespace Klinika.Repositories
 
             return id;
         }
+        internal static int FindType(int id)
+        {
+            string findQuery = "SELECT [Room].Type " +
+                                      "FROM [Room] " +
+                                      "WHERE ID = @RoomID";
+            try
+            {
+                DatabaseConnection.GetInstance().database.Open();
+                SqlCommand find = new SqlCommand(findQuery, DatabaseConnection.GetInstance().database);
+                find.Parameters.AddWithValue("@RoomID", id.ToString());
+                SqlDataReader reader = find.ExecuteReader();
+                reader.Read();
+                id = int.Parse(reader["Type"].ToString());
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+
+            return id;
+        }
+
+        internal static void MergeRenovation(Models.Renovation renovation, int renovationId)
+        {
+            string createQuery = "INSERT INTO [RenovationsAdvanced] " +
+                "(ID, Type, FirstID, SecondID, SecondType, SecondNumber) " +
+                "VALUES (@ID, @Type, @FirstID, @SecondID, @SecondType, @SecondNumber)";
+            try
+            {
+                SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
+                create.Parameters.AddWithValue("@ID", renovationId);
+                create.Parameters.AddWithValue("@Type", 0);
+                create.Parameters.AddWithValue("@FirstID", renovation.id);
+                create.Parameters.AddWithValue("@SecondID", renovation.secondId);
+                create.Parameters.AddWithValue("@SecondType", 0);
+                create.Parameters.AddWithValue("@SecondNumber", 0);
+                DatabaseConnection.GetInstance().database.Open();
+                create.ExecuteNonQuery();
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
 
         internal static void AdvancedRenovation(Models.Renovation renovation)
         {
             SimpleRenovate(renovation);
             if(renovation.advanced == 1)
             {
-
+                MergeRenovation(renovation, FindRenovation(renovation));
             }
             else if(renovation.advanced == 2)
             {
@@ -241,6 +286,39 @@ namespace Klinika.Repositories
                 }
             }
             return success;
+        }
+
+        public static bool IsRoomRenovating(int id, DateTime from, DateTime to)
+        {
+            bool renovating = false;
+
+            string findQuery = "SELECT [Renovations].ID " +
+                                      "FROM [Renovations] " +
+                                      "WHERE RoomID = @RoomID AND " +
+                                      "((StartDate > @StartDate AND StartDate < @EndDate) OR " +
+                                      "(StartDate > @StartDate AND EndDate < @EndDate) OR " +
+                                      "(EndDate > @StartDate AND EndDate < @EndDate) OR " +
+                                      "(StartDate < @StartDate AND EndDate > @EndDate))";
+            try
+            {
+                DatabaseConnection.GetInstance().database.Open();
+                SqlCommand find = new SqlCommand(findQuery, DatabaseConnection.GetInstance().database);
+                find.Parameters.AddWithValue("@RoomID", id.ToString());
+                find.Parameters.AddWithValue("@StartDate", from.ToString("yyyy-MM-dd"));
+                find.Parameters.AddWithValue("@EndDate", to.ToString("yyyy-MM-dd"));
+                SqlDataReader reader = find.ExecuteReader();
+                if (reader.Read())
+                {
+                    renovating = true;
+                }
+                DatabaseConnection.GetInstance().database.Close();
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
+
+            return renovating;
         }
     }
 }

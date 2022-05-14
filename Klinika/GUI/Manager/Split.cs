@@ -28,6 +28,10 @@ namespace Klinika.GUI.Manager
                 MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
+            else
+            {
+                MessageBox.Show("Invalid input.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void Split_Load(object sender, EventArgs e)
