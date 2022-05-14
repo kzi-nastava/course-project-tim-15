@@ -12,14 +12,65 @@ namespace Klinika.GUI.Manager
 {
     public partial class Renovation : Form
     {
-        public Renovation()
+        Main main;
+        Models.Renovation renovation;
+        public Renovation(int id, Main m)
         {
             InitializeComponent();
+            renovation = new Models.Renovation();
+            renovation.id = id;
+            main = m;
         }
 
         private void Renovation_Load(object sender, EventArgs e)
         {
+            noneRadio.Select();
+            fromDateTimePicker.MinDate = DateTime.Now;
+            toDateTimePicker.MinDate = DateTime.Now;
+        }
 
+        public bool CheckForm()
+        {
+            bool ok = true;
+            if(fromDateTimePicker.Value.Date >= toDateTimePicker.Value.Date)
+            {
+                MessageBox.Show("Invalid dates.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ok = false;
+            }
+            return ok;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if(CheckForm())
+            {
+                renovation.from = fromDateTimePicker.Value.Date;
+                renovation.to = toDateTimePicker.Value.Date;
+                if (noneRadio.Checked)
+                {
+                    renovation.advanced = 0;
+                }
+                else if (mergeRadio.Checked)
+                {
+                    renovation.advanced = 1;
+                    new Merge(this).Show();
+                }
+                else if (splitRadio.Checked)
+                {
+                    renovation.advanced = 2;
+                    new Split(this).Show();
+                }
+                if (Repositories.RoomRepository.Renovate(renovation))
+                {
+                    MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    main.Main_Load(null, EventArgs.Empty);
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Can not renovate at this time!.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
         }
     }
 }

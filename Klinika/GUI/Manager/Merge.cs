@@ -12,9 +12,11 @@ namespace Klinika.GUI.Manager
 {
     public partial class Merge : Form
     {
-        public Merge()
+        Renovation renovation;
+        public Merge(Renovation r)
         {
             InitializeComponent();
+            renovation = r;
         }
     }
 }
