@@ -54,5 +54,11 @@ namespace Klinika.Services
             AppointmentRepository.GetInstance().DeleteFromList(id);
         }
 
+        public void ScheduleUnder2Hours()
+        {
+
+        }
+
+
     }
 }

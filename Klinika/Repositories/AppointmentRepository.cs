@@ -15,6 +15,12 @@ namespace Klinika.Repositories
             Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
         }
 
+
+        public Appointment GetById(int id)
+        {
+            return Appointments.Where(x => x.ID == id).FirstOrDefault();
+        }
+
         #region Singleton
         private static AppointmentRepository? Instance;
         public static AppointmentRepository GetInstance()
@@ -235,6 +241,42 @@ namespace Klinika.Repositories
         {
             string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuerry, ("@ID", ID));
+        }
+
+
+        public bool IsAvailable(TimeSlot slot, int doctorID,TimeSlot toFit)
+        {
+            List<Appointment> doctorsAppointments = new List<Appointment>();
+            foreach (Appointment appointment in Appointments)
+            {
+                TimeSlot appointmentSlot = new TimeSlot(appointment.DateTime, appointment.DateTime.AddMinutes(appointment.Duration));
+                if (appointment.DoctorID == doctorID && slot.DoesOverlap(appointmentSlot))
+                {
+                    doctorsAppointments.Add(appointment);
+                }
+
+            }
+
+            doctorsAppointments.OrderBy(o => o.DateTime).ToList();
+            TimeSlot temporary = new TimeSlot(toFit.from, toFit.to);
+            while(temporary.to <= slot.to) 
+            {
+                foreach(Appointment appointment in doctorsAppointments)
+                {
+                    TimeSlot appointementSlot = new TimeSlot(appointment.DateTime, appointment.DateTime.AddMinutes(appointment.Duration));
+                    if(appointementSlot.DoesOverlap(temporary))
+                    {
+                        temporary.from = appointementSlot.to;
+                        temporary.to = appointementSlot.to.AddMinutes(toFit.GetDuration());
+                        break;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
         }
 
         public bool IsOccupied(DateTime newAppointmentStart, int doctorID, int duration = 15, int appointmentID = -1)

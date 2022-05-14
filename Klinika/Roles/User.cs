@@ -68,5 +68,11 @@
             Email = email;
             Password = password;
         }
+
+
+        public string GetIdAndFullName()
+        {
+            return ID + ". " + Name + " " + Surname;
+        }
     }
 }

@@ -8,11 +8,32 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Klinika.Services;
 
 namespace Klinika.Repositories
 {
     internal class DoctorRepository
     {
+
+        private static DoctorRepository? singletonInstance;
+        public  List<Doctor> doctors { get; }
+
+        private DoctorRepository()
+        {
+            doctors = GetAll();
+        }
+
+        public static DoctorRepository GetInstance()
+        {
+            if (singletonInstance == null) singletonInstance = new DoctorRepository();
+            return singletonInstance;
+        }
+
+        public Doctor GetById(int id)
+        {
+            return doctors.Where(x => x.ID == id).FirstOrDefault();
+        }
+
         public static string GetNameSurname(int id)
         {
             string getQuery = "SELECT Name + ' ' + Surname AS 'Doctor' " +
@@ -133,6 +154,69 @@ namespace Klinika.Repositories
             }
 
             return doctors;
+        }
+
+        public List<Specialization> GetAllAvailableSpecializations()
+        {
+            List<int> availableSpecializationsIds = new List<int>();
+            List<Specialization> available = new List<Specialization>();
+            foreach (Doctor doctor in doctors)
+            {
+                if (!availableSpecializationsIds.Contains(doctor.specialization.ID))
+                {
+                    availableSpecializationsIds.Add(doctor.specialization.ID);
+                    available.Add(doctor.specialization);
+                }
+            }
+
+            return available;
+        }
+
+
+        public Doctor? GetFirstUnoccupied(TimeSlot slot,int specializationId)
+        {
+            TimeSlot toFit = new TimeSlot(slot.to, slot.to.AddMinutes(15));
+            foreach(Doctor doctor in doctors)
+            {
+                if(doctor.specialization.ID == specializationId &&
+                   !AppointmentRepository.GetInstance().IsAvailable(slot, doctor.ID,toFit))
+                {
+                    return doctor;
+                }
+            }
+            return null;
+        }
+
+
+        public Dictionary<Appointment, DateTime> GetMostMovableAppointments(int specializationId,int duration)
+        {
+            Dictionary<Appointment, DateTime> appointmentIdRescheduleDatePairs = new Dictionary<Appointment, DateTime>();
+
+            foreach(Doctor doctor in doctors)
+            {
+                if (doctor.specialization.ID != specializationId) continue;
+
+                TimeSlot broadSpan = new TimeSlot(SecretaryService.GetNow().AddHours(-2),SecretaryService.GetNow().AddYears(1));
+                List<TimeSlot> occupied = doctor.GetOccupiedTimeSlots(broadSpan);
+                foreach(Appointment appointment in AppointmentRepository.GetInstance().Appointments)
+                {
+                    if (appointment.DoctorID != doctor.ID) continue;
+                    TimeSlot appointmentSlot = new TimeSlot(appointment.DateTime, appointment.DateTime.AddMinutes(Convert.ToInt32(appointment.Duration)));
+                    for(int i = 0; i < occupied.Count; i++)
+                    {
+                        if(occupied[i].from == appointment.DateTime)
+                        {
+                            TimeSlot firstUnoccupied = appointmentSlot.GetFirstUnoccupied(occupied,-1);
+                            appointmentIdRescheduleDatePairs.Add(appointment, firstUnoccupied.from);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            var midSortedDictionary = from entry in appointmentIdRescheduleDatePairs orderby entry.Key.DateTime ascending select entry;
+            var sortedDictionary = from entry in midSortedDictionary orderby entry.Value ascending select entry;
+            return sortedDictionary.ToDictionary(pair => pair.Key, pair => pair.Value);
         }
     }
 }

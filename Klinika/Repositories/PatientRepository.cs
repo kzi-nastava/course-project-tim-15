@@ -11,6 +11,14 @@ namespace Klinika.Repositories
         public static Dictionary<int,Patient> IDPatientPairs { get; set; }
 
 
+        public static void FillPatientSelectionList(ComboBox patientSelection)
+        {
+            foreach (KeyValuePair<int, Patient> pair in IDPatientPairs)
+            {
+                patientSelection.Items.Add(pair.Value.GetIdAndFullName());
+            }
+        }
+
         public static DataTable GetAll()
         {
             EmailIDPairs = new Dictionary<string, int>();
