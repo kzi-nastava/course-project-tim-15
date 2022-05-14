@@ -54,11 +54,11 @@ namespace Klinika.Models
             IsDeleted = isDeleted;
         }
 
-        public bool IsBetween (DateTime fromTime, DateTime untilTime, int offsetMin = 0)
+        public bool IsBetween(DateSlot timeSlot, int offsetMin = 0)
         {
-            DateTime start = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, fromTime.Hour, fromTime.Minute, fromTime.Second);
-            DateTime end = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, untilTime.Hour, untilTime.Minute, untilTime.Second);
-            if (DateTime.AddMinutes(offsetMin) >= start && DateTime.AddMinutes(offsetMin) < end)
+            DateTime start = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
+            DateTime end = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
+            if (DateTime.AddMinutes(offsetMin) >= start && DateTime.AddMinutes(offsetMin) <= end)
             {
                 return true;
             }

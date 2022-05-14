@@ -77,7 +77,8 @@ namespace Klinika.GUI.Patient
             DateTime deadlineDate = DeadlineDatePicker.Value;
             char priority = DoctorRadioButton.Checked ? 'D' : 'T';
 
-            List<Appointment> recommended = AppointmentServices.FindRecommended(doctorID, fromTime, untilTime, deadlineDate, priority);
+            DateSlot timeSlot = new DateSlot(fromTime, untilTime);
+            List<Appointment> recommended = AppointmentService.FindRecommended(doctorID, timeSlot, deadlineDate, priority);
             FillRecommendedAppointmentTable(recommended);
         }
 
