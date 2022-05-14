@@ -80,6 +80,7 @@
             // 
             // renovateButton
             // 
+            this.renovateButton.Enabled = false;
             this.renovateButton.Location = new System.Drawing.Point(527, 342);
             this.renovateButton.Name = "renovateButton";
             this.renovateButton.Size = new System.Drawing.Size(94, 29);

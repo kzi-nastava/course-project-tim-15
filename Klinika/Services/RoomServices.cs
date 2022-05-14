@@ -12,5 +12,14 @@ namespace Klinika.Services
         {
             return true;
         }
+        public static bool IsRoomRenovating(int id, DateTime from, DateTime to)
+        {
+            bool renovating = false;
+            if(Repositories.RoomRepository.IsRoomRenovating(id, from, to))
+            {
+                renovating = true;
+            }
+            return renovating;
+        }
     }
 }

@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.roomComboBox = new System.Windows.Forms.ComboBox();
             this.pickButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // comboBox1
+            // roomComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(344, 152);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(151, 28);
-            this.comboBox1.TabIndex = 0;
+            this.roomComboBox.FormattingEnabled = true;
+            this.roomComboBox.Location = new System.Drawing.Point(344, 152);
+            this.roomComboBox.Name = "roomComboBox";
+            this.roomComboBox.Size = new System.Drawing.Size(151, 28);
+            this.roomComboBox.TabIndex = 0;
             // 
             // pickButton
             // 
@@ -49,6 +49,7 @@
             this.pickButton.TabIndex = 1;
             this.pickButton.Text = "Pick";
             this.pickButton.UseVisualStyleBackColor = true;
+            this.pickButton.Click += new System.EventHandler(this.pickButton_Click);
             // 
             // label1
             // 
@@ -66,9 +67,10 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pickButton);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.roomComboBox);
             this.Name = "Merge";
             this.Text = "Merge";
+            this.Load += new System.EventHandler(this.Merge_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -76,7 +78,7 @@
 
         #endregion
 
-        private ComboBox comboBox1;
+        private ComboBox roomComboBox;
         private Button pickButton;
         private Label label1;
     }
