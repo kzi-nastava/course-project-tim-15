@@ -14,15 +14,6 @@ namespace Klinika.Services
     internal class SecretaryService
     {
 
-        public static void FillPatientSelectionList(ComboBox patientSelection,Dictionary<int,Patient> IDPatientPairs)
-        {
-            foreach(KeyValuePair<int,Patient> pair in IDPatientPairs)
-            {
-                string patient = pair.Key + ". " + pair.Value.Name + " " + pair.Value.Surname;
-                patientSelection.Items.Add(patient);
-            }
-        }
-
         public static int ExtractID(string objectWithId)
         {
             return Convert.ToInt32(objectWithId.Split('.')[0]);
@@ -33,11 +24,15 @@ namespace Klinika.Services
             MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        public static void ShowInformationMessage(string message)
+        {
+            MessageBox.Show(message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         public static DialogResult ShowConfirmationMessage(string message)
         {
             return MessageBox.Show(message, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
-
 
         public static object GetCellValue(DataGridView table,string columnName)
         {
@@ -48,6 +43,27 @@ namespace Klinika.Services
         {
             table.DataSource = data;
             table.ClearSelection();
+        }
+
+
+        public static void FillSpecializationSelectionList(ComboBox specializationSelection)
+        {
+            List<Specialization> available = DoctorRepository.GetInstance().GetAllAvailableSpecializations();
+
+            foreach(Specialization specialization in available)
+            {
+                specializationSelection.Items.Add(specialization.ID + ". " + specialization.Name);
+            }
+        }
+
+
+        public static DateTime GetNow()
+        {
+            DateTime now = DateTime.Now;
+            now = now.AddMilliseconds(-now.Millisecond);
+            now = now.AddSeconds(-now.Second);
+            
+            return now;
         }
     }
 }

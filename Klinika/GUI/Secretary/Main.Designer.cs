@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.patients = new System.Windows.Forms.TabPage();
+            this.urgentSchedulingButton = new System.Windows.Forms.Button();
             this.unblockButton = new System.Windows.Forms.Button();
             this.blockButton = new System.Windows.Forms.Button();
             this.deletePatientButton = new System.Windows.Forms.Button();
@@ -62,6 +63,7 @@
             // 
             // patients
             // 
+            this.patients.Controls.Add(this.urgentSchedulingButton);
             this.patients.Controls.Add(this.unblockButton);
             this.patients.Controls.Add(this.blockButton);
             this.patients.Controls.Add(this.deletePatientButton);
@@ -76,10 +78,20 @@
             this.patients.Text = "Patients";
             this.patients.UseVisualStyleBackColor = true;
             // 
+            // urgentSchedulingButton
+            // 
+            this.urgentSchedulingButton.Location = new System.Drawing.Point(726, 432);
+            this.urgentSchedulingButton.Name = "urgentSchedulingButton";
+            this.urgentSchedulingButton.Size = new System.Drawing.Size(152, 29);
+            this.urgentSchedulingButton.TabIndex = 6;
+            this.urgentSchedulingButton.Text = "Urgent scheduling";
+            this.urgentSchedulingButton.UseVisualStyleBackColor = true;
+            this.urgentSchedulingButton.Click += new System.EventHandler(this.urgentSchedulingButton_Click);
+            // 
             // unblockButton
             // 
             this.unblockButton.Enabled = false;
-            this.unblockButton.Location = new System.Drawing.Point(683, 429);
+            this.unblockButton.Location = new System.Drawing.Point(597, 432);
             this.unblockButton.Name = "unblockButton";
             this.unblockButton.Size = new System.Drawing.Size(94, 29);
             this.unblockButton.TabIndex = 5;
@@ -90,7 +102,7 @@
             // blockButton
             // 
             this.blockButton.Enabled = false;
-            this.blockButton.Location = new System.Drawing.Point(551, 429);
+            this.blockButton.Location = new System.Drawing.Point(465, 432);
             this.blockButton.Name = "blockButton";
             this.blockButton.Size = new System.Drawing.Size(94, 29);
             this.blockButton.TabIndex = 4;
@@ -101,7 +113,7 @@
             // deletePatientButton
             // 
             this.deletePatientButton.Enabled = false;
-            this.deletePatientButton.Location = new System.Drawing.Point(419, 429);
+            this.deletePatientButton.Location = new System.Drawing.Point(333, 432);
             this.deletePatientButton.Name = "deletePatientButton";
             this.deletePatientButton.Size = new System.Drawing.Size(94, 29);
             this.deletePatientButton.TabIndex = 3;
@@ -112,7 +124,7 @@
             // updatePatientButton
             // 
             this.updatePatientButton.Enabled = false;
-            this.updatePatientButton.Location = new System.Drawing.Point(287, 429);
+            this.updatePatientButton.Location = new System.Drawing.Point(201, 432);
             this.updatePatientButton.Name = "updatePatientButton";
             this.updatePatientButton.Size = new System.Drawing.Size(94, 29);
             this.updatePatientButton.TabIndex = 2;
@@ -122,7 +134,7 @@
             // 
             // addPatientButton
             // 
-            this.addPatientButton.Location = new System.Drawing.Point(155, 429);
+            this.addPatientButton.Location = new System.Drawing.Point(69, 432);
             this.addPatientButton.Name = "addPatientButton";
             this.addPatientButton.Size = new System.Drawing.Size(94, 29);
             this.addPatientButton.TabIndex = 1;
@@ -317,6 +329,8 @@
             // 
             // patientSelection
             // 
+            this.patientSelection.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.patientSelection.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.patientSelection.FormattingEnabled = true;
             this.patientSelection.Location = new System.Drawing.Point(160, 139);
             this.patientSelection.Name = "patientSelection";
@@ -381,5 +395,6 @@
         public TextBox specializationField;
         private Label label4;
         public Button scheduleButton;
+        private Button urgentSchedulingButton;
     }
 }

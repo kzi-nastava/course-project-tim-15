@@ -14,6 +14,15 @@ namespace Klinika.Exceptions
         }
     }
 
+
+    public abstract class ItemNotSelectedException : Exception
+    {
+        public ItemNotSelectedException(string item) : base(item + " is not selected!")
+        {
+            MessageBox.Show(item + " is not selected!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
     public class FieldEmptyException : FormValidationException
     {
        public FieldEmptyException(string message) : base(message) { }
@@ -50,10 +59,29 @@ namespace Klinika.Exceptions
 
     }
 
-
     public class DoctorUnavailableException : FormValidationException
     {
         public DoctorUnavailableException(string message) : base(message) { }
 
     }
+
+    public class PatientNotSelectedException : ItemNotSelectedException
+    {
+        public PatientNotSelectedException() : base("Patient") { }
+
+    }
+
+    public class SpecializationNotSelectedException : ItemNotSelectedException
+    {
+        public SpecializationNotSelectedException() : base("Specialization") { }
+
+    }
+
+    public class NegativeOrZeroValueException : FormValidationException
+    {
+        public NegativeOrZeroValueException(string message) : base(message) { }
+
+    }
+
+
 }

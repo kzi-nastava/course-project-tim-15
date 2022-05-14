@@ -182,5 +182,9 @@ namespace Klinika.Services
             return best;
         }
         #endregion
+        public void ScheduleUnder2Hours()
+        {
+
+        }
     }
 }

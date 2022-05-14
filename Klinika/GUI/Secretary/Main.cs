@@ -108,6 +108,11 @@ namespace Klinika.GUI.Secretary
             FindSuitableDoctor();
         }
 
+        private void urgentSchedulingButton_Click(object sender, EventArgs e)
+        {
+            new UrgentScheduling().Show();
+        }
+
         public void SetRefferalTabFieldValues(ChosenReferral referral)
         {
             refferalTabDoctorField.Text = referral.chosenDoctor;
@@ -232,7 +237,7 @@ namespace Klinika.GUI.Secretary
             }
             else if (tabs.SelectedTab == referrals)
             {
-                SecretaryService.FillPatientSelectionList(patientSelection, PatientRepository.IDPatientPairs);
+                PatientRepository.FillPatientSelectionList(patientSelection);
             }
         }
 
@@ -364,7 +369,8 @@ namespace Klinika.GUI.Secretary
 
         private void FindSuitableDoctor()
         {
-            Roles.Doctor suitableDoctor = DoctorService.GetSuitable(specializationField.Text, appointmentPicker.Value);
+            TimeSlot slot = new TimeSlot(appointmentPicker.Value);
+            Roles.Doctor suitableDoctor = DoctorService.GetSuitable(SecretaryService.ExtractID(specializationField.Text), slot);
             if (suitableDoctor != null)
             {
                 refferalTabDoctorField.Text = suitableDoctor.ID + ". " + suitableDoctor.Name + " " + suitableDoctor.Surname;

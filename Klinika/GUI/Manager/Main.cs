@@ -105,11 +105,13 @@ namespace Klinika.GUI.Manager
             {
                 deleteButton.Enabled = true;
                 modifyButton.Enabled = true;
+                renovateButton.Enabled = true;
             }
             else
             {
                 deleteButton.Enabled = false;
                 modifyButton.Enabled = false;
+                renovateButton.Enabled = false;
             }
         }
 
