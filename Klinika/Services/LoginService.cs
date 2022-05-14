@@ -63,7 +63,7 @@ namespace Klinika.Services
                     new GUI.Manager.Main().Show();
                     break;
                 default:
-                    if (AppointmentRepository.GetScheduledAppointmentsCount(loggingUser.ID) > 8 || PatientRequestRepository.GetModifyAppointmentsCount(loggingUser.ID) > 5)
+                    if (PatientService.IsBlocked(loggingUser.ID))
                     {
                         loggingUser.IsBlocked = true;
                         UserRepository.Block(loggingUser.ID);

@@ -34,5 +34,14 @@ namespace Klinika.Services
             return $"{patient.Name} {patient.Surname}";
         }
 
+        public static bool IsBlocked(int id)
+        {
+            if (AppointmentRepository.GetScheduledAppointmentsCount(id) > 8 
+                || PatientRequestRepository.GetModifyAppointmentsCount(id) > 5)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
