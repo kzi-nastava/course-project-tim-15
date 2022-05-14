@@ -11,42 +11,28 @@ namespace Klinika.Repositories
 {
     internal class MedicalRecordRepository
     {
-        public static T CheckNull<T>(object obj)
-        {
-            return obj == DBNull.Value ? default(T) : (T)obj;
-        }
         public static MedicalRecord Get(int patientID)
         {
             MedicalRecord record = new MedicalRecord();
             string getRecordQuerry = "SELECT * " +
                 "FROM [Patient] " +
                 $"WHERE UserID = {patientID}";
-            try
+
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getRecordQuerry);
+            foreach(object row in resoult)
             {
-                SqlCommand getRecord = new SqlCommand(getRecordQuerry, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = getRecord.ExecuteReader())
-                {
-                    while (retrieved.Read())
-                    {
-                        record.ID = patientID;
-                        record.Height = CheckNull<decimal>(retrieved["Height"]);
-                        record.Weight = CheckNull<decimal>(retrieved["Weight"]);
-                        record.BloodType = CheckNull<string>(retrieved["BloodType"]);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
+                record.ID = patientID;
+                record.Height = DatabaseConnection.CheckNull<decimal>(((object[])row)[1]);
+                record.Weight = DatabaseConnection.CheckNull<decimal>(((object[])row)[2]);
+                record.BloodType = DatabaseConnection.CheckNull<string>(((object[])row)[3]);
             }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+
             record.Anamneses = GetAnamneses(patientID);
             record.Diseases = GetDiseases(patientID);
             record.Allergens = GetAllergens(patientID);
+
             return record;
         }
-         
         public static List<Anamnesis> GetAnamneses(int patientID)
         {
             List<Anamnesis> anamneses = new List<Anamnesis>();
@@ -55,30 +41,19 @@ namespace Klinika.Repositories
                 "SELECT [Anamnesis].ID, [Anamnesis].MedicalActionID, [Anamnesis].Description, [Anamnesis].Symptoms, [Anamnesis].Conclusion " +
                 "FROM [Anamnesis] JOIN [MedicalAction] ON [Anamnesis].MedicalActionID = [MedicalAction].ID " +
                 $"WHERE [MedicalAction].PatientID = {patientID}";
-            try
+
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAnamnesesQuerry);
+            foreach (object row in resoult)
             {
-                SqlCommand getAnamneses = new SqlCommand(getAnamnesesQuerry, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = getAnamneses.ExecuteReader())
+                var anamnesis = new Anamnesis
                 {
-                    while (retrieved.Read())
-                    {
-                        var anamnesis = new Anamnesis
-                        {
-                            ID = Convert.ToInt32(retrieved["ID"]),
-                            MedicalActionID = Convert.ToInt32(retrieved["MedicalActionID"]),
-                            Description = CheckNull<string>(retrieved["Description"]),
-                            Symptoms = CheckNull<string>(retrieved["Symptoms"]),
-                            Conclusion = CheckNull<string>(retrieved["Conclusion"])
-                        };
-                        anamneses.Add(anamnesis);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
+                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
+                    MedicalActionID = Convert.ToInt32(((object[])row)[1].ToString()),
+                    Description = DatabaseConnection.CheckNull<string>(((object[])row)[2]),
+                    Symptoms = DatabaseConnection.CheckNull<string>(((object[])row)[3]),
+                    Conclusion = DatabaseConnection.CheckNull<string>(((object[])row)[4])
+                };
+                anamneses.Add(anamnesis);
             }
             return anamneses;
         }
@@ -90,30 +65,19 @@ namespace Klinika.Repositories
                 "SELECT [Disease].ID, [Disease].Name, [Disease].Description, [PatientDisease].PatientID, [PatientDisease].DateDiagnosed " +
                 "FROM [Disease] JOIN [PatientDisease] ON [Disease].ID = [PatientDisease].Diseaseid " +
                 $"WHERE [PatientDisease].PatientID = {patientID}";
-            try
+
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDiseasesQuerry);
+            foreach (object row in resoult)
             {
-                SqlCommand getDiseases = new SqlCommand(getDiseasesQuerry, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = getDiseases.ExecuteReader())
+                var disease = new Disease
                 {
-                    while (retrieved.Read())
-                    {
-                        var disease = new Disease
-                        {
-                            ID = Convert.ToInt32(retrieved["ID"]),
-                            PatientID = Convert.ToInt32(retrieved["PatientID"]),
-                            Description = CheckNull<string>(retrieved["Description"]),
-                            Name = CheckNull<string>(retrieved["Name"]),
-                            DateDiagnosed = CheckNull<DateTime>(retrieved["DateDiagnosed"])
-                        };
-                        diseases.Add(disease);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
+                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
+                    Name = DatabaseConnection.CheckNull<string>(((object[])row)[1]),
+                    Description = DatabaseConnection.CheckNull<string>(((object[])row)[2]),
+                    PatientID = Convert.ToInt32(((object[])row)[3].ToString()),
+                    DateDiagnosed = DatabaseConnection.CheckNull<DateTime>(((object[])row)[4])
+                };
+                diseases.Add(disease);
             }
             return diseases;
         }
@@ -135,33 +99,23 @@ namespace Klinika.Repositories
         }
         private static List<int> GetAllergensIds(int patientID)
         {
-            List<int> IDs = new List<int>();
+            List<int> ids = new List<int>();
 
             string getAllergensQuerry =
                 "SELECT [PatientAllergen].IngredientID " +
                 "FROM [PatientAllergen] " +
                 $"WHERE [PatientAllergen].PatientID = {patientID}";
-            try
-            {
-                SqlCommand getAllergens = new SqlCommand(getAllergensQuerry, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = getAllergens.ExecuteReader())
-                {
-                    while (retrieved.Read())
-                    {
-                        var IngredientID = Convert.ToInt32(retrieved["IngredientID"]);
-                        IDs.Add(IngredientID);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            return IDs;
-        }
 
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllergensQuerry);
+            foreach(object row in resoult)
+            {
+                var IngredientID = Convert.ToInt32(((object[])row)[0].ToString());
+                ids.Add(IngredientID);
+            }
+
+            return ids;
+        }
+        
         public static int CreateAnamnesis(Anamnesis anamnesis)
         {
             string createQuery = "INSERT INTO [Anamnesis] " +
@@ -169,26 +123,16 @@ namespace Klinika.Repositories
                     "OUTPUT INSERTED.ID " +
                     "VALUES (@MedicalActionID,@Description,@Symptoms,@Conclusion)";
 
-            SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-            create.Parameters.AddWithValue("@MedicalActionID", anamnesis.MedicalActionID);
-            create.Parameters.AddWithValue("@Description", anamnesis.Description);
-            create.Parameters.AddWithValue("@Symptoms", anamnesis.Symptoms);
-            create.Parameters.AddWithValue("@Conclusion", anamnesis.Conclusion);
+            var newID = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+                createQuery,
+                ("@MedicalActionID", anamnesis.MedicalActionID),
+                ("@Description", anamnesis.Description),
+                ("@Symptoms", anamnesis.Symptoms),
+                ("@Conclusion", anamnesis.Conclusion));
 
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                anamnesis.ID = (int)create.ExecuteScalar();
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            anamnesis.ID = (int)newID;
             return anamnesis.ID;
         }
-
-
         public static void Create(int patientID)
         {
             string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";

@@ -42,29 +42,16 @@ namespace Klinika.Repositories
         private void GetIngredients()
         {
             string getIngredientsQuery = "SELECT * FROM [Ingredient]";
-            try
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getIngredientsQuery);
+            foreach(object row in resoult)
             {
-                SqlCommand getIngredients = new SqlCommand(getIngredientsQuery, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-
-                using (SqlDataReader retrieved = getIngredients.ExecuteReader())
+                var ingredient = new Ingredient
                 {
-                    while (retrieved.Read())
-                    {
-                        var ingredient = new Ingredient
-                        {
-                            ID = Convert.ToInt32(retrieved["ID"]),
-                            Name = retrieved["Name"].ToString(),
-                            Type = retrieved["Type"].ToString()
-                        };
-                        Ingredients.Add(ingredient);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
+                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
+                    Name = ((object[])row)[1].ToString(),
+                    Type = ((object[])row)[2].ToString()
+                };
+                Ingredients.Add(ingredient);
             }
         }
         private void GetDrugs()
@@ -75,29 +62,16 @@ namespace Klinika.Repositories
         private void GetDrugsBasicInfo()
         {
             string getDrugsQuery = "SELECT * FROM [Drug]";
-            try
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDrugsQuery);
+            foreach (object row in resoult)
             {
-                SqlCommand getDrugs = new SqlCommand(getDrugsQuery, DatabaseConnection.GetInstance().database);
-                try { DatabaseConnection.GetInstance().database.Open(); } catch { }
-
-                using (SqlDataReader retrieved = getDrugs.ExecuteReader())
+                var drug = new Drug
                 {
-                    while (retrieved.Read())
-                    {
-                        var drug = new Drug
-                        {
-                            ID = Convert.ToInt32(retrieved["ID"]),
-                            Name = retrieved["Name"].ToString(),
-                            Approved = retrieved["Approved"].ToString()
-                        };
-                        Drugs.Add(drug);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
+                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
+                    Name = ((object[])row)[1].ToString(),
+                    Approved = ((object[])row)[2].ToString()
+                };
+                Drugs.Add(drug);
             }
         }
         private void GetDrugsIngredients()
@@ -105,28 +79,15 @@ namespace Klinika.Repositories
             foreach (Drug drug in Drugs)
             {
                 string getDrugsIngredientsQuery = $"SELECT IngredientID FROM [DrugIngredient] WHERE DrugID = {drug.ID}";
-                try
+                var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDrugsIngredientsQuery);
+                foreach (object row in resoult)
                 {
-                    SqlCommand getDrugsIngredients = new SqlCommand(getDrugsIngredientsQuery, DatabaseConnection.GetInstance().database);
-                    try { DatabaseConnection.GetInstance().database.Open(); } catch { }
-
-                    using (SqlDataReader retrieved = getDrugsIngredients.ExecuteReader())
+                    var IngredientID = Convert.ToInt32(((object[])row)[0].ToString());
+                    var ingredient = Ingredients.Where(x => x.ID == IngredientID).FirstOrDefault();
+                    if (ingredient != null)
                     {
-                        while (retrieved.Read())
-                        {
-                            var IngredientID = Convert.ToInt32(retrieved["IngredientID"]);
-                            var ingredient = Ingredients.Where(x => x.ID == IngredientID).FirstOrDefault();
-                            if (ingredient != null)
-                            {
-                                drug.Ingredients.Add(ingredient);
-                            }
-                        }
+                        drug.Ingredients.Add(ingredient);
                     }
-                    DatabaseConnection.GetInstance().database.Close();
-                }
-                catch (SqlException error)
-                {
-                    MessageBox.Show(error.Message);
                 }
             }
         }
@@ -139,24 +100,14 @@ namespace Klinika.Repositories
                 "(PatientID,DrugID,DateStarted,DateEnded,Interval,Comment) " +
                 "VALUES (@PatientID,@DrugID,@DateStarted,@DateEnded,@Interval,@Comment)";
 
-            SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-            create.Parameters.AddWithValue("@PatientID", prescription.PatientID);
-            create.Parameters.AddWithValue("@DrugID", prescription.DrugID);
-            create.Parameters.AddWithValue("@DateStarted", prescription.DateStarted);
-            create.Parameters.AddWithValue("@DateEnded", prescription.DateEnded);
-            create.Parameters.AddWithValue("@Interval", prescription.Interval);
-            create.Parameters.AddWithValue("@Comment", prescription.Comment);
-
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                create.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+           DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+               createQuery,
+               ("@PatientID", prescription.PatientID),
+               ("@DrugID", prescription.DrugID),
+               ("@DateStarted", prescription.DateStarted),
+               ("@DateEnded", prescription.DateEnded),
+               ("@Interval", prescription.Interval),
+               ("@Comment", prescription.Comment));
         }
         #endregion
     }

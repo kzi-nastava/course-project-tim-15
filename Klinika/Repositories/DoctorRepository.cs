@@ -34,26 +34,14 @@ namespace Klinika.Repositories
             SqlConnection database = DatabaseConnection.GetInstance().database;
             string getQuery = "SELECT * FROM [Specialization]";
 
-            try
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery);
+            foreach(object row in resoult)
             {
-                SqlCommand get = new SqlCommand(getQuery, database);
-                database.Open();
-                using (SqlDataReader retrieved = get.ExecuteReader())
+                specializations.Add(new Specialization
                 {
-                    while (retrieved.Read())
-                    {
-                        specializations.Add(new Specialization
-                        {
-                            ID = Convert.ToInt32(retrieved["ID"]),
-                            Name = retrieved["Name"].ToString()
-                        });
-                    }
-                }
-                database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
+                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
+                    Name = ((object[])row)[1].ToString()
+                });
             }
 
             return specializations;
@@ -65,24 +53,12 @@ namespace Klinika.Repositories
             SqlConnection database = DatabaseConnection.GetInstance().database;
             string getQuery = "SELECT UserID " +
                 "FROM [DoctorSpecialization] " +
-                $"WHERE SpecializationID = {specializationID}";
+                "WHERE SpecializationID = @SpecializationID";
 
-            try
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery, ("SpecializationID", specializationID));
+            foreach(object row in resoult)
             {
-                SqlCommand get = new SqlCommand(getQuery, database);
-                database.Open();
-                using (SqlDataReader retrieved = get.ExecuteReader())
-                {
-                    while (retrieved.Read())
-                    {
-                        doctors.Add(Convert.ToInt32(retrieved["UserID"]));
-                    }
-                }
-                database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
+                doctors.Add(Convert.ToInt32(((object[])row)[0].ToString()));
             }
 
             return doctors;
@@ -117,7 +93,6 @@ namespace Klinika.Repositories
 
             return specialization;
         }
-
 
         public static List<Doctor> GetAll()
         {
