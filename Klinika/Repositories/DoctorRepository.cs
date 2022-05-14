@@ -46,7 +46,7 @@ namespace Klinika.Repositories
 
             return specializations;
         }
-        public static List<int> GetSpecializedIDs(int specializationID)
+        private static List<int> GetSpecializedIDs(int specializationID)
         {
             List<int> doctors = new List<int>();
 
@@ -62,6 +62,19 @@ namespace Klinika.Repositories
             }
 
             return doctors;
+        }
+        public static User[] GetSpecializedDoctors(int specializationID)
+        {
+            var doctorIDs = GetSpecializedIDs(specializationID).ToArray();
+
+            var specializedDoctors = new List<User>();
+            foreach (int doctorID in doctorIDs)
+            {
+                var doctor = UserRepository.GetInstance().Users.FirstOrDefault(x => x.ID == doctorID);
+                specializedDoctors.Add(doctor);
+            }
+
+            return specializedDoctors.ToArray();
         }
         public static Specialization getSpecialization (int DoctorID)
         {

@@ -448,15 +448,15 @@
         private DataGridView AllergensTable;
         private GroupBox AnamnesisGroup;
         private Button FinishButton;
-        private TextBox ConclusionTextBox;
+        internal TextBox ConclusionTextBox;
         private Label label6;
         private Label label5;
-        private TextBox SymptomsTextBox;
-        private TextBox DescriptionTextBox;
+        internal TextBox SymptomsTextBox;
+        internal TextBox DescriptionTextBox;
         private Label label4;
-        private ComboBox DoctorsComboBox;
-        private ComboBox SpecializationsComboBox;
-        private CheckBox ReferCheckBox;
+        internal ComboBox DoctorsComboBox;
+        internal ComboBox SpecializationsComboBox;
+        internal CheckBox ReferCheckBox;
         private Button PerscriptionButton;
         private Label PerscriptionHint;
     }
