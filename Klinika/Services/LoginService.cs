@@ -63,7 +63,7 @@ namespace Klinika.Services
                     new GUI.Manager.Main().Show();
                     break;
                 default:
-                    if (AppointmentRepository.GetPersonalCount(loggingUser.ID) > 8 || PatientRequestRepository.GetPersonalCount(loggingUser.ID) > 5)
+                    if (AppointmentRepository.GetScheduledAppointmentsCount(loggingUser.ID) > 8 || PatientRequestRepository.GetModifyAppointmentsCount(loggingUser.ID) > 5)
                     {
                         loggingUser.IsBlocked = true;
                         UserRepository.Block(loggingUser.ID);

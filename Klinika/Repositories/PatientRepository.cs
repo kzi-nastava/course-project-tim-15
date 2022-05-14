@@ -10,7 +10,6 @@ namespace Klinika.Repositories
         public static Dictionary<string, int>? EmailIDPairs { get; set; }
         public static Dictionary<int,Patient> IDPatientPairs { get; set; }
 
-
         public static DataTable GetAll()
         {
             EmailIDPairs = new Dictionary<string, int>();
@@ -68,7 +67,6 @@ namespace Klinika.Repositories
             ("@Password", patient.Password)
             ); 
         }
-
 
         //Logical deletion
         public static void Delete(int id, string email)

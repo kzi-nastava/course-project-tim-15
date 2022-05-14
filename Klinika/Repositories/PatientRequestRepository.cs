@@ -77,11 +77,11 @@ namespace Klinika.Repositories
                 );
         }
 
-        public static int GetPersonalCount(int ID)
+        public static int GetModifyAppointmentsCount(int patientID)
         {
             DateTime startDate = DateTime.Now.AddDays(-30);
 
-            var Descriptions = GetAllDescriptions(ID);
+            var Descriptions = GetAppointmentsDescriptions(patientID);
             int counter = 0;
 
             foreach (string description in Descriptions)
@@ -95,33 +95,20 @@ namespace Klinika.Repositories
             }
             return counter;
         }
-        private static List<string> GetAllDescriptions(int ID)
+        private static List<string> GetAppointmentsDescriptions(int patientID)
         {
-            var Descriptions = new List<string>();
+            var descriptions = new List<string>();
 
             string getDescriptionsQuerry = "SELECT Description " +
                                  "FROM [PatientRequest] " +
-                                 $"WHERE PatientID = {ID}";
-            try
-            {
-                SqlCommand getDescriptons = new SqlCommand(getDescriptionsQuerry, DatabaseConnection.GetInstance().database);
-                DatabaseConnection.GetInstance().database.Open();
-                using (SqlDataReader retrieved = getDescriptons.ExecuteReader())
-                {
-                    while (retrieved.Read())
-                    {
-                        string description = retrieved["Description"].ToString();
-                        Descriptions.Add(description);
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            return Descriptions;
-        }
+                                 $"WHERE PatientID = {patientID}";
 
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDescriptionsQuerry);
+            foreach(object row in resoult)
+            {
+                descriptions.Add(DatabaseConnection.CheckNull<string>(((object[])row)[0]));
+            }
+            return descriptions;
+        }
     }
 }
