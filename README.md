@@ -7,6 +7,6 @@ Conventions:
 
 Test with:
 - Doctor mail: strale@mail.com / pass: strale
-- Patient mail: dijana@mail.com / pass: dijana
+- Patient mail: dara@mail.com / pass: dara
 - Manager mail: uros@mail.com / pass: uros
 - Secretarian mail: jovana@mail.com / pass: jovana
