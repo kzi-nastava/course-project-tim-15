@@ -49,6 +49,9 @@ namespace Klinika.Models
             for (int i = 0; i < occupied.Count; i++)
             {
                 if ((temporary.from - from).TotalMinutes >= inNextMinutes && inNextMinutes != -1) break;
+                if(occupied.Count == 1 && (temporary.to <= occupied[0].from || temporary.from >= occupied[0].to)){
+                    return temporary;
+                }
                 if(i != occupied.Count - 1)
                 {
                     int between = (int)(occupied[i + 1].from - occupied[i].to).TotalMinutes;
