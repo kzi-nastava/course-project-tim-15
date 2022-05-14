@@ -2,6 +2,7 @@
 using Klinika.Repositories;
 using Klinika.Roles;
 using System.Data;
+using Klinika.Services;
 
 namespace Klinika.GUI.Patient
 {
@@ -136,7 +137,7 @@ namespace Klinika.GUI.Patient
             patientRequest.PatientID = Appointment.PatientID;
             patientRequest.MedicalActionID = Appointment.ID;
             patientRequest.Type = 'M';
-            patientRequest.Description = Parent.GetFullRequestDescription(GetSelectedDateTime(), GetDoctorID());
+            patientRequest.Description = PatientRequestService.GenerateDescription(GetSelectedDateTime(), GetDoctorID());
             patientRequest.Approved = isApproved;
             PatientRequestRepository.Create(patientRequest);
         }   

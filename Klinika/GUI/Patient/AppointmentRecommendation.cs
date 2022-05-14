@@ -56,7 +56,7 @@ namespace Klinika.GUI.Patient
                     DataRow newRow = dataTable.NewRow();
 
                     newRow["Doctor ID"] = appointment.DoctorID;
-                    newRow["Doctor"] = Parent.GetDoctorFullName(appointment.DoctorID);
+                    newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
                     newRow["DateTime"] = appointment.DateTime;
                     dataTable.Rows.Add(newRow);
                 }

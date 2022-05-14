@@ -1,6 +1,7 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
+using Klinika.Services;
 using System.Data;
 
 namespace Klinika.GUI.Patient
@@ -8,13 +9,6 @@ namespace Klinika.GUI.Patient
     public partial class PatientMain : Form
     {
         public User Patient { get; }
-        private List<Appointment> Appointments
-        {
-            get
-            {
-                return AppointmentRepository.GetInstance().Appointments;
-            }
-        }
 
         #region Form
         public PatientMain(User patient)
@@ -35,11 +29,10 @@ namespace Klinika.GUI.Patient
             {
                 ScheduleButton.Enabled = false;
                 OccupiedAppointmentsTable.DataSource = new DataTable();
+                return;
             }
-            else if ((sender as TabControl).SelectedIndex == 2)
-            {
-                FillMedicalRecorTab();
-            }
+
+            if ((sender as TabControl).SelectedIndex == 2) FillMedicalRecorTab();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -54,7 +47,7 @@ namespace Klinika.GUI.Patient
             if (allAppointments != null)
             {
                 FillTableWithDoctorData(allAppointments);
-                FillAppointmentTypeName(allAppointments);
+                DoctorService.FillAppointmentTypeField(allAppointments);
 
                 allAppointments.Columns.Remove("DoctorID");
                 allAppointments.Columns.Remove("RoomID");
@@ -71,32 +64,24 @@ namespace Klinika.GUI.Patient
                 PersonalAppointmentsTable.ClearSelection();
             }
         }
-        private void FillAppointmentTypeName(DataTable dataTable)
-        {
-            foreach (DataRow row in dataTable.Rows)
-            {
-                row["Type"] = GetAppointmentTypeName(row["Type"].ToString());
-            }
-        }
         public void InsertRowIntoPersonalAppointmentsTable(Appointment appointment)
         {
             DataTable? dataTable = PersonalAppointmentsTable.DataSource as DataTable;
             DataRow dataRow = dataTable.NewRow();
             dataRow[0] = appointment.ID.ToString();
-            dataRow[1] = GetDoctorFullName(appointment.DoctorID);
+            dataRow[1] = DoctorService.GetFullName(appointment.DoctorID);
             dataRow[2] = appointment.DateTime;
-            dataRow[3] = GetAppointmentTypeName(appointment.Type.ToString());
+            dataRow[3] = appointment.GetType();
             dataRow[4] = appointment.Duration.ToString();
             dataRow[5] = appointment.Urgent;
             dataTable.Rows.Add(dataRow);
         }
         public void ModifyPersonalAppointmentTableRow(Appointment appointment)
         {
-            DataTable? dt = PersonalAppointmentsTable.DataSource as DataTable;
             PersonalAppointmentsTable.SelectedRows[0].SetValues(appointment.ID.ToString(),
-                GetDoctorFullName(appointment.DoctorID),
+                DoctorService.GetFullName(appointment.DoctorID),
                 appointment.DateTime,
-                GetAppointmentTypeName(appointment.Type.ToString()),
+                appointment.GetType(),
                 appointment.Duration.ToString(),
                 appointment.Urgent);
         }
@@ -107,21 +92,15 @@ namespace Klinika.GUI.Patient
         }
         private void ModifyAppointmentClick(object sender, EventArgs e)
         {
-            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
-            Appointment? toModify = GetAppointment(ID);
-            new PersonalAppointment(this, toModify).Show();
+            Appointment selected = AppointmentService.GetSelected(PersonalAppointmentsTable);
+            new PersonalAppointment(this, selected).Show();
         }
         private void DeleteAppointmentClick(object sender, EventArgs e)
         {
-            if (!IsDeleteConfirmed())
-            {
-                return;
-            }
+            if (!IsDeleteConfirmed()) return;
 
-            int ID = Convert.ToInt32(PersonalAppointmentsTable.SelectedRows[0].Cells["ID"].Value);
-            Appointment? toDelete = GetAppointment(ID);
-
-            bool needApproval = DateTime.Now.AddDays(2).Date >= toDelete.DateTime.Date;
+            Appointment selected = AppointmentService.GetSelected(PersonalAppointmentsTable);
+            bool needApproval = DateTime.Now.AddDays(2).Date >= selected.DateTime.Date;
 
             if (needApproval)
             {
@@ -130,14 +109,14 @@ namespace Klinika.GUI.Patient
 
                 if (sendRequest == DialogResult.Yes)
                 {
-                    SendDeletePatientRequest(!needApproval, toDelete);
+                    PatientRequestService.SendDeleted(!needApproval, selected);
                 }
                 return;
             }
 
-            AppointmentRepository.Delete(toDelete.ID);
-            AppointmentRepository.GetInstance().DeleteFromList(toDelete.ID);
-            SendDeletePatientRequest(!needApproval, toDelete);
+            AppointmentRepository.Delete(selected.ID);
+            AppointmentRepository.GetInstance().DeleteFromList(selected.ID);
+            PatientRequestService.SendDeleted(!needApproval, selected);
             PersonalAppointmentsTable.Rows.RemoveAt(PersonalAppointmentsTable.SelectedRows[0].Index);
         }
         #endregion
@@ -152,7 +131,7 @@ namespace Klinika.GUI.Patient
             {
 
                 FillTableWithDoctorData(appointmets);
-                FillAppointmentTypeName(appointmets);
+                DoctorService.FillAppointmentTypeField(appointmets);
 
                 appointmets.Columns.Remove("PatientID");
                 appointmets.Columns.Remove("Completed");
@@ -177,7 +156,7 @@ namespace Klinika.GUI.Patient
             DataTable? dataTable = OccupiedAppointmentsTable.DataSource as DataTable;
             DataRow dataRow = dataTable.NewRow();
             dataRow[0] = appointment.ID.ToString();
-            dataRow[1] = GetDoctorFullName(appointment.DoctorID);
+            dataRow[1] = DoctorService.GetFullName(appointment.DoctorID);
             dataRow[2] = appointment.DoctorID.ToString();
             dataRow[3] = appointment.DateTime;
             dataRow[4] = appointment.Duration.ToString();
@@ -185,10 +164,8 @@ namespace Klinika.GUI.Patient
         }
         private void FindAppointmentsClick(object sender, EventArgs e)
         {
-            if (IsDateValid(AppointmentDatePicker.Value))
-            {
-                FillOccupiedAppointmentsTable();
-            }
+            if (!IsDateValid(AppointmentDatePicker.Value)) return;
+            FillOccupiedAppointmentsTable();
         }
         private void ScheduleAppointmentClick(object sender, EventArgs e)
         {
@@ -224,7 +201,7 @@ namespace Klinika.GUI.Patient
                 DataRow newRow = anamnesesData.NewRow();
                 Appointment appointment = appointments.Where(x => x.ID == anamnesis.MedicalActionID).FirstOrDefault();
 
-                newRow["Doctor"] = GetDoctorFullName(appointment.DoctorID);
+                newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
                 newRow["Doctor Specialization"] = DoctorRepository.getSpecialization(appointment.DoctorID);
                 newRow["DateTime"] = appointment.DateTime;
                 newRow["Description"] = anamnesis.Description;
@@ -237,18 +214,13 @@ namespace Klinika.GUI.Patient
         private void SearchClick(object sender, EventArgs e)
         {
             string searchParam = SearchTextBox.Text.ToUpper();
-            List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
-            List<Anamnesis> searchedAnamneses = new List<Anamnesis>();
-            foreach (Anamnesis anamnesis in anamneses)
-            {
-                if(anamnesis.Description.ToUpper().Contains(searchParam) || 
-                    anamnesis.Symptoms.ToUpper().Contains(searchParam) || 
-                    anamnesis.Conclusion.ToUpper().Contains(searchParam))
-                {
-                    searchedAnamneses.Add(anamnesis);
-                }
-            }
-            FillMedicalRecordTable(searchedAnamneses);
+
+            List<Anamnesis> searchResoult = MedicalRecordRepository.GetAnamneses(Patient.ID).Where(
+                x => x.Description.ToUpper().Contains(searchParam) 
+                || x.Symptoms.ToUpper().Contains(searchParam) 
+                || x.Conclusion.ToUpper().Contains(searchParam)).ToList();
+
+            FillMedicalRecordTable(searchResoult);
         }
         private void ResetClick(object sender, EventArgs e)
         {
@@ -258,47 +230,19 @@ namespace Klinika.GUI.Patient
         #endregion
 
         #region Helper functions
-        private string GetAppointmentTypeName(string type)
-        {
-            if (type == "E")
-            {
-                return "Examination";
-            }
-            else
-            {
-                return "Operation";
-            }
-        }
         private void FillTableWithDoctorData(DataTable dataTable)
         {
             dataTable.Columns.Add("Doctor Full Name");
             dataTable.Columns["Doctor Full Name"].SetOrdinal(1);
             foreach (DataRow row in dataTable.Rows)
             {
-                row["Doctor Full Name"] = GetDoctorFullName(Convert.ToInt32(row["DoctorID"]));
+                row["Doctor Full Name"] = DoctorService.GetFullName(Convert.ToInt32(row["DoctorID"]));
             }
-        }
-        public string GetDoctorFullName(int doctorID)
-        {
-            var doctor = GetDoctor(doctorID);
-            return doctor.Name + " " + doctor.Surname;
-        }
-        private User? GetDoctor(int ID)
-        {
-            return UserRepository.GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
-        }
-        private Appointment? GetAppointment(int ID)
-        {
-            return Appointments.Where(x => x.ID == ID).FirstOrDefault();
         }
         public void FillDoctorComboBox(ComboBox comboBox)
         {
-            comboBox.Items.AddRange(GetDoctors());
+            comboBox.Items.AddRange(UserRepository.GetDoctors().ToArray());
             comboBox.SelectedIndex = 0;
-        }
-        private User[] GetDoctors()
-        {
-            return UserRepository.GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToArray();
         }
         public bool IsDateValid (DateTime dateTime)
         {
@@ -318,18 +262,6 @@ namespace Klinika.GUI.Patient
             }
             return false;
         }
-        public void SendDeletePatientRequest(bool isApproved, Appointment toDelete)
-        {
-            PatientRequest patientRequest = new PatientRequest(-1, toDelete.PatientID, toDelete.ID,
-                        'D', GetFullRequestDescription(toDelete.DateTime, toDelete.DoctorID), isApproved);
-            PatientRequestRepository.Create(patientRequest);
-        }
-        public string GetFullRequestDescription(DateTime dateTime, int doctorID)
-        {
-            return "DateTime=" + dateTime.ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + doctorID.ToString();
-        }
         #endregion
-
-        
     }
 }
