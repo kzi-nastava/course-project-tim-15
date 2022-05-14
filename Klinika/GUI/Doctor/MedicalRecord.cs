@@ -1,6 +1,7 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
+using Klinika.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,7 +48,7 @@ namespace Klinika.GUI.Doctor
         #region View Record
         private void FillPatientMainData()
         {
-            PatientNameLabel.Text = Parent.GetPatientFullName(Record.ID);
+            PatientNameLabel.Text = PatientService.GetFullName(Record.ID);
             BloodTypeLabel.Text = Record.BloodType;
             HeightLabel.Text = $"{Record.Height}cm";
             WeightLabel.Text = $"{Record.Weight}kg";
@@ -144,7 +145,8 @@ namespace Klinika.GUI.Doctor
             Appointment.Completed = true;
             AppointmentRepository.GetInstance().Modify(Appointment);
 
-            Parent.UpdateTableRow(Appointment, Parent.ScheduleTable);
+            DoctorService.UpdateTableRow(Appointment, Parent.ScheduleTable);
+            DoctorService.UpdateTableRow(Appointment, Parent.AllAppointmentsTable);
             Close();
         }
         private void CreateAnamanesisInDatabase()

@@ -1,6 +1,7 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
+using Klinika.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -134,7 +135,7 @@ namespace Klinika.GUI.Doctor
             TransferDataFromUI(Appointment, dateTime);
             AppointmentRepository.GetInstance().Modify(Appointment);
             Parent.Enabled = true;
-            Parent.UpdateTableRow(Appointment, Parent.AllAppointmentsTable);
+            DoctorService.UpdateTableRow(Appointment, Parent.AllAppointmentsTable);
             Close();
         }
         private void TransferDataFromUI(Appointment appointment, DateTime dateTime)

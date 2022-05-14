@@ -29,7 +29,30 @@ namespace Klinika.Services
                 throw new DoctorUnavailableException("The selected doctor is not available at the selected time!");
             }
         }
-
+        public static string GetTypeFullName(char type)
+        {
+            switch (type)
+            {
+                case 'O':
+                    return "Operation";
+                default:
+                    return "Examination";
+            }
+        }
+        public static int GetSelectedID(DataGridView table)
+        {
+            return Convert.ToInt32(table.SelectedRows[0].Cells["ID"].Value);
+        }
+        public static Appointment GetSelected(DataGridView table)
+        {
+            int appointmentID = GetSelectedID(table);
+            return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();
+        }
+        public static void Delete(int id)
+        {
+            AppointmentRepository.Delete(id);
+            AppointmentRepository.GetInstance().DeleteFromList(id);
+        }
 
     }
 }

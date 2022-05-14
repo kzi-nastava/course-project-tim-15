@@ -174,7 +174,7 @@ namespace Klinika.Repositories
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@DoctorID,@PatientID,@DateTime,@RoomID,@Completed,@Type,@Duration,@Urgent,@Description,@IsDeleted)";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+            appointment.ID = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
                 createQuery,
                 ("@DoctorID", appointment.DoctorID),
                 ("@PatientID", appointment.PatientID),
@@ -186,6 +186,8 @@ namespace Klinika.Repositories
                 ("@Urgent", appointment.Urgent),
                 ("@Description", appointment.Description),
                 ("@IsDeleted", appointment.IsDeleted));
+
+            Appointments.Add(appointment);
         }
         public static void Modify(int id, int newDoctorID, DateTime newAppointment)
         {
@@ -225,6 +227,9 @@ namespace Klinika.Repositories
                 ("@Urgent", appointment.Urgent),
                 ("@Description", appointment.Description),
                 ("@IsDeleted", appointment.IsDeleted));
+
+            Appointments.Remove(Appointments.Where(x => x.ID == appointment.ID).FirstOrDefault());
+            Appointments.Add(appointment);
         }
         public static void Delete(int ID)
         {
