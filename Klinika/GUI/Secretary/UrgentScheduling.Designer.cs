@@ -34,9 +34,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.scheduleButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.doctorField = new System.Windows.Forms.TextBox();
+            this.appointmentSelection = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -79,7 +79,7 @@
             // 
             // scheduleButton
             // 
-            this.scheduleButton.Location = new System.Drawing.Point(182, 328);
+            this.scheduleButton.Location = new System.Drawing.Point(193, 339);
             this.scheduleButton.Name = "scheduleButton";
             this.scheduleButton.Size = new System.Drawing.Size(94, 29);
             this.scheduleButton.TabIndex = 4;
@@ -96,40 +96,40 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "Doctor:";
             // 
-            // textBox1
+            // doctorField
             // 
-            this.textBox1.Location = new System.Drawing.Point(193, 192);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(230, 27);
-            this.textBox1.TabIndex = 6;
+            this.doctorField.Location = new System.Drawing.Point(193, 192);
+            this.doctorField.Name = "doctorField";
+            this.doctorField.ReadOnly = true;
+            this.doctorField.Size = new System.Drawing.Size(230, 27);
+            this.doctorField.TabIndex = 6;
             // 
-            // label4
+            // appointmentSelection
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(87, 264);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(100, 20);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Appointment:";
+            this.appointmentSelection.Enabled = false;
+            this.appointmentSelection.FormattingEnabled = true;
+            this.appointmentSelection.Location = new System.Drawing.Point(193, 262);
+            this.appointmentSelection.Name = "appointmentSelection";
+            this.appointmentSelection.Size = new System.Drawing.Size(230, 28);
+            this.appointmentSelection.TabIndex = 10;
             // 
-            // comboBox1
+            // label5
             // 
-            this.comboBox1.Enabled = false;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(193, 261);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(230, 28);
-            this.comboBox1.TabIndex = 8;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(87, 265);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(100, 20);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Appointment:";
             // 
             // UrgentScheduling
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(489, 391);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox1);
+            this.ClientSize = new System.Drawing.Size(489, 393);
+            this.Controls.Add(this.appointmentSelection);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.doctorField);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.scheduleButton);
             this.Controls.Add(this.specializationSelection);
@@ -153,8 +153,8 @@
         private Label label2;
         private Button scheduleButton;
         private Label label3;
-        private TextBox textBox1;
-        private Label label4;
-        private ComboBox comboBox1;
+        private TextBox doctorField;
+        private ComboBox appointmentSelection;
+        private Label label5;
     }
 }

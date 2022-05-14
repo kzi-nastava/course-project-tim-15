@@ -76,4 +76,12 @@ namespace Klinika.Exceptions
         public SpecializationNotSelectedException() : base("Specialization") { }
 
     }
+
+    public class NegativeOrZeroValueException : FormValidationException
+    {
+        public NegativeOrZeroValueException(string message) : base(message) { }
+
+    }
+
+
 }

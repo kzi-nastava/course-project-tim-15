@@ -15,8 +15,7 @@ namespace Klinika.Repositories
         {
             foreach (KeyValuePair<int, Patient> pair in IDPatientPairs)
             {
-                string patient = pair.Key + ". " + pair.Value.Name + " " + pair.Value.Surname;
-                patientSelection.Items.Add(patient);
+                patientSelection.Items.Add(pair.Value.GetIdAndFullName());
             }
         }
 

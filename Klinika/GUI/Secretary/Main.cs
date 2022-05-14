@@ -370,7 +370,7 @@ namespace Klinika.GUI.Secretary
         private void FindSuitableDoctor()
         {
             TimeSlot slot = new TimeSlot(appointmentPicker.Value);
-            Roles.Doctor suitableDoctor = DoctorService.GetSuitable(specializationField.Text, slot);
+            Roles.Doctor suitableDoctor = DoctorService.GetSuitable(SecretaryService.ExtractID(specializationField.Text), slot);
             if (suitableDoctor != null)
             {
                 refferalTabDoctorField.Text = suitableDoctor.ID + ". " + suitableDoctor.Name + " " + suitableDoctor.Surname;

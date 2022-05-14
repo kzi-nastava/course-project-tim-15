@@ -24,6 +24,11 @@ namespace Klinika.Services
             MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        public static void ShowInformationMessage(string message)
+        {
+            MessageBox.Show(message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         public static DialogResult ShowConfirmationMessage(string message)
         {
             return MessageBox.Show(message, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -49,6 +54,16 @@ namespace Klinika.Services
             {
                 specializationSelection.Items.Add(specialization.ID + ". " + specialization.Name);
             }
+        }
+
+
+        public static DateTime GetNow()
+        {
+            DateTime now = DateTime.Now;
+            now = now.AddMilliseconds(-now.Millisecond);
+            now = now.AddSeconds(-now.Second);
+            
+            return now;
         }
     }
 }

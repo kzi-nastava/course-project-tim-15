@@ -31,5 +31,11 @@ namespace Klinika.Services
         }
 
 
+        public void ScheduleUnder2Hours()
+        {
+
+        }
+
+
     }
 }

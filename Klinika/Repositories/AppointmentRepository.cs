@@ -15,6 +15,12 @@ namespace Klinika.Repositories
             Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
         }
 
+
+        public Appointment GetById(int id)
+        {
+            return Appointments.Where(x => x.ID == id).FirstOrDefault();
+        }
+
         #region Singleton
         private static AppointmentRepository? Instance;
         public static AppointmentRepository GetInstance()
