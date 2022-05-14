@@ -32,9 +32,9 @@
             this.DoctorComboBox = new System.Windows.Forms.ComboBox();
             this.FromLabel = new System.Windows.Forms.Label();
             this.TimeGroupBox = new System.Windows.Forms.GroupBox();
-            this.UntilTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.ToTimePicker = new System.Windows.Forms.DateTimePicker();
             this.FromTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.UntilLabel = new System.Windows.Forms.Label();
+            this.ToLabel = new System.Windows.Forms.Label();
             this.LastDateLabel = new System.Windows.Forms.Label();
             this.DeadlineDatePicker = new System.Windows.Forms.DateTimePicker();
             this.PriorityGroupBox = new System.Windows.Forms.GroupBox();
@@ -77,9 +77,9 @@
             // 
             // TimeGroupBox
             // 
-            this.TimeGroupBox.Controls.Add(this.UntilTimePicker);
+            this.TimeGroupBox.Controls.Add(this.ToTimePicker);
             this.TimeGroupBox.Controls.Add(this.FromTimePicker);
-            this.TimeGroupBox.Controls.Add(this.UntilLabel);
+            this.TimeGroupBox.Controls.Add(this.ToLabel);
             this.TimeGroupBox.Controls.Add(this.FromLabel);
             this.TimeGroupBox.Location = new System.Drawing.Point(12, 69);
             this.TimeGroupBox.Name = "TimeGroupBox";
@@ -88,14 +88,14 @@
             this.TimeGroupBox.TabStop = false;
             this.TimeGroupBox.Text = "Time";
             // 
-            // UntilTimePicker
+            // ToTimePicker
             // 
-            this.UntilTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.UntilTimePicker.Location = new System.Drawing.Point(99, 78);
-            this.UntilTimePicker.Name = "UntilTimePicker";
-            this.UntilTimePicker.ShowUpDown = true;
-            this.UntilTimePicker.Size = new System.Drawing.Size(151, 27);
-            this.UntilTimePicker.TabIndex = 5;
+            this.ToTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.ToTimePicker.Location = new System.Drawing.Point(99, 78);
+            this.ToTimePicker.Name = "ToTimePicker";
+            this.ToTimePicker.ShowUpDown = true;
+            this.ToTimePicker.Size = new System.Drawing.Size(151, 27);
+            this.ToTimePicker.TabIndex = 5;
             // 
             // FromTimePicker
             // 
@@ -106,14 +106,14 @@
             this.FromTimePicker.Size = new System.Drawing.Size(151, 27);
             this.FromTimePicker.TabIndex = 4;
             // 
-            // UntilLabel
+            // ToLabel
             // 
-            this.UntilLabel.AutoSize = true;
-            this.UntilLabel.Location = new System.Drawing.Point(15, 78);
-            this.UntilLabel.Name = "UntilLabel";
-            this.UntilLabel.Size = new System.Drawing.Size(47, 20);
-            this.UntilLabel.TabIndex = 3;
-            this.UntilLabel.Text = "Until: ";
+            this.ToLabel.AutoSize = true;
+            this.ToLabel.Location = new System.Drawing.Point(15, 78);
+            this.ToLabel.Name = "ToLabel";
+            this.ToLabel.Size = new System.Drawing.Size(32, 20);
+            this.ToLabel.TabIndex = 3;
+            this.ToLabel.Text = "To: ";
             // 
             // LastDateLabel
             // 
@@ -249,9 +249,9 @@
         private ComboBox DoctorComboBox;
         private Label FromLabel;
         private GroupBox TimeGroupBox;
-        private Label UntilLabel;
+        private Label ToLabel;
         private Label LastDateLabel;
-        private DateTimePicker UntilTimePicker;
+        private DateTimePicker ToTimePicker;
         private DateTimePicker FromTimePicker;
         private DateTimePicker DeadlineDatePicker;
         private GroupBox PriorityGroupBox;

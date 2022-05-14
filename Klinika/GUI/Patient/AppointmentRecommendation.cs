@@ -73,7 +73,7 @@ namespace Klinika.GUI.Patient
 
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
             char priority = DoctorRadioButton.Checked ? 'D' : 'T';
-            TimeSlot timeSlot = new TimeSlot(FromTimePicker.Value, UntilTimePicker.Value);
+            TimeSlot timeSlot = new TimeSlot(FromTimePicker.Value, ToTimePicker.Value);
 
             List<Appointment> recommended = AppointmentService.FindRecommended(doctorID, timeSlot, DeadlineDatePicker.Value, priority);
             FillRecommendedAppointmentTable(recommended);
@@ -113,7 +113,7 @@ namespace Klinika.GUI.Patient
         }
         private bool IsDateValid()
         {
-            return FromTimePicker.Value < UntilTimePicker.Value && DeadlineDatePicker.Value > DateTime.Now;
+            return FromTimePicker.Value < ToTimePicker.Value && DeadlineDatePicker.Value > DateTime.Now;
         }
     }
 }
