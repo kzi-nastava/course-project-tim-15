@@ -187,10 +187,11 @@ namespace Klinika.Repositories
 
         public Doctor? GetFirstUnoccupied(TimeSlot slot,int specializationId)
         {
+            TimeSlot toFit = new TimeSlot(slot.to, slot.to.AddMinutes(15));
             foreach(Doctor doctor in doctors)
             {
                 if(doctor.specialization.ID == specializationId &&
-                   !AppointmentRepository.GetInstance().IsOccupied(slot, doctor.ID))
+                   !AppointmentRepository.GetInstance().IsAvailable(slot, doctor.ID,toFit))
                 {
                     return doctor;
                 }
