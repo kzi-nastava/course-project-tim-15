@@ -36,7 +36,7 @@ namespace Klinika.GUI.Doctor
         private void InitAllAppointmentsTab()
         {
             DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
-            DoctorService.FillTableWithData(allAppointments, AllAppointmentsTable);
+            DoctorService.FillAppointmentsTableWithData(allAppointments, AllAppointmentsTable);
             EditAppointmentButton.Enabled = false;
             DeleteAppointmentButton.Enabled = false;
         }
@@ -49,7 +49,18 @@ namespace Klinika.GUI.Doctor
         private void FillScheduledAppointmentsTable(string date)
         {
             DataTable? scheduledAppointments = AppointmentRepository.GetAll(date, Doctor.ID, User.RoleType.DOCTOR, 3);
-            DoctorService.FillTableWithData(scheduledAppointments, ScheduleTable);
+            DoctorService.FillAppointmentsTableWithData(scheduledAppointments, ScheduleTable);
+        }
+        private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (MainTabControl.SelectedIndex)
+            {
+                case 2:
+                    InitUnapprovedDrugs();
+                    break;
+                default:
+                    break;
+            }
         }
         #endregion
 
@@ -111,7 +122,7 @@ namespace Klinika.GUI.Doctor
             try
             {
                 var selected = AppointmentService.GetSelected(ScheduleTable);
-                bool canBePerformed = !selected.Completed 
+                bool canBePerformed = !selected.Completed
                     && selected.Type == 'E'
                     && selected.DateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
 
@@ -139,6 +150,42 @@ namespace Klinika.GUI.Doctor
             {
                 new MedicalRecord(this, selected, false).Show();
             }
+        }
+        #endregion
+
+        #region Unapproved Drugs
+        private void InitUnapprovedDrugs()
+        {
+            DrugService.FillTable(UnapprovedDrugsTable, true);
+            ApproveDrugButton.Enabled = false;
+            DenyDrugButton.Enabled = false;
+            DenydDrugDescription.Text = "";
+        }
+        private void UnapprovedDrugsTableSelectionChanged(object sender, EventArgs e)
+        {
+            ApproveDrugButton.Enabled = true;
+            DenydDrugDescription.Text = "";
+        }
+        private void DenyDrugDescriptionTextChanged(object sender, EventArgs e)
+        {
+            if (DenydDrugDescription.Text != "" && ApproveDrugButton.Enabled)
+            {
+                DenyDrugButton.Enabled = true;
+                return;
+            }
+            DenyDrugButton.Enabled = false;
+        }
+        private void ApproveDrugButtonClick(object sender, EventArgs e)
+        {
+            var selected = DrugService.GetSelected(UnapprovedDrugsTable);
+            DrugService.ApproveDrug(selected.ID);
+            InitUnapprovedDrugs();
+        }
+        private void DenyDrugButtonClick(object sender, EventArgs e)
+        {
+            var selected = DrugService.GetSelected(UnapprovedDrugsTable);
+            DrugService.DenyDrug(selected.ID, DenydDrugDescription.Text);
+            InitUnapprovedDrugs();
         }
         #endregion
 
