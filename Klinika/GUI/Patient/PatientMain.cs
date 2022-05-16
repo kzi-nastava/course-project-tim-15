@@ -233,6 +233,9 @@ namespace Klinika.GUI.Patient
         #region Doctors
         private void InitDoctorsTab()
         {
+            List<Roles.Doctor> doctors = DoctorRepository.GetInstance().doctors;
+            FillDoctorTable(doctors);
+
             DoctorNameRadioButton.Checked = true;
             DoctorSurnameTextBox.Enabled = false;
             DoctorSpecializationComboBox.Enabled = false;
@@ -265,6 +268,32 @@ namespace Klinika.GUI.Patient
                 DoctorSpecializationComboBox.Enabled = true;
             }
         }
+        private void FillDoctorTable(List<Roles.Doctor> doctors)
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("Doctor ID");
+            dataTable.Columns.Add("Name");
+            dataTable.Columns.Add("Surname");
+            dataTable.Columns.Add("Specialization");
+            dataTable.Columns.Add("Grade");
+
+            if(doctors.Count() != 0)
+            {
+                foreach(Roles.Doctor doctor in doctors)
+                {
+                    DataRow newRow = dataTable.NewRow();
+
+                    newRow["Doctor ID"] = doctor.ID;
+                    newRow["Name"] = doctor.Name;
+                    newRow["Surname"] = doctor.Surname;
+                    newRow["Specialization"] = doctor.specialization;
+                    newRow["Grade"] = 5;
+                    dataTable.Rows.Add(newRow);
+                }
+            }
+            DoctorTable.DataSource = dataTable;
+        }
+
         #endregion
 
         #region Helper functions

@@ -52,6 +52,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.MedicalRecordTable = new System.Windows.Forms.DataGridView();
             this.DoctorsTab = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
+            this.DoctorTable = new System.Windows.Forms.DataGridView();
             this.DoctorSearchButton = new System.Windows.Forms.Button();
             this.DoctorNameRadioButton = new System.Windows.Forms.RadioButton();
             this.DoctorSurnameRadioButton = new System.Windows.Forms.RadioButton();
@@ -59,8 +61,6 @@
             this.DoctorSpecializationComboBox = new System.Windows.Forms.ComboBox();
             this.DoctorSurnameTextBox = new System.Windows.Forms.TextBox();
             this.DoctorNameTextBox = new System.Windows.Forms.TextBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
@@ -69,7 +69,7 @@
             this.MedicalRecordTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MedicalRecordTable)).BeginInit();
             this.DoctorsTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DoctorTable)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -321,7 +321,7 @@
             // DoctorsTab
             // 
             this.DoctorsTab.Controls.Add(this.button1);
-            this.DoctorsTab.Controls.Add(this.dataGridView1);
+            this.DoctorsTab.Controls.Add(this.DoctorTable);
             this.DoctorsTab.Controls.Add(this.DoctorSearchButton);
             this.DoctorsTab.Controls.Add(this.DoctorNameRadioButton);
             this.DoctorsTab.Controls.Add(this.DoctorSurnameRadioButton);
@@ -336,6 +336,39 @@
             this.DoctorsTab.TabIndex = 3;
             this.DoctorsTab.Text = "Doctors";
             this.DoctorsTab.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(212, 459);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 29);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // DoctorTable
+            // 
+            this.DoctorTable.AllowUserToAddRows = false;
+            this.DoctorTable.AllowUserToDeleteRows = false;
+            this.DoctorTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DoctorTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.DoctorTable.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.DoctorTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DoctorTable.DefaultCellStyle = dataGridViewCellStyle2;
+            this.DoctorTable.Location = new System.Drawing.Point(335, 6);
+            this.DoctorTable.Name = "DoctorTable";
+            this.DoctorTable.ReadOnly = true;
+            this.DoctorTable.RowHeadersWidth = 51;
+            this.DoctorTable.RowTemplate.Height = 29;
+            this.DoctorTable.Size = new System.Drawing.Size(744, 495);
+            this.DoctorTable.TabIndex = 12;
             // 
             // DoctorSearchButton
             // 
@@ -404,39 +437,6 @@
             this.DoctorNameTextBox.Size = new System.Drawing.Size(151, 27);
             this.DoctorNameTextBox.TabIndex = 3;
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridView1.Location = new System.Drawing.Point(335, 6);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 29;
-            this.dataGridView1.Size = new System.Drawing.Size(744, 495);
-            this.dataGridView1.TabIndex = 12;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(212, 459);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 29);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // PatientMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -462,7 +462,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.MedicalRecordTable)).EndInit();
             this.DoctorsTab.ResumeLayout(false);
             this.DoctorsTab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DoctorTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -500,5 +500,7 @@
         private Button DoctorSearchButton;
         private Button button1;
         private DataGridView dataGridView1;
+        private DataGridView DoctorsTable;
+        private DataGridView DoctorTable;
     }
 }
