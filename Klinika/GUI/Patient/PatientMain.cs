@@ -293,7 +293,23 @@ namespace Klinika.GUI.Patient
             }
             DoctorTable.DataSource = dataTable;
         }
+        private void DoctorSearchClick(object sender, EventArgs e)
+        {
+            if (DoctorNameRadioButton.Checked)
+            {
+                var searched = SearchByName(DoctorNameTextBox.Text);
+                FillDoctorTable(searched);
+                return;
+            }
+            if (DoctorSurnameRadioButton.Checked)
+            {
+            }
+        }
 
+        public static List<Roles.Doctor> SearchByName(string keyword)
+        {
+            return DoctorRepository.GetInstance().doctors.Where(x => x.Name.ToUpper().Contains(keyword.ToUpper())).ToList();
+        }
         #endregion
 
         #region Helper functions

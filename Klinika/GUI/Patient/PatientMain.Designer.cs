@@ -378,6 +378,7 @@
             this.DoctorSearchButton.TabIndex = 11;
             this.DoctorSearchButton.Text = "Search";
             this.DoctorSearchButton.UseVisualStyleBackColor = true;
+            this.DoctorSearchButton.Click += new System.EventHandler(this.DoctorSearchClick);
             // 
             // DoctorNameRadioButton
             // 
