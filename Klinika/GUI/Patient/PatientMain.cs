@@ -287,7 +287,7 @@ namespace Klinika.GUI.Patient
                     newRow["Name"] = doctor.Name;
                     newRow["Surname"] = doctor.Surname;
                     newRow["Specialization"] = doctor.specialization;
-                    newRow["Grade"] = 5;
+                    newRow["Grade"] = QuestionnaireRepository.GetGrade(doctor.ID);
                     dataTable.Rows.Add(newRow);
                 }
             }
