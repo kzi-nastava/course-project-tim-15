@@ -51,6 +51,17 @@ namespace Klinika.GUI.Doctor
             DataTable? scheduledAppointments = AppointmentRepository.GetAll(date, Doctor.ID, User.RoleType.DOCTOR, 3);
             DoctorService.FillAppointmentsTableWithData(scheduledAppointments, ScheduleTable);
         }
+        private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (MainTabControl.SelectedIndex)
+            {
+                case 2:
+                    InitUnapprovedDrugs();
+                    break;
+                default:
+                    break;
+            }
+        }
         #endregion
 
         #region All Appointments
@@ -177,18 +188,6 @@ namespace Klinika.GUI.Doctor
             InitUnapprovedDrugs();
         }
         #endregion
-
-        private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (MainTabControl.SelectedIndex)
-            {
-                case 2:
-                    InitUnapprovedDrugs();
-                    break;
-                default:
-                    break;
-            }
-        }
 
     }
 }

@@ -62,10 +62,6 @@ namespace Klinika.Services
                 row["Type"] = AppointmentService.GetTypeFullName(Convert.ToChar(row["Type"]));
             }
         }
-        public static void FillUnapprovedDrugsTable()
-        {
-
-        }
         public static void UpdateTableRow(Appointment appointment, DataGridView table)
         {
             table.SelectedRows[0].SetValues(appointment.ID.ToString(),
