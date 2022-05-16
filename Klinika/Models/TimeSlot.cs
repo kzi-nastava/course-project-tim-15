@@ -70,6 +70,7 @@ namespace Klinika.Models
                 }
                 else
                 {
+                    if (temporary.from >= occupied[i].from) return temporary;
                     return new TimeSlot(occupied[i].to, occupied[i].to.AddMinutes(duration));
                 }
             }
@@ -79,7 +80,7 @@ namespace Klinika.Models
         public bool DoesOverlap(TimeSlot slot)
         {
             return ((from >= slot.from && to <= slot.to) || (from <= slot.from && to >= slot.to)
-                || (from >= slot.from && to >= slot.to) || (from <= slot.from && to <= slot.to));
+                || (from >= slot.from && to >= slot.to && from <= slot.to) || (from <= slot.from && to <= slot.to && to >= slot.from));
         }
 
     }

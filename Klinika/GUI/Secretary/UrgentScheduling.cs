@@ -60,6 +60,7 @@ namespace Klinika.GUI.Secretary
                     FillAppointmentSelectionList();
                     appointmentSelection.SelectedIndex = 0;
                     appointmentSelection.Enabled = true;
+                    specializationSelection.Enabled = false;
                 }
                 else
                 {
@@ -108,8 +109,9 @@ namespace Klinika.GUI.Secretary
                 {
                     ordinalAppointmentPairs.Add(ordinal, entry.Key);
                     appointmentSelection.Items.Add(AppointmentRepository.GetInstance().GetById(entry.Key.ID).DateTime.ToString("yyyy-MM-dd HH:mm"));
+                    ordinal++;
                 }
-                ordinal++;
+                
             }
         }
 
