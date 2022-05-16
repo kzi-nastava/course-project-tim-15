@@ -95,5 +95,9 @@ namespace Klinika.Services
         {
             return DoctorRepository.GetInstance().doctors.Where(x => x.specialization.ID == id).ToList();
         }
+        public static int GetSelectedID(DataGridView table)
+        {
+            return Convert.ToInt32(table.SelectedRows[0].Cells["Doctor ID"].Value);
+        }
     }
 }

@@ -239,7 +239,7 @@ namespace Klinika.GUI.Patient
             DoctorNameRadioButton.Checked = true;
             DoctorSurnameTextBox.Enabled = false;
             DoctorSpecializationComboBox.Enabled = false;
-            button1.Enabled = false;
+            NewAppointmentButton.Enabled = false;
             FillSpecializationsComboBox();
         }
         private void DoctorNameRadioButtonCheckedChanged(object sender, EventArgs e)
@@ -249,6 +249,9 @@ namespace Klinika.GUI.Patient
                 DoctorNameTextBox.Enabled = true;
                 DoctorSurnameTextBox.Enabled = false;
                 DoctorSpecializationComboBox.Enabled = false;
+
+                DoctorSurnameTextBox.Text = "";
+                FillDoctorTable();
             }
         }
         private void DoctorSurnameRadioButtonCheckedChanged(object sender, EventArgs e)
@@ -258,6 +261,9 @@ namespace Klinika.GUI.Patient
                 DoctorNameTextBox.Enabled = false;
                 DoctorSurnameTextBox.Enabled = true;
                 DoctorSpecializationComboBox.Enabled = false;
+
+                DoctorNameTextBox.Text = "";
+                FillDoctorTable();
             }
         }
         private void DoctorSpecializationRadioButtonCheckedChanged(object sender, EventArgs e)
@@ -267,9 +273,13 @@ namespace Klinika.GUI.Patient
                 DoctorNameTextBox.Enabled = false;
                 DoctorSurnameTextBox.Enabled = false;
                 DoctorSpecializationComboBox.Enabled = true;
+
+                DoctorSurnameTextBox.Text = "";
+                DoctorNameTextBox.Text = "";
+                FillDoctorTable();
             }
         }
-        private void FillDoctorTable(List<Roles.Doctor> doctors)
+        private void FillDoctorTable(List<Roles.Doctor> doctors = null)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Doctor ID");
@@ -278,7 +288,7 @@ namespace Klinika.GUI.Patient
             dataTable.Columns.Add("Specialization");
             dataTable.Columns.Add("Grade");
 
-            if(doctors.Count() != 0)
+            if(doctors != null)
             {
                 foreach(Roles.Doctor doctor in doctors)
                 {
@@ -293,6 +303,8 @@ namespace Klinika.GUI.Patient
                 }
             }
             DoctorTable.DataSource = dataTable;
+            DoctorTable.ClearSelection();
+            NewAppointmentButton.Enabled = false;
         }
         private void DoctorSearchClick(object sender, EventArgs e)
         {
@@ -311,6 +323,16 @@ namespace Klinika.GUI.Patient
             int selectedID = (DoctorSpecializationComboBox.SelectedItem as Specialization).ID;
             var selected = DoctorService.SearchBySpecialization(selectedID);
             FillDoctorTable(selected);
+        }
+        private void DoctorTableRowSelected(object sender, DataGridViewCellEventArgs e)
+        {
+            NewAppointmentButton.Enabled = true;
+        }
+        private void NewAppointmentClick(object sender, EventArgs e)
+        {
+            Appointment appointment = new Appointment();
+            appointment.DoctorID = DoctorService.GetSelectedID(DoctorTable);
+            new PersonalAppointment(this, appointment, true).Show();
         }
         #endregion
 

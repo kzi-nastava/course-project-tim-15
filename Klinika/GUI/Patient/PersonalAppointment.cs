@@ -10,13 +10,15 @@ namespace Klinika.GUI.Patient
     {
         private readonly PatientMain Parent;
         private Appointment? Appointment;
+        private readonly bool IsDoctorSelected;
 
         #region Form
-        public PersonalAppointment(PatientMain parent, Appointment appointment)
+        public PersonalAppointment(PatientMain parent, Appointment appointment, bool isDoctorSelected = false)
         {
             InitializeComponent();
             Parent = parent;
             Appointment = appointment;
+            IsDoctorSelected = isDoctorSelected;
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -26,7 +28,7 @@ namespace Klinika.GUI.Patient
         }
         private void FillFormDetails()
         {
-            if (Appointment == null)
+            if (Appointment == null || IsDoctorSelected)
             {
                 SetupAsCreate();
                 return;
@@ -35,10 +37,18 @@ namespace Klinika.GUI.Patient
         }
         private void SetupAsCreate()
         {
-            DatePicker.Enabled = false;
-            DatePicker.Value = Parent.AppointmentDatePicker.Value;
+
             DoctorComboBox.Enabled = false;
             DoctorComboBox.SelectedIndex = Parent.DoctorComboBox.SelectedIndex;
+
+            if (IsDoctorSelected)
+            { 
+                DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(UserRepository.GetInstance().Users.Where(x => x.ID == Appointment.DoctorID).FirstOrDefault());
+                return; 
+            }
+
+            DatePicker.Enabled = false;
+            DatePicker.Value = Parent.AppointmentDatePicker.Value;
         }
         private void SetupAsModify()
         {
@@ -60,44 +70,38 @@ namespace Klinika.GUI.Patient
         {
             if (!Parent.IsDateValid(GetSelectedDateTime())) return;
 
-            if (Appointment == null) 
+            if (AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID()))
+            {
+                MessageBox.Show("This time is occupied!", "Denied!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            if (Appointment == null || IsDoctorSelected) 
             {
                 ConfirmeCreate();
                 return;
             }
-            else
-            {
-                ConfirmeModify();
-                return;
-            }
-
-            MessageBox.Show("This time is occupied!", "Denied!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            ConfirmeModify();
         }
         private void ConfirmeCreate()
         {
-            if (!AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID()))
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
             {
-                DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    CreateInDatabase();
-                    Close();
-                }
-                return;
+                CreateInDatabase();
+                Close();
             }
+            return;
         }
         private void ConfirmeModify()
         {
-            if (!AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID(), 15, Appointment.ID))
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to save the changes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
             {
-                DialogResult dialogResult = MessageBox.Show("Are you sure you want to save the changes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dialogResult == DialogResult.Yes)
-                {
-                    ModifyInDatabase();
-                    Close();
-                }
-                return;
+                ModifyInDatabase();
+                Close();
             }
+            return;
         }
         #endregion
 
@@ -116,9 +120,13 @@ namespace Klinika.GUI.Patient
             Appointment.Urgent = false;
             Appointment.Description = "";
             Appointment.IsDeleted = false;
+
             AppointmentRepository.GetInstance().Create(Appointment);
             Parent.InsertRowIntoPersonalAppointmentsTable(Appointment);
-            Parent.InsertRowIntoOccupiedTable(Appointment);
+            if (!IsDoctorSelected)
+            {
+                Parent.InsertRowIntoOccupiedTable(Appointment);
+            }
         }
         private void ModifyInDatabase()
         {

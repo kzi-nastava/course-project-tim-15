@@ -52,7 +52,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.MedicalRecordTable = new System.Windows.Forms.DataGridView();
             this.DoctorsTab = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
+            this.DoctorSpecializationComboBox = new System.Windows.Forms.ComboBox();
+            this.NewAppointmentButton = new System.Windows.Forms.Button();
             this.DoctorTable = new System.Windows.Forms.DataGridView();
             this.DoctorSearchButton = new System.Windows.Forms.Button();
             this.DoctorNameRadioButton = new System.Windows.Forms.RadioButton();
@@ -60,7 +61,6 @@
             this.DoctorSpecializationRadioButton = new System.Windows.Forms.RadioButton();
             this.DoctorSurnameTextBox = new System.Windows.Forms.TextBox();
             this.DoctorNameTextBox = new System.Windows.Forms.TextBox();
-            this.DoctorSpecializationComboBox = new System.Windows.Forms.ComboBox();
             this.MainTabControl.SuspendLayout();
             this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
@@ -321,7 +321,7 @@
             // DoctorsTab
             // 
             this.DoctorsTab.Controls.Add(this.DoctorSpecializationComboBox);
-            this.DoctorsTab.Controls.Add(this.button1);
+            this.DoctorsTab.Controls.Add(this.NewAppointmentButton);
             this.DoctorsTab.Controls.Add(this.DoctorTable);
             this.DoctorsTab.Controls.Add(this.DoctorSearchButton);
             this.DoctorsTab.Controls.Add(this.DoctorNameRadioButton);
@@ -337,14 +337,24 @@
             this.DoctorsTab.Text = "Doctors";
             this.DoctorsTab.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // DoctorSpecializationComboBox
             // 
-            this.button1.Location = new System.Drawing.Point(212, 459);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 29);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.DoctorSpecializationComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DoctorSpecializationComboBox.FormattingEnabled = true;
+            this.DoctorSpecializationComboBox.Location = new System.Drawing.Point(155, 143);
+            this.DoctorSpecializationComboBox.Name = "DoctorSpecializationComboBox";
+            this.DoctorSpecializationComboBox.Size = new System.Drawing.Size(151, 28);
+            this.DoctorSpecializationComboBox.TabIndex = 14;
+            // 
+            // NewAppointmentButton
+            // 
+            this.NewAppointmentButton.Location = new System.Drawing.Point(212, 459);
+            this.NewAppointmentButton.Name = "NewAppointmentButton";
+            this.NewAppointmentButton.Size = new System.Drawing.Size(94, 29);
+            this.NewAppointmentButton.TabIndex = 13;
+            this.NewAppointmentButton.Text = "Schedule";
+            this.NewAppointmentButton.UseVisualStyleBackColor = true;
+            this.NewAppointmentButton.Click += new System.EventHandler(this.NewAppointmentClick);
             // 
             // DoctorTable
             // 
@@ -363,12 +373,15 @@
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.DoctorTable.DefaultCellStyle = dataGridViewCellStyle2;
             this.DoctorTable.Location = new System.Drawing.Point(335, 6);
+            this.DoctorTable.MultiSelect = false;
             this.DoctorTable.Name = "DoctorTable";
             this.DoctorTable.ReadOnly = true;
             this.DoctorTable.RowHeadersWidth = 51;
             this.DoctorTable.RowTemplate.Height = 29;
+            this.DoctorTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DoctorTable.Size = new System.Drawing.Size(744, 495);
             this.DoctorTable.TabIndex = 12;
+            this.DoctorTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DoctorTableRowSelected);
             // 
             // DoctorSearchButton
             // 
@@ -430,15 +443,6 @@
             this.DoctorNameTextBox.Size = new System.Drawing.Size(151, 27);
             this.DoctorNameTextBox.TabIndex = 3;
             // 
-            // DoctorSpecializationComboBox
-            // 
-            this.DoctorSpecializationComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.DoctorSpecializationComboBox.FormattingEnabled = true;
-            this.DoctorSpecializationComboBox.Location = new System.Drawing.Point(155, 143);
-            this.DoctorSpecializationComboBox.Name = "DoctorSpecializationComboBox";
-            this.DoctorSpecializationComboBox.Size = new System.Drawing.Size(151, 28);
-            this.DoctorSpecializationComboBox.TabIndex = 14;
-            // 
             // PatientMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -499,7 +503,7 @@
         private TextBox DoctorSurnameTextBox;
         private TextBox DoctorNameTextBox;
         private Button DoctorSearchButton;
-        private Button button1;
+        private Button NewAppointmentButton;
         private DataGridView dataGridView1;
         private DataGridView DoctorsTable;
         private DataGridView DoctorTable;
