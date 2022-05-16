@@ -58,9 +58,9 @@
             this.DoctorNameRadioButton = new System.Windows.Forms.RadioButton();
             this.DoctorSurnameRadioButton = new System.Windows.Forms.RadioButton();
             this.DoctorSpecializationRadioButton = new System.Windows.Forms.RadioButton();
-            this.DoctorSpecializationComboBox = new System.Windows.Forms.ComboBox();
             this.DoctorSurnameTextBox = new System.Windows.Forms.TextBox();
             this.DoctorNameTextBox = new System.Windows.Forms.TextBox();
+            this.DoctorSpecializationComboBox = new System.Windows.Forms.ComboBox();
             this.MainTabControl.SuspendLayout();
             this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
@@ -320,13 +320,13 @@
             // 
             // DoctorsTab
             // 
+            this.DoctorsTab.Controls.Add(this.DoctorSpecializationComboBox);
             this.DoctorsTab.Controls.Add(this.button1);
             this.DoctorsTab.Controls.Add(this.DoctorTable);
             this.DoctorsTab.Controls.Add(this.DoctorSearchButton);
             this.DoctorsTab.Controls.Add(this.DoctorNameRadioButton);
             this.DoctorsTab.Controls.Add(this.DoctorSurnameRadioButton);
             this.DoctorsTab.Controls.Add(this.DoctorSpecializationRadioButton);
-            this.DoctorsTab.Controls.Add(this.DoctorSpecializationComboBox);
             this.DoctorsTab.Controls.Add(this.DoctorSurnameTextBox);
             this.DoctorsTab.Controls.Add(this.DoctorNameTextBox);
             this.DoctorsTab.Location = new System.Drawing.Point(4, 29);
@@ -416,14 +416,6 @@
             this.DoctorSpecializationRadioButton.UseVisualStyleBackColor = true;
             this.DoctorSpecializationRadioButton.CheckedChanged += new System.EventHandler(this.DoctorSpecializationRadioButtonCheckedChanged);
             // 
-            // DoctorSpecializationComboBox
-            // 
-            this.DoctorSpecializationComboBox.FormattingEnabled = true;
-            this.DoctorSpecializationComboBox.Location = new System.Drawing.Point(155, 143);
-            this.DoctorSpecializationComboBox.Name = "DoctorSpecializationComboBox";
-            this.DoctorSpecializationComboBox.Size = new System.Drawing.Size(151, 28);
-            this.DoctorSpecializationComboBox.TabIndex = 5;
-            // 
             // DoctorSurnameTextBox
             // 
             this.DoctorSurnameTextBox.Location = new System.Drawing.Point(155, 99);
@@ -437,6 +429,15 @@
             this.DoctorNameTextBox.Name = "DoctorNameTextBox";
             this.DoctorNameTextBox.Size = new System.Drawing.Size(151, 27);
             this.DoctorNameTextBox.TabIndex = 3;
+            // 
+            // DoctorSpecializationComboBox
+            // 
+            this.DoctorSpecializationComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DoctorSpecializationComboBox.FormattingEnabled = true;
+            this.DoctorSpecializationComboBox.Location = new System.Drawing.Point(155, 143);
+            this.DoctorSpecializationComboBox.Name = "DoctorSpecializationComboBox";
+            this.DoctorSpecializationComboBox.Size = new System.Drawing.Size(151, 28);
+            this.DoctorSpecializationComboBox.TabIndex = 14;
             // 
             // PatientMain
             // 
@@ -495,7 +496,6 @@
         private RadioButton DoctorNameRadioButton;
         private RadioButton DoctorSurnameRadioButton;
         private RadioButton DoctorSpecializationRadioButton;
-        private ComboBox DoctorSpecializationComboBox;
         private TextBox DoctorSurnameTextBox;
         private TextBox DoctorNameTextBox;
         private Button DoctorSearchButton;
@@ -503,5 +503,6 @@
         private DataGridView dataGridView1;
         private DataGridView DoctorsTable;
         private DataGridView DoctorTable;
+        public ComboBox DoctorSpecializationComboBox;
     }
 }

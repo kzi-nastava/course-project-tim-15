@@ -240,6 +240,7 @@ namespace Klinika.GUI.Patient
             DoctorSurnameTextBox.Enabled = false;
             DoctorSpecializationComboBox.Enabled = false;
             button1.Enabled = false;
+            FillSpecializationsComboBox();
         }
         private void DoctorNameRadioButtonCheckedChanged(object sender, EventArgs e)
         {
@@ -307,6 +308,9 @@ namespace Klinika.GUI.Patient
                 FillDoctorTable(searched);
                 return;
             }
+            int selectedID = (DoctorSpecializationComboBox.SelectedItem as Specialization).ID;
+            var selected = DoctorService.SearchBySpecialization(selectedID);
+            FillDoctorTable(selected);
         }
         #endregion
 
@@ -342,6 +346,12 @@ namespace Klinika.GUI.Patient
                 return true;
             }
             return false;
+        }
+        private void FillSpecializationsComboBox()
+        {
+            var specializations = DoctorRepository.GetSpecializations().ToArray();
+            DoctorSpecializationComboBox.Items.AddRange(specializations);
+            DoctorSpecializationComboBox.SelectedIndex = 0;
         }
         #endregion
     }

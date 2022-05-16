@@ -91,5 +91,9 @@ namespace Klinika.Services
         {
             return DoctorRepository.GetInstance().doctors.Where(x => x.Surname.ToUpper().Contains(keyword.ToUpper())).ToList();
         }
+        public static List<Doctor> SearchBySpecialization(int id)
+        {
+            return DoctorRepository.GetInstance().doctors.Where(x => x.specialization.ID == id).ToList();
+        }
     }
 }
