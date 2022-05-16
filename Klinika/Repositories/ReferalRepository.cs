@@ -31,7 +31,7 @@ namespace Klinika.Repositories
         {
             string getReferralsQuery = "SELECT [Referal].ID, " +
                 "CAST([Referal].DoctorID AS varchar) + '. ' + [User].Name + ' ' + [User].Surname 'Doctor', " +
-                "CAST([Referal].SpecializationID AS varchar) + '. '[Specialization].Name 'Specialization', [Referal].Date 'Date issued',[Referal].IsUsed 'Used' " +
+                "CAST([Referal].SpecializationID AS varchar) + '. ' + [Specialization].Name 'Specialization', [Referal].Date 'Date issued',[Referal].IsUsed 'Used' " +
                 "FROM [Referal]" +
                 "LEFT OUTER JOIN [DoctorSpecialization] ON [Referal].DoctorID = [DoctorSpecialization].UserID " +
                 "LEFT OUTER JOIN [User] ON [DoctorSpecialization].UserID = [User].ID " +

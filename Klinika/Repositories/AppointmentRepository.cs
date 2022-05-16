@@ -193,25 +193,22 @@ namespace Klinika.Repositories
 
             }
 
+            if (doctorsAppointments.Count == 0) return true;
             doctorsAppointments.OrderBy(o => o.DateTime).ToList();
             TimeSlot temporary = new TimeSlot(toFit.from, toFit.to);
-            while(temporary.to <= slot.to) 
+
+            foreach(Appointment appointment in doctorsAppointments)
             {
-                foreach(Appointment appointment in doctorsAppointments)
+                TimeSlot appointementSlot = new TimeSlot(appointment.DateTime, appointment.DateTime.AddMinutes(appointment.Duration));
+                if(appointementSlot.DoesOverlap(temporary))
                 {
-                    TimeSlot appointementSlot = new TimeSlot(appointment.DateTime, appointment.DateTime.AddMinutes(appointment.Duration));
-                    if(appointementSlot.DoesOverlap(temporary))
-                    {
-                        temporary.from = appointementSlot.to;
-                        temporary.to = appointementSlot.to.AddMinutes(toFit.GetDuration());
-                        break;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    temporary.from = appointementSlot.to;
+                    temporary.to = appointementSlot.to.AddMinutes(toFit.GetDuration());
                 }
             }
+
+            if(temporary.to < slot.to) return true;
+
             return false;
         }
 
