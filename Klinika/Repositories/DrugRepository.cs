@@ -102,14 +102,15 @@ namespace Klinika.Repositories
 
             Drugs.Where(x => x.ID == id).First().Approved = type.ToString();
         }
-        public static void CreateUnapproved(string description)
+        public static void CreateUnapproved(int id, string description)
         {
             string createQuery = "INSERT INTO [UnapprovedDrug] " +
-                "(Description) " +
-                "VALUES (@Description)";
+                "(DrugID,Description) " +
+                "VALUES (@DrugID,@Description)";
 
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
                 createQuery,
+                ("@DrugID", id),
                 ("@Description", description));
         }
         #endregion
