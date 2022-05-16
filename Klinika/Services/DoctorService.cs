@@ -26,7 +26,7 @@ namespace Klinika.Services
             return null;
         }
 
-        public static void FillTableWithData(DataTable? data, DataGridView table)
+        public static void FillAppointmentsTableWithData(DataTable? data, DataGridView table)
         {
             if (data != null)
             {

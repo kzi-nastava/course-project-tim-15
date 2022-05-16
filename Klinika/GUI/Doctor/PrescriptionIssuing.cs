@@ -30,7 +30,7 @@ namespace Klinika.GUI.Doctor
             Parent.Enabled = false;
             PrescriptionStartDatePicker.MinDate = DateTime.Now;
             PrescriptionEndDatePicker.MinDate = DateTime.Now;
-            PrescriptionService.FillTable(DrugsTable);
+            DrugService.FillTable(DrugsTable);
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {

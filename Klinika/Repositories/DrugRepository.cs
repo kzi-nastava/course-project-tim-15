@@ -91,6 +91,28 @@ namespace Klinika.Repositories
                 }
             }
         }
+        public void ModifyType(int id, char type)
+        {
+            string modifyQuery = "UPDATE [Drug] SET Approved = @Type WHERE ID = @ID";
+
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                modifyQuery,
+                ("@Type", type),
+                ("@ID", id));
+
+            Drugs.Where(x => x.ID == id).First().Approved = type.ToString();
+        }
+        public static void CreateUnapproved(int id, string description)
+        {
+            string createQuery = "INSERT INTO [UnapprovedDrug] " +
+                "(DrugID,Description) " +
+                "VALUES (@DrugID,@Description)";
+
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                createQuery,
+                ("@DrugID", id),
+                ("@Description", description));
+        }
         #endregion
 
         #region Prescriptions
