@@ -111,7 +111,7 @@ namespace Klinika.GUI.Doctor
             try
             {
                 var selected = AppointmentService.GetSelected(ScheduleTable);
-                bool canBePerformed = !selected.Completed 
+                bool canBePerformed = !selected.Completed
                     && selected.Type == 'E'
                     && selected.DateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
 
@@ -143,23 +143,52 @@ namespace Klinika.GUI.Doctor
         #endregion
 
         #region Unapproved Drugs
-
+        private void InitUnapprovedDrugs()
+        {
+            DrugService.FillTable(UnapprovedDrugsTable, true);
+            ApproveDrugButton.Enabled = false;
+            DenieDrugButton.Enabled = false;
+            DeniedDrugDescription.Text = "";
+        }
+        private void UnapprovedDrugsTableSelectionChanged(object sender, EventArgs e)
+        {
+            ApproveDrugButton.Enabled = true;
+            DeniedDrugDescription.Text = "";
+        }
+        private void DeniedDrugDescriptionTextChanged(object sender, EventArgs e)
+        {
+            if (DeniedDrugDescription.Text != "" && ApproveDrugButton.Enabled)
+            {
+                DenieDrugButton.Enabled = true;
+                return;
+            }
+            DenieDrugButton.Enabled = false;
+        }
+        private void ApproveDrugButtonClick(object sender, EventArgs e)
+        {
+            var selected = DrugService.GetSelected(UnapprovedDrugsTable);
+            DrugService.ApproveDrug(selected.ID);
+            InitUnapprovedDrugs();
+        }
+        private void DenieDrugButtonClick(object sender, EventArgs e)
+        {
+            var selected = DrugService.GetSelected(UnapprovedDrugsTable);
+            DrugService.DenieDrug(selected.ID, DeniedDrugDescription.Text);
+            InitUnapprovedDrugs();
+        }
         #endregion
 
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
         {
             switch (MainTabControl.SelectedIndex)
             {
-                case 0:
-                    break;
-                case 1:
-                    break;
                 case 2:
-                    DrugService.FillTable(UnapprovedDrugsTable, true);
+                    InitUnapprovedDrugs();
                     break;
                 default:
                     break;
             }
         }
+
     }
 }

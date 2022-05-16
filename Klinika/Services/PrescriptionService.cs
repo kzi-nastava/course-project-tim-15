@@ -21,7 +21,7 @@ namespace Klinika.Services
         {
             if (!Validate()) return;
 
-            var selected = DrugService.GetSelectedDrug(Form.DrugsTable);
+            var selected = DrugService.GetSelected(Form.DrugsTable);
 
             if (!ValidateDrug(selected)) return;
 

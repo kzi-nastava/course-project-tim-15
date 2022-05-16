@@ -32,11 +32,20 @@ namespace Klinika.Services
             table.Columns[1].Width = 90;
             table.ClearSelection();
         }
-        public static Drug GetSelectedDrug(DataGridView table)
+        public static Drug GetSelected(DataGridView table)
         {
             int drugId = Convert.ToInt32(table.SelectedRows[0].Cells["ID"].Value);
             var selectedDrug = DrugRepository.Instance.Drugs.Where(x => x.ID == drugId).FirstOrDefault();
             return selectedDrug;
+        }
+        public static void ApproveDrug(int id)
+        {
+            DrugRepository.Instance.ModifyType(id, 'A');
+        }
+        public static void DenieDrug(int id, string description)
+        {
+            //DrugRepository.Instance.ModifyType(id, 'D');
+            DrugRepository.CreateUnapproved(description);
         }
     }
 }
