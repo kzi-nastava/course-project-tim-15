@@ -26,7 +26,7 @@ namespace Klinika.Services
             return null;
         }
 
-        public static void FillTableWithData(DataTable? data, DataGridView table)
+        public static void FillAppointmentsTableWithData(DataTable? data, DataGridView table)
         {
             if (data != null)
             {
@@ -61,6 +61,10 @@ namespace Klinika.Services
             {
                 row["Type"] = AppointmentService.GetTypeFullName(Convert.ToChar(row["Type"]));
             }
+        }
+        public static void FillUnapprovedDrugsTable()
+        {
+
         }
         public static void UpdateTableRow(Appointment appointment, DataGridView table)
         {

@@ -39,23 +39,28 @@
             this.ViewMedicalRecordButton = new System.Windows.Forms.Button();
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
             this.ScheduleTable = new System.Windows.Forms.DataGridView();
+            this.UnapprovedDrugsTab = new System.Windows.Forms.TabPage();
+            this.UnapprovedDrugsTable = new System.Windows.Forms.DataGridView();
             this.MainTabControl.SuspendLayout();
             this.AllAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).BeginInit();
             this.ScheduleTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ScheduleTable)).BeginInit();
+            this.UnapprovedDrugsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.UnapprovedDrugsTable)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTabControl
             // 
             this.MainTabControl.Controls.Add(this.AllAppointmentsTab);
             this.MainTabControl.Controls.Add(this.ScheduleTab);
-            this.MainTabControl.Location = new System.Drawing.Point(10, 9);
-            this.MainTabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MainTabControl.Controls.Add(this.UnapprovedDrugsTab);
+            this.MainTabControl.Location = new System.Drawing.Point(11, 12);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(822, 384);
+            this.MainTabControl.Size = new System.Drawing.Size(939, 512);
             this.MainTabControl.TabIndex = 0;
+            this.MainTabControl.SelectedIndexChanged += new System.EventHandler(this.MainTabControlSelectedIndexChanged);
             // 
             // AllAppointmentsTab
             // 
@@ -63,21 +68,19 @@
             this.AllAppointmentsTab.Controls.Add(this.DeleteAppointmentButton);
             this.AllAppointmentsTab.Controls.Add(this.EditAppointmentButton);
             this.AllAppointmentsTab.Controls.Add(this.AllAppointmentsTable);
-            this.AllAppointmentsTab.Location = new System.Drawing.Point(4, 24);
-            this.AllAppointmentsTab.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.AllAppointmentsTab.Location = new System.Drawing.Point(4, 29);
             this.AllAppointmentsTab.Name = "AllAppointmentsTab";
-            this.AllAppointmentsTab.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.AllAppointmentsTab.Size = new System.Drawing.Size(814, 356);
+            this.AllAppointmentsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.AllAppointmentsTab.Size = new System.Drawing.Size(931, 479);
             this.AllAppointmentsTab.TabIndex = 0;
             this.AllAppointmentsTab.Text = "All Appointments";
             this.AllAppointmentsTab.UseVisualStyleBackColor = true;
             // 
             // AddAppointmentButton
             // 
-            this.AddAppointmentButton.Location = new System.Drawing.Point(729, 330);
-            this.AddAppointmentButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.AddAppointmentButton.Location = new System.Drawing.Point(833, 440);
             this.AddAppointmentButton.Name = "AddAppointmentButton";
-            this.AddAppointmentButton.Size = new System.Drawing.Size(82, 22);
+            this.AddAppointmentButton.Size = new System.Drawing.Size(94, 29);
             this.AddAppointmentButton.TabIndex = 3;
             this.AddAppointmentButton.Text = "Add";
             this.AddAppointmentButton.UseVisualStyleBackColor = true;
@@ -86,10 +89,9 @@
             // DeleteAppointmentButton
             // 
             this.DeleteAppointmentButton.Enabled = false;
-            this.DeleteAppointmentButton.Location = new System.Drawing.Point(93, 330);
-            this.DeleteAppointmentButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.DeleteAppointmentButton.Location = new System.Drawing.Point(106, 440);
             this.DeleteAppointmentButton.Name = "DeleteAppointmentButton";
-            this.DeleteAppointmentButton.Size = new System.Drawing.Size(82, 22);
+            this.DeleteAppointmentButton.Size = new System.Drawing.Size(94, 29);
             this.DeleteAppointmentButton.TabIndex = 2;
             this.DeleteAppointmentButton.Text = "Delete";
             this.DeleteAppointmentButton.UseVisualStyleBackColor = true;
@@ -98,10 +100,9 @@
             // EditAppointmentButton
             // 
             this.EditAppointmentButton.Enabled = false;
-            this.EditAppointmentButton.Location = new System.Drawing.Point(5, 330);
-            this.EditAppointmentButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.EditAppointmentButton.Location = new System.Drawing.Point(6, 440);
             this.EditAppointmentButton.Name = "EditAppointmentButton";
-            this.EditAppointmentButton.Size = new System.Drawing.Size(82, 22);
+            this.EditAppointmentButton.Size = new System.Drawing.Size(94, 29);
             this.EditAppointmentButton.TabIndex = 1;
             this.EditAppointmentButton.Text = "Edit";
             this.EditAppointmentButton.UseVisualStyleBackColor = true;
@@ -114,14 +115,13 @@
             this.AllAppointmentsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.AllAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.AllAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.AllAppointmentsTable.Location = new System.Drawing.Point(5, 4);
-            this.AllAppointmentsTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.AllAppointmentsTable.Location = new System.Drawing.Point(6, 5);
             this.AllAppointmentsTable.Name = "AllAppointmentsTable";
             this.AllAppointmentsTable.ReadOnly = true;
             this.AllAppointmentsTable.RowHeadersWidth = 51;
             this.AllAppointmentsTable.RowTemplate.Height = 29;
             this.AllAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.AllAppointmentsTable.Size = new System.Drawing.Size(805, 322);
+            this.AllAppointmentsTable.Size = new System.Drawing.Size(920, 429);
             this.AllAppointmentsTable.TabIndex = 0;
             this.AllAppointmentsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.AllAppointmentsTableRowSelected);
             // 
@@ -131,19 +131,21 @@
             this.ScheduleTab.Controls.Add(this.ViewMedicalRecordButton);
             this.ScheduleTab.Controls.Add(this.ScheduleDatePicker);
             this.ScheduleTab.Controls.Add(this.ScheduleTable);
-            this.ScheduleTab.Location = new System.Drawing.Point(4, 24);
+            this.ScheduleTab.Location = new System.Drawing.Point(4, 29);
+            this.ScheduleTab.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.ScheduleTab.Name = "ScheduleTab";
-            this.ScheduleTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ScheduleTab.Size = new System.Drawing.Size(814, 356);
+            this.ScheduleTab.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.ScheduleTab.Size = new System.Drawing.Size(931, 479);
             this.ScheduleTab.TabIndex = 1;
             this.ScheduleTab.Text = "Schedule";
             this.ScheduleTab.UseVisualStyleBackColor = true;
             // 
             // PerformButton
             // 
-            this.PerformButton.Location = new System.Drawing.Point(584, 330);
+            this.PerformButton.Location = new System.Drawing.Point(667, 440);
+            this.PerformButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.PerformButton.Name = "PerformButton";
-            this.PerformButton.Size = new System.Drawing.Size(75, 23);
+            this.PerformButton.Size = new System.Drawing.Size(86, 31);
             this.PerformButton.TabIndex = 3;
             this.PerformButton.Text = "Perform";
             this.PerformButton.UseVisualStyleBackColor = true;
@@ -151,9 +153,10 @@
             // 
             // ViewMedicalRecordButton
             // 
-            this.ViewMedicalRecordButton.Location = new System.Drawing.Point(665, 330);
+            this.ViewMedicalRecordButton.Location = new System.Drawing.Point(760, 440);
+            this.ViewMedicalRecordButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.ViewMedicalRecordButton.Name = "ViewMedicalRecordButton";
-            this.ViewMedicalRecordButton.Size = new System.Drawing.Size(143, 23);
+            this.ViewMedicalRecordButton.Size = new System.Drawing.Size(163, 31);
             this.ViewMedicalRecordButton.TabIndex = 2;
             this.ViewMedicalRecordButton.Text = "View Patient Medical Record";
             this.ViewMedicalRecordButton.UseVisualStyleBackColor = true;
@@ -161,9 +164,10 @@
             // 
             // ScheduleDatePicker
             // 
-            this.ScheduleDatePicker.Location = new System.Drawing.Point(3, 330);
+            this.ScheduleDatePicker.Location = new System.Drawing.Point(3, 440);
+            this.ScheduleDatePicker.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.ScheduleDatePicker.Name = "ScheduleDatePicker";
-            this.ScheduleDatePicker.Size = new System.Drawing.Size(222, 23);
+            this.ScheduleDatePicker.Size = new System.Drawing.Size(253, 27);
             this.ScheduleDatePicker.TabIndex = 1;
             this.ScheduleDatePicker.ValueChanged += new System.EventHandler(this.ScheduleDatePickerValueChanged);
             // 
@@ -174,25 +178,54 @@
             this.ScheduleTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.ScheduleTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.ScheduleTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ScheduleTable.Location = new System.Drawing.Point(3, 5);
-            this.ScheduleTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.ScheduleTable.Location = new System.Drawing.Point(3, 7);
             this.ScheduleTable.Name = "ScheduleTable";
             this.ScheduleTable.ReadOnly = true;
+            this.ScheduleTable.RowHeadersWidth = 51;
             this.ScheduleTable.RowTemplate.Height = 25;
             this.ScheduleTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ScheduleTable.Size = new System.Drawing.Size(805, 322);
+            this.ScheduleTable.Size = new System.Drawing.Size(920, 429);
             this.ScheduleTable.TabIndex = 0;
             this.ScheduleTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ScheduleTableRowSelected);
             this.ScheduleTable.SelectionChanged += new System.EventHandler(this.ScheduleTableSelectionChanged);
             // 
+            // UnapprovedDrugsTab
+            // 
+            this.UnapprovedDrugsTab.Controls.Add(this.UnapprovedDrugsTable);
+            this.UnapprovedDrugsTab.Location = new System.Drawing.Point(4, 29);
+            this.UnapprovedDrugsTab.Name = "UnapprovedDrugsTab";
+            this.UnapprovedDrugsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.UnapprovedDrugsTab.Size = new System.Drawing.Size(931, 479);
+            this.UnapprovedDrugsTab.TabIndex = 2;
+            this.UnapprovedDrugsTab.Text = "Unapproved Drugs";
+            this.UnapprovedDrugsTab.UseVisualStyleBackColor = true;
+            // 
+            // UnapprovedDrugsTable
+            // 
+            this.UnapprovedDrugsTable.AllowUserToAddRows = false;
+            this.UnapprovedDrugsTable.AllowUserToDeleteRows = false;
+            this.UnapprovedDrugsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.UnapprovedDrugsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.UnapprovedDrugsTable.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.UnapprovedDrugsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.UnapprovedDrugsTable.GridColor = System.Drawing.SystemColors.Control;
+            this.UnapprovedDrugsTable.Location = new System.Drawing.Point(296, 7);
+            this.UnapprovedDrugsTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.UnapprovedDrugsTable.Name = "UnapprovedDrugsTable";
+            this.UnapprovedDrugsTable.ReadOnly = true;
+            this.UnapprovedDrugsTable.RowHeadersWidth = 51;
+            this.UnapprovedDrugsTable.RowTemplate.Height = 25;
+            this.UnapprovedDrugsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.UnapprovedDrugsTable.Size = new System.Drawing.Size(629, 465);
+            this.UnapprovedDrugsTable.TabIndex = 2;
+            // 
             // DoctorMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(844, 402);
+            this.ClientSize = new System.Drawing.Size(965, 536);
             this.Controls.Add(this.MainTabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DoctorMain";
@@ -205,6 +238,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).EndInit();
             this.ScheduleTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ScheduleTable)).EndInit();
+            this.UnapprovedDrugsTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.UnapprovedDrugsTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -222,5 +257,7 @@
         private DateTimePicker ScheduleDatePicker;
         private Button ViewMedicalRecordButton;
         private Button PerformButton;
+        private TabPage UnapprovedDrugsTab;
+        internal DataGridView UnapprovedDrugsTable;
     }
 }

@@ -36,7 +36,7 @@ namespace Klinika.GUI.Doctor
         private void InitAllAppointmentsTab()
         {
             DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
-            DoctorService.FillTableWithData(allAppointments, AllAppointmentsTable);
+            DoctorService.FillAppointmentsTableWithData(allAppointments, AllAppointmentsTable);
             EditAppointmentButton.Enabled = false;
             DeleteAppointmentButton.Enabled = false;
         }
@@ -49,7 +49,7 @@ namespace Klinika.GUI.Doctor
         private void FillScheduledAppointmentsTable(string date)
         {
             DataTable? scheduledAppointments = AppointmentRepository.GetAll(date, Doctor.ID, User.RoleType.DOCTOR, 3);
-            DoctorService.FillTableWithData(scheduledAppointments, ScheduleTable);
+            DoctorService.FillAppointmentsTableWithData(scheduledAppointments, ScheduleTable);
         }
         #endregion
 
@@ -142,5 +142,24 @@ namespace Klinika.GUI.Doctor
         }
         #endregion
 
+        #region Unapproved Drugs
+
+        #endregion
+
+        private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (MainTabControl.SelectedIndex)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    DrugService.FillTable(UnapprovedDrugsTable, true);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
