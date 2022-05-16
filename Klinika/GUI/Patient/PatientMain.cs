@@ -297,18 +297,16 @@ namespace Klinika.GUI.Patient
         {
             if (DoctorNameRadioButton.Checked)
             {
-                var searched = SearchByName(DoctorNameTextBox.Text);
+                var searched = DoctorService.SearchByName(DoctorNameTextBox.Text);
                 FillDoctorTable(searched);
                 return;
             }
             if (DoctorSurnameRadioButton.Checked)
             {
+                var searched = DoctorService.SearchBySurname(DoctorSurnameTextBox.Text);
+                FillDoctorTable(searched);
+                return;
             }
-        }
-
-        public static List<Roles.Doctor> SearchByName(string keyword)
-        {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.Name.ToUpper().Contains(keyword.ToUpper())).ToList();
         }
         #endregion
 
