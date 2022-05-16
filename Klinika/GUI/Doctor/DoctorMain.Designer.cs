@@ -40,9 +40,9 @@
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
             this.ScheduleTable = new System.Windows.Forms.DataGridView();
             this.UnapprovedDrugsTab = new System.Windows.Forms.TabPage();
-            this.DenieDrugButton = new System.Windows.Forms.Button();
+            this.DenyDrugButton = new System.Windows.Forms.Button();
             this.ApproveDrugButton = new System.Windows.Forms.Button();
-            this.DeniedDrugDescription = new System.Windows.Forms.TextBox();
+            this.DenydDrugDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.UnapprovedDrugsTable = new System.Windows.Forms.DataGridView();
             this.MainTabControl.SuspendLayout();
@@ -195,9 +195,9 @@
             // 
             // UnapprovedDrugsTab
             // 
-            this.UnapprovedDrugsTab.Controls.Add(this.DenieDrugButton);
+            this.UnapprovedDrugsTab.Controls.Add(this.DenyDrugButton);
             this.UnapprovedDrugsTab.Controls.Add(this.ApproveDrugButton);
-            this.UnapprovedDrugsTab.Controls.Add(this.DeniedDrugDescription);
+            this.UnapprovedDrugsTab.Controls.Add(this.DenydDrugDescription);
             this.UnapprovedDrugsTab.Controls.Add(this.label1);
             this.UnapprovedDrugsTab.Controls.Add(this.UnapprovedDrugsTable);
             this.UnapprovedDrugsTab.Location = new System.Drawing.Point(4, 29);
@@ -208,15 +208,15 @@
             this.UnapprovedDrugsTab.Text = "Unapproved Drugs";
             this.UnapprovedDrugsTab.UseVisualStyleBackColor = true;
             // 
-            // DenieDrugButton
+            // DenyDrugButton
             // 
-            this.DenieDrugButton.Location = new System.Drawing.Point(96, 443);
-            this.DenieDrugButton.Name = "DenieDrugButton";
-            this.DenieDrugButton.Size = new System.Drawing.Size(94, 29);
-            this.DenieDrugButton.TabIndex = 6;
-            this.DenieDrugButton.Text = "Denie";
-            this.DenieDrugButton.UseVisualStyleBackColor = true;
-            this.DenieDrugButton.Click += new System.EventHandler(this.DenieDrugButtonClick);
+            this.DenyDrugButton.Location = new System.Drawing.Point(96, 443);
+            this.DenyDrugButton.Name = "DenyDrugButton";
+            this.DenyDrugButton.Size = new System.Drawing.Size(94, 29);
+            this.DenyDrugButton.TabIndex = 6;
+            this.DenyDrugButton.Text = "Deny";
+            this.DenyDrugButton.UseVisualStyleBackColor = true;
+            this.DenyDrugButton.Click += new System.EventHandler(this.DenyDrugButtonClick);
             // 
             // ApproveDrugButton
             // 
@@ -228,14 +228,14 @@
             this.ApproveDrugButton.UseVisualStyleBackColor = true;
             this.ApproveDrugButton.Click += new System.EventHandler(this.ApproveDrugButtonClick);
             // 
-            // DeniedDrugDescription
+            // DenydDrugDescription
             // 
-            this.DeniedDrugDescription.Location = new System.Drawing.Point(10, 327);
-            this.DeniedDrugDescription.Multiline = true;
-            this.DeniedDrugDescription.Name = "DeniedDrugDescription";
-            this.DeniedDrugDescription.Size = new System.Drawing.Size(280, 110);
-            this.DeniedDrugDescription.TabIndex = 4;
-            this.DeniedDrugDescription.TextChanged += new System.EventHandler(this.DeniedDrugDescriptionTextChanged);
+            this.DenydDrugDescription.Location = new System.Drawing.Point(10, 327);
+            this.DenydDrugDescription.Multiline = true;
+            this.DenydDrugDescription.Name = "DenyDrugDescription";
+            this.DenydDrugDescription.Size = new System.Drawing.Size(280, 110);
+            this.DenydDrugDescription.TabIndex = 4;
+            this.DenydDrugDescription.TextChanged += new System.EventHandler(this.DenyDrugDescriptionTextChanged);
             // 
             // label1
             // 
@@ -307,9 +307,9 @@
         private Button PerformButton;
         private TabPage UnapprovedDrugsTab;
         internal DataGridView UnapprovedDrugsTable;
-        private Button DenieDrugButton;
+        private Button DenyDrugButton;
         private Button ApproveDrugButton;
-        private TextBox DeniedDrugDescription;
+        private TextBox DenydDrugDescription;
         private Label label1;
     }
 }

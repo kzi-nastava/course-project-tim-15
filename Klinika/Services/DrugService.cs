@@ -44,9 +44,9 @@ namespace Klinika.Services
             if (msgBox == DialogResult.No) return;
             DrugRepository.Instance.ModifyType(id, 'A');
         }
-        public static void DenieDrug(int id, string description)
+        public static void DenyDrug(int id, string description)
         {
-            var msgBox = MessageBox.Show("Are you sure you want to denie this drug?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var msgBox = MessageBox.Show("Are you sure you want to deny this drug?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (msgBox == DialogResult.No) return;
             DrugRepository.Instance.ModifyType(id, 'D');
             DrugRepository.CreateUnapproved(id, description);

@@ -147,22 +147,22 @@ namespace Klinika.GUI.Doctor
         {
             DrugService.FillTable(UnapprovedDrugsTable, true);
             ApproveDrugButton.Enabled = false;
-            DenieDrugButton.Enabled = false;
-            DeniedDrugDescription.Text = "";
+            DenyDrugButton.Enabled = false;
+            DenydDrugDescription.Text = "";
         }
         private void UnapprovedDrugsTableSelectionChanged(object sender, EventArgs e)
         {
             ApproveDrugButton.Enabled = true;
-            DeniedDrugDescription.Text = "";
+            DenydDrugDescription.Text = "";
         }
-        private void DeniedDrugDescriptionTextChanged(object sender, EventArgs e)
+        private void DenyDrugDescriptionTextChanged(object sender, EventArgs e)
         {
-            if (DeniedDrugDescription.Text != "" && ApproveDrugButton.Enabled)
+            if (DenydDrugDescription.Text != "" && ApproveDrugButton.Enabled)
             {
-                DenieDrugButton.Enabled = true;
+                DenyDrugButton.Enabled = true;
                 return;
             }
-            DenieDrugButton.Enabled = false;
+            DenyDrugButton.Enabled = false;
         }
         private void ApproveDrugButtonClick(object sender, EventArgs e)
         {
@@ -170,10 +170,10 @@ namespace Klinika.GUI.Doctor
             DrugService.ApproveDrug(selected.ID);
             InitUnapprovedDrugs();
         }
-        private void DenieDrugButtonClick(object sender, EventArgs e)
+        private void DenyDrugButtonClick(object sender, EventArgs e)
         {
             var selected = DrugService.GetSelected(UnapprovedDrugsTable);
-            DrugService.DenieDrug(selected.ID, DeniedDrugDescription.Text);
+            DrugService.DenyDrug(selected.ID, DenydDrugDescription.Text);
             InitUnapprovedDrugs();
         }
         #endregion
