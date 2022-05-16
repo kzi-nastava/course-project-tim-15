@@ -33,6 +33,7 @@ namespace Klinika.GUI.Patient
             }
 
             if ((sender as TabControl).SelectedIndex == 2) FillMedicalRecorTab();
+            if ((sender as TabControl).SelectedIndex == 3) InitDoctorsTab();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -226,6 +227,43 @@ namespace Klinika.GUI.Patient
         {
             FillMedicalRecorTab();
             SearchTextBox.Text = "";
+        }
+        #endregion
+
+        #region Doctors
+        private void InitDoctorsTab()
+        {
+            DoctorNameRadioButton.Checked = true;
+            DoctorSurnameTextBox.Enabled = false;
+            DoctorSpecializationComboBox.Enabled = false;
+            button1.Enabled = false;
+        }
+        private void DoctorNameRadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            if(DoctorNameRadioButton.Checked)
+            {
+                DoctorNameTextBox.Enabled = true;
+                DoctorSurnameTextBox.Enabled = false;
+                DoctorSpecializationComboBox.Enabled = false;
+            }
+        }
+        private void DoctorSurnameRadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            if (DoctorSurnameRadioButton.Checked)
+            {
+                DoctorNameTextBox.Enabled = false;
+                DoctorSurnameTextBox.Enabled = true;
+                DoctorSpecializationComboBox.Enabled = false;
+            }
+        }
+        private void DoctorSpecializationRadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            if (DoctorSpecializationRadioButton.Checked)
+            {
+                DoctorNameTextBox.Enabled = false;
+                DoctorSurnameTextBox.Enabled = false;
+                DoctorSpecializationComboBox.Enabled = true;
+            }
         }
         #endregion
 

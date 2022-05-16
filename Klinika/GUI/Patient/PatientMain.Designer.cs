@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.PersonalAppointmentsTab = new System.Windows.Forms.TabPage();
             this.DeleteButton = new System.Windows.Forms.Button();
@@ -50,6 +51,16 @@
             this.SearchTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.MedicalRecordTable = new System.Windows.Forms.DataGridView();
+            this.DoctorsTab = new System.Windows.Forms.TabPage();
+            this.DoctorSearchButton = new System.Windows.Forms.Button();
+            this.DoctorNameRadioButton = new System.Windows.Forms.RadioButton();
+            this.DoctorSurnameRadioButton = new System.Windows.Forms.RadioButton();
+            this.DoctorSpecializationRadioButton = new System.Windows.Forms.RadioButton();
+            this.DoctorSpecializationComboBox = new System.Windows.Forms.ComboBox();
+            this.DoctorSurnameTextBox = new System.Windows.Forms.TextBox();
+            this.DoctorNameTextBox = new System.Windows.Forms.TextBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
@@ -57,6 +68,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.OccupiedAppointmentsTable)).BeginInit();
             this.MedicalRecordTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MedicalRecordTable)).BeginInit();
+            this.DoctorsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -64,6 +77,7 @@
             this.MainTabControl.Controls.Add(this.PersonalAppointmentsTab);
             this.MainTabControl.Controls.Add(this.NewAppointmentTab);
             this.MainTabControl.Controls.Add(this.MedicalRecordTab);
+            this.MainTabControl.Controls.Add(this.DoctorsTab);
             this.MainTabControl.Location = new System.Drawing.Point(12, 12);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
@@ -288,14 +302,14 @@
             this.MedicalRecordTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.MedicalRecordTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.MedicalRecordTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.MedicalRecordTable.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.MedicalRecordTable.DefaultCellStyle = dataGridViewCellStyle1;
             this.MedicalRecordTable.Location = new System.Drawing.Point(6, 6);
             this.MedicalRecordTable.Name = "MedicalRecordTable";
             this.MedicalRecordTable.ReadOnly = true;
@@ -303,6 +317,125 @@
             this.MedicalRecordTable.RowTemplate.Height = 29;
             this.MedicalRecordTable.Size = new System.Drawing.Size(1073, 459);
             this.MedicalRecordTable.TabIndex = 0;
+            // 
+            // DoctorsTab
+            // 
+            this.DoctorsTab.Controls.Add(this.button1);
+            this.DoctorsTab.Controls.Add(this.dataGridView1);
+            this.DoctorsTab.Controls.Add(this.DoctorSearchButton);
+            this.DoctorsTab.Controls.Add(this.DoctorNameRadioButton);
+            this.DoctorsTab.Controls.Add(this.DoctorSurnameRadioButton);
+            this.DoctorsTab.Controls.Add(this.DoctorSpecializationRadioButton);
+            this.DoctorsTab.Controls.Add(this.DoctorSpecializationComboBox);
+            this.DoctorsTab.Controls.Add(this.DoctorSurnameTextBox);
+            this.DoctorsTab.Controls.Add(this.DoctorNameTextBox);
+            this.DoctorsTab.Location = new System.Drawing.Point(4, 29);
+            this.DoctorsTab.Name = "DoctorsTab";
+            this.DoctorsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.DoctorsTab.Size = new System.Drawing.Size(1085, 507);
+            this.DoctorsTab.TabIndex = 3;
+            this.DoctorsTab.Text = "Doctors";
+            this.DoctorsTab.UseVisualStyleBackColor = true;
+            // 
+            // DoctorSearchButton
+            // 
+            this.DoctorSearchButton.Location = new System.Drawing.Point(212, 192);
+            this.DoctorSearchButton.Name = "DoctorSearchButton";
+            this.DoctorSearchButton.Size = new System.Drawing.Size(94, 29);
+            this.DoctorSearchButton.TabIndex = 11;
+            this.DoctorSearchButton.Text = "Search";
+            this.DoctorSearchButton.UseVisualStyleBackColor = true;
+            // 
+            // DoctorNameRadioButton
+            // 
+            this.DoctorNameRadioButton.AutoSize = true;
+            this.DoctorNameRadioButton.Location = new System.Drawing.Point(26, 54);
+            this.DoctorNameRadioButton.Name = "DoctorNameRadioButton";
+            this.DoctorNameRadioButton.Size = new System.Drawing.Size(70, 24);
+            this.DoctorNameRadioButton.TabIndex = 10;
+            this.DoctorNameRadioButton.TabStop = true;
+            this.DoctorNameRadioButton.Text = "Name";
+            this.DoctorNameRadioButton.UseVisualStyleBackColor = true;
+            this.DoctorNameRadioButton.CheckedChanged += new System.EventHandler(this.DoctorNameRadioButtonCheckedChanged);
+            // 
+            // DoctorSurnameRadioButton
+            // 
+            this.DoctorSurnameRadioButton.AutoSize = true;
+            this.DoctorSurnameRadioButton.Location = new System.Drawing.Point(26, 100);
+            this.DoctorSurnameRadioButton.Name = "DoctorSurnameRadioButton";
+            this.DoctorSurnameRadioButton.Size = new System.Drawing.Size(88, 24);
+            this.DoctorSurnameRadioButton.TabIndex = 9;
+            this.DoctorSurnameRadioButton.TabStop = true;
+            this.DoctorSurnameRadioButton.Text = "Surname";
+            this.DoctorSurnameRadioButton.UseVisualStyleBackColor = true;
+            this.DoctorSurnameRadioButton.CheckedChanged += new System.EventHandler(this.DoctorSurnameRadioButtonCheckedChanged);
+            // 
+            // DoctorSpecializationRadioButton
+            // 
+            this.DoctorSpecializationRadioButton.AutoSize = true;
+            this.DoctorSpecializationRadioButton.Location = new System.Drawing.Point(26, 144);
+            this.DoctorSpecializationRadioButton.Name = "DoctorSpecializationRadioButton";
+            this.DoctorSpecializationRadioButton.Size = new System.Drawing.Size(123, 24);
+            this.DoctorSpecializationRadioButton.TabIndex = 8;
+            this.DoctorSpecializationRadioButton.TabStop = true;
+            this.DoctorSpecializationRadioButton.Text = "Specialization";
+            this.DoctorSpecializationRadioButton.UseVisualStyleBackColor = true;
+            this.DoctorSpecializationRadioButton.CheckedChanged += new System.EventHandler(this.DoctorSpecializationRadioButtonCheckedChanged);
+            // 
+            // DoctorSpecializationComboBox
+            // 
+            this.DoctorSpecializationComboBox.FormattingEnabled = true;
+            this.DoctorSpecializationComboBox.Location = new System.Drawing.Point(155, 143);
+            this.DoctorSpecializationComboBox.Name = "DoctorSpecializationComboBox";
+            this.DoctorSpecializationComboBox.Size = new System.Drawing.Size(151, 28);
+            this.DoctorSpecializationComboBox.TabIndex = 5;
+            // 
+            // DoctorSurnameTextBox
+            // 
+            this.DoctorSurnameTextBox.Location = new System.Drawing.Point(155, 99);
+            this.DoctorSurnameTextBox.Name = "DoctorSurnameTextBox";
+            this.DoctorSurnameTextBox.Size = new System.Drawing.Size(151, 27);
+            this.DoctorSurnameTextBox.TabIndex = 4;
+            // 
+            // DoctorNameTextBox
+            // 
+            this.DoctorNameTextBox.Location = new System.Drawing.Point(155, 54);
+            this.DoctorNameTextBox.Name = "DoctorNameTextBox";
+            this.DoctorNameTextBox.Size = new System.Drawing.Size(151, 27);
+            this.DoctorNameTextBox.TabIndex = 3;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridView1.Location = new System.Drawing.Point(335, 6);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.RowTemplate.Height = 29;
+            this.dataGridView1.Size = new System.Drawing.Size(744, 495);
+            this.dataGridView1.TabIndex = 12;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(212, 459);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 29);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // PatientMain
             // 
@@ -327,6 +460,9 @@
             this.MedicalRecordTab.ResumeLayout(false);
             this.MedicalRecordTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MedicalRecordTable)).EndInit();
+            this.DoctorsTab.ResumeLayout(false);
+            this.DoctorsTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -354,5 +490,15 @@
         private Label label1;
         private Button ResetButton;
         private Button RecommendButton;
+        private TabPage DoctorsTab;
+        private RadioButton DoctorNameRadioButton;
+        private RadioButton DoctorSurnameRadioButton;
+        private RadioButton DoctorSpecializationRadioButton;
+        private ComboBox DoctorSpecializationComboBox;
+        private TextBox DoctorSurnameTextBox;
+        private TextBox DoctorNameTextBox;
+        private Button DoctorSearchButton;
+        private Button button1;
+        private DataGridView dataGridView1;
     }
 }
