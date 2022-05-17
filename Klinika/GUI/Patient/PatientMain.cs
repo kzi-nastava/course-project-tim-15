@@ -20,6 +20,7 @@ namespace Klinika.GUI.Patient
         {
             FillPersonalAppointmentTable();
             FillDoctorComboBox(DoctorComboBox);
+            FillSpecializationsComboBox();
             ModifyButton.Enabled = false;
             DeleteButton.Enabled = false;
         }
@@ -240,7 +241,6 @@ namespace Klinika.GUI.Patient
             DoctorSurnameTextBox.Enabled = false;
             DoctorSpecializationComboBox.Enabled = false;
             NewAppointmentButton.Enabled = false;
-            FillSpecializationsComboBox();
         }
         private void DoctorNameRadioButtonCheckedChanged(object sender, EventArgs e)
         {

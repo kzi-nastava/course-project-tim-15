@@ -16,9 +16,9 @@ namespace Klinika.Repositories
                 "ON [Questionnaire].ID = [Answer].QuestionnaireID " +
                 "WHERE [Questionnaire].TargetID = @doctorID";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getGradeQuerry, ("@doctorID", doctorID));
+            var resoult = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(getGradeQuerry, ("@doctorID", doctorID));
 
-            return Convert.ToDouble(((object[])resoult[0])[0]);
+            return Convert.ToDouble(resoult);
         }
     }
 }
