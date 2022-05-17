@@ -11,7 +11,7 @@ using Klinika.Services;
 
 namespace Klinika.Roles
 {
-    internal class Doctor : User
+    public class Doctor : User
     {
         public Specialization specialization { get; set; }
         public Doctor(int id, string name, string surname,Specialization specialization) : base(id, name, surname)

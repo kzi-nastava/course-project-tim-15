@@ -20,6 +20,7 @@ namespace Klinika.GUI.Patient
         {
             FillPersonalAppointmentTable();
             FillDoctorComboBox(DoctorComboBox);
+            FillSpecializationsComboBox();
             ModifyButton.Enabled = false;
             DeleteButton.Enabled = false;
         }
@@ -33,6 +34,7 @@ namespace Klinika.GUI.Patient
             }
 
             if ((sender as TabControl).SelectedIndex == 2) FillMedicalRecorTab();
+            if ((sender as TabControl).SelectedIndex == 3) InitDoctorsTab();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -229,6 +231,111 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
+        #region Doctors
+        private void InitDoctorsTab()
+        {
+            List<Roles.Doctor> doctors = DoctorRepository.GetInstance().doctors;
+            FillDoctorTable(doctors);
+
+            DoctorNameRadioButton.Checked = true;
+            DoctorSurnameTextBox.Enabled = false;
+            DoctorSpecializationComboBox.Enabled = false;
+            NewAppointmentButton.Enabled = false;
+        }
+        private void DoctorNameRadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            if(DoctorNameRadioButton.Checked)
+            {
+                DoctorNameTextBox.Enabled = true;
+                DoctorSurnameTextBox.Enabled = false;
+                DoctorSpecializationComboBox.Enabled = false;
+
+                DoctorSurnameTextBox.Text = "";
+                FillDoctorTable();
+            }
+        }
+        private void DoctorSurnameRadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            if (DoctorSurnameRadioButton.Checked)
+            {
+                DoctorNameTextBox.Enabled = false;
+                DoctorSurnameTextBox.Enabled = true;
+                DoctorSpecializationComboBox.Enabled = false;
+
+                DoctorNameTextBox.Text = "";
+                FillDoctorTable();
+            }
+        }
+        private void DoctorSpecializationRadioButtonCheckedChanged(object sender, EventArgs e)
+        {
+            if (DoctorSpecializationRadioButton.Checked)
+            {
+                DoctorNameTextBox.Enabled = false;
+                DoctorSurnameTextBox.Enabled = false;
+                DoctorSpecializationComboBox.Enabled = true;
+
+                DoctorSurnameTextBox.Text = "";
+                DoctorNameTextBox.Text = "";
+                FillDoctorTable();
+            }
+        }
+        private void FillDoctorTable(List<Roles.Doctor> doctors = null)
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("Doctor ID");
+            dataTable.Columns.Add("Name");
+            dataTable.Columns.Add("Surname");
+            dataTable.Columns.Add("Specialization");
+            dataTable.Columns.Add("Grade");
+
+            if(doctors != null)
+            {
+                foreach(Roles.Doctor doctor in doctors)
+                {
+                    DataRow newRow = dataTable.NewRow();
+
+                    newRow["Doctor ID"] = doctor.ID;
+                    newRow["Name"] = doctor.Name;
+                    newRow["Surname"] = doctor.Surname;
+                    newRow["Specialization"] = doctor.specialization;
+                    newRow["Grade"] = QuestionnaireRepository.GetGrade(doctor.ID);
+                    dataTable.Rows.Add(newRow);
+                }
+            }
+            DoctorTable.DataSource = dataTable;
+            DoctorTable.ClearSelection();
+            NewAppointmentButton.Enabled = false;
+        }
+        private void DoctorSearchClick(object sender, EventArgs e)
+        {
+            if (DoctorNameRadioButton.Checked)
+            {
+                var searched = DoctorService.SearchByName(DoctorNameTextBox.Text);
+                FillDoctorTable(searched);
+                return;
+            }
+            if (DoctorSurnameRadioButton.Checked)
+            {
+                var searched = DoctorService.SearchBySurname(DoctorSurnameTextBox.Text);
+                FillDoctorTable(searched);
+                return;
+            }
+            int selectedID = (DoctorSpecializationComboBox.SelectedItem as Specialization).ID;
+            var selected = DoctorService.SearchBySpecialization(selectedID);
+            FillDoctorTable(selected);
+        }
+        private void DoctorTableRowSelected(object sender, DataGridViewCellEventArgs e)
+        {
+            NewAppointmentButton.Enabled = true;
+        }
+        private void NewAppointmentClick(object sender, EventArgs e)
+        {
+            Appointment appointment = new Appointment();
+            appointment.DoctorID = DoctorService.GetSelectedID(DoctorTable);
+            new PersonalAppointment(this, appointment, true).Show();
+        }
+        #endregion
+
         #region Helper functions
         private void FillTableWithDoctorData(DataTable dataTable)
         {
@@ -261,6 +368,12 @@ namespace Klinika.GUI.Patient
                 return true;
             }
             return false;
+        }
+        private void FillSpecializationsComboBox()
+        {
+            var specializations = DoctorRepository.GetSpecializations().ToArray();
+            DoctorSpecializationComboBox.Items.AddRange(specializations);
+            DoctorSpecializationComboBox.SelectedIndex = 0;
         }
         #endregion
     }

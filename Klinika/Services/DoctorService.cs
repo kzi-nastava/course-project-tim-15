@@ -83,5 +83,21 @@ namespace Klinika.Services
             var doctor = UserRepository.GetDoctor(doctorID);
             return doctor.ToString();
         }
+        public static List<Doctor> SearchByName(string keyword)
+        {
+            return DoctorRepository.GetInstance().doctors.Where(x => x.Name.ToUpper().Contains(keyword.ToUpper())).ToList();
+        }
+        public static List<Doctor> SearchBySurname(string keyword)
+        {
+            return DoctorRepository.GetInstance().doctors.Where(x => x.Surname.ToUpper().Contains(keyword.ToUpper())).ToList();
+        }
+        public static List<Doctor> SearchBySpecialization(int id)
+        {
+            return DoctorRepository.GetInstance().doctors.Where(x => x.specialization.ID == id).ToList();
+        }
+        public static int GetSelectedID(DataGridView table)
+        {
+            return Convert.ToInt32(table.SelectedRows[0].Cells["Doctor ID"].Value);
+        }
     }
 }
