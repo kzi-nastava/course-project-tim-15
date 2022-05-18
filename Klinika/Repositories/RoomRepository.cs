@@ -10,73 +10,41 @@ namespace Klinika.Repositories
         //returns type ID form Name
         public static int GetTypeId(string type)
         {
-            return Repositories.RoomRepository.types.FirstOrDefault(x => x.Value == type).Key;
+            return types.FirstOrDefault(x => x.Value == type).Key;
         }
         public static DataTable GetAll()
         {
-            types = new Dictionary<int, string>();
-            DataTable? retrievedRooms = null;
-            DataTable? retrievedTypes = null;
+            GetAllTypes();
+            return GetAllRoomsWithTypeNames();
+        }
+
+        public static DataTable GetAllRoomsWithTypeNames()
+        {
             string getAllQuery = "SELECT [Room].ID, [RoomType].Name as Type, [Room].Number " +
                                       "FROM [Room] " +
                                       "INNER JOIN [RoomType] ON [Room].Type = [RoomType].ID " +
                                       "WHERE IsDeleted = 0";
+            return DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
+        }
+        public static void GetAllTypes()
+        {
+            types = new Dictionary<int, string>();
+            DataTable? retrievedTypes = null;
             string getAllTypes = "SELECT ID, Name " +
                                       "FROM [RoomType] ";
-            try
+            retrievedTypes = DatabaseConnection.GetInstance().CreateTableOfData(getAllTypes);
+            foreach (DataRow row in retrievedTypes.Rows)
             {
-                SqlConnection database = DatabaseConnection.GetInstance().database;
-                database.Open();
-                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, database);
-                retrievedRooms = new DataTable();
-                adapter.Fill(retrievedRooms);
-                //retrievedPatients.Columns.Remove("ID");
-
-                adapter = new SqlDataAdapter(getAllTypes, database);
-                retrievedTypes = new DataTable();
-                adapter.Fill(retrievedTypes);
-                foreach(DataRow row in retrievedTypes.Rows)
-                {
-                    types.Add((int)row["ID"], row["Name"].ToString());
-                }
-                database.Close();
+                types.Add((int)row["ID"], row["Name"].ToString());
             }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-
-            return retrievedRooms;
-
         }
 
-        public static List<Models.RoomComboBoxItem> GetRooms()
+        public static DataTable GetAllRooms()
         {
-            List<Models.RoomComboBoxItem> rooms = new List<Models.RoomComboBoxItem>();
-            DataTable? retrievedRooms = null;
             string getAllQuery = "SELECT [Room].ID, [Room].Number " +
                                       "FROM [Room] " +
                                       "WHERE IsDeleted = 0";
-            try
-            {
-                SqlConnection database = DatabaseConnection.GetInstance().database;
-                database.Open();
-                SqlDataAdapter adapter = new SqlDataAdapter(getAllQuery, database);
-                retrievedRooms = new DataTable();
-                adapter.Fill(retrievedRooms);
-                database.Close();
-
-                foreach (DataRow row in retrievedRooms.Rows)
-                {
-                    rooms.Add(new Models.RoomComboBoxItem(row["Number"].ToString(), row["ID"].ToString()));
-                }
-                rooms = rooms.OrderBy(x => x.text).ToList();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-            return rooms;
+            return DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
         }
 
         public static void Create(int type, int number)
@@ -84,19 +52,7 @@ namespace Klinika.Repositories
             string createQuery = "INSERT INTO [Room] " +
                 "(Type, Number, IsDeleted) " +
                 "VALUES (@Type, @Number, 0)";
-            try
-            {
-                SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-                create.Parameters.AddWithValue("@Type", type);
-                create.Parameters.AddWithValue("@Number", number);
-                DatabaseConnection.GetInstance().database.Open();
-                create.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createQuery, ("@Type", type), ("@Number", number));
         }
 
         public static void Delete(int id)
@@ -124,22 +80,7 @@ namespace Klinika.Repositories
                                  "SET Type = @Type, " +
                                  "Number = @Number " +
                                  "WHERE ID = @ID";
-
-            SqlCommand modify = new SqlCommand(modifyQuery, DatabaseConnection.GetInstance().database);
-            modify.Parameters.AddWithValue("@ID", id);
-            modify.Parameters.AddWithValue("@Type", GetTypeId(type));
-            modify.Parameters.AddWithValue("@Number", number);
-            try
-            {
-                SqlConnection database = DatabaseConnection.GetInstance().database;
-                database.Open();
-                modify.ExecuteNonQuery();
-                database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuery, ("@ID", id), ("@Type", GetTypeId(type)), ("@Number", number));
         }
 
         internal static void SimpleRenovate(Models.Renovation renovation)
@@ -147,21 +88,10 @@ namespace Klinika.Repositories
             string createQuery = "INSERT INTO [Renovations] " +
                 "(RoomID, StartDate, EndDate, Advanced) " +
                 "VALUES (@RoomID, @StartDate, @EndDate, @Advanced)";
-            try
-            {
-                SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-                create.Parameters.AddWithValue("@RoomID", renovation.id);
-                create.Parameters.AddWithValue("@StartDate", renovation.from.ToString("yyyy-MM-dd"));
-                create.Parameters.AddWithValue("@EndDate", renovation.to.ToString("yyyy-MM-dd"));
-                create.Parameters.AddWithValue("@Advanced", renovation.advanced);
-                DatabaseConnection.GetInstance().database.Open();
-                create.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createQuery, ("@RoomID", renovation.id), 
+                ("@StartDate", renovation.from.ToString("yyyy-MM-dd")), ("@EndDate", renovation.to.ToString("yyyy-MM-dd")), 
+                ("@Advanced", renovation.advanced));
         }
 
         internal static void SplitRenovation(Models.Renovation renovation, int renovationId)
@@ -169,70 +99,18 @@ namespace Klinika.Repositories
             string createQuery = "INSERT INTO [RenovationsAdvanced] " +
                 "(ID, Type, FirstID, SecondID, SecondType, SecondNumber) " +
                 "VALUES (@ID, @Type, @FirstID, @SecondID, @SecondType, @SecondNumber)";
-            try
-            {
-                SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-                create.Parameters.AddWithValue("@ID", renovationId);
-                create.Parameters.AddWithValue("@Type", 1);
-                create.Parameters.AddWithValue("@FirstID", renovation.id);
-                create.Parameters.AddWithValue("@SecondID", 0);
-                create.Parameters.AddWithValue("@SecondType", renovation.secondType);
-                create.Parameters.AddWithValue("@SecondNumber", renovation.secondNumber);
-                DatabaseConnection.GetInstance().database.Open();
-                create.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createQuery, ("@ID", renovationId), 
+                ("@Type", 1), ("@FirstID", renovation.id), ("@SecondID", 0), ("@SecondType", renovation.secondType),
+                ("@SecondNumber", renovation.secondNumber));
         }
 
         internal static int FindRenovation(Models.Renovation renovation)
         {
-            int id = 0;
             string findQuery = "SELECT [Renovations].ID " +
                                       "FROM [Renovations] " +
                                       "WHERE RoomID = @RoomID AND StartDate = @StartDate AND EndDate = @EndDate";
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                SqlCommand find = new SqlCommand(findQuery, DatabaseConnection.GetInstance().database);
-                find.Parameters.AddWithValue("@RoomID", renovation.id.ToString());
-                find.Parameters.AddWithValue("@StartDate", renovation.from.ToString("yyyy-MM-dd"));
-                find.Parameters.AddWithValue("@EndDate", renovation.to.ToString("yyyy-MM-dd"));
-                SqlDataReader reader = find.ExecuteReader();
-                reader.Read();
-                id = int.Parse(reader["ID"].ToString());
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-
-            return id;
-        }
-        internal static int FindType(int id)
-        {
-            string findQuery = "SELECT [Room].Type " +
-                                      "FROM [Room] " +
-                                      "WHERE ID = @RoomID";
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                SqlCommand find = new SqlCommand(findQuery, DatabaseConnection.GetInstance().database);
-                find.Parameters.AddWithValue("@RoomID", id.ToString());
-                SqlDataReader reader = find.ExecuteReader();
-                reader.Read();
-                id = int.Parse(reader["Type"].ToString());
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-
+            int id = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(findQuery, ("@RoomID", renovation.id.ToString()),
+                ("@StartDate", renovation.from.ToString("yyyy-MM-dd")), ("@EndDate", renovation.to.ToString("yyyy-MM-dd")));
             return id;
         }
 
@@ -241,23 +119,8 @@ namespace Klinika.Repositories
             string createQuery = "INSERT INTO [RenovationsAdvanced] " +
                 "(ID, Type, FirstID, SecondID, SecondType, SecondNumber) " +
                 "VALUES (@ID, @Type, @FirstID, @SecondID, @SecondType, @SecondNumber)";
-            try
-            {
-                SqlCommand create = new SqlCommand(createQuery, DatabaseConnection.GetInstance().database);
-                create.Parameters.AddWithValue("@ID", renovationId);
-                create.Parameters.AddWithValue("@Type", 0);
-                create.Parameters.AddWithValue("@FirstID", renovation.id);
-                create.Parameters.AddWithValue("@SecondID", renovation.secondId);
-                create.Parameters.AddWithValue("@SecondType", 0);
-                create.Parameters.AddWithValue("@SecondNumber", 0);
-                DatabaseConnection.GetInstance().database.Open();
-                create.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createQuery, ("@ID", renovationId), ("@Type", 0),
+                ("@FirstID", renovation.id), ("@SecondID", renovation.secondId), ("@SecondType", 0), ("@SecondNumber", 0));
         }
 
         internal static void AdvancedRenovation(Models.Renovation renovation)
@@ -277,25 +140,21 @@ namespace Klinika.Repositories
 
         public static bool Renovate(Models.Renovation renovation)
         {
-            bool success = Services.RoomServices.DateValid(renovation);
-            if (success)
+            if (!Services.RoomServices.DateValid(renovation)) return false; 
+
+            if (renovation.advanced == 0)
             {
-                if (renovation.advanced == 0)
-                {
-                    SimpleRenovate(renovation);
-                }
-                else
-                {
-                    AdvancedRenovation(renovation);
-                }
+                SimpleRenovate(renovation);
             }
-            return success;
+            else
+            {
+                AdvancedRenovation(renovation);
+            }
+            return true;
         }
 
         public static bool IsRoomRenovating(int id, DateTime from, DateTime to)
         {
-            bool renovating = false;
-
             string findQuery = "SELECT [Renovations].ID " +
                                       "FROM [Renovations] " +
                                       "WHERE RoomID = @RoomID AND " +
@@ -303,26 +162,13 @@ namespace Klinika.Repositories
                                       "(StartDate > @StartDate AND EndDate < @EndDate) OR " +
                                       "(EndDate > @StartDate AND EndDate < @EndDate) OR " +
                                       "(StartDate < @StartDate AND EndDate > @EndDate))";
-            try
+            object check = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(findQuery, ("@RoomID", id.ToString()),
+                ("@StartDate", from.ToString("yyyy-MM-dd")), ("@EndDate", to.ToString("yyyy-MM-dd")));
+            if(check != null)
             {
-                DatabaseConnection.GetInstance().database.Open();
-                SqlCommand find = new SqlCommand(findQuery, DatabaseConnection.GetInstance().database);
-                find.Parameters.AddWithValue("@RoomID", id.ToString());
-                find.Parameters.AddWithValue("@StartDate", from.ToString("yyyy-MM-dd"));
-                find.Parameters.AddWithValue("@EndDate", to.ToString("yyyy-MM-dd"));
-                SqlDataReader reader = find.ExecuteReader();
-                if (reader.Read())
-                {
-                    renovating = true;
-                }
-                DatabaseConnection.GetInstance().database.Close();
+                return true;
             }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
-
-            return renovating;
+            return false;
         }
 
         internal static void MigrateEquipment(int firstId, int secondId)
@@ -331,20 +177,7 @@ namespace Klinika.Repositories
                                  "SET RoomID = @first" +
                                  "WHERE RoomID = @second";
 
-            SqlCommand modify = new SqlCommand(modifyQuery, DatabaseConnection.GetInstance().database);
-            modify.Parameters.AddWithValue("@first", firstId);
-            modify.Parameters.AddWithValue("@second", secondId);
-            try
-            {
-                SqlConnection database = DatabaseConnection.GetInstance().database;
-                database.Open();
-                modify.ExecuteNonQuery();
-                database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
-            }
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuery, ("@first", firstId), ("@second", secondId));
         }
 
         internal static void MergeRooms(int firstId, int secondId)
@@ -363,6 +196,20 @@ namespace Klinika.Repositories
             string findQuery = "SELECT [RenovationsAdvanced].ID, [RenovationsAdvanced].SecondID, [RenovationsAdvanced].SecondType, [RenovationsAdvanced].SecondNumber " +
                                       "FROM [RenovationsAdvanced] " +
                                       "WHERE ID = @ID";
+            DataTable advancedRenovation = DatabaseConnection.GetInstance().CreateTableOfData(findQuery, ("@ID", renovationID.ToString()));
+            
+            if(advancedRenovation.Rows.Count != 0)
+            {
+                if (advancedRenovation.Rows[0]["Type"].ToString() == "0")
+                {
+                    MergeRooms(firstID, int.Parse(advancedRenovation.Rows[0]["SecondID"].ToString()));
+                }
+                if (advancedRenovation.Rows[0]["Type"].ToString() == "1")
+                {
+                    SplitRooms(int.Parse(advancedRenovation.Rows[0]["SecondNumber"].ToString()), 
+                        int.Parse(advancedRenovation.Rows[0]["SecondType"].ToString()));
+                }
+            }
             try
             {
                 DatabaseConnection.GetInstance().database.Open();
@@ -393,21 +240,11 @@ namespace Klinika.Repositories
             string findQuery = "SELECT [Renovations].ID, [Renovations].RoomID " +
                                       "FROM [Renovations] " +
                                       "WHERE EndDate = @Today AND Advanced != 0";
-            try
+            DataTable renovations = DatabaseConnection.GetInstance().CreateTableOfData(findQuery, ("@Today", DateTime.Now.Date.ToString("yyyy-MM-dd")));
+
+            foreach (DataRow row in renovations.Rows)
             {
-                DatabaseConnection.GetInstance().database.Open();
-                SqlCommand find = new SqlCommand(findQuery, DatabaseConnection.GetInstance().database);
-                find.Parameters.AddWithValue("@Today", DateTime.Now.Date.ToString("yyyy-MM-dd"));
-                SqlDataReader reader = find.ExecuteReader();
-                while (reader.Read())
-                {
-                    RenovateRoom(int.Parse(reader["ID"].ToString()), int.Parse(reader["RoomID"].ToString()));
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
+                RenovateRoom(int.Parse(row["ID"].ToString()), int.Parse(row["RoomID"].ToString()));
             }
         }
     }

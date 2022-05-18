@@ -22,7 +22,7 @@ namespace Klinika.GUI.Manager
         private void PickDate_Load(object sender, EventArgs e)
         {
             dateTimePicker.MinDate = DateTime.Now;
-            List<Models.RoomComboBoxItem> rooms = Repositories.RoomRepository.GetRooms();
+            List<Models.RoomComboBoxItem> rooms = Services.RoomServices.GetRooms();
             foreach (Models.RoomComboBoxItem room in rooms)
             {
                 if(int.Parse(room.value.ToString()) != main.transfer.fromId)
