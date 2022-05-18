@@ -330,7 +330,7 @@
             this.SpecializationsComboBox.Name = "SpecializationsComboBox";
             this.SpecializationsComboBox.Size = new System.Drawing.Size(209, 28);
             this.SpecializationsComboBox.TabIndex = 8;
-            this.SpecializationsComboBox.SelectedValueChanged += new System.EventHandler(this.SpecializationsComboBox_SelectedValueChanged);
+            this.SpecializationsComboBox.SelectedValueChanged += new System.EventHandler(this.SpecializationsComboBoxSelectedValueChanged);
             // 
             // ReferCheckBox
             // 
