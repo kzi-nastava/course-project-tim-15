@@ -38,7 +38,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.PrescriptionEndDatePicker = new System.Windows.Forms.DateTimePicker();
             this.PrescriptionStartDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.DrugsTable = new System.Windows.Forms.DataGridView();
+            this.DrugsTable = new Klinika.Forms.DrugsDataGridView();
             this.PrescriptButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IntervalSpinner)).BeginInit();
@@ -209,7 +209,7 @@
         private Label label3;
         internal TextBox CommentTextBox;
         private Label label4;
-        internal DataGridView DrugsTable;
+        internal Klinika.Forms.DrugsDataGridView DrugsTable;
         private Button PrescriptButton;
         private Label label5;
     }

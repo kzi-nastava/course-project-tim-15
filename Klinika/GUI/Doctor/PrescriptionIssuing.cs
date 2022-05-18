@@ -28,7 +28,7 @@ namespace Klinika.GUI.Doctor
             Parent.Enabled = false;
             PrescriptionStartDatePicker.MinDate = DateTime.Now;
             PrescriptionEndDatePicker.MinDate = DateTime.Now;
-            DrugService.FillTable(DrugsTable);
+            DrugsTable.Fill(DrugRepository.Instance.GetApproved());
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -41,10 +41,9 @@ namespace Klinika.GUI.Doctor
         {
             if (!ValidateForm()) return;
 
-            var selected = DrugService.GetSelected(DrugsTable);
             var prescription = new Prescription(
                 Parent.Appointment.PatientID,
-                selected.ID,
+                DrugsTable.GetSelectedId(),
                 new TimeSlot(PrescriptionStartDatePicker.Value, PrescriptionEndDatePicker.Value),
                 Convert.ToInt32(IntervalSpinner.Value),
                 CommentTextBox.Text);
@@ -72,8 +71,7 @@ namespace Klinika.GUI.Doctor
         private bool ValidateDrug()
         {
             if (!IsDrugSelected()) return false;
-            var selected = DrugService.GetSelected(DrugsTable);
-            if (!IsDrugPrescriptible(selected)) return false;
+            if (!IsDrugPrescriptible(DrugsTable.GetSelectedDrug())) return false;
             return true;
         }
         private bool IsDrugSelected()

@@ -44,7 +44,7 @@
             this.ApproveDrugButton = new System.Windows.Forms.Button();
             this.DenydDrugDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.UnapprovedDrugsTable = new System.Windows.Forms.DataGridView();
+            this.UnapprovedDrugsTable = new Klinika.Forms.DrugsDataGridView();
             this.MainTabControl.SuspendLayout();
             this.AllAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).BeginInit();
@@ -306,7 +306,7 @@
         private Button ViewMedicalRecordButton;
         private Button PerformButton;
         private TabPage UnapprovedDrugsTab;
-        internal DataGridView UnapprovedDrugsTable;
+        internal Klinika.Forms.DrugsDataGridView UnapprovedDrugsTable;
         private Button DenyDrugButton;
         private Button ApproveDrugButton;
         private TextBox DenydDrugDescription;

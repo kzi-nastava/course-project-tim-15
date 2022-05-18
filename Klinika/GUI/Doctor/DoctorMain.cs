@@ -156,7 +156,7 @@ namespace Klinika.GUI.Doctor
         #region Unapproved Drugs
         private void InitUnapprovedDrugs()
         {
-            DrugService.FillTable(UnapprovedDrugsTable, true);
+            UnapprovedDrugsTable.Fill(DrugRepository.Instance.GetUnapproved());
             ApproveDrugButton.Enabled = false;
             DenyDrugButton.Enabled = false;
             DenydDrugDescription.Text = "";
@@ -177,14 +177,12 @@ namespace Klinika.GUI.Doctor
         }
         private void ApproveDrugButtonClick(object sender, EventArgs e)
         {
-            var selected = DrugService.GetSelected(UnapprovedDrugsTable);
-            DrugService.ApproveDrug(selected.ID);
+            DrugService.ApproveDrug(UnapprovedDrugsTable.GetSelectedId());
             InitUnapprovedDrugs();
         }
         private void DenyDrugButtonClick(object sender, EventArgs e)
         {
-            var selected = DrugService.GetSelected(UnapprovedDrugsTable);
-            DrugService.DenyDrug(selected.ID, DenydDrugDescription.Text);
+            DrugService.DenyDrug(UnapprovedDrugsTable.GetSelectedId(), DenydDrugDescription.Text);
             InitUnapprovedDrugs();
         }
         #endregion
