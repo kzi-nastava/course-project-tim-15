@@ -21,7 +21,7 @@ namespace Klinika.GUI.Manager
 
         private void Merge_Load(object sender, EventArgs e)
         {
-            List<Models.RoomComboBoxItem> rooms = Repositories.RoomRepository.GetRooms();
+            List<Models.RoomComboBoxItem> rooms = Services.RoomServices.GetRooms();
             foreach (Models.RoomComboBoxItem room in rooms)
             {
                 if (int.Parse(room.value.ToString()) != renovation.id)
