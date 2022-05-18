@@ -13,11 +13,11 @@ namespace Klinika.Services
     public class MedicalRecordService
     {
         public MedicalRecordService() { }
-        public void StoreAnamanesis(Anamnesis anamnesis)
+        public static void StoreAnamanesis(Anamnesis anamnesis)
         {
             MedicalRecordRepository.CreateAnamnesis(anamnesis);
         }
-        public void CreateReferal(int patientID, int specializationID, int doctorID)
+        public static void CreateReferal(int patientID, int specializationID, int doctorID)
         {
             ReferalRepository.Create(patientID, specializationID, doctorID);
         }

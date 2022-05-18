@@ -19,7 +19,6 @@ namespace Klinika.GUI.Doctor
         internal readonly DoctorMain Parent;
         public Appointment Appointment;
         public Models.MedicalRecord Record;
-        private MedicalRecordService Service;
 
         #region Form
         public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
@@ -29,7 +28,6 @@ namespace Klinika.GUI.Doctor
             Appointment = appointment;
             Record = MedicalRecordRepository.Get(appointment.PatientID);
             if (!isPreview) ShowNewAnamnesisForm();
-            Service = new MedicalRecordService(this);
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -150,7 +148,7 @@ namespace Klinika.GUI.Doctor
                 SymptomsTextBox.Text,
                 ConclusionTextBox.Text);
 
-            Service.StoreAnamanesis(anamnesis);
+            MedicalRecordService.StoreAnamanesis(anamnesis);
             return true;
         }
         private void FinishButtonClick(object sender, EventArgs e)
@@ -206,8 +204,9 @@ namespace Klinika.GUI.Doctor
 
             int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
             int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).ID;
-            Service.CreateReferal(Appointment.PatientID, specializationID, doctorID);
+            MedicalRecordService.CreateReferal(Appointment.PatientID, specializationID, doctorID);
 
+            MessageBox.Show("Referal made.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return true;
         }
         #endregion

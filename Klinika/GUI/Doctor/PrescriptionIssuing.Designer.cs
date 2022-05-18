@@ -92,9 +92,19 @@
             // IntervalSpinner
             // 
             this.IntervalSpinner.Location = new System.Drawing.Point(89, 80);
+            this.IntervalSpinner.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             this.IntervalSpinner.Name = "IntervalSpinner";
             this.IntervalSpinner.Size = new System.Drawing.Size(120, 23);
             this.IntervalSpinner.TabIndex = 5;
+            this.IntervalSpinner.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
             // 
             // label3
             // 
