@@ -14,7 +14,6 @@ namespace Klinika.Services
     {
         public static void Validate(int doctorID, DateTime appointmentStart)
         {
-
             if (appointmentStart <= DateTime.Now)
             {
                 throw new DateTimeInvalidException("Selected appointment time is incorrect!");
@@ -40,14 +39,24 @@ namespace Klinika.Services
                     return "Examination";
             }
         }
+        // TODO This needs to move
         public static int GetSelectedID(DataGridView table)
         {
             return Convert.ToInt32(table.SelectedRows[0].Cells["ID"].Value);
         }
+        // TODO This needs to move
         public static Appointment GetSelected(DataGridView table)
         {
             int appointmentID = GetSelectedID(table);
             return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();
+        }
+        public static void Create(Appointment appointment)
+        {
+            AppointmentRepository.GetInstance().Create(appointment);
+        }
+        public static void Modify(Appointment appointment)
+        {
+            AppointmentRepository.GetInstance().Modify(appointment);
         }
         public static void Delete(int id)
         {
@@ -182,9 +191,5 @@ namespace Klinika.Services
             return best;
         }
         #endregion
-        public void ScheduleUnder2Hours()
-        {
-
-        }
     }
 }

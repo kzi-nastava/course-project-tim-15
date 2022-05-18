@@ -33,23 +33,34 @@ namespace Klinika.GUI.Doctor
         {
             Application.Exit();
         }
-        private void InitAllAppointmentsTab()
+        private static void FillAppointmentsTableWithData(DataTable? data, DataGridView table)
         {
-            DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
-            DoctorService.FillAppointmentsTableWithData(allAppointments, AllAppointmentsTable);
-            EditAppointmentButton.Enabled = false;
-            DeleteAppointmentButton.Enabled = false;
+            if (data != null)
+            {
+                FillTableWithPatientData(data);
+                DoctorService.FillAppointmentTypeField(data);
+                data.Columns.Remove("DoctorID");
+                data.Columns.Remove("PatientID");
+                data.Columns.Remove("RoomID");
+                data.Columns.Remove("IsDeleted");
+                data.Columns.Remove("Description");
+
+                data.Columns["Completed"].SetOrdinal(6);
+
+                table.DataSource = data;
+                table.Columns["Duration"].HeaderText = "Duration [min]";
+
+                table.ClearSelection();
+            }
         }
-        private void InitScheduleTab()
+        private static void FillTableWithPatientData(DataTable dt)
         {
-            FillScheduledAppointmentsTable(DateTime.Now.ToString("yyyy-MM-dd"));
-            ViewMedicalRecordButton.Enabled = false;
-            PerformButton.Enabled = false;
-        }
-        private void FillScheduledAppointmentsTable(string date)
-        {
-            DataTable? scheduledAppointments = AppointmentRepository.GetAll(date, Doctor.ID, User.RoleType.DOCTOR, 3);
-            DoctorService.FillAppointmentsTableWithData(scheduledAppointments, ScheduleTable);
+            dt.Columns.Add("Patient Full Name");
+            dt.Columns["Patient Full Name"].SetOrdinal(1);
+            foreach (DataRow row in dt.Rows)
+            {
+                row["Patient Full Name"] = PatientService.GetFullName(Convert.ToInt32(row["PatientID"]));
+            }
         }
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
         {
@@ -65,6 +76,32 @@ namespace Klinika.GUI.Doctor
         #endregion
 
         #region All Appointments
+        private static int GetSelectedAppointmentID(DataGridView table)
+        {
+            return Convert.ToInt32(table.SelectedRows[0].Cells["ID"].Value);
+        }
+        private static Appointment GetSelectedAppointment(DataGridView table)
+        {
+            int appointmentID = GetSelectedAppointmentID(table);
+            return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();
+        }
+        private void InitAllAppointmentsTab()
+        {
+            FillAllAppointmentsTable();
+            EditAppointmentButton.Enabled = false;
+            DeleteAppointmentButton.Enabled = false;
+        }
+        private void FillAllAppointmentsTable()
+        {
+            DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
+            FillAppointmentsTableWithData(allAppointments, AllAppointmentsTable);
+        }
+        private static void DeleteAppointmet(DataGridView table)
+        {
+            int id = GetSelectedAppointmentID(table);
+            AppointmentService.Delete(id);
+            table.Rows.RemoveAt(table.CurrentRow.Index);
+        }
         public void InsertIntoAllAppointmentsTable(Appointment appointment)
         {
             DataTable? dt = AllAppointmentsTable.DataSource as DataTable;
@@ -84,7 +121,7 @@ namespace Klinika.GUI.Doctor
         }
         private void EditAppointmentButtonClick(object sender, EventArgs e)
         {
-            var selected = AppointmentService.GetSelected(AllAppointmentsTable);
+            var selected = GetSelectedAppointment(AllAppointmentsTable);
             new AppointmentDetails(this, selected).Show();
         }
         private void DeleteAppointmentButtonClick(object sender, EventArgs e)
@@ -97,7 +134,7 @@ namespace Klinika.GUI.Doctor
 
             if (deleteConfirmation == DialogResult.Yes)
             {
-                DoctorService.DeleteAppointmet(AllAppointmentsTable);
+                DeleteAppointmet(AllAppointmentsTable);
             }
         }
         private void AddAppointmentButtonClick(object sender, EventArgs e)
@@ -107,6 +144,17 @@ namespace Klinika.GUI.Doctor
         #endregion
 
         #region Schedule
+        private void InitScheduleTab()
+        {
+            FillScheduledAppointmentsTable(DateTime.Now.ToString("yyyy-MM-dd"));
+            ViewMedicalRecordButton.Enabled = false;
+            PerformButton.Enabled = false;
+        }
+        private void FillScheduledAppointmentsTable(string date)
+        {
+            DataTable? scheduledAppointments = AppointmentRepository.GetAll(date, Doctor.ID, User.RoleType.DOCTOR, 3);
+            FillAppointmentsTableWithData(scheduledAppointments, ScheduleTable);
+        }
         private void ScheduleDatePickerValueChanged(object sender, EventArgs e)
         {
             var date = ScheduleDatePicker.Value.ToString("yyyy-MM-dd");
@@ -121,7 +169,7 @@ namespace Klinika.GUI.Doctor
         {
             try
             {
-                var selected = AppointmentService.GetSelected(ScheduleTable);
+                var selected = GetSelectedAppointment(ScheduleTable);
                 bool canBePerformed = !selected.Completed
                     && selected.Type == 'E'
                     && selected.DateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
@@ -137,7 +185,7 @@ namespace Klinika.GUI.Doctor
         }
         private void ViewMedicalRecordButtonClick(object sender, EventArgs e)
         {
-            var selected = AppointmentService.GetSelected(ScheduleTable);
+            var selected = GetSelectedAppointment(ScheduleTable);
             if (selected != null)
             {
                 new MedicalRecord(this, selected).Show();
@@ -145,7 +193,7 @@ namespace Klinika.GUI.Doctor
         }
         private void PerformButtonClick(object sender, EventArgs e)
         {
-            var selected = AppointmentService.GetSelected(ScheduleTable);
+            var selected = GetSelectedAppointment(ScheduleTable);
             if (selected != null)
             {
                 new MedicalRecord(this, selected, false).Show();
@@ -168,20 +216,19 @@ namespace Klinika.GUI.Doctor
         }
         private void DenyDrugDescriptionTextChanged(object sender, EventArgs e)
         {
-            if (DenydDrugDescription.Text != "" && ApproveDrugButton.Enabled)
-            {
-                DenyDrugButton.Enabled = true;
-                return;
-            }
-            DenyDrugButton.Enabled = false;
+            DenyDrugButton.Enabled = DenydDrugDescription.Text != "" && ApproveDrugButton.Enabled;
         }
         private void ApproveDrugButtonClick(object sender, EventArgs e)
         {
+            var msgBox = MessageBox.Show("Are you sure you want to approve this drug?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (msgBox == DialogResult.No) return;
             DrugService.ApproveDrug(UnapprovedDrugsTable.GetSelectedId());
             InitUnapprovedDrugs();
         }
         private void DenyDrugButtonClick(object sender, EventArgs e)
         {
+            var msgBox = MessageBox.Show("Are you sure you want to deny this drug?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (msgBox == DialogResult.No) return;
             DrugService.DenyDrug(UnapprovedDrugsTable.GetSelectedId(), DenydDrugDescription.Text);
             InitUnapprovedDrugs();
         }

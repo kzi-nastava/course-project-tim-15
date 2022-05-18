@@ -18,14 +18,12 @@ namespace Klinika.GUI.Doctor
     {
         internal readonly DoctorMain Parent;
         private Appointment? Appointment;
-        private readonly AppointmentDetailsService Service;
 
         public AppointmentDetails(DoctorMain parent, Appointment appointment = null)
         {
             InitializeComponent();
             Parent = parent;
             Appointment = appointment;
-            Service = new AppointmentDetailsService(this);
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -82,9 +80,66 @@ namespace Klinika.GUI.Doctor
         }
         private void ConfirmButtonClick(object sender, EventArgs e)
         {
-            Service.FinishForm(Appointment);
+            if (!ValidateForm()) return;
+
+            if (Appointment != null) Modify();
+            else Create();
+
             Close();
         }
 
+        private bool ValidateForm()
+        {
+            if (!IsDateValid())
+            {
+                MessageBox.Show("Please select valid date!", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (PatientComboBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select patient!", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            if (AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), Parent.Doctor.ID, Convert.ToInt32(DurationTextBox.Text)))
+            {
+                MessageBox.Show("Already occupied", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
+        }
+        private bool IsDateValid()
+        {
+            if (GetSelectedDateTime() < DateTime.Now) return false;
+            return true;
+        }
+        private DateTime GetSelectedDateTime()
+        {
+            var selectedDate = DatePicker.Value;
+            var selectedTime = TimePicker.Value;
+            return DateTime.Parse($"{selectedDate.Year}-{selectedDate.Month}-{selectedDate.Day} {selectedTime.Hour}:{selectedTime.Minute}");
+        }
+        private void TransferDataFromUI(Appointment appointment)
+        {
+            appointment.DoctorID = Parent.Doctor.ID;
+            appointment.PatientID = (PatientComboBox.SelectedItem as User).ID;
+            appointment.Type = ExaminationRadioButton.Checked ? 'E' : 'O';
+            appointment.Duration = Convert.ToInt32(DurationTextBox.Text);
+            appointment.Urgent = IsUrgentCheckBox.Checked;
+            appointment.Description = "";
+        }
+        private void Modify()
+        {
+            Appointment.DateTime = GetSelectedDateTime();
+            TransferDataFromUI(Appointment);
+            AppointmentService.Modify(Appointment);
+            DoctorService.UpdateTableRow(Appointment, Parent.AllAppointmentsTable);
+        }
+        private void Create()
+        {
+            var appointment = new Appointment(GetSelectedDateTime());
+            TransferDataFromUI(appointment);
+            AppointmentService.Create(appointment);
+            Parent.InsertIntoAllAppointmentsTable(appointment);
+        }
     }
 }
