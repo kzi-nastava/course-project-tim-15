@@ -45,7 +45,7 @@ namespace Klinika.GUI.Patient
         #region Personal Appointments Table
         private void FillPersonalAppointmentTable()
         {
-            DataTable? allAppointments = AppointmentRepository.GetAll(Patient.ID, User.RoleType.PATIENT);
+            DataTable? allAppointments = AppointmentRepository.GetAllAsTable(Patient.ID, User.RoleType.PATIENT);
             if (allAppointments != null)
             {
                 FillTableWithDoctorData(allAppointments);
@@ -127,7 +127,7 @@ namespace Klinika.GUI.Patient
         private void FillOccupiedAppointmentsTable()
         {
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
-            DataTable? appointmets = AppointmentRepository.GetAll(AppointmentDatePicker.Value.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
+            DataTable? appointmets = AppointmentRepository.GetAllAsTable(AppointmentDatePicker.Value.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
 
             if (appointmets != null)
             {
@@ -188,7 +188,7 @@ namespace Klinika.GUI.Patient
         private void FillMedicalRecordTable(List<Anamnesis> anamneses)
         {
 
-            List<Appointment> appointments = AppointmentRepository.GetInstance().GetCompleted(Patient.ID);
+            List<Appointment> appointments = AppointmentRepository.GetCompleted(Patient.ID);
 
             DataTable anamnesesData = new DataTable();
             anamnesesData.Columns.Add("Doctor");

@@ -93,7 +93,7 @@ namespace Klinika.GUI.Doctor
         }
         private void FillAllAppointmentsTable()
         {
-            DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
+            DataTable? allAppointments = AppointmentRepository.GetAllAsTable(Doctor.ID, User.RoleType.DOCTOR);
             FillAppointmentsTableWithData(allAppointments, AllAppointmentsTable);
         }
         private static void DeleteAppointmet(DataGridView table)
@@ -152,7 +152,7 @@ namespace Klinika.GUI.Doctor
         }
         private void FillScheduledAppointmentsTable(string date)
         {
-            DataTable? scheduledAppointments = AppointmentRepository.GetAll(date, Doctor.ID, User.RoleType.DOCTOR, 3);
+            DataTable? scheduledAppointments = AppointmentRepository.GetAllAsTable(date, Doctor.ID, User.RoleType.DOCTOR, 3);
             FillAppointmentsTableWithData(scheduledAppointments, ScheduleTable);
         }
         private void ScheduleDatePickerValueChanged(object sender, EventArgs e)
