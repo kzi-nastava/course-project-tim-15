@@ -42,18 +42,18 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
             return GenerateList(resoult);
         }
-        public static List<Appointment> GetAll(int ID, RoleType role)
+        public static List<Appointment> GetAll(int userID, RoleType role)
         {
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction] " +
-                                  $"WHERE DateTime > '{DateTime.Now}' AND {roleToString} = {ID} " +
+                                  $"WHERE DateTime > '{DateTime.Now}' AND {roleToString} = {userID} " +
                                   $"AND IsDeleted = 0";
 
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
             return GenerateList(resoult);
         }
-        public static List<Appointment> GetAll(string requestedDate, int ID, RoleType role, int days = 1)
+        public static List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
         {
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
@@ -61,7 +61,7 @@ namespace Klinika.Repositories
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction] " +
-                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}' AND {roleToString} = {ID} " +
+                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}' AND {roleToString} = {userID} " +
                                   $"AND IsDeleted = 0";
 
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);

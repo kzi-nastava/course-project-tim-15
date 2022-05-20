@@ -235,7 +235,7 @@ namespace Klinika.GUI.Doctor
         {
             Appointment.Completed = true;
             AppointmentRepository.GetInstance().Modify(Appointment);
-            DoctorService.UpdateTableRow(Appointment, Parent.ScheduleTable);
+            Parent.ScheduleTable.UpdateSelected(Appointment);
         }
         private bool IsAppointmentCompleted()
         {
