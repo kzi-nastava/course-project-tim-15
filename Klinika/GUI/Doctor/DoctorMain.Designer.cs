@@ -33,18 +33,18 @@
             this.AddAppointmentButton = new System.Windows.Forms.Button();
             this.DeleteAppointmentButton = new System.Windows.Forms.Button();
             this.EditAppointmentButton = new System.Windows.Forms.Button();
-            this.AllAppointmentsTable = new System.Windows.Forms.DataGridView();
+            this.AllAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView();
             this.ScheduleTab = new System.Windows.Forms.TabPage();
             this.PerformButton = new System.Windows.Forms.Button();
             this.ViewMedicalRecordButton = new System.Windows.Forms.Button();
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.ScheduleTable = new System.Windows.Forms.DataGridView();
+            this.ScheduleTable = new Klinika.Forms.AppointmentsDataGridView();
             this.UnapprovedDrugsTab = new System.Windows.Forms.TabPage();
             this.DenyDrugButton = new System.Windows.Forms.Button();
             this.ApproveDrugButton = new System.Windows.Forms.Button();
             this.DenydDrugDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.UnapprovedDrugsTable = new System.Windows.Forms.DataGridView();
+            this.UnapprovedDrugsTable = new Klinika.Forms.DrugsDataGridView();
             this.MainTabControl.SuspendLayout();
             this.AllAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).BeginInit();
@@ -190,7 +190,6 @@
             this.ScheduleTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ScheduleTable.Size = new System.Drawing.Size(920, 429);
             this.ScheduleTable.TabIndex = 0;
-            this.ScheduleTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ScheduleTableRowSelected);
             this.ScheduleTable.SelectionChanged += new System.EventHandler(this.ScheduleTableSelectionChanged);
             // 
             // UnapprovedDrugsTab
@@ -296,17 +295,17 @@
 
         private TabControl MainTabControl;
         private TabPage AllAppointmentsTab;
-        public DataGridView AllAppointmentsTable;
+        public Klinika.Forms.AppointmentsDataGridView AllAppointmentsTable;
         private Button DeleteAppointmentButton;
         private Button EditAppointmentButton;
         private Button AddAppointmentButton;
         private TabPage ScheduleTab;
-        public DataGridView ScheduleTable;
+        public Klinika.Forms.AppointmentsDataGridView ScheduleTable;
         private DateTimePicker ScheduleDatePicker;
         private Button ViewMedicalRecordButton;
         private Button PerformButton;
         private TabPage UnapprovedDrugsTab;
-        internal DataGridView UnapprovedDrugsTable;
+        internal Klinika.Forms.DrugsDataGridView UnapprovedDrugsTable;
         private Button DenyDrugButton;
         private Button ApproveDrugButton;
         private TextBox DenydDrugDescription;

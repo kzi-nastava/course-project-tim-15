@@ -91,6 +91,16 @@ namespace Klinika.Repositories
                 }
             }
         }
+
+        public List<Drug> GetApproved()
+        {
+            return Drugs.Where(x => x.Approved == "A").ToList();
+        }
+        public List<Drug> GetUnapproved()
+        {
+            return Drugs.Where(x => x.Approved == "C").ToList();
+        }
+
         public void ModifyType(int id, char type)
         {
             string modifyQuery = "UPDATE [Drug] SET Approved = @Type WHERE ID = @ID";

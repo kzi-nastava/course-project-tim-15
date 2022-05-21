@@ -30,12 +30,47 @@ namespace Klinika.Repositories
         }
         public AppointmentRepository()
         {
-            Appointments = new List<Appointment>();
+            Appointments = GetAll();
+        }
+        #endregion
+        
+        public static List<Appointment> GetAll()
+        {
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction]";
 
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
-            foreach (object row in resoult)
+            return GenerateList(resoult);
+        }
+        public static List<Appointment> GetAll(int userID, RoleType role)
+        {
+            string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
+            string getAllQuerry = "SELECT * " +
+                                  "FROM [MedicalAction] " +
+                                  $"WHERE DateTime > '{DateTime.Now}' AND {roleToString} = {userID} " +
+                                  $"AND IsDeleted = 0";
+
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
+            return GenerateList(resoult);
+        }
+        public static List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
+        {
+            DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+            DateTime end = start.AddDays(days);
+
+            string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
+            string getAllQuerry = "SELECT * " +
+                                  "FROM [MedicalAction] " +
+                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}' AND {roleToString} = {userID} " +
+                                  $"AND IsDeleted = 0";
+
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
+            return GenerateList(resoult);
+        }
+        private static List<Appointment> GenerateList(List<object> input)
+        {
+            var output = new List<Appointment>();
+            foreach (object row in input)
             {
                 var appointment = new Appointment
                 {
@@ -51,12 +86,12 @@ namespace Klinika.Repositories
                     Description = DatabaseConnection.CheckNull<string>(((object[])row)[9]),
                     IsDeleted = DatabaseConnection.CheckNull<bool>(((object[])row)[10])
                 };
-                Appointments.Add(appointment);
+                output.Add(appointment);
             }
+            return output;
         }
-        #endregion
 
-        public static DataTable? GetAll(string requestedDate, int ID, RoleType role, int days = 1)
+        public static DataTable? GetAllAsTable(string requestedDate, int ID, RoleType role, int days = 1)
         {
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
@@ -69,7 +104,7 @@ namespace Klinika.Repositories
             
             return DatabaseConnection.GetInstance().CreateTableOfData(getAllQuerry);
         }
-        public static DataTable? GetAll(int ID, RoleType role)
+        public static DataTable? GetAllAsTable(int ID, RoleType role)
         {
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
@@ -79,7 +114,7 @@ namespace Klinika.Repositories
 
             return DatabaseConnection.GetInstance().CreateTableOfData(getAllQuerry);
         }
-        public List<Appointment> GetCompleted(int PatientID)
+        public static List<Appointment> GetCompleted(int PatientID)
         {
             string getCompletedQuerry = "SELECT * " +
                                         "FROM [MedicalAction] " +
@@ -88,26 +123,7 @@ namespace Klinika.Repositories
             List<Appointment> appointments = new List<Appointment>();
 
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getCompletedQuerry);
-            foreach(object row in resoult)
-            {
-                var appointment = new Appointment
-                {
-                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
-                    DoctorID = Convert.ToInt32(((object[])row)[1].ToString()),
-                    PatientID = Convert.ToInt32(((object[])row)[2].ToString()),
-                    DateTime = Convert.ToDateTime(((object[])row)[3].ToString()),
-                    RoomID = Convert.ToInt32(((object[])row)[4].ToString()),
-                    Completed = Convert.ToBoolean(((object[])row)[5].ToString()),
-                    Type = Convert.ToChar(((object[])row)[6].ToString()),
-                    Duration = DatabaseConnection.CheckNull<int>(((object[])row)[7]),
-                    Urgent = DatabaseConnection.CheckNull<bool>(((object[])row)[8]),
-                    Description = DatabaseConnection.CheckNull<string>(((object[])row)[9]),
-                    IsDeleted = DatabaseConnection.CheckNull<bool>(((object[])row)[10])
-                };
-                appointments.Add(appointment);
-            }
-
-            return appointments;
+            return GenerateList(resoult);
         }
 
         public void Create(Appointment appointment)

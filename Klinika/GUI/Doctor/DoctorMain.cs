@@ -2,6 +2,7 @@
 using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
+using Klinika.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,34 +28,18 @@ namespace Klinika.GUI.Doctor
         private void LoadForm(object sender, EventArgs e)
         {
             InitAllAppointmentsTab();
-            InitScheduleTab();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
         }
-        private void InitAllAppointmentsTab()
-        {
-            DataTable? allAppointments = AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR);
-            DoctorService.FillAppointmentsTableWithData(allAppointments, AllAppointmentsTable);
-            EditAppointmentButton.Enabled = false;
-            DeleteAppointmentButton.Enabled = false;
-        }
-        private void InitScheduleTab()
-        {
-            FillScheduledAppointmentsTable(DateTime.Now.ToString("yyyy-MM-dd"));
-            ViewMedicalRecordButton.Enabled = false;
-            PerformButton.Enabled = false;
-        }
-        private void FillScheduledAppointmentsTable(string date)
-        {
-            DataTable? scheduledAppointments = AppointmentRepository.GetAll(date, Doctor.ID, User.RoleType.DOCTOR, 3);
-            DoctorService.FillAppointmentsTableWithData(scheduledAppointments, ScheduleTable);
-        }
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
         {
             switch (MainTabControl.SelectedIndex)
             {
+                case 1:
+                    InitScheduleTab();
+                    break;
                 case 2:
                     InitUnapprovedDrugs();
                     break;
@@ -65,17 +50,11 @@ namespace Klinika.GUI.Doctor
         #endregion
 
         #region All Appointments
-        public void InsertIntoAllAppointmentsTable(Appointment appointment)
+        private void InitAllAppointmentsTab()
         {
-            DataTable? dt = AllAppointmentsTable.DataSource as DataTable;
-            DataRow dataRow = dt.NewRow();
-            dataRow[0] = appointment.ID.ToString();
-            dataRow[1] = PatientService.GetFullName(appointment.PatientID);
-            dataRow[2] = appointment.DateTime.ToString();
-            dataRow[3] = appointment.GetType();
-            dataRow[4] = appointment.Duration.ToString();
-            dataRow[5] = appointment.Urgent;
-            dt.Rows.Add(dataRow);
+            AllAppointmentsTable.Fill(AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR));
+            EditAppointmentButton.Enabled = false;
+            DeleteAppointmentButton.Enabled = false;
         }
         private void AllAppointmentsTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
@@ -84,8 +63,7 @@ namespace Klinika.GUI.Doctor
         }
         private void EditAppointmentButtonClick(object sender, EventArgs e)
         {
-            var selected = AppointmentService.GetSelected(AllAppointmentsTable);
-            new AppointmentDetails(this, selected).Show();
+            new AppointmentDetails(this, AllAppointmentsTable.GetSelected()).Show();
         }
         private void DeleteAppointmentButtonClick(object sender, EventArgs e)
         {
@@ -95,10 +73,9 @@ namespace Klinika.GUI.Doctor
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning);
 
-            if (deleteConfirmation == DialogResult.Yes)
-            {
-                DoctorService.DeleteAppointmet(AllAppointmentsTable);
-            }
+            if (deleteConfirmation == DialogResult.No) return;
+
+            AppointmentService.Delete(AllAppointmentsTable.DeleteSelected());
         }
         private void AddAppointmentButtonClick(object sender, EventArgs e)
         {
@@ -107,21 +84,23 @@ namespace Klinika.GUI.Doctor
         #endregion
 
         #region Schedule
-        private void ScheduleDatePickerValueChanged(object sender, EventArgs e)
+        private void InitScheduleTab()
         {
-            var date = ScheduleDatePicker.Value.ToString("yyyy-MM-dd");
-            FillScheduledAppointmentsTable(date);
+            var scheduled = AppointmentRepository.GetAll(ScheduleDatePicker.Value.ToString("yyyy-MM-dd"), Doctor.ID, User.RoleType.DOCTOR, 3);
+            ScheduleTable.Fill(scheduled);
+            ViewMedicalRecordButton.Enabled = false;
             PerformButton.Enabled = false;
         }
-        private void ScheduleTableRowSelected(object sender, DataGridViewCellEventArgs e)
+        private void ScheduleDatePickerValueChanged(object sender, EventArgs e)
         {
-            ViewMedicalRecordButton.Enabled = true;
+            InitScheduleTab();
         }
         private void ScheduleTableSelectionChanged(object sender, EventArgs e)
         {
+            ViewMedicalRecordButton.Enabled = true;
             try
             {
-                var selected = AppointmentService.GetSelected(ScheduleTable);
+                var selected = ScheduleTable.GetSelected();
                 bool canBePerformed = !selected.Completed
                     && selected.Type == 'E'
                     && selected.DateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
@@ -137,26 +116,20 @@ namespace Klinika.GUI.Doctor
         }
         private void ViewMedicalRecordButtonClick(object sender, EventArgs e)
         {
-            var selected = AppointmentService.GetSelected(ScheduleTable);
-            if (selected != null)
-            {
-                new MedicalRecord(this, selected).Show();
-            }
+            var selected = ScheduleTable.GetSelected();
+            new MedicalRecord(this, selected).Show();
         }
         private void PerformButtonClick(object sender, EventArgs e)
         {
-            var selected = AppointmentService.GetSelected(ScheduleTable);
-            if (selected != null)
-            {
-                new MedicalRecord(this, selected, false).Show();
-            }
+            var selected = ScheduleTable.GetSelected();
+            new MedicalRecord(this, selected, false).Show();
         }
         #endregion
 
         #region Unapproved Drugs
         private void InitUnapprovedDrugs()
         {
-            DrugService.FillTable(UnapprovedDrugsTable, true);
+            UnapprovedDrugsTable.Fill(DrugRepository.Instance.GetUnapproved());
             ApproveDrugButton.Enabled = false;
             DenyDrugButton.Enabled = false;
             DenydDrugDescription.Text = "";
@@ -168,23 +141,20 @@ namespace Klinika.GUI.Doctor
         }
         private void DenyDrugDescriptionTextChanged(object sender, EventArgs e)
         {
-            if (DenydDrugDescription.Text != "" && ApproveDrugButton.Enabled)
-            {
-                DenyDrugButton.Enabled = true;
-                return;
-            }
-            DenyDrugButton.Enabled = false;
+            DenyDrugButton.Enabled = DenydDrugDescription.Text != "" && ApproveDrugButton.Enabled;
         }
         private void ApproveDrugButtonClick(object sender, EventArgs e)
         {
-            var selected = DrugService.GetSelected(UnapprovedDrugsTable);
-            DrugService.ApproveDrug(selected.ID);
+            var msgBox = MessageBox.Show("Are you sure you want to approve this drug?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (msgBox == DialogResult.No) return;
+            DrugService.ApproveDrug(UnapprovedDrugsTable.GetSelectedId());
             InitUnapprovedDrugs();
         }
         private void DenyDrugButtonClick(object sender, EventArgs e)
         {
-            var selected = DrugService.GetSelected(UnapprovedDrugsTable);
-            DrugService.DenyDrug(selected.ID, DenydDrugDescription.Text);
+            var msgBox = MessageBox.Show("Are you sure you want to deny this drug?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (msgBox == DialogResult.No) return;
+            DrugService.DenyDrug(UnapprovedDrugsTable.GetSelectedId(), DenydDrugDescription.Text);
             InitUnapprovedDrugs();
         }
         #endregion

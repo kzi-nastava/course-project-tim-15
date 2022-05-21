@@ -16,5 +16,14 @@ namespace Klinika.Models
         public string? Comment { get; set; }
 
         public Prescription() { }
+        public Prescription(int patientID, int drugID, TimeSlot timeSlot, int interval, string comment)
+        {
+            PatientID = patientID;
+            DrugID = drugID;
+            DateStarted = timeSlot.from;
+            DateEnded = timeSlot.to;
+            Interval = interval;
+            Comment = comment;
+        }
     }
 }

@@ -116,22 +116,18 @@ namespace Klinika.Repositories
             return ids;
         }
         
-        public static int CreateAnamnesis(Anamnesis anamnesis)
+        public static void CreateAnamnesis(Anamnesis anamnesis)
         {
             string createQuery = "INSERT INTO [Anamnesis] " +
                     "(MedicalActionID,Description,Symptoms,Conclusion) " +
-                    "OUTPUT INSERTED.ID " +
                     "VALUES (@MedicalActionID,@Description,@Symptoms,@Conclusion)";
 
-            var newID = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
                 createQuery,
                 ("@MedicalActionID", anamnesis.MedicalActionID),
                 ("@Description", anamnesis.Description),
                 ("@Symptoms", anamnesis.Symptoms),
                 ("@Conclusion", anamnesis.Conclusion));
-
-            anamnesis.ID = (int)newID;
-            return anamnesis.ID;
         }
         public static void Create(int patientID)
         {

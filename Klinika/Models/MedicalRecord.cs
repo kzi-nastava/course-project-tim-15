@@ -22,5 +22,14 @@ namespace Klinika.Models
             Diseases = new List<Disease>();
             Allergens = new List<Ingredient>();
         }
+
+        public bool IsAllergic(Drug drug)
+        {
+            foreach (Ingredient ingredient in drug.Ingredients)
+            {
+                if (Allergens.Contains(ingredient)) return true;
+            }
+            return false;
+        }
     }
 }

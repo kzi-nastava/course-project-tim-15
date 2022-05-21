@@ -15,5 +15,13 @@ namespace Klinika.Models
         public string? Conclusion { get; set; }
 
         public Anamnesis() { }
+
+        public Anamnesis(int appointmentID, string description, string symptoms, string conclusion)
+        {
+            MedicalActionID = appointmentID;
+            Description = description;
+            Symptoms = symptoms;
+            Conclusion = conclusion;
+        }
     }
 }

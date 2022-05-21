@@ -191,7 +191,7 @@
             this.MinimizeBox = false;
             this.Name = "AppointmentDetails";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "t";
+            this.Text = "Appointment Details";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
             this.Load += new System.EventHandler(this.LoadForm);
             this.groupBox1.ResumeLayout(false);

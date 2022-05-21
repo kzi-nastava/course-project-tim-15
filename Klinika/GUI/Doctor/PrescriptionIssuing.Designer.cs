@@ -38,7 +38,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.PrescriptionEndDatePicker = new System.Windows.Forms.DateTimePicker();
             this.PrescriptionStartDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.DrugsTable = new System.Windows.Forms.DataGridView();
+            this.DrugsTable = new Klinika.Forms.DrugsDataGridView();
             this.PrescriptButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IntervalSpinner)).BeginInit();
@@ -92,9 +92,19 @@
             // IntervalSpinner
             // 
             this.IntervalSpinner.Location = new System.Drawing.Point(89, 80);
+            this.IntervalSpinner.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             this.IntervalSpinner.Name = "IntervalSpinner";
             this.IntervalSpinner.Size = new System.Drawing.Size(120, 23);
             this.IntervalSpinner.TabIndex = 5;
+            this.IntervalSpinner.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
             // 
             // label3
             // 
@@ -199,7 +209,7 @@
         private Label label3;
         internal TextBox CommentTextBox;
         private Label label4;
-        internal DataGridView DrugsTable;
+        internal Klinika.Forms.DrugsDataGridView DrugsTable;
         private Button PrescriptButton;
         private Label label5;
     }
