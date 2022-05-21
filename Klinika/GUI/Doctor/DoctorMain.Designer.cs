@@ -190,7 +190,6 @@
             this.ScheduleTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ScheduleTable.Size = new System.Drawing.Size(920, 429);
             this.ScheduleTable.TabIndex = 0;
-            this.ScheduleTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.ScheduleTableRowSelected);
             this.ScheduleTable.SelectionChanged += new System.EventHandler(this.ScheduleTableSelectionChanged);
             // 
             // UnapprovedDrugsTab

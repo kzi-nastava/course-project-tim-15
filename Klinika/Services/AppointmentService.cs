@@ -44,7 +44,6 @@ namespace Klinika.Services
         {
             return Convert.ToInt32(table.SelectedRows[0].Cells["ID"].Value);
         }
-        // TODO This needs to move
         public static Appointment GetSelected(DataGridView table)
         {
             int appointmentID = GetSelectedID(table);

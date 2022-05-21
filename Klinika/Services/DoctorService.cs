@@ -33,17 +33,6 @@ namespace Klinika.Services
                 row["Type"] = AppointmentService.GetTypeFullName(Convert.ToChar(row["Type"]));
             }
         }
-        // TODO This needs to move
-        public static void UpdateTableRow(Appointment appointment, DataGridView table)
-        {
-            table.SelectedRows[0].SetValues(appointment.ID.ToString(),
-                PatientService.GetFullName(appointment.PatientID),
-                appointment.DateTime.ToString(),
-                appointment.GetType(),
-                appointment.Duration.ToString(),
-                appointment.Urgent,
-                appointment.Completed);
-        }
         public static string GetFullName(int doctorID)
         {
             return UserRepository.GetDoctor(doctorID).ToString();

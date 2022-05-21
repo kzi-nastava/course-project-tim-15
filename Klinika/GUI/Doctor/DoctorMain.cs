@@ -95,12 +95,9 @@ namespace Klinika.GUI.Doctor
         {
             InitScheduleTab();
         }
-        private void ScheduleTableRowSelected(object sender, DataGridViewCellEventArgs e)
-        {
-            ViewMedicalRecordButton.Enabled = true;
-        }
         private void ScheduleTableSelectionChanged(object sender, EventArgs e)
         {
+            ViewMedicalRecordButton.Enabled = true;
             try
             {
                 var selected = ScheduleTable.GetSelected();
