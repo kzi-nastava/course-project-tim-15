@@ -111,7 +111,7 @@ namespace Klinika.GUI.Patient
         }
         private DateTime GetSelectedDateTime()
         {
-            return Convert.ToDateTime(RecommendedAppointmentTable.SelectedRows[0].Cells["DateTime"].Value;
+            return Convert.ToDateTime(RecommendedAppointmentTable.SelectedRows[0].Cells["DateTime"].Value);
         }
     }
 }
