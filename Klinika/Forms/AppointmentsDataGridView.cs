@@ -1,4 +1,5 @@
 ﻿using Klinika.Models;
+using Klinika.Roles;
 using Klinika.Services;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,18 @@ namespace Klinika.Forms
     public class AppointmentsDataGridView : DataGridView
     {
         private List<Appointment> Appointments;
-        public AppointmentsDataGridView() : base()
+        private User.RoleType ViewerRole;
+        private string SearchedRole;
+        public AppointmentsDataGridView(User.RoleType viewerRole) : base()
         {
             Appointments = new List<Appointment>();
+            ViewerRole = viewerRole;
+            if (viewerRole == User.RoleType.DOCTOR)
+            {
+                SearchedRole = "Patient";
+                return;
+            }
+            SearchedRole = "Doctor";
         }
         public void Fill(List<Appointment> appointments)
         {
@@ -22,7 +32,7 @@ namespace Klinika.Forms
 
             DataTable appointmetnsData = new DataTable();
             appointmetnsData.Columns.Add("ID");
-            appointmetnsData.Columns.Add("Patient Full Name");
+            appointmetnsData.Columns.Add($"{SearchedRole} Full Name");
             appointmetnsData.Columns.Add("Date & Time");
             appointmetnsData.Columns.Add("Type");
             appointmetnsData.Columns.Add("Duration [min]");
@@ -36,13 +46,12 @@ namespace Klinika.Forms
 
             ClearSelection();
         }
-
         public void Insert(Appointment appointment)
         {
             DataTable? dt = DataSource as DataTable;
             DataRow newRow = dt.NewRow();
             newRow["ID"] = appointment.ID;
-            newRow["Patient Full Name"] = PatientService.GetFullName(appointment.PatientID);
+            newRow[$"{SearchedRole} Full Name"] = GetFullName(appointment);
             newRow["Date & Time"] = appointment.DateTime;
             newRow["Type"] = appointment.GetType();
             newRow["Duration [min]"] = appointment.Duration;
@@ -64,15 +73,23 @@ namespace Klinika.Forms
             Rows.RemoveAt(CurrentRow.Index);
             return selected;
         }
-        public void UpdateSelected(Appointment appointment)
+        public void ModifySelected(Appointment appointment)
         {
             SelectedRows[0].SetValues(appointment.ID.ToString(),
-                PatientService.GetFullName(appointment.PatientID),
+                GetFullName(appointment),
                 appointment.DateTime.ToString(),
                 appointment.GetType(),
                 appointment.Duration.ToString(),
                 appointment.Urgent,
                 appointment.Completed);
+        }
+        private string GetFullName(Appointment appointment)
+        {
+            if (ViewerRole == User.RoleType.DOCTOR)
+            {
+                return PatientService.GetFullName(appointment.PatientID);
+            }
+            return DoctorService.GetFullName(appointment.DoctorID);
         }
     }
 }

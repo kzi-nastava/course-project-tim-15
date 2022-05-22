@@ -18,11 +18,9 @@ namespace Klinika.GUI.Patient
         }
         private void LoadForm(object sender, EventArgs e)
         {
-            FillPersonalAppointmentTable();
+            InitPersonalAppointmentsTab();
             FillDoctorComboBox(DoctorComboBox);
             FillSpecializationsComboBox();
-            ModifyButton.Enabled = false;
-            DeleteButton.Enabled = false;
         }
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
         {
@@ -33,7 +31,7 @@ namespace Klinika.GUI.Patient
                 return;
             }
 
-            if ((sender as TabControl).SelectedIndex == 2) FillMedicalRecorTab();
+            if ((sender as TabControl).SelectedIndex == 2) InitMedicalRecorTab();
             if ((sender as TabControl).SelectedIndex == 3) InitDoctorsTab();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
@@ -43,49 +41,11 @@ namespace Klinika.GUI.Patient
         #endregion
 
         #region Personal Appointments Table
-        private void FillPersonalAppointmentTable()
+        private void InitPersonalAppointmentsTab()
         {
-            DataTable? allAppointments = AppointmentRepository.GetAllAsTable(Patient.ID, User.RoleType.PATIENT);
-            if (allAppointments != null)
-            {
-                FillTableWithDoctorData(allAppointments);
-                DoctorService.FillAppointmentTypeField(allAppointments);
-
-                allAppointments.Columns.Remove("DoctorID");
-                allAppointments.Columns.Remove("RoomID");
-                allAppointments.Columns.Remove("PatientID");
-                allAppointments.Columns.Remove("Completed");
-                allAppointments.Columns.Remove("IsDeleted");
-                allAppointments.Columns.Remove("Description");
-
-                PersonalAppointmentsTable.DataSource = allAppointments;
-
-                PersonalAppointmentsTable.Columns["ID"].Width = 45;
-                PersonalAppointmentsTable.Columns["DateTime"].MinimumWidth = 150;
-
-                PersonalAppointmentsTable.ClearSelection();
-            }
-        }
-        public void InsertRowIntoPersonalAppointmentsTable(Appointment appointment)
-        {
-            DataTable? dataTable = PersonalAppointmentsTable.DataSource as DataTable;
-            DataRow dataRow = dataTable.NewRow();
-            dataRow[0] = appointment.ID.ToString();
-            dataRow[1] = DoctorService.GetFullName(appointment.DoctorID);
-            dataRow[2] = appointment.DateTime;
-            dataRow[3] = appointment.GetType();
-            dataRow[4] = appointment.Duration.ToString();
-            dataRow[5] = appointment.Urgent;
-            dataTable.Rows.Add(dataRow);
-        }
-        public void ModifyPersonalAppointmentTableRow(Appointment appointment)
-        {
-            PersonalAppointmentsTable.SelectedRows[0].SetValues(appointment.ID.ToString(),
-                DoctorService.GetFullName(appointment.DoctorID),
-                appointment.DateTime,
-                appointment.GetType(),
-                appointment.Duration.ToString(),
-                appointment.Urgent);
+            PersonalAppointmentsTable.Fill(AppointmentRepository.GetAll(Patient.ID, User.RoleType.PATIENT));
+            ModifyButton.Enabled = false;
+            DeleteButton.Enabled = false;
         }
         private void PersonalAppointmentsTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
@@ -94,14 +54,13 @@ namespace Klinika.GUI.Patient
         }
         private void ModifyAppointmentClick(object sender, EventArgs e)
         {
-            Appointment selected = AppointmentService.GetSelected(PersonalAppointmentsTable);
-            new PersonalAppointment(this, selected).Show();
+            new PersonalAppointment(this, PersonalAppointmentsTable.GetSelected()).Show();
         }
         private void DeleteAppointmentClick(object sender, EventArgs e)
         {
             if (!IsDeleteConfirmed()) return;
 
-            Appointment selected = AppointmentService.GetSelected(PersonalAppointmentsTable);
+            Appointment selected = PersonalAppointmentsTable.GetSelected();
             bool needApproval = DateTime.Now.AddDays(2).Date >= selected.DateTime.Date;
 
             if (needApproval)
@@ -119,55 +78,18 @@ namespace Klinika.GUI.Patient
             AppointmentRepository.Delete(selected.ID);
             AppointmentRepository.GetInstance().DeleteFromList(selected.ID);
             PatientRequestService.SendDeleted(!needApproval, selected);
-            PersonalAppointmentsTable.Rows.RemoveAt(PersonalAppointmentsTable.SelectedRows[0].Index);
+            PersonalAppointmentsTable.DeleteSelected();
         }
         #endregion
 
         #region Occupied Appointment table
-        private void FillOccupiedAppointmentsTable()
-        {
-            int doctorID = (DoctorComboBox.SelectedItem as User).ID;
-            DataTable? appointmets = AppointmentRepository.GetAllAsTable(AppointmentDatePicker.Value.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
-
-            if (appointmets != null)
-            {
-
-                FillTableWithDoctorData(appointmets);
-                DoctorService.FillAppointmentTypeField(appointmets);
-
-                appointmets.Columns.Remove("PatientID");
-                appointmets.Columns.Remove("Completed");
-                appointmets.Columns.Remove("IsDeleted");
-                appointmets.Columns.Remove("Description");
-                appointmets.Columns.Remove("Type");
-                appointmets.Columns.Remove("Urgent");
-                appointmets.Columns.Remove("RoomID");
-
-                OccupiedAppointmentsTable.DataSource = appointmets;
-
-                OccupiedAppointmentsTable.Columns["ID"].Width = 45;
-                OccupiedAppointmentsTable.Columns["DateTime"].MinimumWidth = 150;
-
-                OccupiedAppointmentsTable.ClearSelection();
-
-                ScheduleButton.Enabled = true;
-            }
-        }
-        public void InsertRowIntoOccupiedTable(Appointment appointment)
-        {
-            DataTable? dataTable = OccupiedAppointmentsTable.DataSource as DataTable;
-            DataRow dataRow = dataTable.NewRow();
-            dataRow[0] = appointment.ID.ToString();
-            dataRow[1] = DoctorService.GetFullName(appointment.DoctorID);
-            dataRow[2] = appointment.DoctorID.ToString();
-            dataRow[3] = appointment.DateTime;
-            dataRow[4] = appointment.Duration.ToString();
-            dataTable.Rows.Add(dataRow);
-        }
         private void FindAppointmentsClick(object sender, EventArgs e)
         {
             if (!IsDateValid(AppointmentDatePicker.Value)) return;
-            FillOccupiedAppointmentsTable();
+            int doctorID = (DoctorComboBox.SelectedItem as User).ID;
+            var occupied = AppointmentRepository.GetAll(AppointmentDatePicker.Value.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
+            OccupiedAppointmentsTable.Fill(occupied);
+            ScheduleButton.Enabled = true;
         }
         private void ScheduleAppointmentClick(object sender, EventArgs e)
         {
@@ -180,7 +102,7 @@ namespace Klinika.GUI.Patient
         #endregion
 
         #region Medical Record
-        private void FillMedicalRecorTab()
+        private void InitMedicalRecorTab()
         {
             List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
             FillMedicalRecordTable(anamneses);
@@ -226,7 +148,7 @@ namespace Klinika.GUI.Patient
         }
         private void ResetClick(object sender, EventArgs e)
         {
-            FillMedicalRecorTab();
+            InitMedicalRecorTab();
             SearchTextBox.Text = "";
         }
         #endregion
@@ -235,7 +157,7 @@ namespace Klinika.GUI.Patient
         private void InitDoctorsTab()
         {
             List<Roles.Doctor> doctors = DoctorRepository.GetInstance().doctors;
-            FillDoctorTable(doctors);
+            FillDoctorsTable(doctors);
 
             DoctorNameRadioButton.Checked = true;
             DoctorSurnameTextBox.Enabled = false;
@@ -251,7 +173,7 @@ namespace Klinika.GUI.Patient
                 DoctorSpecializationComboBox.Enabled = false;
 
                 DoctorSurnameTextBox.Text = "";
-                FillDoctorTable();
+                FillDoctorsTable();
             }
         }
         private void DoctorSurnameRadioButtonCheckedChanged(object sender, EventArgs e)
@@ -263,7 +185,7 @@ namespace Klinika.GUI.Patient
                 DoctorSpecializationComboBox.Enabled = false;
 
                 DoctorNameTextBox.Text = "";
-                FillDoctorTable();
+                FillDoctorsTable();
             }
         }
         private void DoctorSpecializationRadioButtonCheckedChanged(object sender, EventArgs e)
@@ -276,10 +198,10 @@ namespace Klinika.GUI.Patient
 
                 DoctorSurnameTextBox.Text = "";
                 DoctorNameTextBox.Text = "";
-                FillDoctorTable();
+                FillDoctorsTable();
             }
         }
-        private void FillDoctorTable(List<Roles.Doctor> doctors = null)
+        private void FillDoctorsTable(List<Roles.Doctor> doctors = null)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Doctor ID");
@@ -302,8 +224,8 @@ namespace Klinika.GUI.Patient
                     dataTable.Rows.Add(newRow);
                 }
             }
-            DoctorTable.DataSource = dataTable;
-            DoctorTable.ClearSelection();
+            DoctorsTable.DataSource = dataTable;
+            DoctorsTable.ClearSelection();
             NewAppointmentButton.Enabled = false;
         }
         private void DoctorSearchClick(object sender, EventArgs e)
@@ -311,18 +233,18 @@ namespace Klinika.GUI.Patient
             if (DoctorNameRadioButton.Checked)
             {
                 var searched = DoctorService.SearchByName(DoctorNameTextBox.Text);
-                FillDoctorTable(searched);
+                FillDoctorsTable(searched);
                 return;
             }
             if (DoctorSurnameRadioButton.Checked)
             {
                 var searched = DoctorService.SearchBySurname(DoctorSurnameTextBox.Text);
-                FillDoctorTable(searched);
+                FillDoctorsTable(searched);
                 return;
             }
             int selectedID = (DoctorSpecializationComboBox.SelectedItem as Specialization).ID;
             var selected = DoctorService.SearchBySpecialization(selectedID);
-            FillDoctorTable(selected);
+            FillDoctorsTable(selected);
         }
         private void DoctorTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
@@ -331,21 +253,12 @@ namespace Klinika.GUI.Patient
         private void NewAppointmentClick(object sender, EventArgs e)
         {
             Appointment appointment = new Appointment();
-            appointment.DoctorID = DoctorService.GetSelectedID(DoctorTable);
+            appointment.DoctorID = GetSelectedID(DoctorsTable);
             new PersonalAppointment(this, appointment, true).Show();
         }
         #endregion
 
         #region Helper functions
-        private void FillTableWithDoctorData(DataTable dataTable)
-        {
-            dataTable.Columns.Add("Doctor Full Name");
-            dataTable.Columns["Doctor Full Name"].SetOrdinal(1);
-            foreach (DataRow row in dataTable.Rows)
-            {
-                row["Doctor Full Name"] = DoctorService.GetFullName(Convert.ToInt32(row["DoctorID"]));
-            }
-        }
         public void FillDoctorComboBox(ComboBox comboBox)
         {
             comboBox.Items.AddRange(UserRepository.GetDoctors().ToArray());
@@ -374,6 +287,10 @@ namespace Klinika.GUI.Patient
             var specializations = DoctorRepository.GetSpecializations().ToArray();
             DoctorSpecializationComboBox.Items.AddRange(specializations);
             DoctorSpecializationComboBox.SelectedIndex = 0;
+        }
+        private int GetSelectedID(DataGridView table)
+        {
+            return Convert.ToInt32(table.SelectedRows[0].Cells["Doctor ID"].Value);
         }
         #endregion
     }

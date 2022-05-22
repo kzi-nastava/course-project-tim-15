@@ -91,25 +91,16 @@ namespace Klinika.GUI.Patient
                 Close();
             }
         }
+        /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         private void CreateInDatabase()
         {
             int doctorID = Convert.ToInt32(RecommendedAppointmentTable.SelectedRows[0].Cells["Doctor ID"].Value);
             DateTime dateTime = Convert.ToDateTime(RecommendedAppointmentTable.SelectedRows[0].Cells["DateTime"].Value);
 
-            Appointment appointment = new Appointment();
-            appointment.ID = -1;
-            appointment.DoctorID = doctorID;
-            appointment.PatientID = Parent.Patient.ID;
-            appointment.DateTime = dateTime;
-            appointment.RoomID = 1;
-            appointment.Completed = false;
-            appointment.Type = 'E';
-            appointment.Duration = 15;
-            appointment.Urgent = false;
-            appointment.Description = "";
-            appointment.IsDeleted = false;
+            Appointment appointment = new Appointment(doctorID, Parent.Patient.ID, dateTime);
+
             AppointmentRepository.GetInstance().Create(appointment);
-            Parent.InsertRowIntoPersonalAppointmentsTable(appointment);
+            Parent.PersonalAppointmentsTable.Insert(appointment);
         }
         private bool IsDateValid()
         {

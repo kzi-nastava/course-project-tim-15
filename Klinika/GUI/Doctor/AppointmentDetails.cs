@@ -132,7 +132,7 @@ namespace Klinika.GUI.Doctor
             Appointment.DateTime = GetSelectedDateTime();
             TransferDataFromUI(Appointment);
             AppointmentService.Modify(Appointment);
-            Parent.AllAppointmentsTable.UpdateSelected(Appointment);
+            Parent.AllAppointmentsTable.ModifySelected(Appointment);
         }
         private void Create()
         {
