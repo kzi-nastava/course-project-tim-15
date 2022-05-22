@@ -106,7 +106,7 @@
             this.DeleteButton.TabIndex = 2;
             this.DeleteButton.Text = "Delete";
             this.DeleteButton.UseVisualStyleBackColor = true;
-            this.DeleteButton.Click += new System.EventHandler(this.DeleteAppointmentClick);
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteAppointmentButtonClick);
             // 
             // ModifyButton
             // 
@@ -116,7 +116,7 @@
             this.ModifyButton.TabIndex = 1;
             this.ModifyButton.Text = "Modify";
             this.ModifyButton.UseVisualStyleBackColor = true;
-            this.ModifyButton.Click += new System.EventHandler(this.ModifyAppointmentClick);
+            this.ModifyButton.Click += new System.EventHandler(this.ModifyAppointmentButtonClick);
             // 
             // PersonalAppointmentsTable
             // 
@@ -162,7 +162,7 @@
             this.RecommendButton.TabIndex = 8;
             this.RecommendButton.Text = "Recommend";
             this.RecommendButton.UseVisualStyleBackColor = true;
-            this.RecommendButton.Click += new System.EventHandler(this.RecommendClick);
+            this.RecommendButton.Click += new System.EventHandler(this.RecommendButtonClick);
             // 
             // ScheduleButton
             // 
@@ -172,7 +172,7 @@
             this.ScheduleButton.TabIndex = 7;
             this.ScheduleButton.Text = "Schedule";
             this.ScheduleButton.UseVisualStyleBackColor = true;
-            this.ScheduleButton.Click += new System.EventHandler(this.ScheduleAppointmentClick);
+            this.ScheduleButton.Click += new System.EventHandler(this.ScheduleAppointmentButtonClick);
             // 
             // FindAppointmentsButton
             // 
@@ -182,7 +182,7 @@
             this.FindAppointmentsButton.TabIndex = 6;
             this.FindAppointmentsButton.Text = "Find";
             this.FindAppointmentsButton.UseVisualStyleBackColor = true;
-            this.FindAppointmentsButton.Click += new System.EventHandler(this.FindAppointmentsClick);
+            this.FindAppointmentsButton.Click += new System.EventHandler(this.FindAppointmentsButtonClick);
             // 
             // DoctorLabel
             // 
@@ -266,7 +266,7 @@
             this.ResetButton.TabIndex = 4;
             this.ResetButton.Text = "Reset";
             this.ResetButton.UseVisualStyleBackColor = true;
-            this.ResetButton.Click += new System.EventHandler(this.ResetClick);
+            this.ResetButton.Click += new System.EventHandler(this.ResetButtonClick);
             // 
             // SearchButton
             // 
@@ -276,7 +276,7 @@
             this.SearchButton.TabIndex = 3;
             this.SearchButton.Text = "Search";
             this.SearchButton.UseVisualStyleBackColor = true;
-            this.SearchButton.Click += new System.EventHandler(this.SearchClick);
+            this.SearchButton.Click += new System.EventHandler(this.SearchButtonClick);
             // 
             // SearchTextBox
             // 
@@ -354,7 +354,7 @@
             this.NewAppointmentButton.TabIndex = 13;
             this.NewAppointmentButton.Text = "Schedule";
             this.NewAppointmentButton.UseVisualStyleBackColor = true;
-            this.NewAppointmentButton.Click += new System.EventHandler(this.NewAppointmentClick);
+            this.NewAppointmentButton.Click += new System.EventHandler(this.NewAppointmentButtonClick);
             // 
             // DoctorTable
             // 
@@ -391,7 +391,7 @@
             this.DoctorSearchButton.TabIndex = 11;
             this.DoctorSearchButton.Text = "Search";
             this.DoctorSearchButton.UseVisualStyleBackColor = true;
-            this.DoctorSearchButton.Click += new System.EventHandler(this.DoctorSearchClick);
+            this.DoctorSearchButton.Click += new System.EventHandler(this.DoctorSearchButtonClick);
             // 
             // DoctorNameRadioButton
             // 

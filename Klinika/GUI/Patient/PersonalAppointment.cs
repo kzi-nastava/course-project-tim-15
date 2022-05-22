@@ -67,13 +67,7 @@ namespace Klinika.GUI.Patient
         #region Click functions
         private void ConfirmeButtonClick(object sender, EventArgs e)
         {
-            if (!Parent.IsDateValid(GetSelectedDateTime())) return;
-
-            if (AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID()))
-            {
-                MessageBox.Show("This time is occupied!", "Denied!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
+            if (!ValidateForm()) return;
 
             if (Appointment == null || IsDoctorSelected) 
             {
@@ -168,6 +162,17 @@ namespace Klinika.GUI.Patient
         {
             User selected = UserRepository.GetDoctor(Appointment.DoctorID);
             DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(selected);
+        }
+        private bool ValidateForm()
+        {
+            if (!Parent.IsDateValid(GetSelectedDateTime())) return false;
+
+            if (AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID()))
+            {
+                MessageBox.Show("This time is occupied!", "Denied!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+            return true;
         }
         #endregion
     }

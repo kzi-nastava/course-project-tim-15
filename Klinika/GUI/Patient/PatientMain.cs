@@ -46,11 +46,11 @@ namespace Klinika.GUI.Patient
             ModifyButton.Enabled = true;
             DeleteButton.Enabled = true;
         }
-        private void ModifyAppointmentClick(object sender, EventArgs e)
+        private void ModifyAppointmentButtonClick(object sender, EventArgs e)
         {
             new PersonalAppointment(this, PersonalAppointmentsTable.GetSelected()).Show();
         }
-        private void DeleteAppointmentClick(object sender, EventArgs e)
+        private void DeleteAppointmentButtonClick(object sender, EventArgs e)
         {
             if (!IsDeleteConfirmed()) return;
 
@@ -82,7 +82,7 @@ namespace Klinika.GUI.Patient
             ScheduleButton.Enabled = false;
             OccupiedAppointmentsTable.DataSource = new DataTable();
         }
-        private void FindAppointmentsClick(object sender, EventArgs e)
+        private void FindAppointmentsButtonClick(object sender, EventArgs e)
         {
             if (!IsDateValid(AppointmentDatePicker.Value)) return;
 
@@ -91,11 +91,11 @@ namespace Klinika.GUI.Patient
             OccupiedAppointmentsTable.Fill(occupied);
             ScheduleButton.Enabled = true;
         }
-        private void ScheduleAppointmentClick(object sender, EventArgs e)
+        private void ScheduleAppointmentButtonClick(object sender, EventArgs e)
         {
             new PersonalAppointment(this, null).Show();
         }
-        private void RecommendClick(object sender, EventArgs e)
+        private void RecommendButtonClick(object sender, EventArgs e)
         {
             new AppointmentRecommendation(this).Show();
         }
@@ -135,14 +135,14 @@ namespace Klinika.GUI.Patient
             }
             MedicalRecordTable.DataSource = anamnesesData;
         }
-        private void SearchClick(object sender, EventArgs e)
+        private void SearchButtonClick(object sender, EventArgs e)
         {
             string searchParam = SearchTextBox.Text;
             List<Anamnesis> searchResoult = MedicalRecordService.GetFiltered(Patient.ID, searchParam);
 
             FillMedicalRecordTable(searchResoult);
         }
-        private void ResetClick(object sender, EventArgs e)
+        private void ResetButtonClick(object sender, EventArgs e)
         {
             InitMedicalRecorTab();
             SearchTextBox.Text = "";
@@ -221,7 +221,7 @@ namespace Klinika.GUI.Patient
             DoctorsTable.ClearSelection();
             NewAppointmentButton.Enabled = false;
         }
-        private void DoctorSearchClick(object sender, EventArgs e)
+        private void DoctorSearchButtonClick(object sender, EventArgs e)
         {
             if (DoctorNameRadioButton.Checked)
             {
@@ -242,7 +242,7 @@ namespace Klinika.GUI.Patient
         {
             NewAppointmentButton.Enabled = true;
         }
-        private void NewAppointmentClick(object sender, EventArgs e)
+        private void NewAppointmentButtonClick(object sender, EventArgs e)
         {
             Appointment appointment = new Appointment();
             appointment.DoctorID = GetSelectedDoctorID(DoctorsTable);

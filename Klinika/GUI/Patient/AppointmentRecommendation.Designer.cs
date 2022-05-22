@@ -200,7 +200,7 @@
             this.ScheduleButton.TabIndex = 10;
             this.ScheduleButton.Text = "Schedule";
             this.ScheduleButton.UseVisualStyleBackColor = true;
-            this.ScheduleButton.Click += new System.EventHandler(this.ScheduleClick);
+            this.ScheduleButton.Click += new System.EventHandler(this.ScheduleButtonClick);
             // 
             // RecommendButton
             // 
@@ -210,7 +210,7 @@
             this.RecommendButton.TabIndex = 11;
             this.RecommendButton.Text = "Recommend";
             this.RecommendButton.UseVisualStyleBackColor = true;
-            this.RecommendButton.Click += new System.EventHandler(this.RecommendClick);
+            this.RecommendButton.Click += new System.EventHandler(this.RecommendButtonClick);
             // 
             // AppointmentRecommendation
             // 
