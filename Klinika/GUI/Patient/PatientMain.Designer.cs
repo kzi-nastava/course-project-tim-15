@@ -381,7 +381,7 @@
             this.DoctorsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DoctorsTable.Size = new System.Drawing.Size(744, 495);
             this.DoctorsTable.TabIndex = 12;
-            this.DoctorsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DoctorTableRowSelected);
+            this.DoctorsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DoctorsTableRowSelected);
             // 
             // DoctorSearchButton
             // 

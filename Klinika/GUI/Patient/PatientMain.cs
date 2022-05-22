@@ -24,13 +24,7 @@ namespace Klinika.GUI.Patient
         }
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((sender as TabControl).SelectedIndex == 1)
-            {
-                ScheduleButton.Enabled = false;
-                OccupiedAppointmentsTable.DataSource = new DataTable();
-                return;
-            }
-
+            if ((sender as TabControl).SelectedIndex == 1) InitNewAppointmentTab();
             if ((sender as TabControl).SelectedIndex == 2) InitMedicalRecorTab();
             if ((sender as TabControl).SelectedIndex == 3) InitDoctorsTab();
         }
@@ -40,7 +34,7 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
-        #region Personal Appointments Table
+        #region Personal Appointments Tab
         private void InitPersonalAppointmentsTab()
         {
             PersonalAppointmentsTable.Fill(AppointmentRepository.GetAll(Patient.ID, User.RoleType.PATIENT));
@@ -82,10 +76,16 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
-        #region Occupied Appointment table
+        #region New Appointment Tab
+        private void InitNewAppointmentTab()
+        {
+            ScheduleButton.Enabled = false;
+            OccupiedAppointmentsTable.DataSource = new DataTable();
+        }
         private void FindAppointmentsClick(object sender, EventArgs e)
         {
             if (!IsDateValid(AppointmentDatePicker.Value)) return;
+
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
             var occupied = AppointmentRepository.GetAll(AppointmentDatePicker.Value.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
             OccupiedAppointmentsTable.Fill(occupied);
@@ -101,7 +101,7 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
-        #region Medical Record
+        #region Medical Record Tab
         private void InitMedicalRecorTab()
         {
             List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
@@ -137,12 +137,8 @@ namespace Klinika.GUI.Patient
         }
         private void SearchClick(object sender, EventArgs e)
         {
-            string searchParam = SearchTextBox.Text.ToUpper();
-
-            List<Anamnesis> searchResoult = MedicalRecordRepository.GetAnamneses(Patient.ID).Where(
-                x => x.Description.ToUpper().Contains(searchParam) 
-                || x.Symptoms.ToUpper().Contains(searchParam) 
-                || x.Conclusion.ToUpper().Contains(searchParam)).ToList();
+            string searchParam = SearchTextBox.Text;
+            List<Anamnesis> searchResoult = MedicalRecordService.GetFiltered(Patient.ID, searchParam);
 
             FillMedicalRecordTable(searchResoult);
         }
@@ -153,12 +149,9 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
-        #region Doctors
+        #region Doctors Tab
         private void InitDoctorsTab()
         {
-            List<Roles.Doctor> doctors = DoctorRepository.GetInstance().doctors;
-            FillDoctorsTable(doctors);
-
             DoctorNameRadioButton.Checked = true;
             DoctorSurnameTextBox.Enabled = false;
             DoctorSpecializationComboBox.Enabled = false;
@@ -232,28 +225,27 @@ namespace Klinika.GUI.Patient
         {
             if (DoctorNameRadioButton.Checked)
             {
-                var searched = DoctorService.SearchByName(DoctorNameTextBox.Text);
-                FillDoctorsTable(searched);
+                var resoult = DoctorService.SearchByName(DoctorNameTextBox.Text);
+                FillDoctorsTable(resoult);
                 return;
             }
             if (DoctorSurnameRadioButton.Checked)
             {
-                var searched = DoctorService.SearchBySurname(DoctorSurnameTextBox.Text);
-                FillDoctorsTable(searched);
+                var resoult = DoctorService.SearchBySurname(DoctorSurnameTextBox.Text);
+                FillDoctorsTable(resoult);
                 return;
             }
-            int selectedID = (DoctorSpecializationComboBox.SelectedItem as Specialization).ID;
-            var selected = DoctorService.SearchBySpecialization(selectedID);
-            FillDoctorsTable(selected);
+            var resout = DoctorService.SearchBySpecialization(GetSelectedSpecializationID());
+            FillDoctorsTable(resout);
         }
-        private void DoctorTableRowSelected(object sender, DataGridViewCellEventArgs e)
+        private void DoctorsTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
             NewAppointmentButton.Enabled = true;
         }
         private void NewAppointmentClick(object sender, EventArgs e)
         {
             Appointment appointment = new Appointment();
-            appointment.DoctorID = GetSelectedID(DoctorsTable);
+            appointment.DoctorID = GetSelectedDoctorID(DoctorsTable);
             new PersonalAppointment(this, appointment, true).Show();
         }
         #endregion
@@ -263,6 +255,20 @@ namespace Klinika.GUI.Patient
         {
             comboBox.Items.AddRange(UserRepository.GetDoctors().ToArray());
             comboBox.SelectedIndex = 0;
+        }
+        private void FillSpecializationsComboBox()
+        {
+            var specializations = DoctorRepository.GetSpecializations().ToArray();
+            DoctorSpecializationComboBox.Items.AddRange(specializations);
+            DoctorSpecializationComboBox.SelectedIndex = 0;
+        }
+        private int GetSelectedDoctorID(DataGridView table)
+        {
+            return Convert.ToInt32(table.SelectedRows[0].Cells["Doctor ID"].Value);
+        }
+        private int GetSelectedSpecializationID()
+        {
+            return (DoctorSpecializationComboBox.SelectedItem as Specialization).ID;
         }
         public bool IsDateValid (DateTime dateTime)
         {
@@ -281,16 +287,6 @@ namespace Klinika.GUI.Patient
                 return true;
             }
             return false;
-        }
-        private void FillSpecializationsComboBox()
-        {
-            var specializations = DoctorRepository.GetSpecializations().ToArray();
-            DoctorSpecializationComboBox.Items.AddRange(specializations);
-            DoctorSpecializationComboBox.SelectedIndex = 0;
-        }
-        private int GetSelectedID(DataGridView table)
-        {
-            return Convert.ToInt32(table.SelectedRows[0].Cells["Doctor ID"].Value);
         }
         #endregion
     }

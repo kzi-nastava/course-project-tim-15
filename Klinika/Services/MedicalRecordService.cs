@@ -21,5 +21,12 @@ namespace Klinika.Services
         {
             ReferalRepository.Create(patientID, specializationID, doctorID);
         }
+        public static List<Anamnesis> GetFiltered(int patientID, string searchParam)
+        {
+            return MedicalRecordRepository.GetAnamneses(patientID).Where(
+                x => x.Description.ToUpper().Contains(searchParam.ToUpper())
+                || x.Symptoms.ToUpper().Contains(searchParam.ToUpper())
+                || x.Conclusion.ToUpper().Contains(searchParam.ToUpper())).ToList();
+        }
     }
 }
