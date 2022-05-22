@@ -37,7 +37,6 @@ namespace Klinika.GUI.Patient
         }
         private void SetupAsCreate()
         {
-
             DoctorComboBox.Enabled = false;
             DoctorComboBox.SelectedIndex = Parent.DoctorComboBox.SelectedIndex;
 
@@ -57,7 +56,7 @@ namespace Klinika.GUI.Patient
             TimePicker.Enabled = true;
             TimePicker.Value = Appointment.DateTime;
             DoctorComboBox.Enabled = true;
-            DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(UserRepository.GetInstance().Users.Where(x => x.ID == Appointment.DoctorID).FirstOrDefault());
+            SetDoctorComboBoxIndex();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -164,6 +163,11 @@ namespace Klinika.GUI.Patient
             var selectedTime = TimePicker.Value;
             var dateTime = DateTime.Parse($"{selectedDate.Year}-{selectedDate.Month}-{selectedDate.Day} {selectedTime.Hour}:{selectedTime.Minute}");
             return dateTime;
+        }
+        private void SetDoctorComboBoxIndex()
+        {
+            User selected = UserRepository.GetDoctor(Appointment.DoctorID);
+            DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(selected);
         }
         #endregion
     }
