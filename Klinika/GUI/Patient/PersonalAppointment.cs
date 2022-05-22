@@ -102,25 +102,12 @@ namespace Klinika.GUI.Patient
         private void CreateInDatabase()
         {
             Appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
-            //Appointment.ID = -1;
-            //Appointment.DoctorID = GetSelectedDoctorID();
-            //Appointment.PatientID = Parent.Patient.ID;
-            //Appointment.DateTime = GetSelectedDateTime();
-            //Appointment.RoomID = 1;
-            //Appointment.Completed = false;
-            //Appointment.Type = 'E';
-            //Appointment.Duration = 15;
-            //Appointment.Urgent = false;
-            //Appointment.Description = "";
-            //Appointment.IsDeleted = false;
 
             AppointmentRepository.GetInstance().Create(Appointment);
             Parent.PersonalAppointmentsTable.Insert(Appointment);
-            //Parent.InsertRowIntoPersonalAppointmentsTable(Appointment);
             if (!IsDoctorSelected)
             {
                 Parent.OccupiedAppointmentsTable.Insert(Appointment);
-                //Parent.InsertRowIntoOccupiedTable(Appointment);
             }
         }
         private void ModifyInDatabase()

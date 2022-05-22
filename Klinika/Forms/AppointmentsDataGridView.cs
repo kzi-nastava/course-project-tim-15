@@ -18,13 +18,12 @@ namespace Klinika.Forms
         public AppointmentsDataGridView(User.RoleType viewerRole) : base()
         {
             Appointments = new List<Appointment>();
+            SetViewerRole(viewerRole);
+        }
+        private void SetViewerRole(User.RoleType viewerRole)
+        {
             ViewerRole = viewerRole;
-            if (viewerRole == User.RoleType.DOCTOR)
-            {
-                SearchedRole = "Patient";
-                return;
-            }
-            SearchedRole = "Doctor";
+            SearchedRole = viewerRole == User.RoleType.DOCTOR ? "Patient" : "Doctor";
         }
         public void Fill(List<Appointment> appointments)
         {
