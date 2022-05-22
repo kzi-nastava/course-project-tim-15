@@ -37,7 +37,6 @@ namespace Klinika.GUI.Patient
         }
         private void SetupAsCreate()
         {
-
             DoctorComboBox.Enabled = false;
             DoctorComboBox.SelectedIndex = Parent.DoctorComboBox.SelectedIndex;
 
@@ -57,7 +56,7 @@ namespace Klinika.GUI.Patient
             TimePicker.Enabled = true;
             TimePicker.Value = Appointment.DateTime;
             DoctorComboBox.Enabled = true;
-            DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(UserRepository.GetInstance().Users.Where(x => x.ID == Appointment.DoctorID).FirstOrDefault());
+            SetDoctorComboBoxIndex();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -68,13 +67,7 @@ namespace Klinika.GUI.Patient
         #region Click functions
         private void ConfirmeButtonClick(object sender, EventArgs e)
         {
-            if (!Parent.IsDateValid(GetSelectedDateTime())) return;
-
-            if (AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID()))
-            {
-                MessageBox.Show("This time is occupied!", "Denied!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
+            if (!ValidateForm()) return;
 
             if (Appointment == null || IsDoctorSelected) 
             {
@@ -108,24 +101,13 @@ namespace Klinika.GUI.Patient
         #region Helper functions
         private void CreateInDatabase()
         {
-            Appointment = new Appointment();
-            Appointment.ID = -1;
-            Appointment.DoctorID = GetSelectedDoctorID();
-            Appointment.PatientID = Parent.Patient.ID;
-            Appointment.DateTime = GetSelectedDateTime();
-            Appointment.RoomID = 1;
-            Appointment.Completed = false;
-            Appointment.Type = 'E';
-            Appointment.Duration = 15;
-            Appointment.Urgent = false;
-            Appointment.Description = "";
-            Appointment.IsDeleted = false;
+            Appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
 
             AppointmentRepository.GetInstance().Create(Appointment);
-            Parent.InsertRowIntoPersonalAppointmentsTable(Appointment);
+            Parent.PersonalAppointmentsTable.Insert(Appointment);
             if (!IsDoctorSelected)
             {
-                Parent.InsertRowIntoOccupiedTable(Appointment);
+                Parent.OccupiedAppointmentsTable.Insert(Appointment);
             }
         }
         private void ModifyInDatabase()
@@ -145,13 +127,12 @@ namespace Klinika.GUI.Patient
                 {
                     PatientRequestService.SendModify(!needApproval, Appointment, description);
                 }
-
                 return;
             }
 
             PatientRequestService.SendModify(!needApproval, Appointment, description);
             AppointmentRepository.GetInstance().Modify(Appointment);
-            Parent.ModifyPersonalAppointmentTableRow(Appointment);
+            Parent.PersonalAppointmentsTable.ModifySelected(Appointment);
         }  
         private int GetSelectedDoctorID()
         {
@@ -163,6 +144,22 @@ namespace Klinika.GUI.Patient
             var selectedTime = TimePicker.Value;
             var dateTime = DateTime.Parse($"{selectedDate.Year}-{selectedDate.Month}-{selectedDate.Day} {selectedTime.Hour}:{selectedTime.Minute}");
             return dateTime;
+        }
+        private void SetDoctorComboBoxIndex()
+        {
+            User selected = UserRepository.GetDoctor(Appointment.DoctorID);
+            DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(selected);
+        }
+        private bool ValidateForm()
+        {
+            if (!Parent.IsDateValid(GetSelectedDateTime())) return false;
+
+            if (AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID()))
+            {
+                MessageBox.Show("This time is occupied!", "Denied!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+            return true;
         }
         #endregion
     }

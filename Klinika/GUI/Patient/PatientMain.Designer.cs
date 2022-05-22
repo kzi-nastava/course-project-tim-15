@@ -34,7 +34,7 @@
             this.PersonalAppointmentsTab = new System.Windows.Forms.TabPage();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.ModifyButton = new System.Windows.Forms.Button();
-            this.PersonalAppointmentsTable = new System.Windows.Forms.DataGridView();
+            this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT );
             this.NewAppointmentTab = new System.Windows.Forms.TabPage();
             this.RecommendButton = new System.Windows.Forms.Button();
             this.ScheduleButton = new System.Windows.Forms.Button();
@@ -44,7 +44,7 @@
             this.DateLabel = new System.Windows.Forms.Label();
             this.TitleLabel = new System.Windows.Forms.Label();
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.OccupiedAppointmentsTable = new System.Windows.Forms.DataGridView();
+            this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT);
             this.MedicalRecordTab = new System.Windows.Forms.TabPage();
             this.ResetButton = new System.Windows.Forms.Button();
             this.SearchButton = new System.Windows.Forms.Button();
@@ -54,7 +54,7 @@
             this.DoctorsTab = new System.Windows.Forms.TabPage();
             this.DoctorSpecializationComboBox = new System.Windows.Forms.ComboBox();
             this.NewAppointmentButton = new System.Windows.Forms.Button();
-            this.DoctorTable = new System.Windows.Forms.DataGridView();
+            this.DoctorsTable = new System.Windows.Forms.DataGridView();
             this.DoctorSearchButton = new System.Windows.Forms.Button();
             this.DoctorNameRadioButton = new System.Windows.Forms.RadioButton();
             this.DoctorSurnameRadioButton = new System.Windows.Forms.RadioButton();
@@ -69,7 +69,7 @@
             this.MedicalRecordTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MedicalRecordTable)).BeginInit();
             this.DoctorsTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DoctorTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DoctorsTable)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -106,7 +106,7 @@
             this.DeleteButton.TabIndex = 2;
             this.DeleteButton.Text = "Delete";
             this.DeleteButton.UseVisualStyleBackColor = true;
-            this.DeleteButton.Click += new System.EventHandler(this.DeleteAppointmentClick);
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteAppointmentButtonClick);
             // 
             // ModifyButton
             // 
@@ -116,7 +116,7 @@
             this.ModifyButton.TabIndex = 1;
             this.ModifyButton.Text = "Modify";
             this.ModifyButton.UseVisualStyleBackColor = true;
-            this.ModifyButton.Click += new System.EventHandler(this.ModifyAppointmentClick);
+            this.ModifyButton.Click += new System.EventHandler(this.ModifyAppointmentButtonClick);
             // 
             // PersonalAppointmentsTable
             // 
@@ -162,7 +162,7 @@
             this.RecommendButton.TabIndex = 8;
             this.RecommendButton.Text = "Recommend";
             this.RecommendButton.UseVisualStyleBackColor = true;
-            this.RecommendButton.Click += new System.EventHandler(this.RecommendClick);
+            this.RecommendButton.Click += new System.EventHandler(this.RecommendButtonClick);
             // 
             // ScheduleButton
             // 
@@ -172,7 +172,7 @@
             this.ScheduleButton.TabIndex = 7;
             this.ScheduleButton.Text = "Schedule";
             this.ScheduleButton.UseVisualStyleBackColor = true;
-            this.ScheduleButton.Click += new System.EventHandler(this.ScheduleAppointmentClick);
+            this.ScheduleButton.Click += new System.EventHandler(this.ScheduleAppointmentButtonClick);
             // 
             // FindAppointmentsButton
             // 
@@ -182,7 +182,7 @@
             this.FindAppointmentsButton.TabIndex = 6;
             this.FindAppointmentsButton.Text = "Find";
             this.FindAppointmentsButton.UseVisualStyleBackColor = true;
-            this.FindAppointmentsButton.Click += new System.EventHandler(this.FindAppointmentsClick);
+            this.FindAppointmentsButton.Click += new System.EventHandler(this.FindAppointmentsButtonClick);
             // 
             // DoctorLabel
             // 
@@ -266,7 +266,7 @@
             this.ResetButton.TabIndex = 4;
             this.ResetButton.Text = "Reset";
             this.ResetButton.UseVisualStyleBackColor = true;
-            this.ResetButton.Click += new System.EventHandler(this.ResetClick);
+            this.ResetButton.Click += new System.EventHandler(this.ResetButtonClick);
             // 
             // SearchButton
             // 
@@ -276,7 +276,7 @@
             this.SearchButton.TabIndex = 3;
             this.SearchButton.Text = "Search";
             this.SearchButton.UseVisualStyleBackColor = true;
-            this.SearchButton.Click += new System.EventHandler(this.SearchClick);
+            this.SearchButton.Click += new System.EventHandler(this.SearchButtonClick);
             // 
             // SearchTextBox
             // 
@@ -322,7 +322,7 @@
             // 
             this.DoctorsTab.Controls.Add(this.DoctorSpecializationComboBox);
             this.DoctorsTab.Controls.Add(this.NewAppointmentButton);
-            this.DoctorsTab.Controls.Add(this.DoctorTable);
+            this.DoctorsTab.Controls.Add(this.DoctorsTable);
             this.DoctorsTab.Controls.Add(this.DoctorSearchButton);
             this.DoctorsTab.Controls.Add(this.DoctorNameRadioButton);
             this.DoctorsTab.Controls.Add(this.DoctorSurnameRadioButton);
@@ -354,16 +354,16 @@
             this.NewAppointmentButton.TabIndex = 13;
             this.NewAppointmentButton.Text = "Schedule";
             this.NewAppointmentButton.UseVisualStyleBackColor = true;
-            this.NewAppointmentButton.Click += new System.EventHandler(this.NewAppointmentClick);
+            this.NewAppointmentButton.Click += new System.EventHandler(this.NewAppointmentButtonClick);
             // 
             // DoctorTable
             // 
-            this.DoctorTable.AllowUserToAddRows = false;
-            this.DoctorTable.AllowUserToDeleteRows = false;
-            this.DoctorTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DoctorTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.DoctorTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.DoctorTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DoctorsTable.AllowUserToAddRows = false;
+            this.DoctorsTable.AllowUserToDeleteRows = false;
+            this.DoctorsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DoctorsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.DoctorsTable.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.DoctorsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -371,17 +371,17 @@
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DoctorTable.DefaultCellStyle = dataGridViewCellStyle2;
-            this.DoctorTable.Location = new System.Drawing.Point(335, 6);
-            this.DoctorTable.MultiSelect = false;
-            this.DoctorTable.Name = "DoctorTable";
-            this.DoctorTable.ReadOnly = true;
-            this.DoctorTable.RowHeadersWidth = 51;
-            this.DoctorTable.RowTemplate.Height = 29;
-            this.DoctorTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.DoctorTable.Size = new System.Drawing.Size(744, 495);
-            this.DoctorTable.TabIndex = 12;
-            this.DoctorTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DoctorTableRowSelected);
+            this.DoctorsTable.DefaultCellStyle = dataGridViewCellStyle2;
+            this.DoctorsTable.Location = new System.Drawing.Point(335, 6);
+            this.DoctorsTable.MultiSelect = false;
+            this.DoctorsTable.Name = "DoctorTable";
+            this.DoctorsTable.ReadOnly = true;
+            this.DoctorsTable.RowHeadersWidth = 51;
+            this.DoctorsTable.RowTemplate.Height = 29;
+            this.DoctorsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DoctorsTable.Size = new System.Drawing.Size(744, 495);
+            this.DoctorsTable.TabIndex = 12;
+            this.DoctorsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DoctorsTableRowSelected);
             // 
             // DoctorSearchButton
             // 
@@ -391,7 +391,7 @@
             this.DoctorSearchButton.TabIndex = 11;
             this.DoctorSearchButton.Text = "Search";
             this.DoctorSearchButton.UseVisualStyleBackColor = true;
-            this.DoctorSearchButton.Click += new System.EventHandler(this.DoctorSearchClick);
+            this.DoctorSearchButton.Click += new System.EventHandler(this.DoctorSearchButtonClick);
             // 
             // DoctorNameRadioButton
             // 
@@ -468,7 +468,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.MedicalRecordTable)).EndInit();
             this.DoctorsTab.ResumeLayout(false);
             this.DoctorsTab.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DoctorTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DoctorsTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -480,7 +480,7 @@
         private TabPage NewAppointmentTab;
         private Button DeleteButton;
         private Button ModifyButton;
-        private DataGridView PersonalAppointmentsTable;
+        internal Klinika.Forms.AppointmentsDataGridView PersonalAppointmentsTable;
         private Button ScheduleButton;
         private Button FindAppointmentsButton;
         private Label DoctorLabel;
@@ -488,7 +488,7 @@
         private Label DateLabel;
         private Label TitleLabel;
         public DateTimePicker AppointmentDatePicker;
-        private DataGridView OccupiedAppointmentsTable;
+        internal Klinika.Forms.AppointmentsDataGridView OccupiedAppointmentsTable;
         private TabPage MedicalRecordTab;
         private DataGridView MedicalRecordTable;
         private Button SearchButton;
@@ -504,9 +504,7 @@
         private TextBox DoctorNameTextBox;
         private Button DoctorSearchButton;
         private Button NewAppointmentButton;
-        private DataGridView dataGridView1;
         private DataGridView DoctorsTable;
-        private DataGridView DoctorTable;
         public ComboBox DoctorSpecializationComboBox;
     }
 }

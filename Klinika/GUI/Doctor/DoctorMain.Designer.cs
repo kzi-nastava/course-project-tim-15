@@ -33,12 +33,12 @@
             this.AddAppointmentButton = new System.Windows.Forms.Button();
             this.DeleteAppointmentButton = new System.Windows.Forms.Button();
             this.EditAppointmentButton = new System.Windows.Forms.Button();
-            this.AllAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView();
+            this.AllAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.DOCTOR);
             this.ScheduleTab = new System.Windows.Forms.TabPage();
             this.PerformButton = new System.Windows.Forms.Button();
             this.ViewMedicalRecordButton = new System.Windows.Forms.Button();
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.ScheduleTable = new Klinika.Forms.AppointmentsDataGridView();
+            this.ScheduleTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.DOCTOR);
             this.UnapprovedDrugsTab = new System.Windows.Forms.TabPage();
             this.DenyDrugButton = new System.Windows.Forms.Button();
             this.ApproveDrugButton = new System.Windows.Forms.Button();

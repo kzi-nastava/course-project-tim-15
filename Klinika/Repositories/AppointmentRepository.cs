@@ -90,30 +90,6 @@ namespace Klinika.Repositories
             }
             return output;
         }
-
-        public static DataTable? GetAllAsTable(string requestedDate, int ID, RoleType role, int days = 1)
-        {
-            DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
-            DateTime end = start.AddDays(days);
-
-            string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
-            string getAllQuerry = "SELECT * " +
-                                  "FROM [MedicalAction] " +
-                                  $"WHERE DateTime BETWEEN '{start}' AND '{end}' AND {roleToString} = {ID} " +
-                                  $"AND IsDeleted = 0";
-            
-            return DatabaseConnection.GetInstance().CreateTableOfData(getAllQuerry);
-        }
-        public static DataTable? GetAllAsTable(int ID, RoleType role)
-        {
-            string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
-            string getAllQuerry = "SELECT * " +
-                                  "FROM [MedicalAction] " +
-                                  $"WHERE DateTime > '{DateTime.Now}' AND {roleToString} = {ID} " +
-                                  $"AND IsDeleted = 0";
-
-            return DatabaseConnection.GetInstance().CreateTableOfData(getAllQuerry);
-        }
         public static List<Appointment> GetCompleted(int PatientID)
         {
             string getCompletedQuerry = "SELECT * " +

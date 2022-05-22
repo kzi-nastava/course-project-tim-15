@@ -36,7 +36,20 @@ namespace Klinika.Models
             Completed = false;
             RoomID = 1;
         }
-
+        public Appointment(int doctorID, int patientID, DateTime dateTime)
+        {
+            ID = -1;
+            DoctorID = doctorID;
+            PatientID = patientID;
+            DateTime = dateTime;
+            RoomID = 1;
+            Completed = false;
+            Type = 'E';
+            Duration = 15;
+            Urgent = false;
+            Description = "";
+            IsDeleted = false;
+        }
         public Appointment (int id, int doctorID, int patientId, DateTime dateTime, int roomID,
                             bool completed, char type, int duration, bool urgent, string? description,
                             bool isDeleted)
@@ -53,7 +66,6 @@ namespace Klinika.Models
             Description = description;
             IsDeleted = isDeleted;
         }
-
         public bool IsBetween(TimeSlot timeSlot, int offsetMin = 0)
         {
             DateTime start = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
@@ -64,7 +76,6 @@ namespace Klinika.Models
             }
             return false;
         }
-
         public string GetType()
         {
             return AppointmentService.GetTypeFullName(Type);
