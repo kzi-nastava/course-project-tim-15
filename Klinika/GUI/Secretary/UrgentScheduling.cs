@@ -20,9 +20,15 @@ namespace Klinika.GUI.Secretary
 
         private Dictionary<Appointment, DateTime> appointmentRescheduleDatePairs;
         private Dictionary<int, Appointment> ordinalAppointmentPairs;
+        private NotificationRepository notificationRepository;
+        private AppointmentRepository appointmentRepository;
+        private DoctorService doctorService;
         public UrgentScheduling()
         {
             InitializeComponent();
+            notificationRepository = NotificationRepository.GetInstance();
+            appointmentRepository = AppointmentRepository.GetInstance();
+            doctorService = new DoctorService();
         }
 
         private void scheduleButton_Click(object sender, EventArgs e)
@@ -53,10 +59,12 @@ namespace Klinika.GUI.Secretary
             }
             else
             {
-                Roles.Doctor available = GetFirstAvailable();
-                if (available == null)
+                int specializationId = SecretaryService.ExtractID(specializationSelection.SelectedItem.ToString());
+                (Roles.Doctor suitable, TimeSlot firstAvailable) = doctorService.GetSuitableUnderTwoHours(specializationId);
+                if (suitable == null)
                 {
-                    SecretaryService.ShowInformationMessage("Unable to find available doctor under two hours. Please select one of the given appointment times to reschedule.");
+                    SecretaryService.ShowInformationMessage("Unable to find available doctor under two hours. " +
+                                                            "Please select one of the given appointment times to reschedule.");
                     FillAppointmentSelectionList();
                     appointmentSelection.SelectedIndex = 0;
                     appointmentSelection.Enabled = true;
@@ -64,33 +72,29 @@ namespace Klinika.GUI.Secretary
                 }
                 else
                 {
-                    ScheduleForAvailableDoctor(available);
+                    ScheduleForSuitableDoctor(suitable,firstAvailable);
                 }
             }
         }
 
-        private void ScheduleForAvailableDoctor(Roles.Doctor available)
+        private void ScheduleForSuitableDoctor(Roles.Doctor suitable,TimeSlot firstAvailable)
         {
-            doctorField.Text = available.ID + ". " + available.Name + " " + available.Surname;
-            TimeSlot firstAvailable = available.TryUnderTwoHours();
-            if (firstAvailable != null)
-            {
-                appointmentSelection.Text = firstAvailable.from.ToString();
-                appointmentSelection.Enabled = false;
-                AppointmentRepository.GetInstance().Create(new Appointment(-1, available.ID,
-                                            SecretaryService.ExtractID(patientSelection.SelectedItem.ToString()),
-                                            firstAvailable.from,
-                                            1,
-                                            false,
-                                            'E',
-                                            15,
-                                            true,
-                                            "",
-                                            false));
-                SecretaryService.ShowSuccessMessage("Urgent appointment successfully scheduled!");
-                scheduleButton.Enabled = false;
-            }
+            doctorField.Text = suitable.ID + ". " + suitable.Name + " " + suitable.Surname;
 
+            appointmentSelection.Text = firstAvailable.from.ToString();
+            appointmentSelection.Enabled = false;
+            appointmentRepository.Create(new Appointment(-1, suitable.ID,
+                                        SecretaryService.ExtractID(patientSelection.SelectedItem.ToString()),
+                                        firstAvailable.from,
+                                        1,
+                                        false,
+                                        'E',
+                                        15,
+                                        true,
+                                        "",
+                                        false));
+            SecretaryService.ShowSuccessMessage("Urgent appointment successfully scheduled!");
+            scheduleButton.Enabled = false;
         }
 
 
@@ -108,7 +112,7 @@ namespace Klinika.GUI.Secretary
                 if(entry.Value > inTwoHours.to)
                 {
                     ordinalAppointmentPairs.Add(ordinal, entry.Key);
-                    appointmentSelection.Items.Add(AppointmentRepository.GetInstance().GetById(entry.Key.ID).DateTime.ToString("yyyy-MM-dd HH:mm"));
+                    appointmentSelection.Items.Add(appointmentRepository.GetById(entry.Key.ID).DateTime.ToString("yyyy-MM-dd HH:mm"));
                     ordinal++;
                 }
                 
@@ -133,15 +137,6 @@ namespace Klinika.GUI.Secretary
             appointmentSelection.Text = previousAppointment.ToString("yyyy-MM-dd HH:mm");
             SecretaryService.ShowSuccessMessage("Urgent appointment successfully scheduled!");
             scheduleButton.Enabled = false;
-        }
-
-        private Roles.Doctor GetFirstAvailable()
-        {
-            DateTime now = SecretaryService.GetNow();
-            TimeSlot slot = new TimeSlot(now, now.AddHours(2));
-
-            int specializationId = Convert.ToInt32(SecretaryService.ExtractID(specializationSelection.SelectedItem.ToString()));
-            return DoctorRepository.GetInstance().GetFirstUnoccupied(slot, specializationId);
         }
 
         private void NotifyAll(Appointment selected,DateTime previousAppointment)

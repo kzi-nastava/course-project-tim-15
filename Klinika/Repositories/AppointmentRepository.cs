@@ -7,33 +7,34 @@ using static Klinika.Roles.User;
 
 namespace Klinika.Repositories
 {
-    internal class AppointmentRepository
+    internal class AppointmentRepository : Repository
     {
         public List<Appointment> Appointments { get; set; }
-        public void DeleteFromList(int ID)
-        {
-            Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
-        }
-
-
-        public Appointment GetById(int id)
-        {
-            return Appointments.Where(x => x.ID == id).FirstOrDefault();
-        }
 
         #region Singleton
-        private static AppointmentRepository? Instance;
+        private static AppointmentRepository? instance;
         public static AppointmentRepository GetInstance()
         {
-            if(Instance == null) Instance = new AppointmentRepository();
-            return Instance;
+            if(instance == null) instance = new AppointmentRepository();
+            return instance;
         }
         public AppointmentRepository()
         {
             Appointments = GetAll();
         }
         #endregion
-        
+
+        public void DeleteFromList(int ID)
+        {
+            Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
+        }
+
+
+        public Appointment? GetById(int id)
+        {
+            return Appointments.Where(x => x.ID == id).FirstOrDefault();
+        }
+
         public static List<Appointment> GetAll()
         {
             string getAllQuerry = "SELECT * " +
@@ -53,7 +54,7 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
             return GenerateList(resoult);
         }
-        public static List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
+        public List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
         {
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
@@ -101,7 +102,6 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getCompletedQuerry);
             return GenerateList(resoult);
         }
-
         public void Create(Appointment appointment)
         {
             string createQuery = "INSERT INTO [MedicalAction] " +
@@ -171,39 +171,6 @@ namespace Klinika.Repositories
             string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuerry, ("@ID", ID));
         }
-
-        public bool IsAvailable(TimeSlot slot, int doctorID,TimeSlot toFit)
-        {
-            List<Appointment> doctorsAppointments = new List<Appointment>();
-            foreach (Appointment appointment in Appointments)
-            {
-                TimeSlot appointmentSlot = new TimeSlot(appointment.DateTime, appointment.DateTime.AddMinutes(appointment.Duration));
-                if (appointment.DoctorID == doctorID && slot.DoesOverlap(appointmentSlot))
-                {
-                    doctorsAppointments.Add(appointment);
-                }
-
-            }
-
-            if (doctorsAppointments.Count == 0) return true;
-            doctorsAppointments.OrderBy(o => o.DateTime).ToList();
-            TimeSlot temporary = new TimeSlot(toFit.from, toFit.to);
-
-            foreach(Appointment appointment in doctorsAppointments)
-            {
-                TimeSlot appointementSlot = new TimeSlot(appointment.DateTime, appointment.DateTime.AddMinutes(appointment.Duration));
-                if(appointementSlot.DoesOverlap(temporary))
-                {
-                    temporary.from = appointementSlot.to;
-                    temporary.to = appointementSlot.to.AddMinutes(toFit.GetDuration());
-                }
-            }
-
-            if(temporary.to < slot.to) return true;
-
-            return false;
-        }
-
         public bool IsOccupied(DateTime newAppointmentStart, int doctorID, int duration = 15, int appointmentID = -1)
         {
             var newAppointmentEnd = newAppointmentStart.AddMinutes(duration); 

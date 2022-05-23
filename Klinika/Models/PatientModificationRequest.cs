@@ -16,9 +16,9 @@ namespace Klinika.Models
         public string changesMadeDescription { get; set; }
 
 
-        public PatientModificationRequest(int doctorID,DateTime oldAppointment,string changesMadeDescription)
+        public PatientModificationRequest(int oldDoctorID,DateTime oldAppointment,string changesMadeDescription)
         {
-            this.oldDoctorID = doctorID;
+            this.oldDoctorID = oldDoctorID;
             this.oldAppointment = oldAppointment;
             this.changesMadeDescription = changesMadeDescription;
             string[] tokens = changesMadeDescription.Split(';');

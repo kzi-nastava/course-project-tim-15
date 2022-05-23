@@ -56,15 +56,5 @@ namespace Klinika.Services
             }
         }
 
-
-        public static DateTime GetNow()
-        {
-            DateTime now = DateTime.Now;
-            now = now.AddMilliseconds(-now.Millisecond);
-            now = now.AddSeconds(-now.Second);
-            
-            return now;
-        }
-
     }
 }
