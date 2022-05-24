@@ -17,12 +17,6 @@ namespace Klinika.Models
             this.to = to;
         }
 
-        public TimeSlot(DateTime from)
-        {
-            this.from = from;
-            to = from.AddMinutes(15);
-        }
-
         public int GetDuration()
         {
             TimeSpan duration = to - from;
@@ -33,11 +27,12 @@ namespace Klinika.Models
         {
             for (int i = 0; i < occupied.Count; i++)
             {
+                if (occupied[i].to < from) continue;
+
                 if (i == occupied.Count - 1)  return new TimeSlot(occupied[i].to,occupied[i].to.AddMinutes(duration));
 
                 TimeSlot betweenTwo = new TimeSlot(occupied[i].to, occupied[i + 1].from);
                 if (betweenTwo.GetDuration() >= duration) return new TimeSlot(betweenTwo.from, betweenTwo.from.AddMinutes(duration));
-
             }
             return this;
         }

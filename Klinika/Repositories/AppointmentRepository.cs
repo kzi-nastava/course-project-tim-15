@@ -11,24 +11,22 @@ namespace Klinika.Repositories
     {
         public List<Appointment> Appointments { get; set; }
 
-        #region Singleton
-        private static AppointmentRepository? instance;
-        public static AppointmentRepository GetInstance()
-        {
-            if(instance == null) instance = new AppointmentRepository();
-            return instance;
-        }
-        public AppointmentRepository()
+        private static AppointmentRepository instance;
+        private AppointmentRepository()
         {
             Appointments = GetAll();
         }
-        #endregion
+
+        public static AppointmentRepository GetInstance()
+        {
+            if (instance == null) instance = new AppointmentRepository();
+            return instance;
+        }
 
         public void DeleteFromList(int ID)
         {
             Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
         }
-
 
         public Appointment? GetById(int id)
         {
@@ -43,6 +41,7 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
             return GenerateList(resoult);
         }
+
         public static List<Appointment> GetAll(int userID, RoleType role)
         {
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
@@ -54,7 +53,8 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
             return GenerateList(resoult);
         }
-        public List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
+
+        public static List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
         {
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
@@ -68,6 +68,7 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
             return GenerateList(resoult);
         }
+
         private static List<Appointment> GenerateList(List<object> input)
         {
             var output = new List<Appointment>();
@@ -91,6 +92,7 @@ namespace Klinika.Repositories
             }
             return output;
         }
+
         public static List<Appointment> GetCompleted(int PatientID)
         {
             string getCompletedQuerry = "SELECT * " +
@@ -102,6 +104,7 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getCompletedQuerry);
             return GenerateList(resoult);
         }
+
         public void Create(Appointment appointment)
         {
             string createQuery = "INSERT INTO [MedicalAction] " +
@@ -124,6 +127,7 @@ namespace Klinika.Repositories
 
             Appointments.Add(appointment);
         }
+
         public static void Modify(int id, int newDoctorID, DateTime newAppointment)
         {
             string modifyQuery = "UPDATE [MedicalAction] SET DoctorID = @DoctorID, DateTime = @DateTime WHERE ID = @ID";
@@ -134,6 +138,7 @@ namespace Klinika.Repositories
                 ("@DateTime", newAppointment),
                 ("@ID", id));
         }
+
         public void Modify(Appointment appointment)
         {
             string modifyQuery = "UPDATE [MedicalAction] SET " +
@@ -166,11 +171,13 @@ namespace Klinika.Repositories
             Appointments.Remove(Appointments.Where(x => x.ID == appointment.ID).FirstOrDefault());
             Appointments.Add(appointment);
         }
+
         public static void Delete(int ID)
         {
             string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuerry, ("@ID", ID));
         }
+
         public bool IsOccupied(DateTime newAppointmentStart, int doctorID, int duration = 15, int appointmentID = -1)
         {
             var newAppointmentEnd = newAppointmentStart.AddMinutes(duration); 
@@ -190,6 +197,7 @@ namespace Klinika.Repositories
             }
             return false;
         }
+
         public static int GetScheduledAppointmentsCount (int ID)
         {
             DateTime startDate = DateTime.Now.AddDays(-30);
@@ -200,6 +208,25 @@ namespace Klinika.Repositories
 
             var selection = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuerry);
             return Convert.ToInt32(((object[])selection[0])[0]);
+        }
+
+        public List<TimeSlot> GetOccupiedTimeSlotsPerDoctor(TimeSlot span, int doctorID)
+        {
+            List<TimeSlot> scheduledAppointments = new List<TimeSlot>();
+            string getInSpanQuery = "SELECT DateTime,Duration " +
+                                    "FROM [MedicalAction] " +
+                                    "WHERE DoctorID = @doctorId AND " +
+                                    "DateTime BETWEEN @start AND @end " +
+                                    "ORDER BY DateTime";
+            DataTable retrieved = database.CreateTableOfData(getInSpanQuery,
+                ("@doctorId", doctorID), ("@start", span.from), ("@end", span.to));
+            foreach (DataRow row in retrieved.Rows)
+            {
+                DateTime from = DateTime.Parse(row["DateTime"].ToString());
+                scheduledAppointments.Add(new TimeSlot(from, from.AddMinutes(Convert.ToInt32(row["Duration"]))));
+            }
+
+            return scheduledAppointments;
         }
     }
 }

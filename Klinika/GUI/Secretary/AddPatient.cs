@@ -16,11 +16,13 @@ namespace Klinika.GUI.Secretary
     public partial class AddPatient : Form
     {
         private mainWindow parent;
+
         public AddPatient(mainWindow parent)
         {
             this.parent = parent;
             InitializeComponent();
         }
+
         private void AddPatient_Load(object sender, EventArgs e)
         {
             genderSelection.SelectedIndex = 0;
@@ -30,6 +32,7 @@ namespace Klinika.GUI.Secretary
         {
             Add();
         }
+
         private void Add()
         {
             Roles.Patient newPatient = new Roles.Patient(
@@ -42,32 +45,18 @@ namespace Klinika.GUI.Secretary
                 emailField.Text.Trim(),
                 passwordField.Text.Trim());
 
-
             try
             {
                 PatientService.Add(newPatient);
                 parent.AddRowToPatientTable(newPatient);
-                SecretaryService.ShowSuccessMessage("Patient successfully added!");
+                UIService.ShowSuccessMessage("Patient successfully added!");
                 Close();
             }
-            catch (FieldEmptyException) { }
-
-            catch (BirthdateInvalidException) { }
-
-            catch (ExistingEmailException)
+            catch(DatabaseConnectionException error)
             {
-                emailField.Text = "";
+                UIService.ShowErrorMessage(error.Message);
             }
-
-            catch (EmailFormatInvalidException)
-            {
-                emailField.Text = "";
-            }
-
-            catch (JMBGFormatInvalidException)
-            {
-                jmbgField.Text = "";
-            }
+          
         }
     }
 }

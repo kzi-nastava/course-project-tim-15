@@ -11,19 +11,12 @@ using Klinika.Repositories;
 namespace Klinika.Services
 {
     internal class SpecializationService
-    {
-        private DoctorRepository doctorRepository;
-
-        public SpecializationService()
-        {
-            doctorRepository = DoctorRepository.GetInstance();
-        }
-        
-        public List<Specialization> GetAllAvailableSpecializations()
+    {        
+        public static List<Specialization> GetAllAvailableSpecializations()
         {
             List<int> availableSpecializationsIds = new List<int>();
             List<Specialization> available = new List<Specialization>();
-            foreach (Doctor doctor in doctorRepository.doctors)
+            foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
             {
                 if (!availableSpecializationsIds.Contains(doctor.specialization.ID))
                 {

@@ -5,52 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Klinika.Roles;
 using Klinika.Repositories;
-using Klinika.Exceptions;
 
 namespace Klinika.Services
 {
-    internal static class LoginService
+    internal class LoginService
     {
-
-        public static User Validate(string email, string password)
+        public LoginService()
         {
-
-            Dictionary<string, User> allUsers = UserRepository.GetInstance().users;
-
-
-            if (string.IsNullOrEmpty(email))
-            {
-                throw new FieldEmptyException("Email left empty!");
-            }
-
-            else if (string.IsNullOrEmpty(password))
-            {
-
-                throw new FieldEmptyException("Password left empty!");
-            }
-
-            else if (!allUsers.ContainsKey(email))
-            {
-                throw new EmailUnknownException("There is no user with specified email!");
-            }
-
-            else if (!allUsers[email].Password.Equals(password))
-            {
-                throw new PasswordIncorrectException("Password does not match email!");
-            }
-
-            else if (allUsers[email].IsBlocked == true)
-            {
-                throw new UserBlockedException("The user is blocked!");
-            }
-
-            return allUsers[email];
-
+            UserRepository.GetInstance();
         }
 
-        public static void Login(string email, string password)
+        public static string Login(string email, string password)
         {
-            User loggingUser = Validate(email, password);
+            string error_message = ValidationService.ValidateLoginCredentials(email, password);
+            if (error_message != null)
+            {
+                return error_message;
+            }
+            User loggingUser = UserRepository.GetInstance().users[email];
+
             switch (loggingUser.Role)
             {
                 case "Secretary":
@@ -67,7 +40,7 @@ namespace Klinika.Services
                     {
                         loggingUser.IsBlocked = true;
                         UserRepository.Block(loggingUser.ID);
-                        throw new UserBlockedException("Your account is blocked because of trolling.");
+                        UIService.ShowErrorMessage("Your account is blocked because of trolling.");break;
                     }
                     else
                     {
@@ -75,7 +48,8 @@ namespace Klinika.Services
                         break;
                     }
             }
+
+            return null;
         }
     }
 }
-

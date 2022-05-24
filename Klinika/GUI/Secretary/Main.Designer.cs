@@ -130,7 +130,7 @@
             this.updatePatientButton.TabIndex = 2;
             this.updatePatientButton.Text = "Modify";
             this.updatePatientButton.UseVisualStyleBackColor = true;
-            this.updatePatientButton.Click += new System.EventHandler(this.updatePatientButton_Click);
+            this.updatePatientButton.Click += new System.EventHandler(this.modifyPatientButton_Click);
             // 
             // addPatientButton
             // 

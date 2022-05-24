@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Klinika.Services
 {
-    public class PatientRequestService
+    internal class PatientRequestService
     {
         public static void SendDeleted(bool isApproved, Appointment toDelete)
         {
@@ -16,10 +16,12 @@ namespace Klinika.Services
                         'D', GenerateDescription(toDelete.DateTime, toDelete.DoctorID), isApproved);
             PatientRequestRepository.Create(patientRequest);
         }
+
         public static string GenerateDescription(DateTime dateTime, int doctorID)
         {
             return "DateTime=" + dateTime.ToString("yyyy-MM-dd HH:mm:ss.000") + ";DoctorID=" + doctorID.ToString();
         }
+
         public static void SendModify(bool isApproved, Appointment appointment, string description)
         {
             PatientRequest patientRequest = new PatientRequest();
@@ -29,6 +31,11 @@ namespace Klinika.Services
             patientRequest.Description = description;
             patientRequest.Approved = isApproved;
             PatientRequestRepository.Create(patientRequest);
+        }
+
+        public static PatientModificationRequest GetModificationRequest(int requestId)
+        {
+            return PatientRequestRepository.IdRequestPairs[requestId];
         }
     }
 }

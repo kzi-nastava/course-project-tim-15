@@ -16,10 +16,12 @@ namespace Klinika.GUI.Secretary
     public partial class ModifyPatient : Form
     {
         private mainWindow parent;
-        private int selectedID;
-        public ModifyPatient(mainWindow parent)
+        private Roles.Patient selected;
+
+        public ModifyPatient(mainWindow parent,Roles.Patient selected)
         {
             this.parent = parent;
+            this.selected = selected;
             InitializeComponent();
         }
 
@@ -30,24 +32,16 @@ namespace Klinika.GUI.Secretary
 
         private void ModifyPatient_Load(object sender, EventArgs e)
         {
-            ShowSelectedPatientData();
+            SetFormFieldValues();
         }
 
-        private void ShowSelectedPatientData()
+        private void SetFormFieldValues()
         {
-            string selectedEmail = SecretaryService.GetCellValue(parent.patientsTable, "Email").ToString();
-            Roles.Patient selectedPatient = PatientRepository.GetSingle(selectedEmail);
-            SetFormFieldValues(selectedPatient);
-            selectedID = selectedPatient.ID;
-        }
-
-        private void SetFormFieldValues(Roles.Patient selectedPatient)
-        {
-            jmbgField.Text = selectedPatient.jmbg;
-            nameField.Text = selectedPatient.Name;
-            surnameField.Text = selectedPatient.Surname;
-            birthdatePicker.Value = selectedPatient.birthdate;
-            if (selectedPatient.gender == 'F')
+            jmbgField.Text = selected.jmbg;
+            nameField.Text = selected.Name;
+            surnameField.Text = selected.Surname;
+            birthdatePicker.Value = selected.birthdate;
+            if (selected.gender == 'F')
             {
                 genderSelection.SelectedItem = "Female";
             }
@@ -56,15 +50,14 @@ namespace Klinika.GUI.Secretary
             {
                 genderSelection.SelectedItem = "Male";
             }
-            emailField.Text = selectedPatient.Email;
-            passwordField.Text = selectedPatient.Password;
+            emailField.Text = selected.Email;
+            passwordField.Text = selected.Password;
         }
-
 
         private void Modify()
         {
             Roles.Patient modifiedPatient = new Roles.Patient(
-                selectedID,
+                selected.ID,
                 jmbgField.Text.Trim(),
                 nameField.Text.Trim(),
                 surnameField.Text.Trim(),
@@ -74,20 +67,15 @@ namespace Klinika.GUI.Secretary
                 passwordField.Text.Trim());
             try
             {
-                PatientRepository.Modify(modifiedPatient);
+                PatientService.Modify(modifiedPatient);
+                parent.ModifyRowOfPatientTable(modifiedPatient);
+                UIService.ShowSuccessMessage("Patient successfully modified!");
+                Close();
             }
-            catch (FieldEmptyException) { }
-
-            catch (BirthdateInvalidException) { }
-
-            catch (JMBGFormatInvalidException)
+            catch (DatabaseConnectionException error) 
             {
-                jmbgField.Text = "";
+                MessageBox.Show(error.Message);
             }
-
-            parent.ModifyRowOfPatientTable(modifiedPatient);
-            SecretaryService.ShowSuccessMessage("Patient successfully modified!");
-            Close();
         }
 
     }

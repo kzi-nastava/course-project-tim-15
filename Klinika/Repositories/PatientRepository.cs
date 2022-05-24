@@ -5,17 +5,11 @@ using Klinika.Roles;
 
 namespace Klinika.Repositories
 {
-    internal class PatientRepository
+    internal class PatientRepository : Repository
     {
-        public static Dictionary<string, int>? EmailIDPairs { get; set; }
-        public static Dictionary<int,Patient> IDPatientPairs { get; set; }
-        public static void FillPatientSelectionList(ComboBox patientSelection)
-        {
-            foreach (KeyValuePair<int, Patient> pair in IDPatientPairs)
-            {
-                patientSelection.Items.Add(pair.Value.GetIdAndFullName());
-            }
-        }
+        public static Dictionary<string, int>? EmailIDPairs { get; private set; }
+        public static Dictionary<int,Patient>? IDPatientPairs { get; private set; }
+
         public static DataTable GetAll()
         {
             EmailIDPairs = new Dictionary<string, int>();
@@ -46,7 +40,6 @@ namespace Klinika.Repositories
             }
                 retrievedPatients.Columns.Remove("ID");
                 retrievedPatients.Columns.Remove("Password");
-
 
             return retrievedPatients;
 
@@ -111,27 +104,6 @@ namespace Klinika.Repositories
                 EmailIDPairs.Add(newPatient.Email, createdID);
             }
         }
-        public static Patient? GetSingle(string email)
-        {
-
-            string getSingleQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Password " +
-                                     "FROM [User] " +
-                                     "WHERE Email = @Email";
-            Patient patient = null;
-                
-            DataTable retrieved = DatabaseConnection.GetInstance().CreateTableOfData(getSingleQuery, ("@Email", email));
-            DataRow row = retrieved.Rows[0];
-            patient = new Patient(Convert.ToInt32(row["ID"]),
-                                    row["JMBG"].ToString(),
-                                    row["Name"].ToString(),
-                                    row["Surname"].ToString(),
-                                    DateTime.Parse(row["Birthdate"].ToString()),
-                                    row["Gender"].ToString()[0],
-                                    email,
-                                    row["Password"].ToString());
-
-            return patient;
-        }
 
         public static void Block(int id)
         {
@@ -149,4 +121,5 @@ namespace Klinika.Repositories
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(unblockQuery, ("@ID", id));
         }
     }
+
 }

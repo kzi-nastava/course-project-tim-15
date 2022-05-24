@@ -14,18 +14,11 @@ namespace Klinika.Models
         public string message{ get; set; }
         public bool isNotified { get; set; }
 
-        private NotificationRepository notificationRepository = NotificationRepository.GetInstance();
-
         public Notification(int userId, string message)
         {
             this.userId = userId;
             this.message = message;
             isNotified = false;
-        }
-
-        public void Send()
-        {
-            notificationRepository.Send(this);
         }
 
     }

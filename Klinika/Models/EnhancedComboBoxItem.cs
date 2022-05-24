@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Klinika.Models
 {
-    internal class RoomComboBoxItem
+    internal class EnhancedComboBoxItem
     {
         public string text { get; set; }
         public object value { get; set; }
-        public RoomComboBoxItem(string t, object v)
+        public EnhancedComboBoxItem(string t, object v)
         {
             text = t;
             value = v;

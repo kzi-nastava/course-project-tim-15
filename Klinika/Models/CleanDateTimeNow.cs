@@ -8,14 +8,13 @@ namespace Klinika.Models
 {
     internal class CleanDateTimeNow
     {
-        public DateTime now { get; }
+        public DateTime cleanNow { get; }
 
         public CleanDateTimeNow()
         {
-            now = DateTime.Now;
-            now = now.AddMilliseconds(-now.Millisecond);
-            now = now.AddSeconds(-now.Second);
-            
+            cleanNow = DateTime.Now;
+            cleanNow = cleanNow.AddMilliseconds(-cleanNow.Millisecond);
+            cleanNow = cleanNow.AddSeconds(-cleanNow.Second);
         }
     }
 }

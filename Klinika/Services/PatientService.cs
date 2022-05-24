@@ -10,24 +10,48 @@ using Klinika.Data;
 using Klinika.Exceptions;
 using Klinika.GUI.Secretary;
 using Klinika.Repositories;
+using Klinika.Roles;
 
 namespace Klinika.Services
 {
     internal class PatientService
     {
-        public static bool IsValidEmail(string email)
+        public static void Add(Patient newPatient)
         {
-            string pattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|" + 
-                             @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)" +
-                             @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
-            var regex = new Regex(pattern, RegexOptions.IgnoreCase);
-            return regex.IsMatch(email);
-        }
-        public static void Add(Roles.Patient newPatient)
-        {
-            newPatient.Validate();
+            string error_message = ValidationService.ValidatePatient(newPatient);
+            if(error_message != null)
+            {
+                UIService.ShowErrorMessage(error_message);
+                return;
+            }
             PatientRepository.Create(newPatient);
         }
+
+        public static void Modify(Patient patient)
+        {
+            string error_message = ValidationService.ValidatePatient(patient,isModification: true);
+            if(error_message != null)
+            {
+                UIService.ShowErrorMessage(error_message);
+                return;
+            }
+            PatientRepository.Modify(patient);
+        }
+
+        public static void Block(Patient patient,string whoBlocked)
+        {
+            patient.whoBlocked = whoBlocked;
+            patient.IsBlocked = true;
+            PatientRepository.Block(patient.ID);
+        }
+
+        public static void Unblock(Patient patient)
+        {
+            patient.whoBlocked = "";
+            patient.IsBlocked = false;
+            PatientRepository.Unblock(patient.ID);
+        }
+
         public static string GetFullName(int ID)
         {
             var patient = UserRepository.GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
@@ -42,6 +66,11 @@ namespace Klinika.Services
                 return true;
             }
             return false;
+        }
+
+        public static Patient? GetSingle(string email)
+        {
+            return PatientRepository.IDPatientPairs[PatientRepository.EmailIDPairs[email]];
         }
     }
 }

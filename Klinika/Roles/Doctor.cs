@@ -13,7 +13,7 @@ namespace Klinika.Roles
 {
     internal class Doctor : User
     {
-        public Specialization specialization { get; set; }
+        public Specialization specialization { get; }
 
         public Doctor(int id, string name, string surname,Specialization specialization) : base(id, name, surname)
         {

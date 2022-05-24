@@ -14,8 +14,7 @@ namespace Klinika.Repositories
 {
     internal class DoctorRepository : Repository
     {
-
-        private static DoctorRepository? singletonInstance;
+        private static DoctorRepository? instance;
         public  List<Doctor> doctors { get; }
 
         private DoctorRepository()
@@ -25,27 +24,8 @@ namespace Klinika.Repositories
 
         public static DoctorRepository GetInstance()
         {
-            if (singletonInstance == null) singletonInstance = new DoctorRepository();
-            return singletonInstance;
-        }
-
-        public Doctor GetById(int id)
-        {
-            return doctors.Where(x => x.ID == id).FirstOrDefault();
-        }
-
-        public static string GetNameSurname(int id)
-        {
-            string getQuery = "SELECT Name + ' ' + Surname AS 'Doctor' " +
-                                     "FROM [User] " +
-                                     "WHERE ID = @ID";
-            string nameSurname = "";
-            DataTable allDoctors = DatabaseConnection.GetInstance().CreateTableOfData(getQuery, ("@ID", id));
-            foreach (DataRow doctor in allDoctors.Rows)
-            {
-                nameSurname = doctor["Doctor"].ToString();
-            }
-            return nameSurname;
+            if (instance == null) instance = new DoctorRepository();
+            return instance;
         }
 
         public static List<Specialization> GetSpecializations()
@@ -67,6 +47,7 @@ namespace Klinika.Repositories
 
             return specializations;
         }
+
         private static List<int> GetSpecializedIDs(int specializationID)
         {
             List<int> doctors = new List<int>();
@@ -84,6 +65,7 @@ namespace Klinika.Repositories
 
             return doctors;
         }
+
         public static User[] GetSpecializedDoctors(int specializationID)
         {
             var doctorIDs = GetSpecializedIDs(specializationID).ToArray();
@@ -97,6 +79,7 @@ namespace Klinika.Repositories
 
             return specializedDoctors.ToArray();
         }
+
         public static Specialization getSpecialization (int DoctorID)
         {
             string getSpecializationQuerry = "SELECT [Specialization].ID, [Specialization].Name " +
