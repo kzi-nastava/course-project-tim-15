@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Klinika.Services;
 using Klinika.Data;
-using Klinika.Repositories;
 using Klinika.Models;
 using Klinika.Exceptions;
 using Klinika.Utilities;
@@ -33,7 +32,7 @@ namespace Klinika.GUI.Secretary
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            UIUtilities.Fill(patientsTable, PatientRepository.GetAll());
+            UIUtilities.Fill(patientsTable, PatientService.GetAll());
             patientsTable.ClearSelection();
         }
 

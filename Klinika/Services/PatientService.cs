@@ -78,5 +78,10 @@ namespace Klinika.Services
         {
             return PatientRepository.IDPatientPairs[PatientRepository.EmailIDPairs[email]];
         }
+
+        public static DataTable GetAll()
+        {
+            return PatientRepository.GetAll();
+        }
     }
 }
