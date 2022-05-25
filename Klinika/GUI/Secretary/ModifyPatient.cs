@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Klinika.Exceptions;
-using Klinika.Repositories;
 using Klinika.Services;
+using Klinika.Utilities;
 
 namespace Klinika.GUI.Secretary
 {
@@ -69,12 +69,12 @@ namespace Klinika.GUI.Secretary
             {
                 PatientService.Modify(modifiedPatient);
                 parent.ModifyRowOfPatientTable(modifiedPatient);
-                UIService.ShowSuccessMessage("Patient successfully modified!");
+                MessageBoxUtilities.ShowSuccessMessage("Patient successfully modified!");
                 Close();
             }
             catch (DatabaseConnectionException error) 
             {
-                MessageBox.Show(error.Message);
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
             }
         }
 

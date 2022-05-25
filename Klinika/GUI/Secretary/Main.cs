@@ -13,7 +13,7 @@ using Klinika.Data;
 using Klinika.Repositories;
 using Klinika.Models;
 using Klinika.Exceptions;
-using Klinika.Roles;
+using Klinika.Utilities;
 
 namespace Klinika.GUI.Secretary
 {
@@ -33,7 +33,7 @@ namespace Klinika.GUI.Secretary
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            UIService.Fill(patientsTable, PatientRepository.GetAll());
+            UIUtilities.Fill(patientsTable, PatientRepository.GetAll());
             patientsTable.ClearSelection();
         }
 
@@ -114,14 +114,14 @@ namespace Klinika.GUI.Secretary
 
         private void ShowModifyPatientForm()
         {
-            string selectedPatientEmail = UIService.GetCellValue(patientsTable, "Email").ToString();
+            string selectedPatientEmail = UIUtilities.GetCellValue(patientsTable, "Email").ToString();
             Roles.Patient selected = PatientService.GetSingle(selectedPatientEmail);
             new ModifyPatient(this,selected).Show();
         }
 
         private void ShowModificationDetailsForm()
         {
-            int selectedRequestId = (int)UIService.GetCellValue(requestsTable, "ID");
+            int selectedRequestId = (int)UIUtilities.GetCellValue(requestsTable, "ID");
             PatientModificationRequest selected = PatientRequestService.GetModificationRequest(selectedRequestId);
             new ModificationRequestDetails(selected).Show();
         }
@@ -179,20 +179,27 @@ namespace Klinika.GUI.Secretary
 
         private void DeletePatient()
         {
-            DialogResult deletionConfirmation = UIService.ShowConfirmationMessage("Are you sure you want to delete the selected patient? ");
+            DialogResult deletionConfirmation = MessageBoxUtilities.ShowConfirmationMessage("Are you sure you want to delete the selected patient?");
             if (deletionConfirmation == DialogResult.No) return;
-            string email = UIService.GetCellValue(patientsTable, "Email").ToString();
-            PatientRepository.Delete(PatientRepository.EmailIDPairs[email], email);
-            int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
-            patientsTable.Rows.RemoveAt(selectedRowNumber);
-            UIService.ShowSuccessMessage("Patient successfully deleted!");
+            int id = (int)UIUtilities.GetCellValue(patientsTable, "ID");
+            try
+            {
+                PatientService.Delete(id);
+                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
+                patientsTable.Rows.RemoveAt(selectedRowNumber);
+                MessageBoxUtilities.ShowSuccessMessage("Patient successfully deleted!");
+            }
+            catch(DatabaseConnectionException error)
+            {
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
+            }
         }
 
         private void SetPatientTabButtonsStates()
         {
             updatePatientButton.Enabled = true;
             deletePatientButton.Enabled = true;
-            bool isBlocked = Convert.ToBoolean(UIService.GetCellValue(patientsTable, "Blocked"));
+            bool isBlocked = (bool)UIUtilities.GetCellValue(patientsTable, "Blocked");
             if (isBlocked)
             {
                 unblockButton.Enabled = true;
@@ -207,48 +214,67 @@ namespace Klinika.GUI.Secretary
 
         private void BlockPatient()
         {
-            DialogResult blockingConfirmation = UIService.ShowConfirmationMessage("Are you sure you want to block the selected patient?");
+            DialogResult blockingConfirmation = MessageBoxUtilities.ShowConfirmationMessage("Are you sure you want to block the selected patient?");
             if (blockingConfirmation == DialogResult.No) return;
-            string email = UIService.GetCellValue(patientsTable, "Email").ToString();                
-            Roles.Patient toBlock = PatientRepository.IDPatientPairs[PatientRepository.EmailIDPairs[email]];
-            PatientService.Block(toBlock,"SEC");
-            ModifyRowOfPatientTable(toBlock);
-            UIService.ShowSuccessMessage("Patient successfully blocked!");
-            SetPatientTabButtonsStates();
+            string email = UIUtilities.GetCellValue(patientsTable, "Email").ToString();
+            try
+            {
+                Roles.Patient toBlock = PatientService.GetSingle(email);
+                PatientService.Block(toBlock, "SEC");
+                ModifyRowOfPatientTable(toBlock);
+                MessageBoxUtilities.ShowSuccessMessage("Patient successfully blocked!");
+                SetPatientTabButtonsStates();
+            }
+            catch(DatabaseConnectionException error)
+            {
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
+            }
         }
 
         private void UnblockPatient()
         {
-            DialogResult unblockingConfirmation = UIService.ShowConfirmationMessage("Are you sure you want to unblock the selected patient?");
+            DialogResult unblockingConfirmation = MessageBoxUtilities.ShowConfirmationMessage("Are you sure you want to unblock the selected patient?");
             if (unblockingConfirmation == DialogResult.No) return;
-            string email = UIService.GetCellValue(patientsTable, "Email").ToString();
-            int id = PatientRepository.EmailIDPairs[email];
-            Roles.Patient toUnblock = PatientRepository.IDPatientPairs[id];
-            PatientService.Unblock(toUnblock);
-            ModifyRowOfPatientTable(toUnblock);
-            UIService.ShowSuccessMessage("Patient successfully unblocked!");
-            SetPatientTabButtonsStates();
+            string email = UIUtilities.GetCellValue(patientsTable, "Email").ToString();
+            try
+            {
+                Roles.Patient toUnblock = PatientService.GetSingle(email);
+                PatientService.Unblock(toUnblock);
+                ModifyRowOfPatientTable(toUnblock);
+                MessageBoxUtilities.ShowSuccessMessage("Patient successfully unblocked!");
+                SetPatientTabButtonsStates();
+            }
+            catch(DatabaseConnectionException error)
+            {
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
+            }
         }
 
         private void InitializeSelectedTab()
         {
-            if (tabs.SelectedTab == requests)
+            try
             {
-                requestsTable.DataSource = PatientRequestRepository.GetAll();
-                requestsTable.ClearSelection();
+                if (tabs.SelectedTab == requests)
+                {
+                    UIUtilities.Fill(requestsTable, PatientRequestService.GetAll());
+                }
+                else if (tabs.SelectedTab == referrals)
+                {
+                    UIUtilities.FillPatientSelectionList(patientSelection);
+                }
             }
-            else if (tabs.SelectedTab == referrals)
+            catch (DatabaseConnectionException error)
             {
-                UIService.FillPatientSelectionList(patientSelection);
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
             }
         }
 
         private void SetRequestsTabButtonStates()
         {
-            string modificationType = UIService.GetCellValue(requestsTable, "RequestType").ToString();
+            string modificationType = UIUtilities.GetCellValue(requestsTable, "RequestType").ToString();
             bool isModification = modificationType == "Modify" ? true : false;
        
-            if (string.IsNullOrEmpty(UIService.GetCellValue(requestsTable, "Approved").ToString()))
+            if (string.IsNullOrEmpty(UIUtilities.GetCellValue(requestsTable, "Approved").ToString()))
             {
                 if (isModification)
                 {
@@ -271,41 +297,58 @@ namespace Klinika.GUI.Secretary
 
         private void ApprovePatientRequest()
         {
-            DialogResult approveConfirmation = UIService.ShowConfirmationMessage("Are you sure you want to approve the selected request?");
+            DialogResult approveConfirmation = MessageBoxUtilities.ShowConfirmationMessage("Are you sure you want to approve the selected request?");
             if (approveConfirmation == DialogResult.No) return;
 
-            int requestId = Convert.ToInt32(UIService.GetCellValue(requestsTable, "ID"));
-            PatientRequestRepository.Approve(requestId);
-            string requestType = UIService.GetCellValue(requestsTable, "RequestType").ToString();
-            int examinationId = Convert.ToInt32(UIService.GetCellValue(requestsTable,"ExaminationID"));
-            DateTime appointment = DateTime.Parse(UIService.GetCellValue(requestsTable, "DateTime").ToString());
-
-            if (requestType.Equals("Modify"))
+            int requestId = (int)UIUtilities.GetCellValue(requestsTable, "ID");
+            try
             {
-                PatientModificationRequest selected = PatientRequestService.GetModificationRequest(requestId);
-                appointment = selected.newAppointment;
-                AppointmentRepository.Modify(examinationId, selected.newDoctorID, selected.newAppointment);
-            }
-            else
-            {
-                AppointmentRepository.Delete(examinationId);
-            }
+                PatientRequestService.Approve(requestId);
+                string requestType = UIUtilities.GetCellValue(requestsTable, "RequestType").ToString();
+                int appointmentId = Convert.ToInt32(UIUtilities.GetCellValue(requestsTable, "ExaminationID"));
+                DateTime appointmentStart = DateTime.Parse(UIUtilities.GetCellValue(requestsTable, "DateTime").ToString());
 
-            ModifyRowOfPatientRequestsTable(true, appointment);
-            UIService.ShowSuccessMessage("Request successfully executed!");
-            DisableAllReferalTabButtons();
+                if (requestType.Equals("Modify"))
+                {
+                    PatientModificationRequest selected = PatientRequestService.GetModificationRequest(requestId);
+                    Appointment modified = AppointmentService.GetById(appointmentId);
+                    modified.DoctorID = selected.newDoctorID;
+                    modified.DateTime = selected.newAppointment;
+                    AppointmentService.Modify(modified);
+                    appointmentStart = selected.newAppointment;
+                }
+                else
+                {
+                    AppointmentService.Delete(appointmentId);
+                }
+
+                ModifyRowOfPatientRequestsTable(true, appointmentStart);
+                MessageBoxUtilities.ShowSuccessMessage("Request successfully executed!");
+                DisableAllReferalTabButtons();
+            }
+            catch(DatabaseConnectionException error)
+            {
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
+            }
         }
 
         private void DenyPatientRequest()
         {
-            DialogResult denyConfirmation = UIService.ShowConfirmationMessage("Are you sure you want to deny the selected request?");
+            DialogResult denyConfirmation = MessageBoxUtilities.ShowConfirmationMessage("Are you sure you want to deny the selected request?");
             if (denyConfirmation == DialogResult.No) return;
-            int selectedRequestID = Convert.ToInt32(UIService.GetCellValue(requestsTable, "ID"));
-            PatientRequestRepository.Deny(selectedRequestID);
-            DateTime oldAppointment = DateTime.Parse(UIService.GetCellValue(requestsTable, "DateTime").ToString());
-            ModifyRowOfPatientRequestsTable(false, oldAppointment);
-            UIService.ShowSuccessMessage("Request successfully denied!");
-            DisableAllReferalTabButtons();
+            int selectedRequestID = (int)UIUtilities.GetCellValue(requestsTable, "ID");
+            try
+            {
+                PatientRequestService.Deny(selectedRequestID);
+                DateTime oldAppointment = DateTime.Parse(UIUtilities.GetCellValue(requestsTable, "DateTime").ToString());
+                ModifyRowOfPatientRequestsTable(false, oldAppointment);
+                MessageBoxUtilities.ShowSuccessMessage("Request successfully denied!");
+                DisableAllReferalTabButtons();
+            }
+            catch(DatabaseConnectionException error)
+            {
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
+            }
         }
 
         private void DisableAllReferalTabButtons()
@@ -328,50 +371,56 @@ namespace Klinika.GUI.Secretary
             int doctorId = -1;
             if (!string.IsNullOrEmpty(refferalTabDoctorField.Text))
             {
-                doctorId = UIService.ExtractID(refferalTabDoctorField.Text);
+                doctorId = UIUtilities.ExtractID(refferalTabDoctorField.Text);
             }
             
             DateTime chosenTime = appointmentPicker.Value;
-            if (CreateAppointment(doctorId, chosenTime))
+            try
             {
-                ReferalRepository.MarkAsUsed(chosenReferralID);
-                UIService.ShowSuccessMessage("Appointment successfully scheduled!");
+                if (CreateAppointment(doctorId, chosenTime))
+                {
+                    ReferralService.MarkAsUsed(chosenReferralID);
+                    MessageBoxUtilities.ShowSuccessMessage("Appointment successfully scheduled!");
+                }
+            }
+            catch(DatabaseConnectionException error)
+            {
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
             }
         }
 
         private bool CreateAppointment(int doctorId,DateTime appointmentStart)
         {
-            try
-            {
-                string error_message = ValidationService.ValidateAppointment(doctorId, appointmentStart);
-                if(error_message != null)
-                {
-                    UIService.ShowErrorMessage(error_message);
-                    return false;
-                }
-                appointmentStart = appointmentStart.AddSeconds(-appointmentStart.Second);
 
-                Appointment newAppointment = new Appointment(-1,
-                                                UIService.ExtractID(refferalTabDoctorField.Text),
-                                                UIService.ExtractID(patientSelection.SelectedItem.ToString()),
-                                                appointmentStart, 1, false, 'E', 15, false, "", false);
-                AppointmentRepository.GetInstance().Create(newAppointment);
-                return true;
-            }
-            catch(DatabaseConnectionException error)
+            string error_message = ValidationUtilities.ValidateAppointment(doctorId, appointmentStart);
+            if(error_message != null)
             {
-                MessageBox.Show(error.Message);
+                MessageBoxUtilities.ShowErrorMessage(error_message);
+                return false;
             }
+            appointmentStart = appointmentStart.AddSeconds(-appointmentStart.Second);
 
-            return false;
+            Appointment newAppointment = new Appointment(-1,
+                                            UIUtilities.ExtractID(refferalTabDoctorField.Text),
+                                            UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
+                                            appointmentStart, 1, false, 'E', 15, false, "", false);
+            AppointmentService.Create(newAppointment);
+            return true;
         }
 
         private void FindSuitableDoctor()
         {
-            Roles.Doctor suitableDoctor = DoctorService.GetSuitable(UIService.ExtractID(specializationField.Text), appointmentPicker.Value);
-            if (suitableDoctor != null)
+            try
             {
-                refferalTabDoctorField.Text = suitableDoctor.ID + ". " + suitableDoctor.Name + " " + suitableDoctor.Surname;
+                Roles.Doctor suitableDoctor = DoctorService.GetSuitable(UIUtilities.ExtractID(specializationField.Text), appointmentPicker.Value);
+                if (suitableDoctor != null)
+                {
+                    refferalTabDoctorField.Text = suitableDoctor.GetIdAndFullName();
+                }
+            }
+            catch(DatabaseConnectionException error)
+            {
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
             }
         }
 

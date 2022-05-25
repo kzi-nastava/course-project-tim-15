@@ -11,6 +11,7 @@ using Klinika.Exceptions;
 using Klinika.GUI.Secretary;
 using Klinika.Repositories;
 using Klinika.Roles;
+using Klinika.Utilities;
 
 namespace Klinika.Services
 {
@@ -18,10 +19,10 @@ namespace Klinika.Services
     {
         public static void Add(Patient newPatient)
         {
-            string error_message = ValidationService.ValidatePatient(newPatient);
+            string error_message = ValidationUtilities.ValidatePatient(newPatient);
             if(error_message != null)
             {
-                UIService.ShowErrorMessage(error_message);
+                MessageBoxUtilities.ShowErrorMessage(error_message);
                 return;
             }
             PatientRepository.Create(newPatient);
@@ -29,13 +30,18 @@ namespace Klinika.Services
 
         public static void Modify(Patient patient)
         {
-            string error_message = ValidationService.ValidatePatient(patient,isModification: true);
+            string error_message = ValidationUtilities.ValidatePatient(patient,isModification: true);
             if(error_message != null)
             {
-                UIService.ShowErrorMessage(error_message);
+                MessageBoxUtilities.ShowErrorMessage(error_message);
                 return;
             }
             PatientRepository.Modify(patient);
+        }
+
+        public static void Delete(int patientId)
+        {
+            PatientRepository.Delete(patientId);
         }
 
         public static void Block(Patient patient,string whoBlocked)

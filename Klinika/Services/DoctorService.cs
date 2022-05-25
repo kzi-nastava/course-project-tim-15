@@ -36,7 +36,7 @@ namespace Klinika.Services
             {
                 if (doctor.specialization.ID == specializationId)
                 {
-                    TimeSlot? firstAvailable = AppointmentService.GetFirstSlotAvailableUnderTwoHours(doctor.ID);
+                    TimeSlot? firstAvailable = ScheduleService.GetFirstSlotAvailableUnderTwoHours(doctor.ID);
                     if (firstAvailable != null) return (doctor,firstAvailable);
                 }
             }

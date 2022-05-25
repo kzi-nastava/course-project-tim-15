@@ -2,6 +2,7 @@ using Klinika.Exceptions;
 using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
+using Klinika.Utilities;
 
 namespace Klinika
 {
@@ -36,7 +37,7 @@ namespace Klinika
                 string error_message = LoginService.Login(emailField.Text.Trim(), passwordField.Text.Trim());
                 if (error_message != null)
                 {
-                    UIService.ShowErrorMessage(error_message);
+                    MessageBoxUtilities.ShowErrorMessage(error_message);
                     return;
                 }
                 Hide();

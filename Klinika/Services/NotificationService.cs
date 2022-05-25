@@ -8,7 +8,7 @@ using Klinika.Repositories;
 
 namespace Klinika.Services
 {
-    internal class NotificationsService
+    internal class NotificationService
     {
         public static void Send(Notification notification)
         {

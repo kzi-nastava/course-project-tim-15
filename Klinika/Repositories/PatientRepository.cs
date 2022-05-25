@@ -38,7 +38,6 @@ namespace Klinika.Repositories
                 IDPatientPairs.Add(id, newPatient);
 
             }
-                retrievedPatients.Columns.Remove("ID");
                 retrievedPatients.Columns.Remove("Password");
 
             return retrievedPatients;
@@ -68,13 +67,14 @@ namespace Klinika.Repositories
         }
 
         //Logical deletion
-        public static void Delete(int id, string email)
+        public static void Delete(int id)
         {
             string deleteQuery = "UPDATE [User] SET IsDeleted = 1 WHERE ID = @ID";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuery, ("@ID", id));
             if (EmailIDPairs != null)
             {
-                EmailIDPairs.Remove(email);
+                
+                EmailIDPairs.Remove(IDPatientPairs[id].Email);
             }
         }
 

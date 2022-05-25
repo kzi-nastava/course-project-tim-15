@@ -28,11 +28,6 @@ namespace Klinika.Repositories
             Appointments.Where(x => x.ID == ID).FirstOrDefault().IsDeleted = true;
         }
 
-        public Appointment? GetById(int id)
-        {
-            return Appointments.Where(x => x.ID == id).FirstOrDefault();
-        }
-
         public static List<Appointment> GetAll()
         {
             string getAllQuerry = "SELECT * " +

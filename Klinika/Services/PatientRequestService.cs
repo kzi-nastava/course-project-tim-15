@@ -2,6 +2,7 @@
 using Klinika.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,21 @@ namespace Klinika.Services
         public static PatientModificationRequest GetModificationRequest(int requestId)
         {
             return PatientRequestRepository.IdRequestPairs[requestId];
+        }
+
+        public static DataTable GetAll()
+        {
+            return PatientRequestRepository.GetAll();
+        }
+
+        public static void Approve(int requestId)
+        {
+            PatientRequestRepository.Approve(requestId);
+        }
+
+        public static void Deny(int requestId)
+        {
+            PatientRequestRepository.Deny(requestId);
         }
     }
 }

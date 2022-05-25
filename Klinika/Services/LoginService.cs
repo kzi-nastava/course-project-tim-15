@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Klinika.Roles;
 using Klinika.Repositories;
+using Klinika.Utilities;
 
 namespace Klinika.Services
 {
@@ -17,7 +18,7 @@ namespace Klinika.Services
 
         public static string Login(string email, string password)
         {
-            string error_message = ValidationService.ValidateLoginCredentials(email, password);
+            string error_message = ValidationUtilities.ValidateLoginCredentials(email, password);
             if (error_message != null)
             {
                 return error_message;
@@ -40,7 +41,7 @@ namespace Klinika.Services
                     {
                         loggingUser.IsBlocked = true;
                         UserRepository.Block(loggingUser.ID);
-                        UIService.ShowErrorMessage("Your account is blocked because of trolling.");break;
+                        MessageBoxUtilities.ShowErrorMessage("Your account is blocked because of trolling.");break;
                     }
                     else
                     {

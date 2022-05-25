@@ -7,9 +7,9 @@ using Klinika.Roles;
 using Klinika.Repositories;
 using System.Text.RegularExpressions;
 
-namespace Klinika.Services
+namespace Klinika.Utilities
 {
-    internal class ValidationService
+    internal class ValidationUtilities
     {
         public static string? ValidateLoginCredentials(string email, string password)
         {
