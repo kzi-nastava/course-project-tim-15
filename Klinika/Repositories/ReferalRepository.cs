@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Klinika.Repositories
 {
-    public class ReferalRepository
+    internal class ReferalRepository : Repository
     {
         public static void Create(int _patientID, int _specializationID, int _doctorID)
         {
@@ -26,7 +26,6 @@ namespace Klinika.Repositories
                 ("Date", DateTime.Now));
         }
 
-
         public static DataTable GetReferralsPerPatient(int patientId)
         {
             string getReferralsQuery = "SELECT [Referal].ID, " +
@@ -42,7 +41,6 @@ namespace Klinika.Repositories
             DataTable retrievedReferrals = DatabaseConnection.GetInstance().CreateTableOfData(getReferralsQuery, ("@patientID", patientId));
             return retrievedReferrals;
         }
-
 
         public static void MarkAsUsed(int referralID)
         {

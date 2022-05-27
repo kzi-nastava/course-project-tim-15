@@ -8,8 +8,8 @@ namespace Klinika.Models
 {
     public class TimeSlot
     {
-        public DateTime from { get; set; }
-        public DateTime to { get; set; }
+        public DateTime from { get; }
+        public DateTime to { get; }
 
         public TimeSlot(DateTime from, DateTime to)
         {
@@ -17,70 +17,32 @@ namespace Klinika.Models
             this.to = to;
         }
 
-        public TimeSlot(DateTime from)
-        {
-            this.from = from;
-            to = from.AddMinutes(15);
-        }
-
-
         public int GetDuration()
         {
             TimeSpan duration = to - from;
             return (int)duration.TotalMinutes;
         }
 
-
-        public bool Equals(TimeSlot slot)
+        public TimeSlot GetFirstUnoccupied(List<TimeSlot> occupied,int duration = 15)
         {
-            return slot.from == from && slot.to == to; ;
-        }
-
-
-        public TimeSlot? GetFirstUnoccupied(List<TimeSlot> occupied,int inNextMinutes = 120)
-        {
-            if(occupied.Count() == 0)
-            {
-                return this;
-            }
-
-            TimeSlot temporary = new TimeSlot(this.from,this.to);
-            int duration = GetDuration();
             for (int i = 0; i < occupied.Count; i++)
             {
-                if ((temporary.from - from).TotalMinutes >= inNextMinutes && inNextMinutes != -1) break;
-                if(occupied.Count == 1 && (temporary.to <= occupied[0].from || temporary.from >= occupied[0].to)){
-                    return temporary;
-                }
-                if(i != occupied.Count - 1)
-                {
-                    int between = (int)(occupied[i + 1].from - occupied[i].to).TotalMinutes;
-                    if(between >= (duration)  && (occupied[i].to <= temporary.from && occupied[i + 1].from >= temporary.to))
-                    {
-                        return temporary;
-                    }
-                    else
-                    {
-                        if(temporary.from < occupied[i + 1].to)
-                        {
-                            temporary.from = occupied[i + 1].to;
-                            temporary.to = temporary.from.AddMinutes(duration);
-                        }
-                    }
-                }
-                else
-                {
-                    if (temporary.from >= occupied[i].from) return temporary;
-                    return new TimeSlot(occupied[i].to, occupied[i].to.AddMinutes(duration));
-                }
+                if (occupied[i].to < from) continue;
+
+                if (i == occupied.Count - 1)  return new TimeSlot(occupied[i].to,occupied[i].to.AddMinutes(duration));
+
+                TimeSlot betweenTwo = new TimeSlot(occupied[i].to, occupied[i + 1].from);
+                if (betweenTwo.GetDuration() >= duration) return new TimeSlot(betweenTwo.from, betweenTwo.from.AddMinutes(duration));
             }
-            return null;
+            return this;
         }
 
         public bool DoesOverlap(TimeSlot slot)
         {
-            return ((from >= slot.from && to <= slot.to) || (from <= slot.from && to >= slot.to)
-                || (from >= slot.from && to >= slot.to && from <= slot.to) || (from <= slot.from && to <= slot.to && to >= slot.from));
+            return ((from >= slot.from && to <= slot.to) || 
+                    (from <= slot.from && to >= slot.to) ||
+                    (from >= slot.from && to >= slot.to && from <= slot.to) ||
+                    (from <= slot.from && to <= slot.to && to >= slot.from));
         }
 
     }

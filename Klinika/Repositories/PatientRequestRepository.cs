@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Klinika.Repositories
 {
-    internal class PatientRequestRepository
+    internal class PatientRequestRepository : Repository
     {
-        public static Dictionary<int, PatientModificationRequest> IdRequestPairs { get; set; }
+        public static Dictionary<int, PatientModificationRequest>? IdRequestPairs { get; set; }
 
         public static DataTable? GetAll()
         {
@@ -53,12 +53,13 @@ namespace Klinika.Repositories
         public static void Approve(int id)
         {
             string approveQuery = "UPDATE [PatientRequest] SET Approved = 1 WHERE ID = @ID";
-            DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(approveQuery, ("@ID", id));
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(approveQuery, ("@ID", id));
         }
+
         public static void Deny(int id)
         {
             string denyQuery = "UPDATE [PatientRequest] SET Approved = 0 WHERE ID = @ID";
-            DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(denyQuery, ("@ID", id));
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(denyQuery, ("@ID", id));
         }
 
         public static void Create(PatientRequest patientRequest)
@@ -69,11 +70,11 @@ namespace Klinika.Repositories
                 "VALUES (@PatientID, @MedicalActionID, @Type, @Description)";
 
             patientRequest.ID = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
-                createQuerry,
-                ("@PatientID", patientRequest.PatientID),
-                ("@MedicalActionID", patientRequest.MedicalActionID),
-                ("@Type", patientRequest.Type),
-                ("@Description", patientRequest.Description)
+                                                                        createQuerry,
+                                                                        ("@PatientID", patientRequest.PatientID),
+                                                                        ("@MedicalActionID", patientRequest.MedicalActionID),
+                                                                        ("@Type", patientRequest.Type),
+                                                                        ("@Description", patientRequest.Description)
                 );
         }
 
@@ -95,6 +96,7 @@ namespace Klinika.Repositories
             }
             return counter;
         }
+
         private static List<string> GetAppointmentsDescriptions(int patientID)
         {
             var descriptions = new List<string>();

@@ -9,16 +9,16 @@ namespace Klinika.Models
 {
     internal class PatientModificationRequest
     {
-        public int oldDoctorID { get; set; }
-        public int newDoctorID { get; set; }
-        public DateTime oldAppointment { get; set; }
-        public DateTime newAppointment { get; set; }
-        public string changesMadeDescription { get; set; }
+        public int oldDoctorID { get; }
+        public int newDoctorID { get; }
+        public DateTime oldAppointment { get; }
+        public DateTime newAppointment { get; }
+        public string changesMadeDescription { get; }
 
 
-        public PatientModificationRequest(int doctorID,DateTime oldAppointment,string changesMadeDescription)
+        public PatientModificationRequest(int oldDoctorID,DateTime oldAppointment,string changesMadeDescription)
         {
-            this.oldDoctorID = doctorID;
+            this.oldDoctorID = oldDoctorID;
             this.oldAppointment = oldAppointment;
             this.changesMadeDescription = changesMadeDescription;
             string[] tokens = changesMadeDescription.Split(';');

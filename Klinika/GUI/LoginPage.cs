@@ -2,6 +2,7 @@ using Klinika.Exceptions;
 using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
+using Klinika.Utilities;
 
 namespace Klinika
 {
@@ -10,7 +11,7 @@ namespace Klinika
         public LoginPage()
         {
             InitializeComponent();
-            UserRepository.GetInstance();
+            new LoginService();
         }
 
         private void LoginButton_Click(object sender, EventArgs e)
@@ -25,35 +26,27 @@ namespace Klinika
 
         private void LoginPage_Load(object sender, EventArgs e)
         {
-            Repositories.EquipmentRepository.CheckEquipmentTransfers();
-            Repositories.RoomRepository.CheckRenovations();
+            EquipmentRepository.CheckEquipmentTransfers();
+            RoomRepository.CheckRenovations();
         }
 
         private void TryLogin()
         {
             try
             {
-                LoginService.Login(emailField.Text.Trim(), passwordField.Text.Trim());
+                string error_message = LoginService.Login(emailField.Text.Trim(), passwordField.Text.Trim());
+                if (error_message != null)
+                {
+                    MessageBoxUtilities.ShowErrorMessage(error_message);
+                    return;
+                }
                 Hide();
             }
-            catch (FieldEmptyException) { }
-
-            catch (EmailUnknownException)
+            catch (DatabaseConnectionException error)
             {
-                emailField.Text = "";
-                passwordField.Text = "";
-            }
-
-            catch (PasswordIncorrectException)
-            {
-                passwordField.Text = "";
-            }
-
-            catch (UserBlockedException)
-            {
-                emailField.Text = "";
-                passwordField.Text = "";
+                MessageBox.Show(error.Message);
             }
         }
+
     }
 }

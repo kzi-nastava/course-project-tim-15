@@ -22,8 +22,8 @@ namespace Klinika.GUI.Manager
         private void PickDate_Load(object sender, EventArgs e)
         {
             dateTimePicker.MinDate = DateTime.Now;
-            List<Models.RoomComboBoxItem> rooms = Services.RoomServices.GetRooms();
-            foreach (Models.RoomComboBoxItem room in rooms)
+            List<Models.EnhancedComboBoxItem> rooms = Services.RoomServices.GetRooms();
+            foreach (Models.EnhancedComboBoxItem room in rooms)
             {
                 if(int.Parse(room.value.ToString()) != main.transfer.fromId)
                     roomComboBox.Items.Add(room);
@@ -79,7 +79,7 @@ namespace Klinika.GUI.Manager
 
         private void roomComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            main.transfer.toId = int.Parse(((Models.RoomComboBoxItem)roomComboBox.Items[roomComboBox.SelectedIndex]).value.ToString());
+            main.transfer.toId = int.Parse(((Models.EnhancedComboBoxItem)roomComboBox.Items[roomComboBox.SelectedIndex]).value.ToString());
         }
     }
 }

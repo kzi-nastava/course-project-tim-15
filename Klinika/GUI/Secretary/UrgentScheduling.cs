@@ -8,18 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Klinika.Services;
-using Klinika.Repositories;
 using Klinika.Models;
-using Klinika.Roles;
 using Klinika.Exceptions;
+using Klinika.Utilities;
 
 namespace Klinika.GUI.Secretary
 {
     public partial class UrgentScheduling : Form
     {
+        private List<Rescheduling> reschedulings;
 
-        private Dictionary<Appointment, DateTime> appointmentRescheduleDatePairs;
-        private Dictionary<int, Appointment> ordinalAppointmentPairs;
         public UrgentScheduling()
         {
             InitializeComponent();
@@ -30,127 +28,119 @@ namespace Klinika.GUI.Secretary
             TryScheduling();
         }
 
-        private void FillInitialSelectionFields()
-        {
-            PatientRepository.FillPatientSelectionList(patientSelection);
-            SecretaryService.FillSpecializationSelectionList(specializationSelection);
-            patientSelection.SelectedIndex = 0;
-            specializationSelection.SelectedIndex = 0;
-        }
-
         private void UrgentScheduling_Load(object sender, EventArgs e)
         {
             FillInitialSelectionFields();
         }
 
+        private void FillInitialSelectionFields()
+        {
+            UIUtilities.FillPatientSelectionList(patientSelection);
+            FillSpecializationSelectionList();
+            patientSelection.SelectedIndex = 0;
+            specializationSelection.SelectedIndex = 0;
+        }
 
         private void TryScheduling()
         {
-            if (appointmentSelection.Items.Count != 0)
+            try
             {
-                ScheduleWithRescheduling();
-                
-            }
-            else
-            {
-                Roles.Doctor available = GetFirstAvailable();
-                if (available == null)
+                if (appointmentSelection.Items.Count != 0)
                 {
-                    SecretaryService.ShowInformationMessage("Unable to find available doctor under two hours. Please select one of the given appointment times to reschedule.");
-                    FillAppointmentSelectionList();
-                    appointmentSelection.SelectedIndex = 0;
-                    appointmentSelection.Enabled = true;
-                    specializationSelection.Enabled = false;
+                    ScheduleWithRescheduling();
                 }
                 else
                 {
-                    ScheduleForAvailableDoctor(available);
+                    int specializationId = UIUtilities.ExtractID(specializationSelection.SelectedItem.ToString());
+                    (Roles.Doctor suitable, TimeSlot firstAvailable) = DoctorService.GetSuitableUnderTwoHours(specializationId);
+                    if (suitable == null)
+                    {
+                        MessageBoxUtilities.ShowInformationMessage("Unable to find available doctor under two hours. " +
+                                                                "Please select one of the given appointment times to reschedule.");
+                        FillAppointmentSelectionList();
+                        appointmentSelection.SelectedIndex = 0;
+                        appointmentSelection.Enabled = true;
+                        specializationSelection.Enabled = false;
+                        return;
+                    }
+                    ScheduleForSuitableDoctor(suitable, firstAvailable);
                 }
             }
-        }
-
-        private void ScheduleForAvailableDoctor(Roles.Doctor available)
-        {
-            doctorField.Text = available.ID + ". " + available.Name + " " + available.Surname;
-            TimeSlot firstAvailable = available.TryUnderTwoHours();
-            if (firstAvailable != null)
+            catch(DatabaseConnectionException error)
             {
-                appointmentSelection.Text = firstAvailable.from.ToString();
-                appointmentSelection.Enabled = false;
-                AppointmentRepository.GetInstance().Create(new Appointment(-1, available.ID,
-                                            SecretaryService.ExtractID(patientSelection.SelectedItem.ToString()),
-                                            firstAvailable.from,
-                                            1,
-                                            false,
-                                            'E',
-                                            15,
-                                            true,
-                                            "",
-                                            false));
-                SecretaryService.ShowSuccessMessage("Urgent appointment successfully scheduled!");
-                scheduleButton.Enabled = false;
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
             }
-
         }
 
+        private void ScheduleForSuitableDoctor(Roles.Doctor suitable,TimeSlot firstAvailable)
+        {
+            doctorField.Text = suitable.ID + ". " + suitable.Name + " " + suitable.Surname;
+
+            appointmentSelection.Text = firstAvailable.from.ToString();
+
+            AppointmentService.Create(new Appointment(-1, suitable.ID,
+                                        UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
+                                        firstAvailable.from,
+                                        1,
+                                        false,
+                                        'E',
+                                        15,
+                                        true,
+                                        "",
+                                        false));
+            MessageBoxUtilities.ShowSuccessMessage("Urgent appointment successfully scheduled!");
+            appointmentSelection.Enabled = false;
+            scheduleButton.Enabled = false;
+        }
 
         private void FillAppointmentSelectionList()
         {
-            ordinalAppointmentPairs = new Dictionary<int, Appointment>();
-            appointmentRescheduleDatePairs = DoctorRepository.GetInstance().
-            GetMostMovableAppointments(SecretaryService.ExtractID(specializationSelection.SelectedItem.ToString()),
-                                           15);
-            TimeSlot inTwoHours = new TimeSlot(SecretaryService.GetNow(), SecretaryService.GetNow().AddHours(2));
-            int ordinal = 0;
-            foreach (KeyValuePair<Appointment, DateTime> entry in appointmentRescheduleDatePairs)
+            reschedulings = ScheduleService.
+            GetMostMovableAppointments(UIUtilities.ExtractID(specializationSelection.SelectedItem.ToString()));
+            foreach(Rescheduling rescheduling in reschedulings)
             {
-                if (appointmentSelection.Items.Count == 5) break;
-                if(entry.Value > inTwoHours.to)
-                {
-                    ordinalAppointmentPairs.Add(ordinal, entry.Key);
-                    appointmentSelection.Items.Add(AppointmentRepository.GetInstance().GetById(entry.Key.ID).DateTime.ToString("yyyy-MM-dd HH:mm"));
-                    ordinal++;
-                }
-                
+                string appointmentStart = rescheduling.appointment.DateTime.ToString("yyyy-MM-dd HH:mm");
+                appointmentSelection.Items.Add(new EnhancedComboBoxItem(appointmentStart, rescheduling));
+            }
+        }
+
+        public void FillSpecializationSelectionList()
+        {
+            List<Specialization> available = SpecializationService.GetAllAvailableSpecializations();
+
+            foreach (Specialization specialization in available)
+            {
+                specializationSelection.Items.Add(specialization.ID + ". " + specialization.Name);
             }
         }
 
         private void ScheduleWithRescheduling()
         {
-            Appointment selected = ordinalAppointmentPairs[appointmentSelection.SelectedIndex];
-            DateTime previousAppointment = selected.DateTime;
-            selected.DateTime = appointmentRescheduleDatePairs[selected];
-            AppointmentRepository.GetInstance().Modify(selected);
-            
-
-            Appointment urgent = new Appointment(-1, selected.DoctorID, SecretaryService.ExtractID(patientSelection.SelectedItem.ToString()),
+            Rescheduling selected = (Rescheduling)((appointmentSelection.SelectedItem as EnhancedComboBoxItem).value);
+            Appointment toReschedule = selected.appointment;
+            DateTime previousAppointment = toReschedule.DateTime;
+            toReschedule.DateTime = selected.to;
+            AppointmentService.Modify(toReschedule);
+            Appointment urgent = new Appointment(-1, toReschedule.DoctorID, UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
                                                  previousAppointment,
                                                  1, false, 'E', 15, true,"", false);
-            AppointmentRepository.GetInstance().Create(urgent);
-            NotifyAll(selected,previousAppointment);
-            Roles.Doctor doctor = DoctorRepository.GetInstance().GetById(selected.DoctorID);
+            AppointmentService.Create(urgent);
+            NotifyAll(toReschedule,previousAppointment);
+            Roles.Doctor doctor = DoctorService.GetById(toReschedule.DoctorID);
             doctorField.Text = doctor.GetIdAndFullName();
             appointmentSelection.Text = previousAppointment.ToString("yyyy-MM-dd HH:mm");
-            SecretaryService.ShowSuccessMessage("Urgent appointment successfully scheduled!");
+            MessageBoxUtilities.ShowSuccessMessage("Urgent appointment successfully scheduled!");
             scheduleButton.Enabled = false;
-        }
-
-        private Roles.Doctor GetFirstAvailable()
-        {
-            DateTime now = SecretaryService.GetNow();
-            TimeSlot slot = new TimeSlot(now, now.AddHours(2));
-
-            int specializationId = Convert.ToInt32(SecretaryService.ExtractID(specializationSelection.SelectedItem.ToString()));
-            return DoctorRepository.GetInstance().GetFirstUnoccupied(slot, specializationId);
         }
 
         private void NotifyAll(Appointment selected,DateTime previousAppointment)
         {
             string message = "Appointment number " + selected.ID + " modified! New time: " + selected.DateTime.ToString("yyyy-MM-dd HH:mm");
-            new Notification(selected.PatientID, message).Send();
-            new Notification(selected.DoctorID, message).Send();
+
+            NotificationService.Send(new Notification(selected.PatientID, message));
+            NotificationService.Send(new Notification(selected.DoctorID, message));
             message = "New urgent appointment on " + previousAppointment.ToString("yyyy-MM-dd HH:mm") + ".";
-            new Notification(selected.DoctorID, message).Send();
+            NotificationService.Send(new Notification(selected.DoctorID, message));
         }
 
     }

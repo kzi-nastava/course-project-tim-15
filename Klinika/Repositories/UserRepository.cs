@@ -16,7 +16,14 @@ namespace Klinika.Repositories
         public Dictionary<string, User> users { get; }
         public List<User> Users { get; }
 
-        private static UserRepository? singletonInstance;
+        private static UserRepository? instance;
+
+        public static UserRepository GetInstance()
+        {
+            if (instance == null) instance = new UserRepository();
+            return instance;
+        }
+
         private UserRepository()
         {
             users = new Dictionary<string, User>();
@@ -42,6 +49,7 @@ namespace Klinika.Repositories
             }
 
         }
+
         public static void Block(int ID)
         {
             string blockQuery = "UPDATE [User] SET " +
@@ -65,20 +73,17 @@ namespace Klinika.Repositories
                 MessageBox.Show(ex.Message);
             }
         }
-        public static UserRepository GetInstance()
-        {
-            if (singletonInstance == null) singletonInstance = new UserRepository();
-            return singletonInstance;
-        }
 
         public static User[] GetPatients()
         {
             return GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.PATIENT.ToString()).ToArray();
         }
+
         public static List<User> GetDoctors()
         {
              return GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToList();
         }
+
         public static User? GetDoctor(int ID)
         {
             return GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();

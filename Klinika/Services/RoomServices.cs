@@ -22,14 +22,14 @@ namespace Klinika.Services
             }
             return renovating;
         }
-        public static List<Models.RoomComboBoxItem> GetRooms()
+        public static List<Models.EnhancedComboBoxItem> GetRooms()
         {
-            List<Models.RoomComboBoxItem> rooms = new List<Models.RoomComboBoxItem>();
+            List<Models.EnhancedComboBoxItem> rooms = new List<Models.EnhancedComboBoxItem>();
             DataTable retrievedRooms = Repositories.RoomRepository.GetAllRooms();
 
             foreach (DataRow row in retrievedRooms.Rows)
             {
-                rooms.Add(new Models.RoomComboBoxItem(row["Number"].ToString(), row["ID"].ToString()));
+                rooms.Add(new Models.EnhancedComboBoxItem(row["Number"].ToString(), row["ID"].ToString()));
             }
             rooms = rooms.OrderBy(x => x.text).ToList();
             return rooms;

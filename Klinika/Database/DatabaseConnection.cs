@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Klinika.Exceptions;
 
 
 namespace Klinika.Data
@@ -56,7 +57,7 @@ namespace Klinika.Data
             }
             catch (SqlException error)
             {
-                MessageBox.Show(error.Message);
+                throw new DatabaseConnectionException(error.Message);
             }
             finally
             {
@@ -67,7 +68,7 @@ namespace Klinika.Data
 
         public object? ExecuteNonQueryScalarCommand(string query, params (string, object)[] commandParameters)
         {
-            object value = null;
+            object? value = null;
             try
             {
                 database.Open();
@@ -76,7 +77,7 @@ namespace Klinika.Data
             }
             catch (SqlException error)
             {
-                MessageBox.Show(error.Message);
+                throw new DatabaseConnectionException(error.Message);
             }
             finally
             {
@@ -94,10 +95,9 @@ namespace Klinika.Data
                 SqlDataAdapter adapter = new SqlDataAdapter(command);
                 adapter.Fill(table);
             }
-
             catch (SqlException error)
             {
-                MessageBox.Show(error.Message);
+                throw new DatabaseConnectionException(error.Message);
             }
 
             return table;
@@ -126,7 +126,7 @@ namespace Klinika.Data
             }
             catch (SqlException error)
             {
-                MessageBox.Show(error.Message);
+                throw new DatabaseConnectionException(error.Message);
             }
             finally
             {

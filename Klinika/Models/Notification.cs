@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Klinika.Data;
+using Klinika.Repositories;
 
 namespace Klinika.Models
 {
@@ -20,14 +21,5 @@ namespace Klinika.Models
             isNotified = false;
         }
 
-        public void Send()
-        {
-            string sendQuery = "INSERT INTO [Notification] (UserID,Message,IsNotified) " +
-                               "VALUES(@userID,@message,@isNotified)";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(sendQuery,
-                                            ("@userId", userId),
-                                            ("@message", message),
-                                            ("@isNotified", isNotified));
-        }
     }
 }

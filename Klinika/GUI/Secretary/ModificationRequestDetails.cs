@@ -13,14 +13,14 @@ using Klinika.Services;
 
 namespace Klinika.GUI.Secretary
 {
-    public partial class ModificationRequestDetails : Form
+    internal partial class ModificationRequestDetails : Form
     {
         private PatientModificationRequest selected;
-        public ModificationRequestDetails(mainWindow parent)
+
+        public ModificationRequestDetails(PatientModificationRequest selected)
         {
             InitializeComponent();
-            int requestID = Convert.ToInt32(SecretaryService.GetCellValue(parent.requestsTable,"ID"));
-            selected = PatientRequestRepository.IdRequestPairs[requestID];
+            this.selected = selected;
         }
 
         private void ModificationRequestDetails_Load(object sender, EventArgs e)
@@ -28,13 +28,12 @@ namespace Klinika.GUI.Secretary
             FillFields();
         }
 
-
         private void FillFields()
         {
             oldAppointment.Value = selected.oldAppointment;
             newAppointment.Value = selected.newAppointment;
-            oldDoctorField.Text = DoctorRepository.GetNameSurname(selected.oldDoctorID);
-            newDoctorField.Text = DoctorRepository.GetNameSurname(selected.newDoctorID);
+            oldDoctorField.Text = DoctorService.GetFullName(selected.oldDoctorID);
+            newDoctorField.Text = DoctorService.GetFullName(selected.newDoctorID);
         }
     }
 }

@@ -12,23 +12,6 @@ namespace Klinika.Services
 {
     internal class AppointmentService
     {
-        public static void Validate(int doctorID, DateTime appointmentStart)
-        {
-            if (appointmentStart <= DateTime.Now)
-            {
-                throw new DateTimeInvalidException("Selected appointment time is incorrect!");
-            }
-
-            if (doctorID == -1)
-            {
-                throw new FieldEmptyException("Doctor is not selected!");
-            }
-
-            if (AppointmentRepository.GetInstance().IsOccupied(appointmentStart,doctorID:doctorID))
-            {
-                throw new DoctorUnavailableException("The selected doctor is not available at the selected time!");
-            }
-        }
         public static string GetTypeFullName(char type)
         {
             switch (type)
@@ -39,30 +22,44 @@ namespace Klinika.Services
                     return "Examination";
             }
         }
+
         // TODO This needs to move
         public static int GetSelectedID(DataGridView table)
         {
             return Convert.ToInt32(table.SelectedRows[0].Cells["ID"].Value);
         }
+
         public static Appointment GetSelected(DataGridView table)
         {
             int appointmentID = GetSelectedID(table);
             return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();
         }
+
+        public static List<Appointment> GetDoctorsAppointments(int doctorId)
+        {
+            return AppointmentRepository.GetInstance().Appointments.Where(x => x.DoctorID == doctorId).ToList();
+        }
+
         public static void Create(Appointment appointment)
         {
             AppointmentRepository.GetInstance().Create(appointment);
         }
+
         public static void Modify(Appointment appointment)
         {
             AppointmentRepository.GetInstance().Modify(appointment);
         }
+
         public static void Delete(int id)
         {
             AppointmentRepository.Delete(id);
             AppointmentRepository.GetInstance().DeleteFromList(id);
         }
 
+        public static Appointment GetById(int id)
+        {
+            return AppointmentRepository.GetInstance().Appointments.Where(o => o.ID == id).FirstOrDefault();
+        }
         #region Recomended Appointments
         public static List<Appointment> FindRecommended(int doctorID, TimeSlot timeSlot, DateTime deadlineDate, char priority)
         {
