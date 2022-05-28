@@ -40,6 +40,11 @@ namespace Klinika.Utilities
             comboBox.Items.AddRange(UserRepository.GetDoctors().ToArray());
             comboBox.SelectedIndex = 0;
         }
+        public static void FillPatientComboBox(ComboBox comboBox)
+        {
+            comboBox.Items.AddRange(UserRepository.GetPatients().ToArray());
+            comboBox.SelectedIndex = 0;
+        }
         public static bool Confirm(string message)
         {
             var result = MessageBoxUtilities.ShowConfirmationMessage(message);

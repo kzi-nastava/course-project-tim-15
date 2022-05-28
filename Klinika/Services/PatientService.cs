@@ -21,11 +21,14 @@ namespace Klinika.Services
         {
             return PatientRepository.IDPatientPairs[PatientRepository.EmailIDPairs[email]];
         }
+        public static User? GetSingle(int id)
+        {
+            return UserRepository.GetInstance().Users.Where(x => x.ID == id).FirstOrDefault();
+        }
         public static DataTable GetAll()
         {
             return PatientRepository.GetAll();
         }
-
         public static void Add(Patient newPatient)
         {
             string error_message = ValidationUtilities.ValidatePatient(newPatient);

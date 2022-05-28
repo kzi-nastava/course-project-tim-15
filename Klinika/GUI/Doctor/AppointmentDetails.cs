@@ -1,17 +1,7 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Klinika.GUI.Doctor
 {
@@ -20,7 +10,7 @@ namespace Klinika.GUI.Doctor
         internal readonly DoctorMain Parent;
         private Appointment? Appointment;
 
-        public AppointmentDetails(DoctorMain parent, Appointment appointment = null)
+        public AppointmentDetails(DoctorMain parent, Appointment? appointment = null)
         {
             InitializeComponent();
             Parent = parent;
@@ -29,11 +19,11 @@ namespace Klinika.GUI.Doctor
         private void LoadForm(object sender, EventArgs e)
         {
             Parent.Enabled = false;
-            PatientComboBox.Items.AddRange(UserRepository.GetPatients());
+            UIUtilities.FillPatientComboBox(PatientComboBox);
 
             if (Appointment == null)
             {
-                SetTypeExamination();
+                SetType(Appointment.Types.EXAMINATION);
                 return;
             }
 
@@ -48,36 +38,24 @@ namespace Klinika.GUI.Doctor
         {
             DatePicker.Value = Appointment.DateTime;
             TimePicker.Value = Appointment.DateTime;
-            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(UserRepository.GetInstance().Users.Where(x => x.ID == Appointment.PatientID).FirstOrDefault());
+            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(PatientService.GetSingle(Appointment.PatientID));
 
-            if (Appointment.Type == 'E') SetTypeExamination();
-            else SetTypeOperation(Appointment.Duration);
+            SetType((Appointment.Types)Appointment.Type, Appointment.Duration);
 
             IsUrgentCheckBox.Checked = Appointment.Urgent;
             ConfirmButton.Text = "Save";
         }
-        private void SetTypeExamination()
+        private void SetType(Appointment.Types type, int duration = -1)
         {
-            ExaminationRadioButton.Checked = true;
-            OperationRadioButton.Checked = false;
-            DurationTextBox.Enabled = false;
-            DurationTextBox.Text = "15";
-        }
-        private void SetTypeOperation(int duration = -1)
-        {
-            ExaminationRadioButton.Checked = false;
-            OperationRadioButton.Checked = true;
-            DurationTextBox.Enabled = true;
-            DurationTextBox.Text = duration == -1 ? "" : duration.ToString();
+            ExaminationRadioButton.Checked = type == Appointment.Types.EXAMINATION;
+            OperationRadioButton.Checked = type == Appointment.Types.OPERATION;
+            DurationTextBox.Enabled = type == Appointment.Types.OPERATION;
+            DurationTextBox.Text = type == Appointment.Types.EXAMINATION ? "15"
+                : duration == -1 ? "" : duration.ToString();
         }
         private void ExaminationRadioButtonCheckedChanged(object sender, EventArgs e)
         {
-            if(ExaminationRadioButton.Checked)
-            {
-                SetTypeExamination();
-                return;
-            }
-            SetTypeOperation();
+            SetType(ExaminationRadioButton.Checked ? Appointment.Types.EXAMINATION : Appointment.Types.OPERATION);
         }
         private void ConfirmButtonClick(object sender, EventArgs e)
         {
@@ -91,7 +69,7 @@ namespace Klinika.GUI.Doctor
 
         private bool ValidateForm()
         {
-            if (!IsDateValid())
+            if (GetSelectedDateTime() < DateTime.Now)
             {
                 MessageBoxUtilities.ShowErrorMessage("Date or time is not valid!");
                 return false;
@@ -106,11 +84,6 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowErrorMessage("Already occupied!");
                 return false;
             }
-            return true;
-        }
-        private bool IsDateValid()
-        {
-            if (GetSelectedDateTime() < DateTime.Now) return false;
             return true;
         }
         private DateTime GetSelectedDateTime()

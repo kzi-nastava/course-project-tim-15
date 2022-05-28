@@ -9,6 +9,7 @@ namespace Klinika.Models
 {
     public class Appointment
     {
+        public enum Types { EXAMINATION = 'E', OPERATION = 'O' }
         public int ID { get; set; }
         public int DoctorID { get; set; }
         public int PatientID { get; set; }
