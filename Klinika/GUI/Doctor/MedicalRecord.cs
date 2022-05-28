@@ -2,15 +2,8 @@
 using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using Klinika.Utilities;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Klinika.GUI.Doctor
 {
@@ -129,14 +122,9 @@ namespace Klinika.GUI.Doctor
         }
         private bool ValidateAnamnesis(bool skipValidation)
         {
-            if (skipValidation) return true;
-
             bool someFieldsEmpty = DescriptionTextBox.Text.Trim() == "" || SymptomsTextBox.Text.Trim() == "" || ConclusionTextBox.Text.Trim() == "";
-            if (!someFieldsEmpty) return true;
-            
-            var msgBox = MessageBox.Show("Some fields are left empty. Are you sure you want to save it?", "Caution", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (msgBox == DialogResult.Yes) return true;
-            return false;
+            if (skipValidation || !someFieldsEmpty) return true;
+            return UIUtilities.Confirm("Some fields are left empty. Are you sure you want to save it?");
         }
         private bool TryCreateAnamnesis(bool skipValidation = false)
         {
@@ -206,7 +194,7 @@ namespace Klinika.GUI.Doctor
             int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).ID;
             MedicalRecordService.CreateReferal(Appointment.PatientID, specializationID, doctorID);
 
-            MessageBox.Show("Referal made.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBoxUtilities.ShowInformationMessage("Referal made successfully!");
             return true;
         }
         #endregion

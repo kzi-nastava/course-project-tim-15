@@ -1,17 +1,7 @@
-﻿using Klinika.Models;
-using Klinika.Repositories;
+﻿using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
-using Klinika.Forms;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Klinika.Utilities;
 
 namespace Klinika.GUI.Doctor
 {
@@ -67,14 +57,7 @@ namespace Klinika.GUI.Doctor
         }
         private void DeleteAppointmentButtonClick(object sender, EventArgs e)
         {
-            DialogResult deleteConfirmation = MessageBox.Show(
-                "Are you sure you want to delete the selected appointment? This action cannot be undone.",
-                "Delete",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning);
-
-            if (deleteConfirmation == DialogResult.No) return;
-
+            if (!UIUtilities.Confirm("Are you sure you want to delete the selected appointment? This action cannot be undone.")) return;
             AppointmentService.Delete(AllAppointmentsTable.DeleteSelected());
         }
         private void AddAppointmentButtonClick(object sender, EventArgs e)
@@ -145,15 +128,13 @@ namespace Klinika.GUI.Doctor
         }
         private void ApproveDrugButtonClick(object sender, EventArgs e)
         {
-            var msgBox = MessageBox.Show("Are you sure you want to approve this drug?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (msgBox == DialogResult.No) return;
+            if (!UIUtilities.Confirm("Are you sure you want to approve this drug?")) return;
             DrugService.ApproveDrug(UnapprovedDrugsTable.GetSelectedId());
             InitUnapprovedDrugs();
         }
         private void DenyDrugButtonClick(object sender, EventArgs e)
         {
-            var msgBox = MessageBox.Show("Are you sure you want to deny this drug?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (msgBox == DialogResult.No) return;
+            if (!UIUtilities.Confirm("Are you sure you want to deny this drug?")) return;
             DrugService.DenyDrug(UnapprovedDrugsTable.GetSelectedId(), DenydDrugDescription.Text);
             InitUnapprovedDrugs();
         }

@@ -2,6 +2,7 @@
 using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
+using Klinika.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -92,17 +93,17 @@ namespace Klinika.GUI.Doctor
         {
             if (!IsDateValid())
             {
-                MessageBox.Show("Please select valid date!", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxUtilities.ShowErrorMessage("Date or time is not valid!");
                 return false;
             }
             if (PatientComboBox.SelectedIndex == -1)
             {
-                MessageBox.Show("Please select patient!", "Caution", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxUtilities.ShowErrorMessage("Patient is not valid!");
                 return false;
             }
             if (DoctorService.IsOccupied(GetSelectedDateTime(), Parent.Doctor.ID, Convert.ToInt32(DurationTextBox.Text)))
             {
-                MessageBox.Show("Already occupied", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxUtilities.ShowErrorMessage("Already occupied!");
                 return false;
             }
             return true;

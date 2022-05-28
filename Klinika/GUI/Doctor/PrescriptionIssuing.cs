@@ -1,15 +1,7 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Klinika.Utilities;
 
 namespace Klinika.GUI.Doctor
 {
@@ -49,7 +41,7 @@ namespace Klinika.GUI.Doctor
                 CommentTextBox.Text);
             PrescriptionService.StorePrescription(prescription);
 
-            MessageBox.Show("Drug prescripted.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBoxUtilities.ShowInformationMessage("Drug prescripted!");
             Close();
         }
         private bool ValidateForm()
@@ -65,7 +57,7 @@ namespace Klinika.GUI.Doctor
 
             if (startDate < endDate) return true;
 
-            MessageBox.Show("Date is not valid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBoxUtilities.ShowErrorMessage("Date is not valid!");
             return false;
         }
         private bool ValidateDrug()
@@ -78,7 +70,7 @@ namespace Klinika.GUI.Doctor
         {
             if (DrugsTable.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Drug not selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxUtilities.ShowErrorMessage("Drug not selected!");
                 return false;
             }
             return true;
@@ -86,11 +78,8 @@ namespace Klinika.GUI.Doctor
         private bool IsDrugPrescriptible(Drug selected)
         {
             if (!Parent.Record.IsAllergic(selected)) return true;
-
-            var msgBox = MessageBox.Show($"Patient is allergic to ingredient found in the selected drug\n" +
-                        $"Are you sure you want to prescript it?", "Caution", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (msgBox == DialogResult.Yes) return true;
-            return false;
+            var msg = "Patient is allergic to ingredient found in the selected drug\n" + "Are you sure you want to prescript it?";
+            return UIUtilities.Confirm(msg);
         }
         #endregion
     }
