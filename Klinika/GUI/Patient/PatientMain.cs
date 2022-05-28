@@ -95,13 +95,11 @@ namespace Klinika.GUI.Patient
         #region Medical Record Tab
         private void InitMedicalRecorTab()
         {
-            List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
-            FillMedicalRecordTable(anamneses);
+            FillMedicalRecordTable(MedicalRecordService.GetAnamneses(Patient.ID));
         }
         private void FillMedicalRecordTable(List<Anamnesis> anamneses)
         {
-
-            List<Appointment> appointments = AppointmentRepository.GetCompleted(Patient.ID);
+            List<Appointment> appointments = AppointmentService.GetCompleted(Patient.ID);
 
             DataTable anamnesesData = new DataTable();
             anamnesesData.Columns.Add("Doctor");
@@ -117,7 +115,7 @@ namespace Klinika.GUI.Patient
                 Appointment appointment = appointments.Where(x => x.ID == anamnesis.MedicalActionID).FirstOrDefault();
 
                 newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
-                newRow["Doctor Specialization"] = DoctorRepository.getSpecialization(appointment.DoctorID);
+                newRow["Doctor Specialization"] = DoctorRepository.GetSpecialization(appointment.DoctorID);
                 newRow["DateTime"] = appointment.DateTime;
                 newRow["Description"] = anamnesis.Description;
                 newRow["Symptoms"] = anamnesis.Symptoms;
@@ -130,7 +128,6 @@ namespace Klinika.GUI.Patient
         {
             string searchParam = SearchTextBox.Text;
             List<Anamnesis> searchResoult = MedicalRecordService.GetFiltered(Patient.ID, searchParam);
-
             FillMedicalRecordTable(searchResoult);
         }
         private void ResetButtonClick(object sender, EventArgs e)

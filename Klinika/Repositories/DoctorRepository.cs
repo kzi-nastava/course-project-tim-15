@@ -80,7 +80,7 @@ namespace Klinika.Repositories
             return specializedDoctors.ToArray();
         }
 
-        public static Specialization getSpecialization (int DoctorID)
+        public static Specialization GetSpecialization (int DoctorID)
         {
             string getSpecializationQuerry = "SELECT [Specialization].ID, [Specialization].Name " +
                                           "FROM [Specialization] JOIN [DoctorSpecialization] " +

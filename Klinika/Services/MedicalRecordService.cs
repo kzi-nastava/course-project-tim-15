@@ -13,6 +13,10 @@ namespace Klinika.Services
     public class MedicalRecordService
     {
         public MedicalRecordService() { }
+        public static List<Anamnesis> GetAnamneses(int patientID)
+        {
+            return MedicalRecordRepository.GetAnamneses(patientID);
+        }
         public static void StoreAnamanesis(Anamnesis anamnesis)
         {
             MedicalRecordRepository.CreateAnamnesis(anamnesis);

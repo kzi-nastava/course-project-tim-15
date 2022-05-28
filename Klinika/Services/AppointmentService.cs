@@ -26,6 +26,10 @@ namespace Klinika.Services
         {
             return AppointmentRepository.GetAll(date.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
         }
+        public static List<Appointment> GetCompleted(DateTime date, int doctorID)
+        {
+            return AppointmentRepository.GetAll(date.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
+        }
         public static void Create(Appointment appointment)
         {
             AppointmentRepository.GetInstance().Create(appointment);
