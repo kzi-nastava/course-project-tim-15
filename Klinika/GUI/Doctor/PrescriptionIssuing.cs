@@ -20,7 +20,7 @@ namespace Klinika.GUI.Doctor
             Parent.Enabled = false;
             PrescriptionStartDatePicker.MinDate = DateTime.Now;
             PrescriptionEndDatePicker.MinDate = DateTime.Now;
-            DrugsTable.Fill(DrugRepository.Instance.GetApproved());
+            DrugsTable.Fill(DrugService.GetUnapproved());
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {

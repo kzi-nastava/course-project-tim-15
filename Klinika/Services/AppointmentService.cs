@@ -39,6 +39,11 @@ namespace Klinika.Services
             AppointmentRepository.Delete(id);
             AppointmentRepository.GetInstance().DeleteFromList(id);
         }
+        public static void Complete(Appointment appointment)
+        {
+            appointment.Completed = true;
+            AppointmentRepository.GetInstance().Modify(appointment);
+        }
         public static Appointment GetById(int id)
         {
             return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == id).FirstOrDefault();
