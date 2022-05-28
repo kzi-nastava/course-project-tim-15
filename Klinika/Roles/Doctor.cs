@@ -13,6 +13,8 @@ namespace Klinika.Roles
 {
     internal class Doctor : User
     {
+        public enum Filters { BY_NAME, BY_SURNAME, BY_SPECIALIZATION, NONE }
+
         public Specialization specialization { get; }
 
         public Doctor(int id, string name, string surname,Specialization specialization) : base(id, name, surname)

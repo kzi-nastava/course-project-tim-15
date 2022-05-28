@@ -4,11 +4,13 @@ using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
 using System.Data;
+using RDoctor = Klinika.Roles.Doctor;
 
 namespace Klinika.GUI.Patient
 {
     public partial class PatientMain : Form
     {
+        RDoctor.Filters SelectedDoctorFilter = RDoctor.Filters.BY_NAME;
         public User Patient { get; }
 
         #region Form
@@ -141,48 +143,35 @@ namespace Klinika.GUI.Patient
         private void InitDoctorsTab()
         {
             DoctorNameRadioButton.Checked = true;
-            DoctorSurnameTextBox.Enabled = false;
-            DoctorSpecializationComboBox.Enabled = false;
-            NewAppointmentButton.Enabled = false;
+        }
+        private void SetDoctorFilter(RDoctor.Filters selected)
+        {
+            DoctorNameTextBox.Enabled = selected == RDoctor.Filters.BY_NAME;
+            DoctorSurnameTextBox.Enabled = selected == RDoctor.Filters.BY_SURNAME;
+            DoctorSpecializationComboBox.Enabled = selected == RDoctor.Filters.BY_SPECIALIZATION;
+
+            DoctorNameTextBox.Text = "";
+            DoctorSurnameTextBox.Text = "";
+            DoctorsTable.DataSource = null;
+
+            SelectedDoctorFilter = selected;
         }
         private void DoctorNameRadioButtonCheckedChanged(object sender, EventArgs e)
         {
-            if(DoctorNameRadioButton.Checked)
-            {
-                DoctorNameTextBox.Enabled = true;
-                DoctorSurnameTextBox.Enabled = false;
-                DoctorSpecializationComboBox.Enabled = false;
-
-                DoctorSurnameTextBox.Text = "";
-                FillDoctorsTable();
-            }
+            if (!DoctorNameRadioButton.Checked) return;
+            SetDoctorFilter(RDoctor.Filters.BY_NAME);
         }
         private void DoctorSurnameRadioButtonCheckedChanged(object sender, EventArgs e)
         {
-            if (DoctorSurnameRadioButton.Checked)
-            {
-                DoctorNameTextBox.Enabled = false;
-                DoctorSurnameTextBox.Enabled = true;
-                DoctorSpecializationComboBox.Enabled = false;
-
-                DoctorNameTextBox.Text = "";
-                FillDoctorsTable();
-            }
+            if (!DoctorSurnameRadioButton.Checked) return;
+            SetDoctorFilter(RDoctor.Filters.BY_SURNAME);
         }
         private void DoctorSpecializationRadioButtonCheckedChanged(object sender, EventArgs e)
         {
-            if (DoctorSpecializationRadioButton.Checked)
-            {
-                DoctorNameTextBox.Enabled = false;
-                DoctorSurnameTextBox.Enabled = false;
-                DoctorSpecializationComboBox.Enabled = true;
-
-                DoctorSurnameTextBox.Text = "";
-                DoctorNameTextBox.Text = "";
-                FillDoctorsTable();
-            }
+            if (!DoctorSpecializationRadioButton.Checked) return;
+            SetDoctorFilter(RDoctor.Filters.BY_SPECIALIZATION);
         }
-        private void FillDoctorsTable(List<Roles.Doctor> doctors = null)
+        private void FillDoctorsTable(List<RDoctor>? doctors = null)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Doctor ID");
@@ -193,7 +182,7 @@ namespace Klinika.GUI.Patient
 
             if(doctors != null)
             {
-                foreach(Roles.Doctor doctor in doctors)
+                foreach(RDoctor doctor in doctors)
                 {
                     DataRow newRow = dataTable.NewRow();
 
@@ -211,20 +200,14 @@ namespace Klinika.GUI.Patient
         }
         private void DoctorSearchButtonClick(object sender, EventArgs e)
         {
-            if (DoctorNameRadioButton.Checked)
+            List<RDoctor> result = SelectedDoctorFilter switch
             {
-                var resoult = DoctorService.SearchByName(DoctorNameTextBox.Text);
-                FillDoctorsTable(resoult);
-                return;
-            }
-            if (DoctorSurnameRadioButton.Checked)
-            {
-                var resoult = DoctorService.SearchBySurname(DoctorSurnameTextBox.Text);
-                FillDoctorsTable(resoult);
-                return;
-            }
-            var resout = DoctorService.SearchBySpecialization(GetSelectedSpecializationID());
-            FillDoctorsTable(resout);
+                RDoctor.Filters.BY_NAME => DoctorService.SearchByName(DoctorNameTextBox.Text),
+                RDoctor.Filters.BY_SURNAME => DoctorService.SearchBySurname(DoctorSurnameTextBox.Text),
+                RDoctor.Filters.BY_SPECIALIZATION => DoctorService.SearchBySpecialization(GetSelectedSpecializationID()),
+                _ => new List<RDoctor>()
+            };
+            FillDoctorsTable(result);
         }
         private void DoctorsTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
