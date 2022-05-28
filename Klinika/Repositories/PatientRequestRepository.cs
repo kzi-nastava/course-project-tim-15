@@ -78,39 +78,5 @@ namespace Klinika.Repositories
                 );
         }
 
-        public static int GetModifyAppointmentsCount(int patientID)
-        {
-            DateTime startDate = DateTime.Now.AddDays(-30);
-
-            var Descriptions = GetAppointmentsDescriptions(patientID);
-            int counter = 0;
-
-            foreach (string description in Descriptions)
-            {
-                DateTime date = DateTime.ParseExact(description.Substring(9, 10), "yyyy-MM-dd",
-                                       System.Globalization.CultureInfo.InvariantCulture);
-                if (date > startDate)
-                {
-                    counter += 1;
-                }
-            }
-            return counter;
-        }
-
-        private static List<string> GetAppointmentsDescriptions(int patientID)
-        {
-            var descriptions = new List<string>();
-
-            string getDescriptionsQuerry = "SELECT Description " +
-                                 "FROM [PatientRequest] " +
-                                 $"WHERE PatientID = {patientID}";
-
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDescriptionsQuerry);
-            foreach(object row in resoult)
-            {
-                descriptions.Add(DatabaseConnection.CheckNull<string>(((object[])row)[0]));
-            }
-            return descriptions;
-        }
     }
 }

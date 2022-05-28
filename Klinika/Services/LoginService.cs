@@ -37,11 +37,10 @@ namespace Klinika.Services
                     new GUI.Manager.Main().Show();
                     break;
                 default:
-                    if (PatientService.IsBlocked(loggingUser.ID))
+                    if (PatientService.IsBlocked(loggingUser))
                     {
-                        loggingUser.IsBlocked = true;
-                        UserRepository.Block(loggingUser.ID);
-                        MessageBoxUtilities.ShowErrorMessage("Your account is blocked because of trolling.");break;
+                        MessageBoxUtilities.ShowErrorMessage("Your account is blocked because of trolling.");
+                        break;
                     }
                     else
                     {

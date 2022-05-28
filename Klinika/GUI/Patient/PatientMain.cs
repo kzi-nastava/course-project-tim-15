@@ -2,12 +2,15 @@
 using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
+using Klinika.Utilities;
 using System.Data;
+using RDoctor = Klinika.Roles.Doctor;
 
 namespace Klinika.GUI.Patient
 {
     public partial class PatientMain : Form
     {
+        RDoctor.Filters SelectedDoctorFilter = RDoctor.Filters.BY_NAME;
         public User Patient { get; }
 
         #region Form
@@ -19,7 +22,7 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             InitPersonalAppointmentsTab();
-            FillDoctorComboBox(DoctorComboBox);
+            UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillSpecializationsComboBox();
         }
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
@@ -52,26 +55,17 @@ namespace Klinika.GUI.Patient
         }
         private void DeleteAppointmentButtonClick(object sender, EventArgs e)
         {
-            if (!IsDeleteConfirmed()) return;
+            if (!UIUtilities.Confirm("Are you sure you want to delete selected appointment?")) return;
 
             Appointment selected = PersonalAppointmentsTable.GetSelected();
             bool needApproval = DateTime.Now.AddDays(2).Date >= selected.DateTime.Date;
 
-            if (needApproval)
-            {
-                DialogResult sendRequest = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
-                "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
-                if (sendRequest == DialogResult.Yes)
-                {
-                    PatientRequestService.SendDeleted(!needApproval, selected);
-                }
-                return;
-            }
+            PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.Delete);
+            if (needApproval) return;
 
-            AppointmentRepository.Delete(selected.ID);
-            AppointmentRepository.GetInstance().DeleteFromList(selected.ID);
-            PatientRequestService.SendDeleted(!needApproval, selected);
+            AppointmentService.Delete(selected.ID);
             PersonalAppointmentsTable.DeleteSelected();
         }
         #endregion
@@ -87,8 +81,7 @@ namespace Klinika.GUI.Patient
             if (!IsDateValid(AppointmentDatePicker.Value)) return;
 
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
-            var occupied = AppointmentRepository.GetAll(AppointmentDatePicker.Value.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
-            OccupiedAppointmentsTable.Fill(occupied);
+            OccupiedAppointmentsTable.Fill(AppointmentService.GetOccupied(AppointmentDatePicker.Value, doctorID));
             ScheduleButton.Enabled = true;
         }
         private void ScheduleAppointmentButtonClick(object sender, EventArgs e)
@@ -104,13 +97,11 @@ namespace Klinika.GUI.Patient
         #region Medical Record Tab
         private void InitMedicalRecorTab()
         {
-            List<Anamnesis> anamneses = MedicalRecordRepository.GetAnamneses(Patient.ID);
-            FillMedicalRecordTable(anamneses);
+            FillMedicalRecordTable(MedicalRecordService.GetAnamneses(Patient.ID));
         }
         private void FillMedicalRecordTable(List<Anamnesis> anamneses)
         {
-
-            List<Appointment> appointments = AppointmentRepository.GetCompleted(Patient.ID);
+            List<Appointment> appointments = AppointmentService.GetCompleted(Patient.ID);
 
             DataTable anamnesesData = new DataTable();
             anamnesesData.Columns.Add("Doctor");
@@ -126,7 +117,7 @@ namespace Klinika.GUI.Patient
                 Appointment appointment = appointments.Where(x => x.ID == anamnesis.MedicalActionID).FirstOrDefault();
 
                 newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
-                newRow["Doctor Specialization"] = DoctorRepository.getSpecialization(appointment.DoctorID);
+                newRow["Doctor Specialization"] = DoctorRepository.GetSpecialization(appointment.DoctorID);
                 newRow["DateTime"] = appointment.DateTime;
                 newRow["Description"] = anamnesis.Description;
                 newRow["Symptoms"] = anamnesis.Symptoms;
@@ -139,7 +130,6 @@ namespace Klinika.GUI.Patient
         {
             string searchParam = SearchTextBox.Text;
             List<Anamnesis> searchResoult = MedicalRecordService.GetFiltered(Patient.ID, searchParam);
-
             FillMedicalRecordTable(searchResoult);
         }
         private void ResetButtonClick(object sender, EventArgs e)
@@ -153,48 +143,35 @@ namespace Klinika.GUI.Patient
         private void InitDoctorsTab()
         {
             DoctorNameRadioButton.Checked = true;
-            DoctorSurnameTextBox.Enabled = false;
-            DoctorSpecializationComboBox.Enabled = false;
-            NewAppointmentButton.Enabled = false;
+        }
+        private void SetDoctorFilter(RDoctor.Filters selected)
+        {
+            DoctorNameTextBox.Enabled = selected == RDoctor.Filters.BY_NAME;
+            DoctorSurnameTextBox.Enabled = selected == RDoctor.Filters.BY_SURNAME;
+            DoctorSpecializationComboBox.Enabled = selected == RDoctor.Filters.BY_SPECIALIZATION;
+
+            DoctorNameTextBox.Text = "";
+            DoctorSurnameTextBox.Text = "";
+            DoctorsTable.DataSource = null;
+
+            SelectedDoctorFilter = selected;
         }
         private void DoctorNameRadioButtonCheckedChanged(object sender, EventArgs e)
         {
-            if(DoctorNameRadioButton.Checked)
-            {
-                DoctorNameTextBox.Enabled = true;
-                DoctorSurnameTextBox.Enabled = false;
-                DoctorSpecializationComboBox.Enabled = false;
-
-                DoctorSurnameTextBox.Text = "";
-                FillDoctorsTable();
-            }
+            if (!DoctorNameRadioButton.Checked) return;
+            SetDoctorFilter(RDoctor.Filters.BY_NAME);
         }
         private void DoctorSurnameRadioButtonCheckedChanged(object sender, EventArgs e)
         {
-            if (DoctorSurnameRadioButton.Checked)
-            {
-                DoctorNameTextBox.Enabled = false;
-                DoctorSurnameTextBox.Enabled = true;
-                DoctorSpecializationComboBox.Enabled = false;
-
-                DoctorNameTextBox.Text = "";
-                FillDoctorsTable();
-            }
+            if (!DoctorSurnameRadioButton.Checked) return;
+            SetDoctorFilter(RDoctor.Filters.BY_SURNAME);
         }
         private void DoctorSpecializationRadioButtonCheckedChanged(object sender, EventArgs e)
         {
-            if (DoctorSpecializationRadioButton.Checked)
-            {
-                DoctorNameTextBox.Enabled = false;
-                DoctorSurnameTextBox.Enabled = false;
-                DoctorSpecializationComboBox.Enabled = true;
-
-                DoctorSurnameTextBox.Text = "";
-                DoctorNameTextBox.Text = "";
-                FillDoctorsTable();
-            }
+            if (!DoctorSpecializationRadioButton.Checked) return;
+            SetDoctorFilter(RDoctor.Filters.BY_SPECIALIZATION);
         }
-        private void FillDoctorsTable(List<Roles.Doctor> doctors = null)
+        private void FillDoctorsTable(List<RDoctor>? doctors = null)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Doctor ID");
@@ -205,7 +182,7 @@ namespace Klinika.GUI.Patient
 
             if(doctors != null)
             {
-                foreach(Roles.Doctor doctor in doctors)
+                foreach(RDoctor doctor in doctors)
                 {
                     DataRow newRow = dataTable.NewRow();
 
@@ -223,20 +200,14 @@ namespace Klinika.GUI.Patient
         }
         private void DoctorSearchButtonClick(object sender, EventArgs e)
         {
-            if (DoctorNameRadioButton.Checked)
+            List<RDoctor> result = SelectedDoctorFilter switch
             {
-                var resoult = DoctorService.SearchByName(DoctorNameTextBox.Text);
-                FillDoctorsTable(resoult);
-                return;
-            }
-            if (DoctorSurnameRadioButton.Checked)
-            {
-                var resoult = DoctorService.SearchBySurname(DoctorSurnameTextBox.Text);
-                FillDoctorsTable(resoult);
-                return;
-            }
-            var resout = DoctorService.SearchBySpecialization(GetSelectedSpecializationID());
-            FillDoctorsTable(resout);
+                RDoctor.Filters.BY_NAME => DoctorService.SearchByName(DoctorNameTextBox.Text),
+                RDoctor.Filters.BY_SURNAME => DoctorService.SearchBySurname(DoctorSurnameTextBox.Text),
+                RDoctor.Filters.BY_SPECIALIZATION => DoctorService.SearchBySpecialization(GetSelectedSpecializationID()),
+                _ => new List<RDoctor>()
+            };
+            FillDoctorsTable(result);
         }
         private void DoctorsTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
@@ -251,14 +222,9 @@ namespace Klinika.GUI.Patient
         #endregion
 
         #region Helper functions
-        public void FillDoctorComboBox(ComboBox comboBox)
-        {
-            comboBox.Items.AddRange(UserRepository.GetDoctors().ToArray());
-            comboBox.SelectedIndex = 0;
-        }
         private void FillSpecializationsComboBox()
         {
-            var specializations = DoctorRepository.GetSpecializations().ToArray();
+            var specializations = DoctorService.GetAllSpecializations().ToArray();
             DoctorSpecializationComboBox.Items.AddRange(specializations);
             DoctorSpecializationComboBox.SelectedIndex = 0;
         }
@@ -272,20 +238,8 @@ namespace Klinika.GUI.Patient
         }
         public bool IsDateValid (DateTime dateTime)
         {
-            if (dateTime < DateTime.Now)
-            {
-                MessageBox.Show("Date is not valid!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            return true;
-        }
-        public bool IsDeleteConfirmed()
-        {
-            DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete selected appointment?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (deleteConfirmation == DialogResult.Yes)
-            {
-                return true;
-            }
+            if (dateTime > DateTime.Now) return true;
+            MessageBoxUtilities.ShowErrorMessage("Date is not valid!");
             return false;
         }
         #endregion

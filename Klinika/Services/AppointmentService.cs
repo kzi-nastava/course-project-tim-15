@@ -22,170 +22,46 @@ namespace Klinika.Services
                     return "Examination";
             }
         }
-
-        // TODO This needs to move
-        public static int GetSelectedID(DataGridView table)
+        public static List<Appointment> GetOccupied(DateTime date, int doctorID)
         {
-            return Convert.ToInt32(table.SelectedRows[0].Cells["ID"].Value);
+            return AppointmentRepository.GetAll(date.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
         }
-
-        public static Appointment GetSelected(DataGridView table)
+        public static List<Appointment> GetCompleted(int patientID)
         {
-            int appointmentID = GetSelectedID(table);
-            return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == appointmentID).FirstOrDefault();
+            return AppointmentRepository.GetCompleted(patientID);
         }
-
-        public static List<Appointment> GetDoctorsAppointments(int doctorId)
-        {
-            return AppointmentRepository.GetInstance().Appointments.Where(x => x.DoctorID == doctorId).ToList();
-        }
-
         public static void Create(Appointment appointment)
         {
             AppointmentRepository.GetInstance().Create(appointment);
         }
-
         public static void Modify(Appointment appointment)
         {
             AppointmentRepository.GetInstance().Modify(appointment);
         }
-
         public static void Delete(int id)
         {
             AppointmentRepository.Delete(id);
             AppointmentRepository.GetInstance().DeleteFromList(id);
         }
-
         public static Appointment GetById(int id)
         {
-            return AppointmentRepository.GetInstance().Appointments.Where(o => o.ID == id).FirstOrDefault();
+            return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == id).FirstOrDefault();
         }
-        #region Recomended Appointments
-        public static List<Appointment> FindRecommended(int doctorID, TimeSlot timeSlot, DateTime deadlineDate, char priority)
+        public static int GetModifyAppointmentsCount(int patientID)
         {
-            Appointment bestMatch = FindClosestMatch(doctorID, timeSlot, deadlineDate);
+            DateTime startDate = DateTime.Now.AddDays(-30);
 
-            if (priority == 'D' || bestMatch.IsBetween(timeSlot))
+            var Descriptions = AppointmentRepository.GetDescriptions(patientID);
+            int counter = 0;
+
+            foreach (string description in Descriptions)
             {
-                return new List<Appointment>() { bestMatch };
+                DateTime date = DateTime.ParseExact(description.Substring(9, 10), "yyyy-MM-dd", 
+                    System.Globalization.CultureInfo.InvariantCulture);
+
+                if (date > startDate) counter += 1;
             }
-
-            List<Appointment> available = new List<Appointment>();
-            foreach (User doctor in UserRepository.GetDoctors())
-            {
-                if (doctor.ID == bestMatch.DoctorID) continue;
-                Appointment personalBest = FindClosestMatch(doctor.ID, timeSlot, deadlineDate);
-                if (personalBest.IsBetween(timeSlot))
-                {
-                    return new List<Appointment>() { personalBest };
-                }
-                available.Add(personalBest);
-            }
-
-            List<Appointment> recommended = new List<Appointment>() { bestMatch };
-            recommended.Add(FindClosestAvailable(available, timeSlot));
-            available.Remove(recommended[1]);
-            recommended.Add(FindClosestAvailable(available, timeSlot));
-
-            return recommended;
+            return counter;
         }
-        private static Appointment FindClosestMatch(int doctorID, TimeSlot timeSlot, DateTime deadlineDate)
-        {
-            Appointment best = new Appointment();
-
-            int numberOfDays = deadlineDate.Subtract(DateTime.Now).Days;
-
-            for (int i = 0; i < numberOfDays + 1; i++)
-            {
-                DateTime day = DateTime.Now.AddDays(i + 1);
-                if (IsDoctorAvailable(doctorID, timeSlot, day))
-                {
-                    best.DoctorID = doctorID;
-                    best.DateTime = new DateTime(day.Year, DateTime.Now.Month, day.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
-                    return best;
-                }
-
-                Appointment bestMatch = FindBestMatch(timeSlot, GetAppointmentsForDay(doctorID, day));
-
-                if (bestMatch.IsBetween(timeSlot)) return bestMatch;
-
-                if (IsMoreAccurate(timeSlot.from, bestMatch.DateTime, best.DateTime))
-                {
-                    best = bestMatch;
-                }
-            }
-            return best;
-        }
-        private static Appointment FindBestMatch(TimeSlot timeSlot, List<Appointment> doctorAppointments)
-        {
-            Appointment bestMatch = new Appointment();
-
-            foreach (Appointment appointment in doctorAppointments)
-            {
-                for (int i = -15; i <= 15; i += 30)
-                {
-                    DateTime current = appointment.DateTime.AddMinutes(i);
-                    if (appointment.IsBetween(timeSlot, i)
-                        && !AppointmentRepository.GetInstance().IsOccupied(current, appointment.DoctorID))
-                    {
-                        bestMatch.DoctorID = appointment.DoctorID;
-                        bestMatch.DateTime = current;
-                        return bestMatch;
-                    }
-
-                    if (IsMoreAccurate(timeSlot.from, timeSlot.to, bestMatch.DateTime)
-                        && !AppointmentRepository.GetInstance().IsOccupied(current, appointment.DoctorID))
-                    {
-                        bestMatch.DoctorID = appointment.DoctorID;
-                        bestMatch.DateTime = current;
-                    }
-                }
-            }
-            return bestMatch;
-        }
-        private static bool IsDoctorAvailable(int doctorID, TimeSlot timeSlot, DateTime day)
-        {
-            DateTime start = new DateTime(day.Year, day.Month, day.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
-            DateTime end = new DateTime(day.Year, day.Month, day.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
-
-            List<Appointment> ForSelectedTimeSpan = AppointmentRepository.GetInstance().Appointments.Where(
-                x => x.DoctorID == doctorID && x.DateTime >= start && x.DateTime < end && !x.IsDeleted).ToList();
-
-            if (ForSelectedTimeSpan.Count == 0) return true;
-            return false;
-        }
-        private static List<Appointment> GetAppointmentsForDay(int doctorID, DateTime day)
-        {
-            DateTime start = new DateTime(day.Year, day.Month, day.Day, 0, 0, 0);
-            DateTime end = new DateTime(day.AddDays(1).Year, day.AddDays(1).Month, day.AddDays(1).Day, 0, 0, 0);
-
-            return AppointmentRepository.GetInstance().Appointments.Where(
-                x => x.DoctorID == doctorID && x.DateTime >= start && x.DateTime < end && !x.IsDeleted).ToList();
-        }
-        private static bool IsMoreAccurate(DateTime referentDate, DateTime first, DateTime second)
-        {
-            first = first.AddDays(referentDate.Day - first.Day);
-            var firstAccuracy = referentDate.Subtract(first);
-            int firstMinutes = Math.Abs(firstAccuracy.Hours) * 60 + Math.Abs(firstAccuracy.Minutes);
-
-            second = second.AddDays(referentDate.Day - second.Day);
-            var secondAccuracy = referentDate.Subtract(second);
-            int secondMinutes = Math.Abs(secondAccuracy.Hours) * 60 + Math.Abs(secondAccuracy.Minutes);
-
-            return secondMinutes > firstMinutes;
-        }
-        private static Appointment FindClosestAvailable(List<Appointment> available, TimeSlot timeSlot)
-        {
-            Appointment best = available[0];
-            for (int i = 1; i < available.Count; i++)
-            {
-                if (IsMoreAccurate(timeSlot.from, available[i].DateTime, best.DateTime))
-                {
-                    best = available[i];
-                }
-            }
-            return best;
-        }
-        #endregion
     }
 }

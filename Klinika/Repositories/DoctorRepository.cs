@@ -32,7 +32,6 @@ namespace Klinika.Repositories
         {
             List<Specialization> specializations = new List<Specialization>();
             
-            SqlConnection database = DatabaseConnection.GetInstance().database;
             string getQuery = "SELECT * FROM [Specialization]";
 
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery);
@@ -80,7 +79,7 @@ namespace Klinika.Repositories
             return specializedDoctors.ToArray();
         }
 
-        public static Specialization getSpecialization (int DoctorID)
+        public static Specialization GetSpecialization (int DoctorID)
         {
             string getSpecializationQuerry = "SELECT [Specialization].ID, [Specialization].Name " +
                                           "FROM [Specialization] JOIN [DoctorSpecialization] " +

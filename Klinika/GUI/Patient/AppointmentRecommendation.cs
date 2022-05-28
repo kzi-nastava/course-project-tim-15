@@ -2,6 +2,7 @@
 using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
+using Klinika.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,11 +27,11 @@ namespace Klinika.GUI.Patient
         }
         private void LoadForm(object sender, EventArgs e)
         {
-            Parent.FillDoctorComboBox(DoctorComboBox);
-            ScheduleButton.Enabled = false;
-            DoctorRadioButton.Checked = true;
+            UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillRecommendedAppointmentTable();
             Parent.Enabled = false;
+            ScheduleButton.Enabled = false;
+            DoctorRadioButton.Checked = true;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -47,28 +48,28 @@ namespace Klinika.GUI.Patient
         {
             if (!IsDateValid())
             {
-                MessageBox.Show("Time is not valid! Please enter valid time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBoxUtilities.ShowErrorMessage("Time is not valid! Please enter valid time.");
                 return;
             }
+            ShowRecommended();
+        }
+        private void ScheduleButtonClick(object sender, EventArgs e)
+        {
+            if (!UIUtilities.Confirm("Are you sure you want to create this Appoinment?")) return;
+            Create();
+            Close();
+        }
+        #endregion
 
+        private void ShowRecommended()
+        {
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
             char priority = DoctorRadioButton.Checked ? 'D' : 'T';
             TimeSlot timeSlot = new TimeSlot(FromTimePicker.Value, ToTimePicker.Value);
 
-            List<Appointment> recommended = AppointmentService.FindRecommended(doctorID, timeSlot, DeadlineDatePicker.Value, priority);
+            List<Appointment> recommended = AppointmentRecommendationService.Find(doctorID, timeSlot, DeadlineDatePicker.Value, priority);
             FillRecommendedAppointmentTable(recommended);
         }
-        private void ScheduleButtonClick(object sender, EventArgs e)
-        {
-            DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes)
-            {
-                CreateInDatabase();
-                Close();
-            }
-        }
-        #endregion
-
         private void FillRecommendedAppointmentTable(List<Appointment> appointments = null)
         {
             DataTable dataTable = new DataTable();
@@ -94,17 +95,6 @@ namespace Klinika.GUI.Patient
         {
             ScheduleButton.Enabled = true;
         }
-        private void CreateInDatabase()
-        {
-            Appointment appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
-
-            AppointmentRepository.GetInstance().Create(appointment);
-            Parent.PersonalAppointmentsTable.Insert(appointment);
-        }
-        private bool IsDateValid()
-        {
-            return FromTimePicker.Value < ToTimePicker.Value && DeadlineDatePicker.Value > DateTime.Now;
-        }
         private int GetSelectedDoctorID()
         {
             return Convert.ToInt32(RecommendedAppointmentTable.SelectedRows[0].Cells["Doctor ID"].Value);
@@ -112,6 +102,16 @@ namespace Klinika.GUI.Patient
         private DateTime GetSelectedDateTime()
         {
             return Convert.ToDateTime(RecommendedAppointmentTable.SelectedRows[0].Cells["DateTime"].Value);
+        }
+        private bool IsDateValid()
+        {
+            return FromTimePicker.Value < ToTimePicker.Value && DeadlineDatePicker.Value > DateTime.Now;
+        }
+        private void Create()
+        {
+            Appointment appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
+            AppointmentService.Create(appointment);
+            Parent.PersonalAppointmentsTable.Insert(appointment);
         }
     }
 }

@@ -18,8 +18,8 @@ namespace Klinika.Data
         private DatabaseConnection()
         {
             SqlConnectionStringBuilder credentials = new SqlConnectionStringBuilder();
-            credentials.DataSource = "usiprojekat.database.windows.net";
-            credentials.UserID = "dracooya";
+            credentials.DataSource = "35.224.70.24";
+            credentials.UserID = "sqlserver";
             credentials.Password = "UsiTim15#";
             credentials.InitialCatalog = "Clinic";
 
