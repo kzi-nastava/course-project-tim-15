@@ -18,6 +18,15 @@ namespace Klinika.Services
             doctorRepository = DoctorRepository.GetInstance();
         }
 
+        public static List<Appointment> GetAppointments(int doctorID)
+        {
+            return AppointmentRepository.GetAll(doctorID, User.RoleType.DOCTOR);
+        }
+        public static List<Appointment> GetAppointments(DateTime date, int doctorID, int days = 1)
+        {
+            return AppointmentRepository.GetAll(date.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR, days);
+        }
+
         public static Doctor? GetSuitable(int specializationId, DateTime from)
         {
             foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)

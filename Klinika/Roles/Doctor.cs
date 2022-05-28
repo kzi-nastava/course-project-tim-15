@@ -11,7 +11,7 @@ using Klinika.Services;
 
 namespace Klinika.Roles
 {
-    internal class Doctor : User
+    public class Doctor : User
     {
         public enum Filters { BY_NAME, BY_SURNAME, BY_SPECIALIZATION, NONE }
 
@@ -21,6 +21,5 @@ namespace Klinika.Roles
         {
             this.specialization = specialization;
         }
-
     }
 }

@@ -22,10 +22,6 @@ namespace Klinika.Services
                     return "Examination";
             }
         }
-        public static List<Appointment> GetOccupied(DateTime date, int doctorID)
-        {
-            return AppointmentRepository.GetAll(date.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
-        }
         public static List<Appointment> GetCompleted(int patientID)
         {
             return AppointmentRepository.GetCompleted(patientID);

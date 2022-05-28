@@ -101,7 +101,7 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowErrorMessage("Patient is not valid!");
                 return false;
             }
-            if (DoctorService.IsOccupied(GetSelectedDateTime(), Parent.Doctor.ID, Convert.ToInt32(DurationTextBox.Text)))
+            if (DoctorService.IsOccupied(GetSelectedDateTime(), Parent._Doctor.ID, Convert.ToInt32(DurationTextBox.Text)))
             {
                 MessageBoxUtilities.ShowErrorMessage("Already occupied!");
                 return false;
@@ -121,7 +121,7 @@ namespace Klinika.GUI.Doctor
         }
         private void TransferDataFromUI(Appointment appointment)
         {
-            appointment.DoctorID = Parent.Doctor.ID;
+            appointment.DoctorID = Parent._Doctor.ID;
             appointment.PatientID = (PatientComboBox.SelectedItem as User).ID;
             appointment.Type = ExaminationRadioButton.Checked ? 'E' : 'O';
             appointment.Duration = Convert.ToInt32(DurationTextBox.Text);

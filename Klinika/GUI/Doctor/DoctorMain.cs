@@ -7,13 +7,13 @@ namespace Klinika.GUI.Doctor
 {
     public partial class DoctorMain : Form
     {
-        public User Doctor { get; }
+        public Roles.Doctor _Doctor { get; }
 
         #region Form
-        public DoctorMain(User doctor)
+        public DoctorMain(int doctorID)
         {
             InitializeComponent();
-            Doctor = doctor;
+            _Doctor = DoctorService.GetById(doctorID);
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -25,24 +25,15 @@ namespace Klinika.GUI.Doctor
         }
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (MainTabControl.SelectedIndex)
-            {
-                case 1:
-                    InitScheduleTab();
-                    break;
-                case 2:
-                    InitUnapprovedDrugs();
-                    break;
-                default:
-                    break;
-            }
+            if (MainTabControl.SelectedIndex == 1) InitScheduleTab();
+            if (MainTabControl.SelectedIndex == 2) InitUnapprovedDrugs();
         }
         #endregion
 
         #region All Appointments
         private void InitAllAppointmentsTab()
         {
-            AllAppointmentsTable.Fill(AppointmentRepository.GetAll(Doctor.ID, User.RoleType.DOCTOR));
+            AllAppointmentsTable.Fill(DoctorService.GetAppointments(_Doctor.ID));
             EditAppointmentButton.Enabled = false;
             DeleteAppointmentButton.Enabled = false;
         }
@@ -69,7 +60,7 @@ namespace Klinika.GUI.Doctor
         #region Schedule
         private void InitScheduleTab()
         {
-            var scheduled = AppointmentRepository.GetAll(ScheduleDatePicker.Value.ToString("yyyy-MM-dd"), Doctor.ID, User.RoleType.DOCTOR, 3);
+            var scheduled = DoctorService.GetAppointments(ScheduleDatePicker.Value, _Doctor.ID, 3);
             ScheduleTable.Fill(scheduled);
             ViewMedicalRecordButton.Enabled = false;
             PerformButton.Enabled = false;
@@ -99,32 +90,30 @@ namespace Klinika.GUI.Doctor
         }
         private void ViewMedicalRecordButtonClick(object sender, EventArgs e)
         {
-            var selected = ScheduleTable.GetSelected();
-            new MedicalRecord(this, selected).Show();
+            new MedicalRecord(this, ScheduleTable.GetSelected()).Show();
         }
         private void PerformButtonClick(object sender, EventArgs e)
         {
-            var selected = ScheduleTable.GetSelected();
-            new MedicalRecord(this, selected, false).Show();
+            new MedicalRecord(this, ScheduleTable.GetSelected(), false).Show();
         }
         #endregion
 
         #region Unapproved Drugs
         private void InitUnapprovedDrugs()
         {
-            UnapprovedDrugsTable.Fill(DrugRepository.Instance.GetUnapproved());
+            UnapprovedDrugsTable.Fill(DrugService.GetUnapproved());
             ApproveDrugButton.Enabled = false;
             DenyDrugButton.Enabled = false;
-            DenydDrugDescription.Text = "";
+            DenyDrugDescription.Text = "";
         }
         private void UnapprovedDrugsTableSelectionChanged(object sender, EventArgs e)
         {
             ApproveDrugButton.Enabled = true;
-            DenydDrugDescription.Text = "";
+            DenyDrugDescription.Text = "";
         }
         private void DenyDrugDescriptionTextChanged(object sender, EventArgs e)
         {
-            DenyDrugButton.Enabled = DenydDrugDescription.Text != "" && ApproveDrugButton.Enabled;
+            DenyDrugButton.Enabled = DenyDrugDescription.Text != "" && ApproveDrugButton.Enabled;
         }
         private void ApproveDrugButtonClick(object sender, EventArgs e)
         {
@@ -135,7 +124,7 @@ namespace Klinika.GUI.Doctor
         private void DenyDrugButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to deny this drug?")) return;
-            DrugService.DenyDrug(UnapprovedDrugsTable.GetSelectedId(), DenydDrugDescription.Text);
+            DrugService.DenyDrug(UnapprovedDrugsTable.GetSelectedId(), DenyDrugDescription.Text);
             InitUnapprovedDrugs();
         }
         #endregion
