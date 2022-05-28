@@ -48,6 +48,10 @@ namespace Klinika.Services
         {
             return DoctorRepository.GetInstance().doctors.Where(x => x.ID == id).FirstOrDefault();
         }
+        public static List<Specialization> GetAllSpecializations()
+        {
+            return DoctorRepository.GetSpecializations();
+        }
 
         public static List<Doctor> SearchByName(string keyword)
         {

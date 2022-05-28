@@ -124,13 +124,9 @@ namespace Klinika.GUI.Patient
         private bool ValidateForm()
         {
             if (!Parent.IsDateValid(GetSelectedDateTime())) return false;
-
-            if (DoctorService.IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID()))
-            {
-                MessageBox.Show("This time is occupied!", "Denied!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            return true;
+            if (!DoctorService.IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID())) return true;
+            MessageBoxUtilities.ShowErrorMessage("This time is occupied!");
+            return false;
         }
     }
 }

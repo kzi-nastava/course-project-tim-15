@@ -55,7 +55,7 @@ namespace Klinika.GUI.Patient
         }
         private void DeleteAppointmentButtonClick(object sender, EventArgs e)
         {
-            if (!IsDeleteConfirmed()) return;
+            if (!UIUtilities.Confirm("Are you sure you want to delete selected appointment?")) return;
 
             Appointment selected = PersonalAppointmentsTable.GetSelected();
             bool needApproval = DateTime.Now.AddDays(2).Date >= selected.DateTime.Date;
@@ -224,7 +224,7 @@ namespace Klinika.GUI.Patient
         #region Helper functions
         private void FillSpecializationsComboBox()
         {
-            var specializations = DoctorRepository.GetSpecializations().ToArray();
+            var specializations = DoctorService.GetAllSpecializations().ToArray();
             DoctorSpecializationComboBox.Items.AddRange(specializations);
             DoctorSpecializationComboBox.SelectedIndex = 0;
         }
@@ -238,20 +238,8 @@ namespace Klinika.GUI.Patient
         }
         public bool IsDateValid (DateTime dateTime)
         {
-            if (dateTime < DateTime.Now)
-            {
-                MessageBox.Show("Date is not valid!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            return true;
-        }
-        public bool IsDeleteConfirmed()
-        {
-            DialogResult deleteConfirmation = MessageBox.Show("Are you sure you want to delete selected appointment?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (deleteConfirmation == DialogResult.Yes)
-            {
-                return true;
-            }
+            if (dateTime > DateTime.Now) return true;
+            MessageBoxUtilities.ShowErrorMessage("Date is not valid!");
             return false;
         }
         #endregion

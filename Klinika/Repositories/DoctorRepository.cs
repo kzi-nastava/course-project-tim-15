@@ -32,7 +32,6 @@ namespace Klinika.Repositories
         {
             List<Specialization> specializations = new List<Specialization>();
             
-            SqlConnection database = DatabaseConnection.GetInstance().database;
             string getQuery = "SELECT * FROM [Specialization]";
 
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery);

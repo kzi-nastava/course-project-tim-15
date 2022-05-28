@@ -48,18 +48,16 @@ namespace Klinika.GUI.Patient
         {
             if (!IsDateValid())
             {
-                MessageBox.Show("Time is not valid! Please enter valid time.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBoxUtilities.ShowErrorMessage("Time is not valid! Please enter valid time.");
                 return;
             }
             ShowRecommended();
         }
         private void ScheduleButtonClick(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.No) return;
-            
+            if (!UIUtilities.Confirm("Are you sure you want to create this Appoinment?")) return;
             Create();
-            Close();  
+            Close();
         }
         #endregion
 
