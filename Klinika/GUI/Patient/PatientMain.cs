@@ -2,6 +2,7 @@
 using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
+using Klinika.Utilities;
 using System.Data;
 
 namespace Klinika.GUI.Patient
@@ -19,7 +20,7 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             InitPersonalAppointmentsTab();
-            FillDoctorComboBox(DoctorComboBox);
+            UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillSpecializationsComboBox();
         }
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
@@ -251,11 +252,7 @@ namespace Klinika.GUI.Patient
         #endregion
 
         #region Helper functions
-        public void FillDoctorComboBox(ComboBox comboBox)
-        {
-            comboBox.Items.AddRange(UserRepository.GetDoctors().ToArray());
-            comboBox.SelectedIndex = 0;
-        }
+        
         private void FillSpecializationsComboBox()
         {
             var specializations = DoctorRepository.GetSpecializations().ToArray();

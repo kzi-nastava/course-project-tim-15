@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Klinika.Roles;
 using Klinika.Repositories;
 using System.Text.RegularExpressions;
+using Klinika.Services;
 
 namespace Klinika.Utilities
 {
@@ -60,7 +61,7 @@ namespace Klinika.Utilities
                 error_message = "Doctor is not selected!" ;
             }
 
-            if (AppointmentRepository.GetInstance().IsOccupied(appointmentStart, doctorID: doctorID))
+            if (DoctorService.IsOccupied(appointmentStart, doctorID: doctorID))
             {
                 error_message = "The selected doctor is not available at the selected time!";
             }

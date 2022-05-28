@@ -3,6 +3,7 @@ using Klinika.Repositories;
 using Klinika.Roles;
 using System.Data;
 using Klinika.Services;
+using Klinika.Utilities;
 
 namespace Klinika.GUI.Patient
 {
@@ -23,7 +24,7 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             Parent.Enabled = false;
-            Parent.FillDoctorComboBox(DoctorComboBox);
+            UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillFormDetails();
         }
         private void FillFormDetails()
@@ -154,7 +155,7 @@ namespace Klinika.GUI.Patient
         {
             if (!Parent.IsDateValid(GetSelectedDateTime())) return false;
 
-            if (AppointmentRepository.GetInstance().IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID()))
+            if (DoctorService.IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID()))
             {
                 MessageBox.Show("This time is occupied!", "Denied!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;

@@ -18,14 +18,13 @@ namespace Klinika.Services
             doctorRepository = DoctorRepository.GetInstance();
         }
 
-
         public static Doctor? GetSuitable(int specializationId, DateTime from)
         {
             foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
             {
                 if (doctor.specialization.ID != specializationId) continue;
 
-                if (!AppointmentRepository.GetInstance().IsOccupied(from, doctor.ID)) return doctor;
+                if (!DoctorService.IsOccupied(from, doctor.ID)) return doctor;
             }
             return null;
         }
@@ -41,15 +40,6 @@ namespace Klinika.Services
                 }
             }
             return (null,null);
-        }
-
-        // TODO This needs to move
-        public static void FillAppointmentTypeField(DataTable dt)
-        {
-            foreach (DataRow row in dt.Rows)
-            {
-                row["Type"] = AppointmentService.GetTypeFullName(Convert.ToChar(row["Type"]));
-            }
         }
 
         public static string GetFullName(int doctorID)
@@ -75,6 +65,26 @@ namespace Klinika.Services
         public static Doctor GetById(int id)
         {
             return DoctorRepository.GetInstance().doctors.Where(x => x.ID == id).FirstOrDefault();
+        }
+
+        public static bool IsOccupied(int doctorID, TimeSlot timeSlot, DateTime day)
+        {
+            DateTime start = new DateTime(day.Year, day.Month, day.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
+            DateTime end = new DateTime(day.Year, day.Month, day.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
+            return IsOccupied(doctorID, start, end);
+        }
+        public static bool IsOccupied(DateTime start, int doctorID, int duration = 15, int forAppointmentID = -1)
+        {
+            var end = start.AddMinutes(duration);
+            return IsOccupied(doctorID, start, end, forAppointmentID);
+        }
+        private static bool IsOccupied(int doctorID, DateTime start, DateTime end, int forAppointmentID = -1)
+        {
+            List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().Appointments.Where(
+                x => x.DoctorID == doctorID && x.DateTime >= start && x.DateTime < end && !x.IsDeleted && x.ID != forAppointmentID).ToList();
+
+            if (forSelectedTimeSpan.Count == 0) return false;
+            return true;
         }
 
     }

@@ -173,6 +173,7 @@ namespace Klinika.Repositories
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuerry, ("@ID", ID));
         }
 
+        // TODO Delete once new method in DoctorService is tested
         public bool IsOccupied(DateTime newAppointmentStart, int doctorID, int duration = 15, int appointmentID = -1)
         {
             var newAppointmentEnd = newAppointmentStart.AddMinutes(duration); 

@@ -35,6 +35,11 @@ namespace Klinika.Utilities
                 patientSelection.Items.Add(pair.Value.GetIdAndFullName());
             }
         }
+        public static void FillDoctorComboBox(ComboBox comboBox)
+        {
+            comboBox.Items.AddRange(UserRepository.GetDoctors().ToArray());
+            comboBox.SelectedIndex = 0;
+        }
 
     }
 }
