@@ -68,7 +68,7 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
-        private void ConfirmeButtonClick(object sender, EventArgs e)
+        private void ConfirmButtonClick(object sender, EventArgs e)
         {
             if (!ValidateForm()) return;
 

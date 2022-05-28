@@ -31,7 +31,7 @@
             this.DateLabel = new System.Windows.Forms.Label();
             this.TimeLabel = new System.Windows.Forms.Label();
             this.DoctorLabel = new System.Windows.Forms.Label();
-            this.ConfirmeButton = new System.Windows.Forms.Button();
+            this.ConfirmButton = new System.Windows.Forms.Button();
             this.TimePicker = new System.Windows.Forms.DateTimePicker();
             this.DoctorComboBox = new System.Windows.Forms.ComboBox();
             this.DatePicker = new System.Windows.Forms.DateTimePicker();
@@ -64,15 +64,15 @@
             this.DoctorLabel.TabIndex = 2;
             this.DoctorLabel.Text = "Doctor: ";
             // 
-            // ConfirmeButton
+            // ConfirmButton
             // 
-            this.ConfirmeButton.Location = new System.Drawing.Point(82, 172);
-            this.ConfirmeButton.Name = "ConfirmeButton";
-            this.ConfirmeButton.Size = new System.Drawing.Size(94, 29);
-            this.ConfirmeButton.TabIndex = 4;
-            this.ConfirmeButton.Text = "Confirme";
-            this.ConfirmeButton.UseVisualStyleBackColor = true;
-            this.ConfirmeButton.Click += new System.EventHandler(this.ConfirmeButtonClick);
+            this.ConfirmButton.Location = new System.Drawing.Point(82, 172);
+            this.ConfirmButton.Name = "ConfirmButton";
+            this.ConfirmButton.Size = new System.Drawing.Size(94, 29);
+            this.ConfirmButton.TabIndex = 4;
+            this.ConfirmButton.Text = "Confirm";
+            this.ConfirmButton.UseVisualStyleBackColor = true;
+            this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButtonClick);
             // 
             // TimePicker
             // 
@@ -107,7 +107,7 @@
             this.Controls.Add(this.DatePicker);
             this.Controls.Add(this.DoctorComboBox);
             this.Controls.Add(this.TimePicker);
-            this.Controls.Add(this.ConfirmeButton);
+            this.Controls.Add(this.ConfirmButton);
             this.Controls.Add(this.DoctorLabel);
             this.Controls.Add(this.TimeLabel);
             this.Controls.Add(this.DateLabel);
@@ -129,7 +129,7 @@
         private Label DateLabel;
         private Label TimeLabel;
         private Label DoctorLabel;
-        private Button ConfirmeButton;
+        private Button ConfirmButton;
         private DateTimePicker TimePicker;
         private ComboBox DoctorComboBox;
         private DateTimePicker DatePicker;
