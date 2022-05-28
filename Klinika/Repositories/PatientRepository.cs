@@ -104,16 +104,16 @@ namespace Klinika.Repositories
                 EmailIDPairs.Add(newPatient.Email, createdID);
             }
         }
-
-        public static void Block(int id)
+        public static void Block(int id, string whoBlocked)
         {
-            string blockQuery = "UPDATE [User] SET IsBlocked = 1, WhoBlocked = 'SEC' " +
-                                "WHERE ID = @ID";
+            string blockQuery = "UPDATE [User] SET " +
+                "IsBlocked = 1, " +
+                "WhoBlocked = @WhoBlocked " +
+                "WHERE ID = @ID";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(blockQuery, ("@ID", id));
-
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                blockQuery, ("@WhoBlocked", whoBlocked), ("@ID", id));
         }
-
         public static void Unblock(int id)
         {
             string unblockQuery = "UPDATE [User] SET IsBlocked = 0, WhoBlocked = NULL " +

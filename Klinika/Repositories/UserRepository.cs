@@ -50,30 +50,6 @@ namespace Klinika.Repositories
 
         }
 
-        public static void Block(int ID)
-        {
-            string blockQuery = "UPDATE [User] SET " +
-                "IsBlocked = @IsBlocked, " +
-                "WhoBlocked = @WhoBlocked " +
-                "WHERE ID = @ID";
-
-            SqlCommand block = new SqlCommand(blockQuery, DatabaseConnection.GetInstance().database);
-            block.Parameters.AddWithValue("@ID", ID);
-            block.Parameters.AddWithValue("@IsBlocked", true);
-            block.Parameters.AddWithValue("@WhoBlocked", "SYS");
-
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                block.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         public static User[] GetPatients()
         {
             return GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.PATIENT.ToString()).ToArray();

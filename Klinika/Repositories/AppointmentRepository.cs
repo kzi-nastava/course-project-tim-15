@@ -163,6 +163,21 @@ namespace Klinika.Repositories
             var selection = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuerry);
             return Convert.ToInt32(((object[])selection[0])[0]);
         }
+        public static List<string> GetDescriptions(int patientID)
+        {
+            var descriptions = new List<string>();
+
+            string getDescriptionsQuerry = "SELECT Description " +
+                                 "FROM [PatientRequest] " +
+                                 $"WHERE PatientID = {patientID}";
+
+            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDescriptionsQuerry);
+            foreach (object row in resoult)
+            {
+                descriptions.Add(DatabaseConnection.CheckNull<string>(((object[])row)[0]));
+            }
+            return descriptions;
+        }
         public List<TimeSlot> GetOccupiedTimeSlotsPerDoctor(TimeSlot span, int doctorID)
         {
             List<TimeSlot> scheduledAppointments = new List<TimeSlot>();

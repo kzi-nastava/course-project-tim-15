@@ -47,5 +47,21 @@ namespace Klinika.Services
         {
             return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == id).FirstOrDefault();
         }
+        public static int GetModifyAppointmentsCount(int patientID)
+        {
+            DateTime startDate = DateTime.Now.AddDays(-30);
+
+            var Descriptions = AppointmentRepository.GetDescriptions(patientID);
+            int counter = 0;
+
+            foreach (string description in Descriptions)
+            {
+                DateTime date = DateTime.ParseExact(description.Substring(9, 10), "yyyy-MM-dd", 
+                    System.Globalization.CultureInfo.InvariantCulture);
+
+                if (date > startDate) counter += 1;
+            }
+            return counter;
+        }
     }
 }

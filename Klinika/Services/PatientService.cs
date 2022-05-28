@@ -17,6 +17,15 @@ namespace Klinika.Services
 {
     internal class PatientService
     {
+        public static Patient? GetSingle(string email)
+        {
+            return PatientRepository.IDPatientPairs[PatientRepository.EmailIDPairs[email]];
+        }
+        public static DataTable GetAll()
+        {
+            return PatientRepository.GetAll();
+        }
+
         public static void Add(Patient newPatient)
         {
             string error_message = ValidationUtilities.ValidatePatient(newPatient);
@@ -27,7 +36,6 @@ namespace Klinika.Services
             }
             PatientRepository.Create(newPatient);
         }
-
         public static void Modify(Patient patient)
         {
             string error_message = ValidationUtilities.ValidatePatient(patient,isModification: true);
@@ -38,24 +46,9 @@ namespace Klinika.Services
             }
             PatientRepository.Modify(patient);
         }
-
         public static void Delete(int patientId)
         {
             PatientRepository.Delete(patientId);
-        }
-
-        public static void Block(Patient patient,string whoBlocked)
-        {
-            patient.whoBlocked = whoBlocked;
-            patient.IsBlocked = true;
-            PatientRepository.Block(patient.ID);
-        }
-
-        public static void Unblock(Patient patient)
-        {
-            patient.whoBlocked = "";
-            patient.IsBlocked = false;
-            PatientRepository.Unblock(patient.ID);
         }
 
         public static string GetFullName(int ID)
@@ -64,24 +57,24 @@ namespace Klinika.Services
             return $"{patient.Name} {patient.Surname}";
         }
 
-        public static bool IsBlocked(int id)
+        public static bool IsBlocked(User patient)
         {
-            if (AppointmentRepository.GetScheduledAppointmentsCount(id) > 8 
-                || PatientRequestRepository.GetModifyAppointmentsCount(id) > 5)
-            {
-                return true;
-            }
+            bool isBlocked = AppointmentRepository.GetScheduledAppointmentsCount(patient.ID) > 8 
+                || AppointmentService.GetModifyAppointmentsCount(patient.ID) > 5;
+            if (isBlocked) return true;
+            Block(patient, "SYS");
             return false;
         }
-
-        public static Patient? GetSingle(string email)
+        public static void Block(User patient, string whoBlocked)
         {
-            return PatientRepository.IDPatientPairs[PatientRepository.EmailIDPairs[email]];
+            patient.IsBlocked = true;
+            PatientRepository.Block(patient.ID, whoBlocked);
         }
-
-        public static DataTable GetAll()
+        public static void Unblock(Patient patient)
         {
-            return PatientRepository.GetAll();
+            patient.whoBlocked = "";
+            patient.IsBlocked = false;
+            PatientRepository.Unblock(patient.ID);
         }
     }
 }
