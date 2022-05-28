@@ -8,6 +8,8 @@ namespace Klinika.Models
 {
     internal class PatientRequest
     {
+        public enum Types { Delete = 'D', Modify = 'M' }
+
         public int ID { get; set; }
         public int PatientID { get; set; }
         public int MedicalActionID  { get; set; }
@@ -19,13 +21,13 @@ namespace Klinika.Models
         {
             ID = -1;
         }
-        public PatientRequest(int id, int patientID, int medicalActionID, char type,
+        public PatientRequest(int patientID, int medicalActionID, Types type,
             string? description, bool approved)
         {
-            ID = id;
+            ID = -1;
             PatientID = patientID;
             MedicalActionID = medicalActionID;
-            Type = type;
+            Type = (char)type;
             Description = description;
             Approved = approved;
         }

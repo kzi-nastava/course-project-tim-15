@@ -23,12 +23,10 @@ namespace Klinika.Services
             foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
             {
                 if (doctor.specialization.ID != specializationId) continue;
-
-                if (!DoctorService.IsOccupied(from, doctor.ID)) return doctor;
+                if (!IsOccupied(from, doctor.ID)) return doctor;
             }
             return null;
         }
-
         public static (Doctor?,TimeSlot?) GetSuitableUnderTwoHours(int specializationId)
         {
             foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
@@ -46,25 +44,22 @@ namespace Klinika.Services
         {
             return UserRepository.GetDoctor(doctorID).ToString();
         }
+        public static Doctor GetById(int id)
+        {
+            return DoctorRepository.GetInstance().doctors.Where(x => x.ID == id).FirstOrDefault();
+        }
 
         public static List<Doctor> SearchByName(string keyword)
         {
             return DoctorRepository.GetInstance().doctors.Where(x => x.Name.ToUpper().Contains(keyword.ToUpper())).ToList();
         }
-
         public static List<Doctor> SearchBySurname(string keyword)
         {
             return DoctorRepository.GetInstance().doctors.Where(x => x.Surname.ToUpper().Contains(keyword.ToUpper())).ToList();
         }
-
         public static List<Doctor> SearchBySpecialization(int id)
         {
             return DoctorRepository.GetInstance().doctors.Where(x => x.specialization.ID == id).ToList();
-        }
-
-        public static Doctor GetById(int id)
-        {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.ID == id).FirstOrDefault();
         }
 
         public static bool IsOccupied(int doctorID, TimeSlot timeSlot, DateTime day)

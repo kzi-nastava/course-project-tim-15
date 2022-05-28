@@ -65,14 +65,14 @@ namespace Klinika.GUI.Patient
 
                 if (sendRequest == DialogResult.Yes)
                 {
-                    PatientRequestService.SendDeleted(!needApproval, selected);
+                    PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.Delete);
                 }
                 return;
             }
 
             AppointmentRepository.Delete(selected.ID);
             AppointmentRepository.GetInstance().DeleteFromList(selected.ID);
-            PatientRequestService.SendDeleted(!needApproval, selected);
+            PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.Delete);
             PersonalAppointmentsTable.DeleteSelected();
         }
         #endregion

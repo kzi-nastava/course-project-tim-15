@@ -12,6 +12,13 @@ namespace Klinika.GUI.Patient
         private readonly PatientMain Parent;
         private Appointment? Appointment;
         private readonly bool IsDoctorSelected;
+        private bool IsCreate
+        {
+            get
+            {
+                return Appointment == null || IsDoctorSelected;
+            }
+        }
 
         #region Form
         public PersonalAppointment(PatientMain parent, Appointment appointment, bool isDoctorSelected = false)
@@ -29,12 +36,8 @@ namespace Klinika.GUI.Patient
         }
         private void FillFormDetails()
         {
-            if (Appointment == null || IsDoctorSelected)
-            {
-                SetupAsCreate();
-                return;
-            }
-            SetupAsModify();
+            if (IsCreate) SetupAsCreate();
+            else SetupAsModify();
         }
         private void SetupAsCreate()
         {
@@ -42,8 +45,8 @@ namespace Klinika.GUI.Patient
             DoctorComboBox.SelectedIndex = Parent.DoctorComboBox.SelectedIndex;
 
             if (IsDoctorSelected)
-            { 
-                DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(UserRepository.GetInstance().Users.Where(x => x.ID == Appointment.DoctorID).FirstOrDefault());
+            {
+                SetDoctorComboBoxIndex();
                 return; 
             }
 
@@ -65,75 +68,61 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
-        #region Click functions
         private void ConfirmeButtonClick(object sender, EventArgs e)
         {
             if (!ValidateForm()) return;
 
-            if (Appointment == null || IsDoctorSelected) 
-            {
-                ConfirmeCreate();
-                return;
-            }
-            ConfirmeModify();
+            if (IsCreate) Create();
+            else Modify();
         }
-        private void ConfirmeCreate()
+        private bool ConfirmeCreate()
         {
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes)
-            {
-                CreateInDatabase();
-                Close();
-            }
-            return;
+            if (dialogResult == DialogResult.Yes) return true;
+            return false;
         }
-        private void ConfirmeModify()
+        private bool ConfirmeModify()
         {
-            DialogResult dialogResult = MessageBox.Show("Are you sure you want to save the changes?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes)
-            {
-                ModifyInDatabase();
-                Close();
-            }
-            return;
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to save the changes?", 
+                "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes) return true;
+            return false;
         }
-        #endregion
+        private bool ConfirmeSendRequest()
+        {
+            DialogResult sendConfirmation = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
+                    "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (sendConfirmation == DialogResult.Yes) return true;
+            return false;
+        }
+        
+        private void Create()
+        {
+            if (!ConfirmeCreate()) return;
 
-        #region Helper functions
-        private void CreateInDatabase()
-        {
             Appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
-
             AppointmentRepository.GetInstance().Create(Appointment);
+
             Parent.PersonalAppointmentsTable.Insert(Appointment);
-            if (!IsDoctorSelected)
-            {
-                Parent.OccupiedAppointmentsTable.Insert(Appointment);
-            }
+            if (!IsDoctorSelected) Parent.OccupiedAppointmentsTable.Insert(Appointment);
+
+            Close();
         }
-        private void ModifyInDatabase()
+        private void Modify()
         {
+            if (!ConfirmeModify()) return;
+
             Appointment.DoctorID = GetSelectedDoctorID();
             Appointment.DateTime = GetSelectedDateTime();
-            string description = PatientRequestService.GenerateDescription(GetSelectedDateTime(), GetSelectedDoctorID());
 
             bool needApproval = DateTime.Now.AddDays(2).Date >= Appointment.DateTime.Date;
+            if (needApproval && !ConfirmeSendRequest()) return;
 
-            if (needApproval)
-            {
-                DialogResult sendConfirmation = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
-                    "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            PatientRequestService.Send(!needApproval, Appointment, PatientRequest.Types.Modify);
+            AppointmentService.Modify(Appointment);
 
-                if (sendConfirmation == DialogResult.Yes)
-                {
-                    PatientRequestService.SendModify(!needApproval, Appointment, description);
-                }
-                return;
-            }
-
-            PatientRequestService.SendModify(!needApproval, Appointment, description);
-            AppointmentRepository.GetInstance().Modify(Appointment);
             Parent.PersonalAppointmentsTable.ModifySelected(Appointment);
+            Close();
         }  
         private int GetSelectedDoctorID()
         {
@@ -162,6 +151,5 @@ namespace Klinika.GUI.Patient
             }
             return true;
         }
-        #endregion
     }
 }
