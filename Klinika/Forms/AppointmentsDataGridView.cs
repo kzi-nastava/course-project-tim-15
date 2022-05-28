@@ -27,8 +27,6 @@ namespace Klinika.Forms
         }
         public void Fill(List<Appointment> appointments)
         {
-            Appointments = appointments;
-
             DataTable appointmetnsData = new DataTable();
             appointmetnsData.Columns.Add("ID");
             appointmetnsData.Columns.Add($"{SearchedRole} Full Name");
@@ -41,7 +39,7 @@ namespace Klinika.Forms
             DataSource = appointmetnsData;
             Columns[0].Width = 45;
 
-            foreach (Appointment appointment in Appointments) Insert(appointment);
+            foreach (Appointment appointment in appointments) Insert(appointment);
 
             ClearSelection();
         }
@@ -57,6 +55,7 @@ namespace Klinika.Forms
             newRow["Urgent"] = appointment.Urgent;
             newRow["Completed"] = appointment.Completed;
             dt.Rows.Add(newRow);
+            Appointments.Add(appointment);
         }
         public int GetSelectedID()
         {

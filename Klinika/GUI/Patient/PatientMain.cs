@@ -58,21 +58,12 @@ namespace Klinika.GUI.Patient
             Appointment selected = PersonalAppointmentsTable.GetSelected();
             bool needApproval = DateTime.Now.AddDays(2).Date >= selected.DateTime.Date;
 
-            if (needApproval)
-            {
-                DialogResult sendRequest = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
-                "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
-                if (sendRequest == DialogResult.Yes)
-                {
-                    PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.Delete);
-                }
-                return;
-            }
-
-            AppointmentRepository.Delete(selected.ID);
-            AppointmentRepository.GetInstance().DeleteFromList(selected.ID);
             PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.Delete);
+            if (needApproval) return;
+
+            AppointmentService.Delete(selected.ID);
             PersonalAppointmentsTable.DeleteSelected();
         }
         #endregion
@@ -252,7 +243,6 @@ namespace Klinika.GUI.Patient
         #endregion
 
         #region Helper functions
-        
         private void FillSpecializationsComboBox()
         {
             var specializations = DoctorRepository.GetSpecializations().ToArray();

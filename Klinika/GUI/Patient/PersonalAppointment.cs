@@ -75,30 +75,9 @@ namespace Klinika.GUI.Patient
             if (IsCreate) Create();
             else Modify();
         }
-        private bool ConfirmeCreate()
-        {
-            DialogResult dialogResult = MessageBox.Show("Are you sure you want to create this Appoinment?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes) return true;
-            return false;
-        }
-        private bool ConfirmeModify()
-        {
-            DialogResult dialogResult = MessageBox.Show("Are you sure you want to save the changes?", 
-                "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.Yes) return true;
-            return false;
-        }
-        private bool ConfirmeSendRequest()
-        {
-            DialogResult sendConfirmation = MessageBox.Show("Changes that you have requested have to be check by secretary. " +
-                    "Do you want to send request? ", "Send Request", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (sendConfirmation == DialogResult.Yes) return true;
-            return false;
-        }
-        
         private void Create()
         {
-            if (!ConfirmeCreate()) return;
+            if (!UIUtilities.Confirm("Are you sure you want to create this Appoinment ?")) return;
 
             Appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
             AppointmentRepository.GetInstance().Create(Appointment);
@@ -110,18 +89,20 @@ namespace Klinika.GUI.Patient
         }
         private void Modify()
         {
-            if (!ConfirmeModify()) return;
+            if (!UIUtilities.Confirm("Are you sure you want to save the changes?")) return;
 
             Appointment.DoctorID = GetSelectedDoctorID();
             Appointment.DateTime = GetSelectedDateTime();
 
             bool needApproval = DateTime.Now.AddDays(2).Date >= Appointment.DateTime.Date;
-            if (needApproval && !ConfirmeSendRequest()) return;
+            if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
             PatientRequestService.Send(!needApproval, Appointment, PatientRequest.Types.Modify);
-            AppointmentService.Modify(Appointment);
-
-            Parent.PersonalAppointmentsTable.ModifySelected(Appointment);
+            if (!needApproval)
+            {
+                AppointmentService.Modify(Appointment);
+                Parent.PersonalAppointmentsTable.ModifySelected(Appointment);
+            }
             Close();
         }  
         private int GetSelectedDoctorID()
