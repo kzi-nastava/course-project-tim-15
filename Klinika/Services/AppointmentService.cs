@@ -22,27 +22,22 @@ namespace Klinika.Services
                     return "Examination";
             }
         }
-
         public static void Create(Appointment appointment)
         {
             AppointmentRepository.GetInstance().Create(appointment);
         }
-
         public static void Modify(Appointment appointment)
         {
             AppointmentRepository.GetInstance().Modify(appointment);
         }
-
         public static void Delete(int id)
         {
             AppointmentRepository.Delete(id);
             AppointmentRepository.GetInstance().DeleteFromList(id);
         }
-
         public static Appointment GetById(int id)
         {
-            return AppointmentRepository.GetInstance().Appointments.Where(o => o.ID == id).FirstOrDefault();
+            return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == id).FirstOrDefault();
         }
-        
     }
 }
