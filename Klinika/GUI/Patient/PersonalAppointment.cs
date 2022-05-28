@@ -21,7 +21,7 @@ namespace Klinika.GUI.Patient
         }
 
         #region Form
-        public PersonalAppointment(PatientMain parent, Appointment appointment, bool isDoctorSelected = false)
+        public PersonalAppointment(PatientMain parent, Appointment? appointment, bool isDoctorSelected = false)
         {
             InitializeComponent();
             Parent = parent;

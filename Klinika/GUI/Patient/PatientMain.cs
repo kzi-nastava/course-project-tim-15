@@ -79,8 +79,7 @@ namespace Klinika.GUI.Patient
             if (!IsDateValid(AppointmentDatePicker.Value)) return;
 
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
-            var occupied = AppointmentRepository.GetAll(AppointmentDatePicker.Value.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
-            OccupiedAppointmentsTable.Fill(occupied);
+            OccupiedAppointmentsTable.Fill(AppointmentService.GetOccupied(AppointmentDatePicker.Value, doctorID));
             ScheduleButton.Enabled = true;
         }
         private void ScheduleAppointmentButtonClick(object sender, EventArgs e)
