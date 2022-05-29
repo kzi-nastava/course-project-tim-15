@@ -22,10 +22,10 @@ namespace Klinika.Repositories
         public DrugRepository()
         {
             Drugs = new List<Drug>();
-            GetDrugs();
+            GetAll();
         }
 
-        private void GetDrugs()
+        private void GetAll()
         {
             GetBasicInfo();
             GetIngredients();

@@ -126,7 +126,7 @@ namespace Klinika.GUI.Doctor
             var anamnesis = new Anamnesis(Appointment.ID, DescriptionTextBox.Text,
                 SymptomsTextBox.Text, ConclusionTextBox.Text);
 
-            MedicalRecordService.StoreAnamanesis(anamnesis);
+            AnamnesisService.Create(anamnesis);
             return true;
         }
         private void FinishButtonClick(object sender, EventArgs e)
@@ -160,7 +160,7 @@ namespace Klinika.GUI.Doctor
 
             int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
             int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).ID;
-            MedicalRecordService.CreateReferal(Appointment.PatientID, specializationID, doctorID);
+            ReferralService.Create(Appointment.PatientID, specializationID, doctorID);
 
             MessageBoxUtilities.ShowInformationMessage("Referal made successfully!");
             return true;

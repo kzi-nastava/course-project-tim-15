@@ -8,7 +8,7 @@ namespace Klinika.Services
         public PrescriptionService() { }
         public static void StorePrescription(Prescription prescription)
         {
-            PrescriptionRepository.CreatePrescription(prescription);
+            PrescriptionRepository.Create(prescription);
         }
     }
 }

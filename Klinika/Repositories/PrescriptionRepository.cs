@@ -5,7 +5,7 @@ namespace Klinika.Repositories
 {
     public class PrescriptionRepository
     {
-        public static void CreatePrescription(Prescription prescription)
+        public static void Create(Prescription prescription)
         {
             string createQuery = "INSERT INTO [Prescription] " +
                 "(PatientID,DrugID,DateStarted,DateEnded,Interval,Comment) " +

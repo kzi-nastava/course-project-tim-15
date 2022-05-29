@@ -97,7 +97,7 @@ namespace Klinika.GUI.Patient
         #region Medical Record Tab
         private void InitMedicalRecorTab()
         {
-            FillMedicalRecordTable(MedicalRecordService.GetAnamneses(Patient.ID));
+            FillMedicalRecordTable(AnamnesisService.Get(Patient.ID));
         }
         private void FillMedicalRecordTable(List<Anamnesis> anamneses)
         {
@@ -129,7 +129,7 @@ namespace Klinika.GUI.Patient
         private void SearchButtonClick(object sender, EventArgs e)
         {
             string searchParam = SearchTextBox.Text;
-            List<Anamnesis> searchResoult = MedicalRecordService.GetFiltered(Patient.ID, searchParam);
+            List<Anamnesis> searchResoult = AnamnesisService.GetFiltered(Patient.ID, searchParam);
             FillMedicalRecordTable(searchResoult);
         }
         private void ResetButtonClick(object sender, EventArgs e)
