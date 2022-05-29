@@ -20,6 +20,7 @@ namespace Klinika.GUI.Doctor
         {
             Parent.Enabled = false;
             UIUtilities.FillPatientComboBox(PatientComboBox);
+            RoomComboBox.Items.AddRange(RoomServices.GetOperationRooms());
 
             if (Appointment == null)
             {
@@ -49,6 +50,8 @@ namespace Klinika.GUI.Doctor
         {
             ExaminationRadioButton.Checked = type == Appointment.Types.EXAMINATION;
             OperationRadioButton.Checked = type == Appointment.Types.OPERATION;
+            RoomComboBox.Enabled = type == Appointment.Types.OPERATION;
+            RoomComboBox.SelectedIndex = type == Appointment.Types.EXAMINATION ? -1 : -1;
             DurationTextBox.Enabled = type == Appointment.Types.OPERATION;
             DurationTextBox.Text = type == Appointment.Types.EXAMINATION ? "15"
                 : duration == -1 ? "" : duration.ToString();

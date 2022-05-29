@@ -41,6 +41,8 @@
             this.DurationTextBox = new System.Windows.Forms.TextBox();
             this.ConfirmButton = new System.Windows.Forms.Button();
             this.IsUrgentCheckBox = new System.Windows.Forms.CheckBox();
+            this.RoomComboBox = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -151,7 +153,7 @@
             // 
             // ConfirmButton
             // 
-            this.ConfirmButton.Location = new System.Drawing.Point(144, 313);
+            this.ConfirmButton.Location = new System.Drawing.Point(140, 350);
             this.ConfirmButton.Name = "ConfirmButton";
             this.ConfirmButton.Size = new System.Drawing.Size(94, 29);
             this.ConfirmButton.TabIndex = 11;
@@ -170,11 +172,33 @@
             this.IsUrgentCheckBox.Text = "Urgent";
             this.IsUrgentCheckBox.UseVisualStyleBackColor = true;
             // 
+            // RoomComboBox
+            // 
+            this.RoomComboBox.DropDownHeight = 180;
+            this.RoomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.RoomComboBox.FormattingEnabled = true;
+            this.RoomComboBox.IntegralHeight = false;
+            this.RoomComboBox.Location = new System.Drawing.Point(83, 288);
+            this.RoomComboBox.Name = "RoomComboBox";
+            this.RoomComboBox.Size = new System.Drawing.Size(151, 28);
+            this.RoomComboBox.TabIndex = 13;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(13, 291);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(49, 20);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Room";
+            // 
             // AppointmentDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(259, 369);
+            this.ClientSize = new System.Drawing.Size(259, 406);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.RoomComboBox);
             this.Controls.Add(this.IsUrgentCheckBox);
             this.Controls.Add(this.ConfirmButton);
             this.Controls.Add(this.DurationTextBox);
@@ -216,5 +240,7 @@
         internal TextBox DurationTextBox;
         private Button ConfirmButton;
         internal CheckBox IsUrgentCheckBox;
+        internal ComboBox RoomComboBox;
+        private Label label5;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Klinika.Data;
+using Klinika.Models;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -12,12 +13,28 @@ namespace Klinika.Repositories
         {
             return types.FirstOrDefault(x => x.Value == type).Key;
         }
+        public static List<Room> Get()
+        {
+            string getQuery = "SELECT [Room].ID, [Room].Type, [Room].Number " +
+                                      "FROM [Room] " +
+                                      "WHERE IsDeleted = 0";
+            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery);
+            var output = new List<Room>();
+            foreach (object row in result)
+            {
+                var room = new Room(
+                    id: Convert.ToInt32(((object[])row)[0].ToString()),
+                    type: Convert.ToInt32(((object[])row)[1].ToString()),
+                    number: Convert.ToInt32(((object[])row)[2].ToString()));
+                output.Add(room);
+            }
+            return output;
+        }
         public static DataTable GetAll()
         {
             GetAllTypes();
             return GetAllRoomsWithTypeNames();
         }
-
         public static DataTable GetAllRoomsWithTypeNames()
         {
             string getAllQuery = "SELECT [Room].ID, [RoomType].Name as Type, [Room].Number " +

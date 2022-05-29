@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Klinika.Models;
+using Klinika.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -25,7 +27,7 @@ namespace Klinika.Services
         public static List<Models.EnhancedComboBoxItem> GetRooms()
         {
             List<Models.EnhancedComboBoxItem> rooms = new List<Models.EnhancedComboBoxItem>();
-            DataTable retrievedRooms = Repositories.RoomRepository.GetAllRooms();
+            DataTable retrievedRooms = Repositories.RoomRepository.GetAllRoomsWithTypeNames();
 
             foreach (DataRow row in retrievedRooms.Rows)
             {
@@ -33,6 +35,10 @@ namespace Klinika.Services
             }
             rooms = rooms.OrderBy(x => x.text).ToList();
             return rooms;
+        }
+        public static Room[] GetOperationRooms()
+        {
+            return RoomRepository.Get().Where(x => x.Type == 1).ToArray();
         }
     }
 }
