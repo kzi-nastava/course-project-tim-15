@@ -26,5 +26,9 @@ namespace Klinika.Services
             }
             return available;
         }
+        public static List<Specialization> GetAll()
+        {
+            return DoctorRepository.GetSpecializations();
+        }
     }
 }

@@ -7,6 +7,7 @@ using Klinika.Roles;
 using Klinika.Repositories;
 using System.Data;
 using Klinika.Models;
+using Klinika.Services;
 
 namespace Klinika.Utilities
 {
@@ -39,6 +40,23 @@ namespace Klinika.Utilities
         {
             comboBox.Items.AddRange(UserRepository.GetDoctors().ToArray());
             comboBox.SelectedIndex = 0;
+        }
+        public static void FillPatientComboBox(ComboBox comboBox)
+        {
+            comboBox.Items.AddRange(UserRepository.GetPatients().ToArray());
+            comboBox.SelectedIndex = 0;
+        }
+        public static void FillSpecializationComboBox(ComboBox comboBox)
+        {
+            var specializations = SpecializationService.GetAll().ToArray();
+            comboBox.Items.AddRange(specializations); 
+            comboBox.SelectedIndex = -1;
+        }
+        public static void FillSpecializedDoctorComboBox(ComboBox comboBox, int specializationID)
+        {
+            comboBox.Items.Clear();
+            comboBox.Items.AddRange(DoctorRepository.GetSpecializedDoctors(specializationID));
+            comboBox.SelectedIndex = -1;
         }
         public static bool Confirm(string message)
         {

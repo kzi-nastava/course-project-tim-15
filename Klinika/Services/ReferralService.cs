@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using Klinika.Repositories;
 
 namespace Klinika.Services
@@ -14,7 +9,10 @@ namespace Klinika.Services
         {
             return ReferalRepository.GetReferralsPerPatient(patientId);
         }
-
+        public static void Create(int patientID, int specializationID, int doctorID)
+        {
+            ReferalRepository.Create(patientID, specializationID, doctorID);
+        }
         public static void MarkAsUsed(int referralId)
         {
             ReferalRepository.MarkAsUsed(referralId);

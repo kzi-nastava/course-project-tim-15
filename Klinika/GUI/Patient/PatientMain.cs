@@ -81,7 +81,7 @@ namespace Klinika.GUI.Patient
             if (!IsDateValid(AppointmentDatePicker.Value)) return;
 
             int doctorID = (DoctorComboBox.SelectedItem as User).ID;
-            OccupiedAppointmentsTable.Fill(AppointmentService.GetOccupied(AppointmentDatePicker.Value, doctorID));
+            OccupiedAppointmentsTable.Fill(DoctorService.GetAppointments(AppointmentDatePicker.Value, doctorID));
             ScheduleButton.Enabled = true;
         }
         private void ScheduleAppointmentButtonClick(object sender, EventArgs e)
@@ -97,7 +97,7 @@ namespace Klinika.GUI.Patient
         #region Medical Record Tab
         private void InitMedicalRecorTab()
         {
-            FillMedicalRecordTable(MedicalRecordService.GetAnamneses(Patient.ID));
+            FillMedicalRecordTable(AnamnesisService.Get(Patient.ID));
         }
         private void FillMedicalRecordTable(List<Anamnesis> anamneses)
         {
@@ -129,7 +129,7 @@ namespace Klinika.GUI.Patient
         private void SearchButtonClick(object sender, EventArgs e)
         {
             string searchParam = SearchTextBox.Text;
-            List<Anamnesis> searchResoult = MedicalRecordService.GetFiltered(Patient.ID, searchParam);
+            List<Anamnesis> searchResoult = AnamnesisService.GetFiltered(Patient.ID, searchParam);
             FillMedicalRecordTable(searchResoult);
         }
         private void ResetButtonClick(object sender, EventArgs e)
@@ -224,7 +224,7 @@ namespace Klinika.GUI.Patient
         #region Helper functions
         private void FillSpecializationsComboBox()
         {
-            var specializations = DoctorService.GetAllSpecializations().ToArray();
+            var specializations = SpecializationService.GetAll().ToArray();
             DoctorSpecializationComboBox.Items.AddRange(specializations);
             DoctorSpecializationComboBox.SelectedIndex = 0;
         }
