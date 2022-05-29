@@ -42,7 +42,7 @@
             this.UnapprovedDrugsTab = new System.Windows.Forms.TabPage();
             this.DenyDrugButton = new System.Windows.Forms.Button();
             this.ApproveDrugButton = new System.Windows.Forms.Button();
-            this.DenydDrugDescription = new System.Windows.Forms.TextBox();
+            this.DenyDrugDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.UnapprovedDrugsTable = new Klinika.Forms.DrugsDataGridView();
             this.MainTabControl.SuspendLayout();
@@ -196,7 +196,7 @@
             // 
             this.UnapprovedDrugsTab.Controls.Add(this.DenyDrugButton);
             this.UnapprovedDrugsTab.Controls.Add(this.ApproveDrugButton);
-            this.UnapprovedDrugsTab.Controls.Add(this.DenydDrugDescription);
+            this.UnapprovedDrugsTab.Controls.Add(this.DenyDrugDescription);
             this.UnapprovedDrugsTab.Controls.Add(this.label1);
             this.UnapprovedDrugsTab.Controls.Add(this.UnapprovedDrugsTable);
             this.UnapprovedDrugsTab.Location = new System.Drawing.Point(4, 29);
@@ -229,12 +229,12 @@
             // 
             // DenydDrugDescription
             // 
-            this.DenydDrugDescription.Location = new System.Drawing.Point(10, 327);
-            this.DenydDrugDescription.Multiline = true;
-            this.DenydDrugDescription.Name = "DenyDrugDescription";
-            this.DenydDrugDescription.Size = new System.Drawing.Size(280, 110);
-            this.DenydDrugDescription.TabIndex = 4;
-            this.DenydDrugDescription.TextChanged += new System.EventHandler(this.DenyDrugDescriptionTextChanged);
+            this.DenyDrugDescription.Location = new System.Drawing.Point(10, 327);
+            this.DenyDrugDescription.Multiline = true;
+            this.DenyDrugDescription.Name = "DenyDrugDescription";
+            this.DenyDrugDescription.Size = new System.Drawing.Size(280, 110);
+            this.DenyDrugDescription.TabIndex = 4;
+            this.DenyDrugDescription.TextChanged += new System.EventHandler(this.DenyDrugDescriptionTextChanged);
             // 
             // label1
             // 
@@ -308,7 +308,7 @@
         internal Klinika.Forms.DrugsDataGridView UnapprovedDrugsTable;
         private Button DenyDrugButton;
         private Button ApproveDrugButton;
-        private TextBox DenydDrugDescription;
+        private TextBox DenyDrugDescription;
         private Label label1;
     }
 }
