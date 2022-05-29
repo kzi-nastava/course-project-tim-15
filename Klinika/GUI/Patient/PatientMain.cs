@@ -224,7 +224,7 @@ namespace Klinika.GUI.Patient
         #region Helper functions
         private void FillSpecializationsComboBox()
         {
-            var specializations = DoctorService.GetAllSpecializations().ToArray();
+            var specializations = SpecializationService.GetAll().ToArray();
             DoctorSpecializationComboBox.Items.AddRange(specializations);
             DoctorSpecializationComboBox.SelectedIndex = 0;
         }

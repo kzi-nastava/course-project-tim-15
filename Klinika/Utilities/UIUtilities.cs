@@ -48,7 +48,7 @@ namespace Klinika.Utilities
         }
         public static void FillSpecializationComboBox(ComboBox comboBox)
         {
-            var specializations = DoctorService.GetAllSpecializations().ToArray();
+            var specializations = SpecializationService.GetAll().ToArray();
             comboBox.Items.AddRange(specializations); 
             comboBox.SelectedIndex = -1;
         }
