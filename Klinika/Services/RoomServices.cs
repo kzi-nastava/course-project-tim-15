@@ -40,5 +40,13 @@ namespace Klinika.Services
         {
             return RoomRepository.Get().Where(x => x.Type == 1).ToArray();
         }
+        public static List<Room> GetExaminationRooms()
+        {
+            return RoomRepository.Get().Where(x => x.Type == 2).ToList();
+        }
+        public static Room? GetSingle(int id)
+        {
+            return RoomRepository.Get().Where(x => x.ID == id).FirstOrDefault();
+        }
     }
 }

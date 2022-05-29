@@ -53,6 +53,10 @@ namespace Klinika.Services
         {
             return UserRepository.GetDoctor(doctorID).ToString();
         }
+        public static Room? GetOffice(int officeID)
+        {
+            return RoomServices.GetExaminationRooms().Where(x => x.ID == officeID).FirstOrDefault();
+        }
         public static Doctor GetById(int id)
         {
             return DoctorRepository.GetInstance().doctors.Where(x => x.ID == id).FirstOrDefault();

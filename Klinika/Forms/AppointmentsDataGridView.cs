@@ -32,6 +32,7 @@ namespace Klinika.Forms
             appointmetnsData.Columns.Add($"{SearchedRole} Full Name");
             appointmetnsData.Columns.Add("Date & Time");
             appointmetnsData.Columns.Add("Type");
+            appointmetnsData.Columns.Add("Room");
             appointmetnsData.Columns.Add("Duration [min]");
             appointmetnsData.Columns.Add("Urgent", typeof(bool));
             appointmetnsData.Columns.Add("Completed", typeof(bool));
@@ -51,6 +52,7 @@ namespace Klinika.Forms
             newRow[$"{SearchedRole} Full Name"] = GetFullName(appointment);
             newRow["Date & Time"] = appointment.DateTime;
             newRow["Type"] = appointment.GetType();
+            newRow["Room"] = RoomServices.GetSingle(appointment.RoomID).ToString();
             newRow["Duration [min]"] = appointment.Duration;
             newRow["Urgent"] = appointment.Urgent;
             newRow["Completed"] = appointment.Completed;
@@ -77,6 +79,7 @@ namespace Klinika.Forms
                 GetFullName(appointment),
                 appointment.DateTime.ToString(),
                 appointment.GetType(),
+                RoomServices.GetSingle(appointment.RoomID).ToString(),
                 appointment.Duration.ToString(),
                 appointment.Urgent,
                 appointment.Completed);
