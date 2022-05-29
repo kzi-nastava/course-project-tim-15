@@ -22,5 +22,20 @@ namespace Klinika.Models
             fromId = -1;
             toId = -1;
         }
+
+        public EquipmentTransfer(int fromId,
+                                 int maxQuantity,
+                                 int toId,
+                                 int quantity,
+                                 int equipment,
+                                 DateTime transfer)
+        {
+            this.fromId = fromId;
+            this.maxQuantity = maxQuantity;
+            this.toId = toId;
+            this.quantity = quantity;
+            this.equipment = equipment;
+            this.transfer = transfer;
+        }
     }
 }

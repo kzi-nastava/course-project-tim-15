@@ -36,11 +36,13 @@
             // referralsTable
             // 
             this.referralsTable.AllowUserToAddRows = false;
+            this.referralsTable.AllowUserToDeleteRows = false;
             this.referralsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.referralsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.referralsTable.Location = new System.Drawing.Point(12, 12);
             this.referralsTable.MultiSelect = false;
             this.referralsTable.Name = "referralsTable";
+            this.referralsTable.ReadOnly = true;
             this.referralsTable.RowHeadersWidth = 51;
             this.referralsTable.RowTemplate.Height = 29;
             this.referralsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;

@@ -29,15 +29,17 @@ namespace Klinika.Services
         {
             return PatientRepository.GetAll();
         }
-        public static void Add(Patient newPatient)
+
+        public static bool Add(Patient newPatient)
         {
             string error_message = ValidationUtilities.ValidatePatient(newPatient);
             if(error_message != null)
             {
                 MessageBoxUtilities.ShowErrorMessage(error_message);
-                return;
+                return false;
             }
             PatientRepository.Create(newPatient);
+            return true;
         }
         public static void Modify(Patient patient)
         {
