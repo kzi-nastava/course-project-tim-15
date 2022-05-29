@@ -1,5 +1,4 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
@@ -18,7 +17,7 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             Parent = parent;
             Appointment = appointment;
-            Record = MedicalRecordRepository.Get(appointment.PatientID);
+            Record = MedicalRecordService.Get(appointment.PatientID);
             if (!isPreview) AnamnesisGroup.Visible = true;
         }
         private void LoadForm(object sender, EventArgs e)
