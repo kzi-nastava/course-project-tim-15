@@ -88,7 +88,7 @@ namespace Klinika.Repositories
 
             foreach(int id in ingredientsIDs)
             {
-                var ingredient = DrugRepository.Instance.Ingredients.Where(x => x.ID == id).FirstOrDefault();
+                var ingredient = IngredientRepository.Instance.Ingredients.Where(x => x.ID == id).FirstOrDefault();
                 if (ingredient != null)
                 {
                     allergens.Add(ingredient);
