@@ -230,5 +230,10 @@ namespace Klinika.GUI.Manager
                 MessageBox.Show("Invalid picks.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

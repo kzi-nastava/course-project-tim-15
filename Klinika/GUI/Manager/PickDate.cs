@@ -34,10 +34,14 @@ namespace Klinika.GUI.Manager
             {
                 MessageBox.Show("You must choose a not 0 value for quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+            else if(int.Parse(quantityTextBox.Text.Trim()) > main.transfer.maxQuantity)
+            {
+                MessageBox.Show("Can not transfer that much.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
             else
             {
                 main.transfer.quantity = int.Parse(quantityTextBox.Text);
-                main.transfer.transfer = dateTimePicker.Value;
+                main.transfer.transfer = dateTimePicker.Value.Date;
                 if(main.transfer.transfer.Date == DateTime.Now.Date)
                 {
                     Repositories.EquipmentRepository.Transfer(main.transfer);

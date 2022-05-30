@@ -57,7 +57,7 @@ namespace Klinika.Repositories
                 create.Parameters.AddWithValue("@ToID", transfer.toId);
                 create.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
                 create.Parameters.AddWithValue("@Quantity", transfer.quantity);
-                create.Parameters.AddWithValue("@Date", transfer.transfer.ToString("yyyy-mm-dd"));
+                create.Parameters.AddWithValue("@Date", transfer.transfer.ToString("yyyy-MM-dd"));
                 create.Parameters.AddWithValue("@MaxQuantity", transfer.maxQuantity);
                 DatabaseConnection.GetInstance().database.Open();
                 create.ExecuteNonQuery();
@@ -131,8 +131,52 @@ namespace Klinika.Repositories
 
         public static void CheckEquipmentTransfers()
         {
-            string transfersQuery = "SELECT Quantity FROM [RoomEquipment] " +
-                "WHERE RoomID = @RoomID AND EquipmentID = @EquipmentID";
+            string getRequestsQuery = "SELECT [EquipmentTransferRequest].ID, [EquipmentTransferRequest].FromID, [EquipmentTransferRequest].ToID, [EquipmentTransferRequest].EquipmentID, [EquipmentTransferRequest].Quantity, [EquipmentTransferRequest].Date, [EquipmentTransferRequest].MaxQuantity, [EquipmentTransferRequest].Done " +
+                "FROM [EquipmentTransferRequest]";
+
+            string doneQuery = "UPDATE [EquipmentTransferRequest] " +
+                                 "SET Done = 1 " +
+                                 "WHERE ID = @ID";
+
+            DataTable requests = new DataTable();
+            try
+            {
+                SqlConnection database = DatabaseConnection.GetInstance().database;
+                database.Open();
+                SqlDataAdapter adapter = new SqlDataAdapter(getRequestsQuery, database);
+                adapter.Fill(requests);
+                database.Close();
+
+                Models.EquipmentTransfer transfer = new Models.EquipmentTransfer();
+
+                if (requests.Rows.Count > 0)
+                {
+                    foreach (DataRow row in requests.Rows)
+                    {
+                        transfer.transfer = DateTime.Parse(row["Date"].ToString());
+
+                        if (transfer.transfer <= DateTime.Now && (bool)row["Done"] == false)
+                        {
+                            transfer.quantity = (int)row["Quantity"];
+                            transfer.maxQuantity = (int)row["MaxQuantity"];
+                            transfer.fromId = (int)row["FromID"];
+                            transfer.toId = (int)row["ToID"];
+                            transfer.equipment = (int)row["EquipmentID"];
+
+                            database.Open();
+                            SqlCommand modify = new SqlCommand(doneQuery, DatabaseConnection.GetInstance().database);
+                            modify.Parameters.AddWithValue("@ID", (int)row["ID"]);
+                            modify.ExecuteNonQuery();
+                            database.Close();
+                            Transfer(transfer);
+                        }
+                    }
+                }
+            }
+            catch (SqlException error)
+            {
+                MessageBox.Show(error.Message);
+            }
         }
     }
 }
