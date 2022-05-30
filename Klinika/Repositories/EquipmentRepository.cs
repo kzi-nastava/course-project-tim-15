@@ -266,5 +266,20 @@ namespace Klinika.Repositories
                 MessageBox.Show(error.Message);
             }
         }
+
+        public static DataTable GetMissingDynamicEquipment()
+        {
+            string getQuery = "SELECT [Equipment].ID, [Equipment].Name, ISNULL([Storage].Quantity,0) 'Quantity' FROM [Equipment] " +
+                              "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +
+                              "LEFT OUTER JOIN [Storage] ON [Equipment].ID = [Storage].EquipmentID " +
+                              "WHERE [EquipmentType].Name = 'dynamic'";
+            DataTable allDynamicEquipmentInStorage = DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
+            for (int i = allDynamicEquipmentInStorage.Rows.Count - 1; i >= 0; i--)
+            {
+                if ((int)allDynamicEquipmentInStorage.Rows[i]["Quantity"] > 0) allDynamicEquipmentInStorage.Rows.RemoveAt(i);   
+            }
+            allDynamicEquipmentInStorage.Columns.Remove("Quantity");
+            return allDynamicEquipmentInStorage;
+        }
     }
 }

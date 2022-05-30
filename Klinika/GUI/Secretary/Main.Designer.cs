@@ -53,12 +53,20 @@
             this.label2 = new System.Windows.Forms.Label();
             this.patientSelection = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.equipmentRequests = new System.Windows.Forms.TabPage();
+            this.orderButton = new System.Windows.Forms.Button();
+            this.quantityPicker = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.dynamicEquipmentTable = new System.Windows.Forms.DataGridView();
             this.patients.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.patientsTable)).BeginInit();
             this.tabs.SuspendLayout();
             this.requests.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).BeginInit();
             this.referrals.SuspendLayout();
+            this.equipmentRequests.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.quantityPicker)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dynamicEquipmentTable)).BeginInit();
             this.SuspendLayout();
             // 
             // patients
@@ -150,6 +158,7 @@
             this.patientsTable.Location = new System.Drawing.Point(0, 0);
             this.patientsTable.MultiSelect = false;
             this.patientsTable.Name = "patientsTable";
+            this.patientsTable.ReadOnly = true;
             this.patientsTable.RowHeadersWidth = 51;
             this.patientsTable.RowTemplate.Height = 29;
             this.patientsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -162,6 +171,7 @@
             this.tabs.Controls.Add(this.patients);
             this.tabs.Controls.Add(this.requests);
             this.tabs.Controls.Add(this.referrals);
+            this.tabs.Controls.Add(this.equipmentRequests);
             this.tabs.Location = new System.Drawing.Point(12, 21);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
@@ -224,6 +234,7 @@
             this.requestsTable.Location = new System.Drawing.Point(0, 14);
             this.requestsTable.MultiSelect = false;
             this.requestsTable.Name = "requestsTable";
+            this.requestsTable.ReadOnly = true;
             this.requestsTable.RowHeadersWidth = 51;
             this.requestsTable.RowTemplate.Height = 29;
             this.requestsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -347,6 +358,81 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Patient:";
             // 
+            // equipmentRequests
+            // 
+            this.equipmentRequests.Controls.Add(this.orderButton);
+            this.equipmentRequests.Controls.Add(this.quantityPicker);
+            this.equipmentRequests.Controls.Add(this.label5);
+            this.equipmentRequests.Controls.Add(this.dynamicEquipmentTable);
+            this.equipmentRequests.Location = new System.Drawing.Point(4, 29);
+            this.equipmentRequests.Name = "equipmentRequests";
+            this.equipmentRequests.Padding = new System.Windows.Forms.Padding(3);
+            this.equipmentRequests.Size = new System.Drawing.Size(946, 487);
+            this.equipmentRequests.TabIndex = 3;
+            this.equipmentRequests.Text = "Missing dynamic equipment";
+            this.equipmentRequests.UseVisualStyleBackColor = true;
+            // 
+            // orderButton
+            // 
+            this.orderButton.Enabled = false;
+            this.orderButton.Location = new System.Drawing.Point(578, 413);
+            this.orderButton.Name = "orderButton";
+            this.orderButton.Size = new System.Drawing.Size(94, 29);
+            this.orderButton.TabIndex = 10;
+            this.orderButton.Text = "Order";
+            this.orderButton.UseVisualStyleBackColor = true;
+            this.orderButton.Click += new System.EventHandler(this.orderButton_Click);
+            // 
+            // quantityPicker
+            // 
+            this.quantityPicker.Enabled = false;
+            this.quantityPicker.Location = new System.Drawing.Point(249, 414);
+            this.quantityPicker.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.quantityPicker.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.quantityPicker.Name = "quantityPicker";
+            this.quantityPicker.Size = new System.Drawing.Size(226, 27);
+            this.quantityPicker.TabIndex = 9;
+            this.quantityPicker.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(171, 417);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(72, 20);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Quantity: ";
+            // 
+            // dynamicEquipmentTable
+            // 
+            this.dynamicEquipmentTable.AllowUserToAddRows = false;
+            this.dynamicEquipmentTable.AllowUserToDeleteRows = false;
+            this.dynamicEquipmentTable.AllowUserToOrderColumns = true;
+            this.dynamicEquipmentTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dynamicEquipmentTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dynamicEquipmentTable.Location = new System.Drawing.Point(3, 5);
+            this.dynamicEquipmentTable.MultiSelect = false;
+            this.dynamicEquipmentTable.Name = "dynamicEquipmentTable";
+            this.dynamicEquipmentTable.ReadOnly = true;
+            this.dynamicEquipmentTable.RowHeadersWidth = 51;
+            this.dynamicEquipmentTable.RowTemplate.Height = 29;
+            this.dynamicEquipmentTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dynamicEquipmentTable.Size = new System.Drawing.Size(940, 367);
+            this.dynamicEquipmentTable.TabIndex = 7;
+            this.dynamicEquipmentTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dynamicEquipmentTable_CellClick);
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -365,6 +451,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).EndInit();
             this.referrals.ResumeLayout(false);
             this.referrals.PerformLayout();
+            this.equipmentRequests.ResumeLayout(false);
+            this.equipmentRequests.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.quantityPicker)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dynamicEquipmentTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -396,5 +486,10 @@
         private Label label4;
         public Button scheduleButton;
         private Button urgentSchedulingButton;
+        private TabPage equipmentRequests;
+        private Button orderButton;
+        private NumericUpDown quantityPicker;
+        private Label label5;
+        public DataGridView dynamicEquipmentTable;
     }
 }

@@ -47,7 +47,7 @@ namespace Klinika.GUI.Secretary
 
             try
             {
-                PatientService.Add(newPatient);
+                if(!PatientService.Add(newPatient)) return;
                 parent.AddRowToPatientTable(newPatient);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully added!");
                 Close();

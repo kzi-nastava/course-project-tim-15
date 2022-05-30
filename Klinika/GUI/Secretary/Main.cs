@@ -261,6 +261,10 @@ namespace Klinika.GUI.Secretary
                 {
                     UIUtilities.FillPatientSelectionList(patientSelection);
                 }
+                else if (tabs.SelectedTab == equipmentRequests)
+                {
+                    UIUtilities.Fill(dynamicEquipmentTable, EquipmentService.GetMissingDynamicEquipment());
+                }
             }
             catch (DatabaseConnectionException error)
             {
@@ -376,11 +380,9 @@ namespace Klinika.GUI.Secretary
             DateTime chosenTime = appointmentPicker.Value;
             try
             {
-                if (CreateAppointment(doctorId, chosenTime))
-                {
-                    ReferralService.MarkAsUsed(chosenReferralID);
-                    MessageBoxUtilities.ShowSuccessMessage("Appointment successfully scheduled!");
-                }
+                if (!CreateAppointment(doctorId, chosenTime)) return;
+                ReferralService.MarkAsUsed(chosenReferralID);
+                MessageBoxUtilities.ShowSuccessMessage("Appointment successfully scheduled!");
             }
             catch(DatabaseConnectionException error)
             {
@@ -423,6 +425,48 @@ namespace Klinika.GUI.Secretary
             }
         }
 
+        private void orderButton_Click(object sender, EventArgs e)
+        {
+            OrderMissingDynamicEquipment();
+            SetEquipmentTabCommandStates(disable: true);
+        }
+
+        private void dynamicEquipmentTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SetEquipmentTabCommandStates();
+        }
+
+        private void SetEquipmentTabCommandStates(bool disable = false)
+        {
+            quantityPicker.Value = quantityPicker.Minimum;
+            if(!disable)
+            {
+                quantityPicker.Enabled = true;
+                orderButton.Enabled = true;
+            }
+            else
+            {
+                quantityPicker.Enabled = false;
+                orderButton.Enabled = false;
+                dynamicEquipmentTable.ClearSelection();
+            }
+
+        }
+
+        private void OrderMissingDynamicEquipment()
+        {
+            try
+            {
+                EquipmentService.MakeEquipmentTransferRequest((int)UIUtilities.GetCellValue(dynamicEquipmentTable, "ID"),
+                                                          (int)quantityPicker.Value);
+                MessageBoxUtilities.ShowSuccessMessage("Selected equipment is ordered and will be stored tomorrow.");
+                
+            }
+            catch(DatabaseConnectionException error)
+            {
+                MessageBoxUtilities.ShowErrorMessage(error.Message);
+            }
+        }
     }
 
 }
