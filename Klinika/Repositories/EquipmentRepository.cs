@@ -281,5 +281,15 @@ namespace Klinika.Repositories
             allDynamicEquipmentInStorage.Columns.Remove("Quantity");
             return allDynamicEquipmentInStorage;
         }
+        public static DataTable GetDynamicEquipment(int roomID)
+        {
+            string getQuery = "SELECT [Equipment].ID, [Equipment].Name, [RoomEquipment].Quantity FROM [Equipment] " +
+                              "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +
+                              "LEFT OUTER JOIN [RoomEquipment] ON [Equipment].ID = [RoomEquipment].EquipmentID " +
+                              "WHERE [EquipmentType].Name = 'dynamic' AND [RoomEquipment].RoomID = @ROOMID";
+
+            DataTable allDynamicEquipmentInRoom = DatabaseConnection.GetInstance().CreateTableOfData(getQuery, ("@ROOMID", roomID));
+            return allDynamicEquipmentInRoom;
+        }
     }
 }

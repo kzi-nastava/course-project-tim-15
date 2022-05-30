@@ -15,6 +15,10 @@ namespace Klinika.Services
         {
             return EquipmentRepository.GetMissingDynamicEquipment();
         }
+        public static DataTable GetDynamicEquipment(int roomID)
+        {
+            return EquipmentRepository.GetDynamicEquipment(roomID);
+        }
 
         public static void MakeEquipmentTransferRequest(int equipmentId,int quantity)
         {

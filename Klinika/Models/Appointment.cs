@@ -82,5 +82,10 @@ namespace Klinika.Models
             return AppointmentService.GetTypeFullName(Type);
         }
 
+        public bool IsExamination()
+        {
+            return Type == (char)Types.EXAMINATION;
+        }
+
     }
 }

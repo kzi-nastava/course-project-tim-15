@@ -17,7 +17,6 @@ namespace Klinika.Forms
         private string SearchedRole;
         public AppointmentsDataGridView(User.RoleType viewerRole) : base()
         {
-            Appointments = new List<Appointment>();
             SetViewerRole(viewerRole);
         }
         private void SetViewerRole(User.RoleType viewerRole)
@@ -44,6 +43,7 @@ namespace Klinika.Forms
             Columns["Urgent"].Width = 80;
             Columns["Completed"].Width = 90;
 
+            Appointments = new List<Appointment>();
             foreach (Appointment appointment in appointments) Insert(appointment);
 
             ClearSelection();
@@ -87,6 +87,9 @@ namespace Klinika.Forms
                 appointment.Duration.ToString(),
                 appointment.Urgent,
                 appointment.Completed);
+
+            Appointments.Remove(Appointments.Where(x => x.ID == appointment.ID).FirstOrDefault());
+            Appointments.Add(appointment);
         }
         private string GetFullName(Appointment appointment)
         {

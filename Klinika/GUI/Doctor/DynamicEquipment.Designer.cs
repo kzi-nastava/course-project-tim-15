@@ -28,12 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.EquipmentTable = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.EquipmentTable)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // EquipmentTable
+            // 
+            this.EquipmentTable.AllowUserToAddRows = false;
+            this.EquipmentTable.AllowUserToDeleteRows = false;
+            this.EquipmentTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.EquipmentTable.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.EquipmentTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.EquipmentTable.Location = new System.Drawing.Point(12, 12);
+            this.EquipmentTable.Name = "EquipmentTable";
+            this.EquipmentTable.ReadOnly = true;
+            this.EquipmentTable.RowHeadersWidth = 51;
+            this.EquipmentTable.RowTemplate.Height = 29;
+            this.EquipmentTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.EquipmentTable.Size = new System.Drawing.Size(820, 347);
+            this.EquipmentTable.TabIndex = 0;
+            // 
+            // DynamicEquipment
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "DynamicEquipment";
+            this.ClientSize = new System.Drawing.Size(844, 402);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Controls.Add(this.EquipmentTable);
+            this.Name = "DynamicEquipment";
+            this.Text = "Dynamic Equipment";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DynamicEquipmentFormClosing);
+            this.Load += new System.EventHandler(this.DynamicEquipmentLoad);
+            ((System.ComponentModel.ISupportInitialize)(this.EquipmentTable)).EndInit();
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        public System.Windows.Forms.DataGridView EquipmentTable;
     }
 }
