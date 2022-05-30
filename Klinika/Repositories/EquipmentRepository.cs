@@ -88,40 +88,129 @@ namespace Klinika.Repositories
 
             try
             {
-                SqlCommand fromTransfer = new SqlCommand(transferFromQuery, DatabaseConnection.GetInstance().database);
-                fromTransfer.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
-                fromTransfer.Parameters.AddWithValue("@RoomID", transfer.fromId);
-                fromTransfer.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
-
-                SqlCommand toCheck = new SqlCommand(checkQuery, DatabaseConnection.GetInstance().database);
-                toCheck.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
-                toCheck.Parameters.AddWithValue("@RoomID", transfer.toId);
-                toCheck.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
-
-                DatabaseConnection.GetInstance().database.Open();
-
-                SqlDataReader readCheck = toCheck.ExecuteReader();
-                if (readCheck.Read())
+                //If storage is one of the transfer rooms
+                if(transfer.toId == 0)
                 {
-                    SqlCommand update = new SqlCommand(updateQuery, DatabaseConnection.GetInstance().database);
-                    update.Parameters.AddWithValue("@Quantity", transfer.equipment + (int)readCheck["Quantity"]);
-                    update.Parameters.AddWithValue("@RoomID", transfer.toId);
-                    update.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
-                    readCheck.Close();
-                    update.ExecuteNonQuery();
+                    SqlCommand fromTransfer = new SqlCommand(transferFromQuery, DatabaseConnection.GetInstance().database);
+                    fromTransfer.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
+                    fromTransfer.Parameters.AddWithValue("@RoomID", transfer.fromId);
+                    fromTransfer.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+
+                    DatabaseConnection.GetInstance().database.Open();
+
+                    checkQuery = "SELECT Quantity FROM [Storage] " +
+                        "WHERE EquipmentID = @EquipmentID";
+
+                    SqlCommand toCheck = new SqlCommand(checkQuery, DatabaseConnection.GetInstance().database);
+                    toCheck.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+
+                    SqlDataReader readCheck = toCheck.ExecuteReader();
+                    if (readCheck.Read())
+                    {
+                        updateQuery = "UPDATE [Storage] " +
+                        "SET Quantity = @Quantity " +
+                        "WHERE EquipmentID = @EquipmentID";
+                        SqlCommand update = new SqlCommand(updateQuery, DatabaseConnection.GetInstance().database);
+                        update.Parameters.AddWithValue("@Quantity", transfer.equipment + (int)readCheck["Quantity"]);
+                        update.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+                        readCheck.Close();
+                        update.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        insertQuery = "INSERT INTO [Storage] " +
+                        "(EquipmentID, Quantity) " +
+                        "VALUES (@EquipmentID, @Quantity)";
+                        readCheck.Close();
+                        SqlCommand insert = new SqlCommand(insertQuery, DatabaseConnection.GetInstance().database);
+                        insert.Parameters.AddWithValue("@Quantity", transfer.quantity);
+                        insert.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+                        insert.ExecuteNonQuery();
+                    }
+
+                    fromTransfer.ExecuteNonQuery();
+                    DatabaseConnection.GetInstance().database.Close();
                 }
+
+                else if(transfer.fromId == 0)
+                {
+                    transferFromQuery = "UPDATE [Storage] " +
+                        "SET Quantity = @Quantity " +
+                        "WHERE EquipmentID = @EquipmentID";
+
+                    SqlCommand fromTransfer = new SqlCommand(transferFromQuery, DatabaseConnection.GetInstance().database);
+                    fromTransfer.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
+                    fromTransfer.Parameters.AddWithValue("@RoomID", transfer.fromId);
+                    fromTransfer.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+
+                    SqlCommand toCheck = new SqlCommand(checkQuery, DatabaseConnection.GetInstance().database);
+                    toCheck.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
+                    toCheck.Parameters.AddWithValue("@RoomID", transfer.toId);
+                    toCheck.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+
+                    DatabaseConnection.GetInstance().database.Open();
+
+                    SqlDataReader readCheck = toCheck.ExecuteReader();
+                    if (readCheck.Read())
+                    {
+                        SqlCommand update = new SqlCommand(updateQuery, DatabaseConnection.GetInstance().database);
+                        update.Parameters.AddWithValue("@Quantity", transfer.equipment + (int)readCheck["Quantity"]);
+                        update.Parameters.AddWithValue("@RoomID", transfer.toId);
+                        update.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+                        readCheck.Close();
+                        update.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        readCheck.Close();
+                        SqlCommand insert = new SqlCommand(insertQuery, DatabaseConnection.GetInstance().database);
+                        insert.Parameters.AddWithValue("@Quantity", transfer.quantity);
+                        insert.Parameters.AddWithValue("@RoomID", transfer.toId);
+                        insert.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+                        insert.ExecuteNonQuery();
+                    }
+
+                    fromTransfer.ExecuteNonQuery();
+                    DatabaseConnection.GetInstance().database.Close();
+                }
+
                 else
                 {
-                    readCheck.Close();
-                    SqlCommand insert = new SqlCommand(insertQuery, DatabaseConnection.GetInstance().database);
-                    insert.Parameters.AddWithValue("@Quantity", transfer.quantity);
-                    insert.Parameters.AddWithValue("@RoomID", transfer.toId);
-                    insert.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
-                    insert.ExecuteNonQuery();
-                }
+                    SqlCommand fromTransfer = new SqlCommand(transferFromQuery, DatabaseConnection.GetInstance().database);
+                    fromTransfer.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
+                    fromTransfer.Parameters.AddWithValue("@RoomID", transfer.fromId);
+                    fromTransfer.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
 
-                fromTransfer.ExecuteNonQuery();
-                DatabaseConnection.GetInstance().database.Close();
+                    SqlCommand toCheck = new SqlCommand(checkQuery, DatabaseConnection.GetInstance().database);
+                    toCheck.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
+                    toCheck.Parameters.AddWithValue("@RoomID", transfer.toId);
+                    toCheck.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+
+                    DatabaseConnection.GetInstance().database.Open();
+
+                    SqlDataReader readCheck = toCheck.ExecuteReader();
+                    if (readCheck.Read())
+                    {
+                        SqlCommand update = new SqlCommand(updateQuery, DatabaseConnection.GetInstance().database);
+                        update.Parameters.AddWithValue("@Quantity", transfer.equipment + (int)readCheck["Quantity"]);
+                        update.Parameters.AddWithValue("@RoomID", transfer.toId);
+                        update.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+                        readCheck.Close();
+                        update.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        readCheck.Close();
+                        SqlCommand insert = new SqlCommand(insertQuery, DatabaseConnection.GetInstance().database);
+                        insert.Parameters.AddWithValue("@Quantity", transfer.quantity);
+                        insert.Parameters.AddWithValue("@RoomID", transfer.toId);
+                        insert.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
+                        insert.ExecuteNonQuery();
+                    }
+
+                    fromTransfer.ExecuteNonQuery();
+                    DatabaseConnection.GetInstance().database.Close();
+                }
             }
             catch (SqlException error)
             {
