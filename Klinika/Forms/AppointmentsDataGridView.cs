@@ -38,7 +38,11 @@ namespace Klinika.Forms
             appointmetnsData.Columns.Add("Completed", typeof(bool));
 
             DataSource = appointmetnsData;
-            Columns[0].Width = 45;
+            Columns["ID"].Width = 45;
+            Columns["Date & Time"].Width = 155;
+            Columns["Duration [min]"].Width = 80;
+            Columns["Urgent"].Width = 80;
+            Columns["Completed"].Width = 90;
 
             foreach (Appointment appointment in appointments) Insert(appointment);
 
