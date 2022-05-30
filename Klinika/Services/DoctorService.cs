@@ -79,17 +79,17 @@ namespace Klinika.Services
         {
             DateTime start = new DateTime(day.Year, day.Month, day.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
             DateTime end = new DateTime(day.Year, day.Month, day.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
-            return IsOccupied(doctorID, start, end);
+            return IsOccupied(doctorID, new TimeSlot(start, end));
         }
         public static bool IsOccupied(DateTime start, int doctorID, int duration = 15, int forAppointmentID = -1)
         {
-            var end = start.AddMinutes(duration);
-            return IsOccupied(doctorID, start, end, forAppointmentID);
+            var slot = new TimeSlot(start, duration);
+            return IsOccupied(doctorID, slot, forAppointmentID);
         }
-        private static bool IsOccupied(int doctorID, DateTime start, DateTime end, int forAppointmentID = -1)
+        private static bool IsOccupied(int doctorID, TimeSlot slot, int forAppointmentID = -1)
         {
             List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().Appointments.Where(
-                x => x.DoctorID == doctorID && x.DateTime >= start && x.DateTime < end && !x.IsDeleted && x.ID != forAppointmentID).ToList();
+                x => x.DoctorID == doctorID && slot.DoesOverlap(new TimeSlot(x.DateTime, x.DateTime.AddMinutes(x.Duration))) && !x.IsDeleted && x.ID != forAppointmentID).ToList();
 
             if (forSelectedTimeSpan.Count == 0) return false;
             return true;

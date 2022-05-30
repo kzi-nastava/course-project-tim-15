@@ -17,6 +17,12 @@ namespace Klinika.Models
             this.to = to;
         }
 
+        public TimeSlot(DateTime from, int duration)
+        {
+            this.from = from;
+            this.to = from.AddMinutes(duration);
+        }
+
         public int GetDuration()
         {
             TimeSpan duration = to - from;
