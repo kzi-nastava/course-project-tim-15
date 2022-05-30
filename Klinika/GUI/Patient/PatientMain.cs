@@ -5,19 +5,20 @@ using Klinika.Services;
 using Klinika.Utilities;
 using System.Data;
 using RDoctor = Klinika.Roles.Doctor;
+using RPatient = Klinika.Roles.Patient;
 
 namespace Klinika.GUI.Patient
 {
     public partial class PatientMain : Form
     {
         RDoctor.Filters SelectedDoctorFilter = RDoctor.Filters.BY_NAME;
-        public User Patient { get; }
+        public RPatient Patient { get; }
 
         #region Form
-        public PatientMain(User patient)
+        public PatientMain(int patientID)
         {
             InitializeComponent();
-            Patient = patient;
+            Patient = PatientService.GetById(patientID);
         }
         private void LoadForm(object sender, EventArgs e)
         {

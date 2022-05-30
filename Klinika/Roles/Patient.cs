@@ -1,13 +1,4 @@
-﻿using Klinika.Exceptions;
-using Klinika.Repositories;
-using Klinika.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Klinika.Roles
+﻿namespace Klinika.Roles
 {
     public class Patient : User
     {
@@ -31,7 +22,5 @@ namespace Klinika.Roles
             IsBlocked = false;
             whoBlocked = "";
         }
-
-
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Klinika.Data;
 using System.Data;
-using System.Data.SqlClient;
 using Klinika.Roles;
 
 namespace Klinika.Repositories
@@ -42,6 +41,23 @@ namespace Klinika.Repositories
 
             return retrievedPatients;
 
+        }
+        public static Patient GetSingle (int id)
+        {
+            string getSingleQuerry = "SELECT [User].ID, [User].JMBG, [User].Name, [User].Surname, [User].Birthdate, [User].Gender, [User].Email, [User].Password " +
+                "FROM [User] " + 
+                $"WHERE [User].ID = {id}";
+            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSingleQuerry);
+            Patient patient = new Patient(
+                Convert.ToInt32(((object[])result[0])[0]),
+                ((object[])result[0])[1].ToString(),
+                ((object[])result[0])[2].ToString(),
+                ((object[])result[0])[3].ToString(),
+                Convert.ToDateTime(((object[])result[0])[4]),
+                Convert.ToChar(((object[])result[0])[5]),
+                ((object[])result[0])[6].ToString(),
+                ((object[])result[0])[7].ToString());
+            return patient;
         }
 
         internal static void Modify(Patient patient)
