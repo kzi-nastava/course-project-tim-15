@@ -443,14 +443,12 @@ namespace Klinika.GUI.Secretary
             {
                 quantityPicker.Enabled = true;
                 orderButton.Enabled = true;
-            }
-            else
-            {
-                quantityPicker.Enabled = false;
-                orderButton.Enabled = false;
-                dynamicEquipmentTable.ClearSelection();
+                return;
             }
 
+            quantityPicker.Enabled = false;
+            orderButton.Enabled = false;
+            dynamicEquipmentTable.ClearSelection();
         }
 
         private void OrderMissingDynamicEquipment()
