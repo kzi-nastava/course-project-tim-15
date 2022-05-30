@@ -245,5 +245,10 @@ namespace Klinika.GUI.Patient
             return false;
         }
         #endregion
+
+        private void SetButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
