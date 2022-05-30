@@ -65,7 +65,7 @@ namespace Klinika.GUI.Doctor
         {
             RoomComboBox.Items.Clear();
             RoomComboBox.Items.AddRange(RoomServices.GetOperationRooms());
-            if (Appointment == null || Appointment.RoomID == 1) return -1;
+            if (Appointment == null || Appointment.RoomID == 1) return 0;
             var rooms = RoomComboBox.Items.Cast<Room>().Select(x => x).ToList();
             var room = rooms.Where(x => x.ID == Appointment.RoomID).FirstOrDefault();
             return RoomComboBox.Items.IndexOf(room);
@@ -100,6 +100,12 @@ namespace Klinika.GUI.Doctor
                 Convert.ToInt32(DurationTextBox.Text), Appointment == null ? -1 : Appointment.ID))
             {
                 MessageBoxUtilities.ShowErrorMessage("Already occupied!");
+                return false;
+            }
+            if (RoomServices.IsOccupied(GetSelectedDateTime(), (RoomComboBox.SelectedItem as Room).ID,
+                Convert.ToInt32(DurationTextBox.Text), Appointment == null ? -1 : Appointment.ID))
+            {
+                MessageBoxUtilities.ShowErrorMessage("Room is occupied!");
                 return false;
             }
             return true;

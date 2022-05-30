@@ -15,6 +15,18 @@ namespace Klinika.Services
         {
             return true;
         }
+        public static bool IsOccupied(DateTime start, int roomID, int duration = 15, int forAppointmentID = -1)
+        {
+            return IsOccupied(roomID, new TimeSlot(start, duration), forAppointmentID);
+        }
+        private static bool IsOccupied(int roomID, TimeSlot slot, int forAppointmentID = -1)
+        {
+            List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().Appointments.Where(
+                x => x.RoomID == roomID && slot.DoesOverlap(new TimeSlot(x.DateTime, x.Duration)) && !x.IsDeleted && x.ID != forAppointmentID).ToList();
+
+            if (forSelectedTimeSpan.Count == 0) return false;
+            return true;
+        }
         public static bool IsRoomRenovating(int id, DateTime from, DateTime to)
         {
             bool renovating = false;
