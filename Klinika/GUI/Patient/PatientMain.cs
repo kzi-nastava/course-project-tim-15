@@ -24,6 +24,7 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             InitPersonalAppointmentsTab();
+            FillNotificationsTable(NotificationService.Get(Patient));
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillSpecializationsComboBox();
         }
@@ -32,6 +33,7 @@ namespace Klinika.GUI.Patient
             if ((sender as TabControl).SelectedIndex == 1) InitNewAppointmentTab();
             if ((sender as TabControl).SelectedIndex == 2) InitMedicalRecorTab();
             if ((sender as TabControl).SelectedIndex == 3) InitDoctorsTab();
+            if ((sender as TabControl).SelectedIndex == 4) InitNotificationsForm();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -223,6 +225,41 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
+        #region Notifications Tab
+        private void InitNotificationsForm()
+        {
+            OffsetNumericUpDown.Value = Patient.NotificationOffset;
+            SetButton.Enabled = false;
+            MarkAsReadButton.Enabled = false;
+        }
+        private void FillNotificationsTable(List<Notification> notifications)
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("ID");
+            dataTable.Columns.Add("DateTime");
+            dataTable.Columns.Add("Message");
+
+            if (notifications != null)
+            {
+                foreach (Notification notification in notifications)
+                {
+                    DataRow newRow = dataTable.NewRow();
+
+                    newRow["ID"] = notification.ID;
+                    newRow["DateTime"] = notification.DateTime;
+                    newRow["Message"] = notification.message;
+                    dataTable.Rows.Add(newRow);
+                }
+            }
+            NotificationsTable.DataSource = dataTable;
+            NotificationsTable.ClearSelection();
+        }
+        private void SetButtonClick(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
         #region Helper functions
         private void FillSpecializationsComboBox()
         {
@@ -244,11 +281,6 @@ namespace Klinika.GUI.Patient
             MessageBoxUtilities.ShowErrorMessage("Date is not valid!");
             return false;
         }
-        #endregion
-
-        private void SetButton_Click(object sender, EventArgs e)
-        {
-
-        }
+        #endregion 
     }
 }
