@@ -19,7 +19,7 @@ namespace Klinika.GUI.Secretary
         {
             InitializeComponent();
             int requestID = Convert.ToInt32(parent.requestsTable.SelectedRows[0].Cells["ID"].Value);
-            selected = PatientRequestRepository.IdRequestPairs[requestID];
+            selected = RequestRepository.IdRequestPairs[requestID];
 
         }
 

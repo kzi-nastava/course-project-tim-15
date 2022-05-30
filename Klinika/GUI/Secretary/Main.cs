@@ -117,7 +117,7 @@ namespace Klinika.GUI.Secretary
         {
             if(tabs.SelectedTab == requests)
             {
-                requestsTable.DataSource = PatientRequestRepository.GetAll();
+                requestsTable.DataSource = RequestRepository.GetAll();
                 requestsTable.ClearSelection();
             }
         }
@@ -155,20 +155,20 @@ namespace Klinika.GUI.Secretary
             if (approveConfirmation == DialogResult.Yes)
             {
                 int requestID = Convert.ToInt32(requestsTable.SelectedRows[0].Cells["ID"].Value);
-                PatientRequestRepository.Approve(requestID);
+                RequestRepository.Approve(requestID);
                 int selectedRequestIndex = requestsTable.SelectedRows[0].Index;
                 DataRow selectedRequest = ((DataTable)requestsTable.DataSource).Rows[selectedRequestIndex];
                 selectedRequest["Approved"] = true;
                 string requestType = requestsTable.SelectedRows[0].Cells["RequestType"].Value.ToString();
                 if(requestType.Equals("Modify"))
                 {
-                    PatientModificationRequest selected = PatientRequestRepository.IdRequestPairs[requestID];
+                    PatientModificationRequest selected = RequestRepository.IdRequestPairs[requestID];
                     selectedRequest["DateTime"] = selected.newAppointment;
-                    AppointmentRepository.Modify(Convert.ToInt32(selectedRequest["ExaminationID"]), selected.newDoctorID, selected.newAppointment);
+                    MedicalActionRepository.Modify(Convert.ToInt32(selectedRequest["ExaminationID"]), selected.newDoctorID, selected.newAppointment);
                 }
                 else
                 {
-                    AppointmentRepository.Delete(Convert.ToInt32(selectedRequest["ExaminationID"]));
+                    MedicalActionRepository.Delete(Convert.ToInt32(selectedRequest["ExaminationID"]));
                 }
                 MessageBox.Show("Request successfully executed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 approveButton.Enabled = false;
@@ -182,7 +182,7 @@ namespace Klinika.GUI.Secretary
             DialogResult denyConfirmation = MessageBox.Show("Are you sure you want to deny the selected request?", "Deny", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (denyConfirmation == DialogResult.Yes)
             {
-                PatientRequestRepository.Deny(Convert.ToInt32(requestsTable.SelectedRows[0].Cells["ID"].Value));
+                RequestRepository.Deny(Convert.ToInt32(requestsTable.SelectedRows[0].Cells["ID"].Value));
                 int selectedRequestIndex = requestsTable.SelectedRows[0].Index;
                 DataRow selectedRequest = ((DataTable)requestsTable.DataSource).Rows[selectedRequestIndex];
                 selectedRequest["Approved"] = false;

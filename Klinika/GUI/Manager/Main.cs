@@ -204,7 +204,7 @@ namespace Klinika.GUI.Manager
         {
             filter();
         }
-        
+
         private void fromButton_Click(object sender, EventArgs e)
         {
             try
