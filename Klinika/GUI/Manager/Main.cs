@@ -12,21 +12,38 @@ namespace Klinika.GUI.Manager
 {
     public partial class Main : Form
     {
+        public Models.EquipmentTransfer transfer;
         public DataTable unfiltered;
+        public bool[] transferCheck;
         public Main()
         {
+            transferCheck = new bool[2];
+            transferCheck[0] = false;
+            transferCheck[1] = false;
+            transfer = new Models.EquipmentTransfer();
             unfiltered = new DataTable();
             InitializeComponent();
         }
 
         public void Main_Load(object sender, EventArgs e)
         {
-            roomsTable.DataSource = Repositories.RoomRepository.GetAll();
-            roomsTable.ClearSelection();
+            equipmentComboBox.Items.Clear();
+            roomComboBox.Items.Clear();
+            quantityComboBox.Items.Clear();
+
+            DataTable rooms = Repositories.RoomRepository.GetAll();
+            DataRow storage = rooms.NewRow();
+            storage["ID"] = 0;
+            storage["Type"] = "Storage";
+            storage["Number"] = 0;
+            rooms.Rows.Add(storage);
+            roomsTable.DataSource = rooms;
             roomsTable.Columns["ID"].Visible = false;
+
             unfiltered = Repositories.EquipmentRepository.GetAll();
             equipmentTable.DataSource = unfiltered;
-            equipmentTable.Columns["ID"].Visible = false;
+            equipmentTable.Columns["EquipmentID"].Visible = false;
+            equipmentTable.Columns["RoomID"].Visible = false;
             equipmentTable.ClearSelection();
 
             roomComboBox.Items.Add("");
@@ -43,6 +60,9 @@ namespace Klinika.GUI.Manager
                 if (!equipmentComboBox.Items.Contains(equipmentTable.Rows[i].Cells["Equipment Type"].Value.ToString()))
                     equipmentComboBox.Items.Add(equipmentTable.Rows[i].Cells["Equipment Type"].Value.ToString());
             }
+            roomComboBox.SelectedIndex = 0;
+            equipmentComboBox.SelectedIndex = 0;
+            quantityComboBox.SelectedIndex = 0;
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -72,8 +92,16 @@ namespace Klinika.GUI.Manager
 
         private void roomsTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            deleteButton.Enabled = true;
-            modifyButton.Enabled = true;
+            if((int)roomsTable.SelectedRows[0].Cells["ID"].Value != 0)
+            {
+                deleteButton.Enabled = true;
+                modifyButton.Enabled = true;
+            }
+            else
+            {
+                deleteButton.Enabled = false;
+                modifyButton.Enabled = false;
+            }
         }
 
         protected void filter()
@@ -88,35 +116,47 @@ namespace Klinika.GUI.Manager
                     && row.Field<string>("Equipment Type").ToString().Contains(typeTextBox.Text)
                     && row.Field<int>("Quantity").ToString().Contains(quantityTextBox.Text)
                     ).CopyToDataTable();
-                //MessageBox.Show(roomComboBox.SelectedText);
-                if (roomComboBox.SelectedText != "")
+
+                if (roomComboBox.SelectedIndex != -1)
                 {
-                    filtered = filtered.AsEnumerable()
-                        .Where(row => row.Field<string>("Room Type").ToString() == roomComboBox.SelectedText).CopyToDataTable();
-                }
-                if (equipmentComboBox.SelectedText != "")
-                {
-                    filtered = filtered.AsEnumerable()
-                        .Where(row => row.Field<string>("Equipment Type").ToString() == equipmentComboBox.SelectedText).CopyToDataTable();
-                }
-                if (quantityComboBox.SelectedText != "")
-                {
-                    if (quantityComboBox.SelectedText == "no available")
+                    if (roomComboBox.Items[roomComboBox.SelectedIndex].ToString() != "")
                     {
                         filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<int>("Quantity") == 0).CopyToDataTable();
-                    }
-                    else if (quantityComboBox.SelectedText == "0-10")
-                    {
-                        filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<int>("Quantity") > 0 || row.Field<int>("Quantity") < 10).CopyToDataTable();
-                    }
-                    else if (quantityComboBox.SelectedText == "10+")
-                    {
-                        filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<int>("Quantity") >= 10).CopyToDataTable();
+                            .Where(row => row.Field<string>("Room Type").ToString() == roomComboBox.Items[roomComboBox.SelectedIndex].ToString()).CopyToDataTable();
                     }
                 }
+
+                if (equipmentComboBox.SelectedIndex != -1)
+                {
+                    if (equipmentComboBox.Items[equipmentComboBox.SelectedIndex].ToString() != "")
+                    {
+                        filtered = filtered.AsEnumerable()
+                            .Where(row => row.Field<string>("Equipment Type").ToString() == equipmentComboBox.Items[equipmentComboBox.SelectedIndex].ToString()).CopyToDataTable();
+                    }
+                }
+
+                if (quantityComboBox.SelectedIndex != -1)
+                {
+                    if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() != "")
+                    {
+                        if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "no available")
+                        {
+                            filtered = filtered.AsEnumerable()
+                                .Where(row => row.Field<int>("Quantity") == 0).CopyToDataTable();
+                        }
+                        else if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "0-10")
+                        {
+                            filtered = filtered.AsEnumerable()
+                                .Where(row => row.Field<int>("Quantity") > 0 && row.Field<int>("Quantity") < 10).CopyToDataTable();
+                        }
+                        else if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "10+")
+                        {
+                            filtered = filtered.AsEnumerable()
+                                .Where(row => row.Field<int>("Quantity") >= 10).CopyToDataTable();
+                        }
+                    }
+                }
+
                 equipmentTable.DataSource = filtered;
             }
             catch (System.InvalidOperationException ex)
@@ -164,10 +204,73 @@ namespace Klinika.GUI.Manager
         {
             filter();
         }
-        
+
+        private void fromButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                transfer.fromId = (int)equipmentTable.SelectedRows[0].Cells["RoomID"].Value;
+                transfer.equipment = (int)equipmentTable.SelectedRows[0].Cells["EquipmentID"].Value;
+                transfer.maxQuantity = (int)equipmentTable.SelectedRows[0].Cells["Quantity"].Value;
+
+                if (transfer.maxQuantity == 0)
+                {
+                    MessageBox.Show("You must pick a row with not 0 quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    transferCheck[0] = false;
+                }
+                else
+                {
+                    MessageBox.Show("Selected room and equipment to transfer!");
+                    transferCheck[0] = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Select a room first");
+            }
+        }
+
+        private void toButton_Click(object sender, EventArgs e)
+        {
+            transfer.toId = (int)roomsTable.SelectedRows[0].Cells["ID"].Value;
+            if (Services.ManagerServices.TransferReady(transfer))
+            {
+                MessageBox.Show("Selected room from Rooms Tab! This can be changed.");
+                transferCheck[1] = true;
+            }
+            else
+            {
+                MessageBox.Show("You must pick 2 different rooms.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                transferCheck[1] = false;
+            }
+        }
+
+        private void dateButton_Click(object sender, EventArgs e)
+        {
+            if (transferCheck[0] && transferCheck[1])
+            {
+                new PickDate(this).Show();
+            }
+            else
+            {
+                MessageBox.Show("Invalid picks.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Heavy refactoring and reorganisation is needed on this page. " +
+                "All functionalitis are here, but for now this is how to use them:\n" +
+                "1) Select a room and in the same time equipment to be transfered from the Table on this Tab\n" +
+                "2) Click the \"Select From\" buttom\n" +
+                "3) Select a room for the equipment to be transfered to in the Rooms tab of the form\n" +
+                "4) Click the \"Select To\" buttom\n on the Equipment Tab\n" +
+                "5) Click the \"Pick Transfer Data\" button and than fill out the form");
         }
     }
 }
