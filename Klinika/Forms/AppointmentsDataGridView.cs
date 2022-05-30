@@ -32,13 +32,19 @@ namespace Klinika.Forms
             appointmetnsData.Columns.Add($"{SearchedRole} Full Name");
             appointmetnsData.Columns.Add("Date & Time");
             appointmetnsData.Columns.Add("Type");
+            appointmetnsData.Columns.Add("Room");
             appointmetnsData.Columns.Add("Duration [min]");
             appointmetnsData.Columns.Add("Urgent", typeof(bool));
             appointmetnsData.Columns.Add("Completed", typeof(bool));
 
             DataSource = appointmetnsData;
-            Columns[0].Width = 45;
+            Columns["ID"].Width = 45;
+            Columns["Date & Time"].Width = 155;
+            Columns["Duration [min]"].Width = 80;
+            Columns["Urgent"].Width = 80;
+            Columns["Completed"].Width = 90;
 
+            Appointments = new List<Appointment>();
             foreach (Appointment appointment in appointments) Insert(appointment);
 
             ClearSelection();
@@ -51,6 +57,7 @@ namespace Klinika.Forms
             newRow[$"{SearchedRole} Full Name"] = GetFullName(appointment);
             newRow["Date & Time"] = appointment.DateTime;
             newRow["Type"] = appointment.GetType();
+            newRow["Room"] = RoomServices.GetSingle(appointment.RoomID).ToString();
             newRow["Duration [min]"] = appointment.Duration;
             newRow["Urgent"] = appointment.Urgent;
             newRow["Completed"] = appointment.Completed;
@@ -77,9 +84,13 @@ namespace Klinika.Forms
                 GetFullName(appointment),
                 appointment.DateTime.ToString(),
                 appointment.GetType(),
+                RoomServices.GetSingle(appointment.RoomID).ToString(),
                 appointment.Duration.ToString(),
                 appointment.Urgent,
                 appointment.Completed);
+
+            Appointments.Remove(Appointments.Where(x => x.ID == appointment.ID).FirstOrDefault());
+            Appointments.Add(appointment);
         }
         private string GetFullName(Appointment appointment)
         {

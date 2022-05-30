@@ -131,8 +131,8 @@ namespace Klinika.GUI.Doctor
         private void FinishButtonClick(object sender, EventArgs e)
         {
             if (!IsAppointmentCompleted()) return;
-            CompleteAppointment();
             Close();
+            new DynamicEquipment(Parent, Appointment).Show();
         }
         #endregion
         #region Refer
@@ -184,11 +184,6 @@ namespace Klinika.GUI.Doctor
         }
         #endregion
         #region Appointment
-        private void CompleteAppointment()
-        {
-            AppointmentService.Complete(Appointment);
-            Parent.ScheduleTable.ModifySelected(Appointment);
-        }
         private bool IsAppointmentCompleted()
         {
             bool isCreated = TryCreateReferal();

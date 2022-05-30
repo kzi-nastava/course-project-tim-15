@@ -1,4 +1,5 @@
-﻿using Klinika.Repositories;
+﻿using Klinika.Models;
+using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
@@ -76,7 +77,6 @@ namespace Klinika.GUI.Doctor
             {
                 var selected = ScheduleTable.GetSelected();
                 bool canBePerformed = !selected.Completed
-                    && selected.Type == 'E'
                     && selected.DateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
 
                 if (canBePerformed)
@@ -94,7 +94,9 @@ namespace Klinika.GUI.Doctor
         }
         private void PerformButtonClick(object sender, EventArgs e)
         {
-            new MedicalRecord(this, ScheduleTable.GetSelected(), false).Show();
+            var selected = ScheduleTable.GetSelected();
+            if (selected.IsExamination()) new MedicalRecord(this, selected, false).Show();
+            else new DynamicEquipment(this, selected).Show();
         }
         #endregion
 

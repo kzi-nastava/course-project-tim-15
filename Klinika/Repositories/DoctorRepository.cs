@@ -100,7 +100,7 @@ namespace Klinika.Repositories
         {
             List<Doctor> doctors = new List<Doctor>();
             string getAllQuery = "SELECT [DoctorSpecialization].UserID, [User].Name,[User].Surname, " +
-                                 "[DoctorSpecialization].SpecializationID,[Specialization].Name 'Specialization' " +
+                                 "[DoctorSpecialization].SpecializationID, [DoctorSpecialization].OfficeID, [Specialization].Name 'Specialization' " +
                                  "FROM [DoctorSpecialization] " +
                                  "LEFT OUTER JOIN [User] ON [DoctorSpecialization].UserID = [User].ID " +
                                  "LEFT OUTER JOIN [Specialization] ON [DoctorSpecialization].SpecializationID = [Specialization].ID";
@@ -117,7 +117,8 @@ namespace Klinika.Repositories
                                 Convert.ToInt32(row["UserID"]),
                                 row["Name"].ToString(),
                                 row["Surname"].ToString(),
-                                specialization);
+                                specialization,
+                                Convert.ToInt32(row["OfficeID"]));
                 doctors.Add(doctor);
             }
 
