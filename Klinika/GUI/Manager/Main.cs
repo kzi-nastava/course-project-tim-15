@@ -261,5 +261,16 @@ namespace Klinika.GUI.Manager
         {
             Application.Exit();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Heavy refactoring and reorganisation is needed on this page. " +
+                "All functionalitis are here, but for now this is how to use them:\n" +
+                "1) Select a room and in the same time equipment to be transfered from the Table on this Tab\n" +
+                "2) Click the \"Select From\" buttom\n" +
+                "3) Select a room for the equipment to be transfered to in the Rooms tab of the form\n" +
+                "4) Click the \"Select To\" buttom\n on the Equipment Tab\n" +
+                "5) Click the \"Pick Transfer Data\" button and than fill out the form");
+        }
     }
 }
