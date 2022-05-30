@@ -111,7 +111,7 @@ namespace Klinika.Repositories
                         "SET Quantity = @Quantity " +
                         "WHERE EquipmentID = @EquipmentID";
                         SqlCommand update = new SqlCommand(updateQuery, DatabaseConnection.GetInstance().database);
-                        update.Parameters.AddWithValue("@Quantity", transfer.equipment + (int)readCheck["Quantity"]);
+                        update.Parameters.AddWithValue("@Quantity", transfer.quantity + (int)readCheck["Quantity"]);
                         update.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
                         readCheck.Close();
                         update.ExecuteNonQuery();
@@ -144,7 +144,6 @@ namespace Klinika.Repositories
                     fromTransfer.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
 
                     SqlCommand toCheck = new SqlCommand(checkQuery, DatabaseConnection.GetInstance().database);
-                    toCheck.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
                     toCheck.Parameters.AddWithValue("@RoomID", transfer.toId);
                     toCheck.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
 
@@ -154,7 +153,7 @@ namespace Klinika.Repositories
                     if (readCheck.Read())
                     {
                         SqlCommand update = new SqlCommand(updateQuery, DatabaseConnection.GetInstance().database);
-                        update.Parameters.AddWithValue("@Quantity", transfer.equipment + (int)readCheck["Quantity"]);
+                        update.Parameters.AddWithValue("@Quantity", transfer.quantity + (int)readCheck["Quantity"]);
                         update.Parameters.AddWithValue("@RoomID", transfer.toId);
                         update.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
                         readCheck.Close();
@@ -192,7 +191,7 @@ namespace Klinika.Repositories
                     if (readCheck.Read())
                     {
                         SqlCommand update = new SqlCommand(updateQuery, DatabaseConnection.GetInstance().database);
-                        update.Parameters.AddWithValue("@Quantity", transfer.equipment + (int)readCheck["Quantity"]);
+                        update.Parameters.AddWithValue("@Quantity", transfer.quantity + (int)readCheck["Quantity"]);
                         update.Parameters.AddWithValue("@RoomID", transfer.toId);
                         update.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
                         readCheck.Close();

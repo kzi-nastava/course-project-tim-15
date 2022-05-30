@@ -27,8 +27,19 @@ namespace Klinika.GUI.Manager
 
         public void Main_Load(object sender, EventArgs e)
         {
-            roomsTable.DataSource = Repositories.RoomRepository.GetAll();
+            equipmentComboBox.Items.Clear();
+            roomComboBox.Items.Clear();
+            quantityComboBox.Items.Clear();
+
+            DataTable rooms = Repositories.RoomRepository.GetAll();
+            DataRow storage = rooms.NewRow();
+            storage["ID"] = 0;
+            storage["Type"] = "Storage";
+            storage["Number"] = 0;
+            rooms.Rows.Add(storage);
+            roomsTable.DataSource = rooms;
             roomsTable.Columns["ID"].Visible = false;
+
             unfiltered = Repositories.EquipmentRepository.GetAll();
             equipmentTable.DataSource = unfiltered;
             equipmentTable.Columns["EquipmentID"].Visible = false;
@@ -81,8 +92,16 @@ namespace Klinika.GUI.Manager
 
         private void roomsTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            deleteButton.Enabled = true;
-            modifyButton.Enabled = true;
+            if((int)roomsTable.SelectedRows[0].Cells["ID"].Value != 0)
+            {
+                deleteButton.Enabled = true;
+                modifyButton.Enabled = true;
+            }
+            else
+            {
+                deleteButton.Enabled = false;
+                modifyButton.Enabled = false;
+            }
         }
 
         protected void filter()
@@ -188,19 +207,26 @@ namespace Klinika.GUI.Manager
 
         private void fromButton_Click(object sender, EventArgs e)
         {
-            transfer.fromId = (int)equipmentTable.SelectedRows[0].Cells["RoomID"].Value;
-            transfer.equipment = (int)equipmentTable.SelectedRows[0].Cells["EquipmentID"].Value;
-            transfer.maxQuantity = (int)equipmentTable.SelectedRows[0].Cells["Quantity"].Value;
-            
-            if (transfer.maxQuantity == 0)
+            try
             {
-                MessageBox.Show("You must pick a row with not 0 quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                transferCheck[0] = false;
+                transfer.fromId = (int)equipmentTable.SelectedRows[0].Cells["RoomID"].Value;
+                transfer.equipment = (int)equipmentTable.SelectedRows[0].Cells["EquipmentID"].Value;
+                transfer.maxQuantity = (int)equipmentTable.SelectedRows[0].Cells["Quantity"].Value;
+
+                if (transfer.maxQuantity == 0)
+                {
+                    MessageBox.Show("You must pick a row with not 0 quantity.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    transferCheck[0] = false;
+                }
+                else
+                {
+                    MessageBox.Show("Selected room and equipment to transfer!");
+                    transferCheck[0] = true;
+                }
             }
-            else
+            catch(Exception ex)
             {
-                MessageBox.Show("Selected room and equipment to transfer!");
-                transferCheck[0] = true;
+                MessageBox.Show("Select a room first");
             }
         }
 
