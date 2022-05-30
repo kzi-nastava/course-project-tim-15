@@ -44,9 +44,9 @@
             this.DateLabel = new System.Windows.Forms.Label();
             this.TitleLabel = new System.Windows.Forms.Label();
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.MedicalRecordTab = new System.Windows.Forms.TabPage();
             this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT);
             this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT);
-            this.MedicalRecordTab = new System.Windows.Forms.TabPage();
             this.ResetButton = new System.Windows.Forms.Button();
             this.SearchButton = new System.Windows.Forms.Button();
             this.SearchTextBox = new System.Windows.Forms.TextBox();
@@ -477,6 +477,7 @@
             this.MarkAsReadButton.TabIndex = 5;
             this.MarkAsReadButton.Text = "Mark as read";
             this.MarkAsReadButton.UseVisualStyleBackColor = true;
+            this.MarkAsReadButton.Click += new System.EventHandler(this.MarkAsReadButtonClick);
             // 
             // SetButton
             // 
@@ -530,8 +531,10 @@
             this.NotificationsTable.ReadOnly = true;
             this.NotificationsTable.RowHeadersWidth = 51;
             this.NotificationsTable.RowTemplate.Height = 29;
+            this.NotificationsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.NotificationsTable.Size = new System.Drawing.Size(1073, 451);
             this.NotificationsTable.TabIndex = 1;
+            this.NotificationsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.NotificationsTableRowEnter);
             // 
             // PatientMain
             // 

@@ -254,6 +254,17 @@ namespace Klinika.GUI.Patient
             NotificationsTable.DataSource = dataTable;
             NotificationsTable.ClearSelection();
         }
+        private void NotificationsTableRowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            MarkAsReadButton.Enabled = true;
+        }
+        private void MarkAsReadButtonClick(object sender, EventArgs e)
+        {
+            if (!UIUtilities.Confirm("Are you sure you want mark as read this notification?")) return;
+            int notificationID = Convert.ToInt32(NotificationsTable.SelectedRows[0].Cells["ID"].Value);
+            NotificationService.MarkAsRead(notificationID);
+            NotificationsTable.Rows.RemoveAt(NotificationsTable.CurrentRow.Index);
+        }
         private void SetButtonClick(object sender, EventArgs e)
         {
 
@@ -281,6 +292,6 @@ namespace Klinika.GUI.Patient
             MessageBoxUtilities.ShowErrorMessage("Date is not valid!");
             return false;
         }
-        #endregion 
+        #endregion
     }
 }

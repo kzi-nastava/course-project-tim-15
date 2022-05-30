@@ -38,5 +38,15 @@ namespace Klinika.Repositories
                                             ("@isNotified", notification.isNotified),
                                             ("@dateTime", notification.DateTime));
         }
+        public static void Modify (int id)
+        {
+            string modifyQuery = "UPDATE [Notification] SET " +
+               "IsNotified = 1 " +
+               "WHERE ID = @Id";
+
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                modifyQuery,
+                ("@Id", id));
+        }
     }
 }

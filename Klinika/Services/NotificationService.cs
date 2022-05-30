@@ -21,7 +21,7 @@ namespace Klinika.Services
             DateTime end = new DateTime(prescription.DateEnded.Year, prescription.DateEnded.Month, prescription.DateEnded.Day,
                 prescription.DateStarted.Hour + 1, 0, 0);
 
-            while (start < end)
+            while (start <= end)
             {
                 Send(new Notification(prescription.PatientID, GenerateMessage(prescription), start));
                 start = start.AddHours(prescription.Interval);
@@ -31,6 +31,10 @@ namespace Klinika.Services
         {
             Drug drug = DrugRepository.Instance.Drugs.Where(x => x.ID == prescription.DrugID).FirstOrDefault();
             return "Drug: " + drug.Name + "\nComment: " + prescription.Comment;
+        }
+        public static void MarkAsRead(int id)
+        {
+            NotificationRepository.Modify(id);
         }
     }
 }
