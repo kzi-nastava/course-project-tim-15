@@ -33,7 +33,7 @@ namespace Klinika.GUI.Patient
             if ((sender as TabControl).SelectedIndex == 1) InitNewAppointmentTab();
             if ((sender as TabControl).SelectedIndex == 2) InitMedicalRecorTab();
             if ((sender as TabControl).SelectedIndex == 3) InitDoctorsTab();
-            if ((sender as TabControl).SelectedIndex == 4) InitNotificationsForm();
+            if ((sender as TabControl).SelectedIndex == 4) InitNotificationsTab();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -226,11 +226,10 @@ namespace Klinika.GUI.Patient
         #endregion
 
         #region Notifications Tab
-        private void InitNotificationsForm()
+        private void InitNotificationsTab()
         {
             OffsetNumericUpDown.Value = Patient.NotificationOffset;
             SetButton.Enabled = false;
-            MarkAsReadButton.Enabled = false;
         }
         private void FillNotificationsTable(List<Notification> notifications)
         {
@@ -253,10 +252,7 @@ namespace Klinika.GUI.Patient
             }
             NotificationsTable.DataSource = dataTable;
             NotificationsTable.ClearSelection();
-        }
-        private void NotificationsTableRowEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            MarkAsReadButton.Enabled = true;
+            MarkAsReadButton.Enabled = false;
         }
         private void MarkAsReadButtonClick(object sender, EventArgs e)
         {
@@ -264,10 +260,23 @@ namespace Klinika.GUI.Patient
             int notificationID = Convert.ToInt32(NotificationsTable.SelectedRows[0].Cells["ID"].Value);
             NotificationService.MarkAsRead(notificationID);
             NotificationsTable.Rows.RemoveAt(NotificationsTable.CurrentRow.Index);
+            MarkAsReadButton.Enabled = false;
         }
         private void SetButtonClick(object sender, EventArgs e)
         {
-
+            if (!UIUtilities.Confirm("Are you sure you want to save changes?")) return;
+            Patient.NotificationOffset = Convert.ToInt32(OffsetNumericUpDown.Value);
+            PatientService.SetNotificationOffset(Patient);
+            FillNotificationsTable(NotificationRepository.Get(Patient));
+            SetButton.Enabled = false;
+        }
+        private void OffsetNumericUpDownEnter(object sender, EventArgs e)
+        {
+            SetButton.Enabled = true;
+        }
+        private void NotificationsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            MarkAsReadButton.Enabled = true;
         }
         #endregion
 

@@ -64,7 +64,7 @@ namespace Klinika.Repositories
                 Convert.ToInt32(((object[])result[0])[10]));
             return patient;
         }
-
+        
         internal static void Modify(Patient patient)
         {
             string modifyQuery = "UPDATE [User] " +
@@ -85,6 +85,11 @@ namespace Klinika.Repositories
             ("@Gender", patient.gender),
             ("@Password", patient.Password)
             ); 
+        }
+        public static void Modify(int id, int offset)
+        {
+            string modifyQuerry = "UPDATE [Patient] SET NotificationOffset = @notificationOffset WHERE UserID = @Id";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuerry, ("@notificationOffset", offset), ("@Id", id));
         }
 
         //Logical deletion
