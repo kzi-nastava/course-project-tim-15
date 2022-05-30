@@ -26,7 +26,7 @@ namespace Klinika.GUI.Doctor
         private void DynamicEquipmentLoad(object sender, EventArgs e)
         {
             Parent.Enabled = false;
-            UIUtilities.Fill(EquipmentTable, EquipmentService.GetDynamicEquipment(Appointment.RoomID));
+            EquipmentTable.Fill(EquipmentService.GetDynamicEquipment(Appointment.RoomID));
         }
         private void DynamicEquipmentFormClosing(object sender, FormClosingEventArgs e)
         {

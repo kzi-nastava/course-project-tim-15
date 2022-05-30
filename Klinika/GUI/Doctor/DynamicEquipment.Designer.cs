@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.EquipmentTable = new System.Windows.Forms.DataGridView();
+            this.EquipmentTable = new Klinika.Forms.RoomEquipmentDataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.EquipmentTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -69,6 +69,6 @@
 
         #endregion
 
-        public System.Windows.Forms.DataGridView EquipmentTable;
+        public Klinika.Forms.RoomEquipmentDataGridView EquipmentTable;
     }
 }

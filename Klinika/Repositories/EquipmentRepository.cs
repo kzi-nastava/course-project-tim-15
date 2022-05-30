@@ -1,4 +1,6 @@
 ﻿using Klinika.Data;
+using Klinika.Models;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -281,15 +283,25 @@ namespace Klinika.Repositories
             allDynamicEquipmentInStorage.Columns.Remove("Quantity");
             return allDynamicEquipmentInStorage;
         }
-        public static DataTable GetDynamicEquipment(int roomID)
+        public static List<Equipment> GetDynamicEquipment()
         {
-            string getQuery = "SELECT [Equipment].ID, [Equipment].Name, [RoomEquipment].Quantity FROM [Equipment] " +
+            string getQuery = "SELECT [Equipment].ID, [Equipment].Name, [RoomEquipment].RoomID, [RoomEquipment].Quantity FROM [Equipment] " +
                               "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +
                               "LEFT OUTER JOIN [RoomEquipment] ON [Equipment].ID = [RoomEquipment].EquipmentID " +
-                              "WHERE [EquipmentType].Name = 'dynamic' AND [RoomEquipment].RoomID = @ROOMID";
+                              "WHERE [EquipmentType].Name = 'dynamic'";
 
-            DataTable allDynamicEquipmentInRoom = DatabaseConnection.GetInstance().CreateTableOfData(getQuery, ("@ROOMID", roomID));
-            return allDynamicEquipmentInRoom;
+            DataTable allDynamicEquipmentInRoom = DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
+
+            List<Equipment> equipment = new List<Equipment>();
+            foreach(DataRow row in allDynamicEquipmentInRoom.Rows)
+            {
+                equipment.Add(new Equipment(
+                    id: Convert.ToInt32(row["ID"]),
+                    name: DatabaseConnection.CheckNull<string>(row["Name"]),
+                    roomID: DatabaseConnection.CheckNull<int>(row["RoomID"]),
+                    quantity: DatabaseConnection.CheckNull<int>(row["Quantity"])));
+            }
+            return equipment;
         }
     }
 }
