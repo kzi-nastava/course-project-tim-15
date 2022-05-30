@@ -1,12 +1,5 @@
 ﻿using Klinika.Data;
 using Klinika.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Klinika.Repositories
 {
     internal class MedicalRecordRepository
@@ -27,35 +20,11 @@ namespace Klinika.Repositories
                 record.BloodType = DatabaseConnection.CheckNull<string>(((object[])row)[3]);
             }
 
-            record.Anamneses = GetAnamneses(patientID);
+            record.Anamneses = AnamnesisRepository.Get(patientID);
             record.Diseases = GetDiseases(patientID);
             record.Allergens = GetAllergens(patientID);
 
             return record;
-        }
-        public static List<Anamnesis> GetAnamneses(int patientID)
-        {
-            List<Anamnesis> anamneses = new List<Anamnesis>();
-
-            string getAnamnesesQuerry = 
-                "SELECT [Anamnesis].ID, [Anamnesis].MedicalActionID, [Anamnesis].Description, [Anamnesis].Symptoms, [Anamnesis].Conclusion " +
-                "FROM [Anamnesis] JOIN [MedicalAction] ON [Anamnesis].MedicalActionID = [MedicalAction].ID " +
-                $"WHERE [MedicalAction].PatientID = {patientID}";
-
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAnamnesesQuerry);
-            foreach (object row in resoult)
-            {
-                var anamnesis = new Anamnesis
-                {
-                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
-                    MedicalActionID = Convert.ToInt32(((object[])row)[1].ToString()),
-                    Description = DatabaseConnection.CheckNull<string>(((object[])row)[2]),
-                    Symptoms = DatabaseConnection.CheckNull<string>(((object[])row)[3]),
-                    Conclusion = DatabaseConnection.CheckNull<string>(((object[])row)[4])
-                };
-                anamneses.Add(anamnesis);
-            }
-            return anamneses;
         }
         private static List<Disease> GetDiseases(int patientID)
         {
@@ -88,7 +57,7 @@ namespace Klinika.Repositories
 
             foreach(int id in ingredientsIDs)
             {
-                var ingredient = DrugRepository.Instance.Ingredients.Where(x => x.ID == id).FirstOrDefault();
+                var ingredient = IngredientRepository.Instance.Ingredients.Where(x => x.ID == id).FirstOrDefault();
                 if (ingredient != null)
                 {
                     allergens.Add(ingredient);
@@ -116,19 +85,6 @@ namespace Klinika.Repositories
             return ids;
         }
         
-        public static void CreateAnamnesis(Anamnesis anamnesis)
-        {
-            string createQuery = "INSERT INTO [Anamnesis] " +
-                    "(MedicalActionID,Description,Symptoms,Conclusion) " +
-                    "VALUES (@MedicalActionID,@Description,@Symptoms,@Conclusion)";
-
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
-                createQuery,
-                ("@MedicalActionID", anamnesis.MedicalActionID),
-                ("@Description", anamnesis.Description),
-                ("@Symptoms", anamnesis.Symptoms),
-                ("@Conclusion", anamnesis.Conclusion));
-        }
         public static void Create(int patientID)
         {
             string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";

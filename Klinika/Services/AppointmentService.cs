@@ -22,10 +22,6 @@ namespace Klinika.Services
                     return "Examination";
             }
         }
-        public static List<Appointment> GetOccupied(DateTime date, int doctorID)
-        {
-            return AppointmentRepository.GetAll(date.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR);
-        }
         public static List<Appointment> GetCompleted(int patientID)
         {
             return AppointmentRepository.GetCompleted(patientID);
@@ -42,6 +38,11 @@ namespace Klinika.Services
         {
             AppointmentRepository.Delete(id);
             AppointmentRepository.GetInstance().DeleteFromList(id);
+        }
+        public static void Complete(Appointment appointment)
+        {
+            appointment.Completed = true;
+            AppointmentRepository.GetInstance().Modify(appointment);
         }
         public static Appointment GetById(int id)
         {

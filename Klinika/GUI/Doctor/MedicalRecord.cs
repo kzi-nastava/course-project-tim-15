@@ -1,16 +1,8 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using Klinika.Utilities;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Klinika.GUI.Doctor
 {
@@ -19,15 +11,14 @@ namespace Klinika.GUI.Doctor
         internal readonly DoctorMain Parent;
         public Appointment Appointment;
         public Models.MedicalRecord Record;
-
         #region Form
         public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
         {
             InitializeComponent();
             Parent = parent;
             Appointment = appointment;
-            Record = MedicalRecordRepository.Get(appointment.PatientID);
-            if (!isPreview) ShowNewAnamnesisForm();
+            Record = MedicalRecordService.Get(appointment.PatientID);
+            if (!isPreview) AnamnesisGroup.Visible = true;
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -36,7 +27,7 @@ namespace Klinika.GUI.Doctor
             FillAnamnesesTable(AnamnesesTable, Record.Anamneses);
             FillDiseasesTable(DiseasesTable, Record.Diseases);
             FillAllergensTable(AllergensTable, Record.Allergens);
-            FillSpecializationsComboBox();
+            UIUtilities.FillSpecializationComboBox(SpecializationsComboBox);
         }
         public static void FillAnamnesesTable(DataGridView table, List<Anamnesis> anamneses)
         {
@@ -107,7 +98,6 @@ namespace Klinika.GUI.Doctor
             Parent.Enabled = true;
         }
         #endregion
-
         #region Record
         private void FillPatientMainData()
         {
@@ -121,34 +111,21 @@ namespace Klinika.GUI.Doctor
             (sender as DataGridView).ClearSelection();
         }
         #endregion
-
         #region Add Anamnesis
-        private void ShowNewAnamnesisForm()
-        {
-            AnamnesisGroup.Visible = true;
-        }
         private bool ValidateAnamnesis(bool skipValidation)
         {
-            if (skipValidation) return true;
-
-            bool someFieldsEmpty = DescriptionTextBox.Text.Trim() == "" || SymptomsTextBox.Text.Trim() == "" || ConclusionTextBox.Text.Trim() == "";
-            if (!someFieldsEmpty) return true;
-            
-            var msgBox = MessageBox.Show("Some fields are left empty. Are you sure you want to save it?", "Caution", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (msgBox == DialogResult.Yes) return true;
-            return false;
+            bool hasEmptyFields = DescriptionTextBox.Text.Trim() == "" || SymptomsTextBox.Text.Trim() == "" || ConclusionTextBox.Text.Trim() == "";
+            if (skipValidation || !hasEmptyFields) return true;
+            return UIUtilities.Confirm("Some fields are left empty. Are you sure you want to save it?");
         }
         private bool TryCreateAnamnesis(bool skipValidation = false)
         {
             if (!ValidateAnamnesis(skipValidation)) return false;
 
-            var anamnesis = new Anamnesis(
-                Appointment.ID,
-                DescriptionTextBox.Text,
-                SymptomsTextBox.Text,
-                ConclusionTextBox.Text);
+            var anamnesis = new Anamnesis(Appointment.ID, DescriptionTextBox.Text,
+                SymptomsTextBox.Text, ConclusionTextBox.Text);
 
-            MedicalRecordService.StoreAnamanesis(anamnesis);
+            AnamnesisService.Create(anamnesis);
             return true;
         }
         private void FinishButtonClick(object sender, EventArgs e)
@@ -158,45 +135,23 @@ namespace Klinika.GUI.Doctor
             Close();
         }
         #endregion
-
         #region Refer
-        private void FillSpecializationsComboBox()
-        {
-            var specializations = DoctorRepository.GetSpecializations().ToArray();
-            SpecializationsComboBox.Items.AddRange(specializations);
-            DoctorsComboBox.SelectedIndex = -1;
-        }
-        private void FillDoctorsComboBox(int specializationID)
-        {
-            DoctorsComboBox.Items.Clear();
-            DoctorsComboBox.Items.AddRange(DoctorRepository.GetSpecializedDoctors(specializationID));
-        }
         private void ReferCheckBoxCheckedChanged(object sender, EventArgs e)
         {
-            if((sender as CheckBox).Checked)
-            {
-                EnableReferal();
-                return;
-            }
-            DisableReferal();
+            ToggleReferal(ReferCheckBox.Checked);
         }
-        private void EnableReferal()
+        private void ToggleReferal(bool state)
         {
-            SpecializationsComboBox.Enabled = true;
-            DoctorsComboBox.Enabled = true;
-        }
-        private void DisableReferal()
-        {
-            SpecializationsComboBox.Enabled = false;
+            SpecializationsComboBox.Enabled = state;
+            DoctorsComboBox.Enabled = state;
             SpecializationsComboBox.SelectedIndex = -1;
-            DoctorsComboBox.Enabled = false;
             DoctorsComboBox.SelectedIndex = -1;
         }
         private void SpecializationsComboBoxSelectedValueChanged(object sender, EventArgs e)
         {
             if(SpecializationsComboBox.SelectedIndex == -1) return;
             int selectedID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
-            FillDoctorsComboBox(selectedID);
+            UIUtilities.FillSpecializedDoctorComboBox(DoctorsComboBox, selectedID);
         }
         private bool TryCreateReferal()
         {
@@ -204,18 +159,17 @@ namespace Klinika.GUI.Doctor
 
             int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
             int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).ID;
-            MedicalRecordService.CreateReferal(Appointment.PatientID, specializationID, doctorID);
+            ReferralService.Create(Appointment.PatientID, specializationID, doctorID);
 
-            MessageBox.Show("Referal made.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBoxUtilities.ShowInformationMessage("Referal made successfully!");
             return true;
         }
         #endregion
-
         #region Perscription
         private void AnamnesisTextChanged(object sender, EventArgs e)
         {
-            bool areAllFiledsFiled = DescriptionTextBox.Text != "" && SymptomsTextBox.Text != "" && ConclusionTextBox.Text != "";
-            if (areAllFiledsFiled)
+            bool hasEmptyFileds = DescriptionTextBox.Text == "" || SymptomsTextBox.Text == "" || ConclusionTextBox.Text == "";
+            if (!hasEmptyFileds)
             {
                 PerscriptionButton.Enabled = true;
                 PerscriptionHint.Visible = false;
@@ -229,12 +183,10 @@ namespace Klinika.GUI.Doctor
             new PrescriptionIssuing(this).Show();
         }
         #endregion
-
         #region Appointment
         private void CompleteAppointment()
         {
-            Appointment.Completed = true;
-            AppointmentRepository.GetInstance().Modify(Appointment);
+            AppointmentService.Complete(Appointment);
             Parent.ScheduleTable.ModifySelected(Appointment);
         }
         private bool IsAppointmentCompleted()
