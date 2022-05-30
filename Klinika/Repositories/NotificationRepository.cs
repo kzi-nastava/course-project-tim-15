@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Models;
+﻿using Klinika.Models;
 using Klinika.Data;
 
 namespace Klinika.Repositories
@@ -12,12 +7,13 @@ namespace Klinika.Repositories
     {
         public static void Send(Notification notification)
         {
-            string sendQuery = "INSERT INTO [Notification] (UserID,Message,IsNotified) " +
-                               "VALUES(@userID,@message,@isNotified)";
+            string sendQuery = "INSERT INTO [Notification] (UserID,Message,IsNotified,DateTime) " +
+                               "VALUES(@userID,@message,@isNotified,@dateTime)";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(sendQuery,
                                             ("@userId", notification.userId),
                                             ("@message", notification.message),
-                                            ("@isNotified", notification.isNotified));
+                                            ("@isNotified", notification.isNotified),
+                                            ("@dateTime", notification.DateTime));
         }
     }
 }
