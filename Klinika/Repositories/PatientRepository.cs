@@ -44,8 +44,10 @@ namespace Klinika.Repositories
         }
         public static Patient GetSingle (int id)
         {
-            string getSingleQuerry = "SELECT [User].ID, [User].JMBG, [User].Name, [User].Surname, [User].Birthdate, [User].Gender, [User].Email, [User].Password " +
-                "FROM [User] " + 
+            string getSingleQuerry = "SELECT [User].ID, [User].JMBG, [User].Name, [User].Surname, [User].Birthdate, [User].Gender, " +
+                "[User].Email, [User].Password, [User].IsBlocked, [User].WhoBlocked, [Patient].NotificationOffset " +
+                "FROM [User] JOIN [Patient] " +
+                "ON [User].ID = [Patient].UserID " + 
                 $"WHERE [User].ID = {id}";
             var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSingleQuerry);
             Patient patient = new Patient(
@@ -56,7 +58,10 @@ namespace Klinika.Repositories
                 Convert.ToDateTime(((object[])result[0])[4]),
                 Convert.ToChar(((object[])result[0])[5]),
                 ((object[])result[0])[6].ToString(),
-                ((object[])result[0])[7].ToString());
+                ((object[])result[0])[7].ToString(),
+                Convert.ToBoolean(((object[])result[0])[8]),
+                ((object[])result[0])[9].ToString(),
+                Convert.ToInt32(((object[])result[0])[10]));
             return patient;
         }
 

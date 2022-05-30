@@ -19,6 +19,7 @@ namespace Klinika.GUI.Patient
         {
             InitializeComponent();
             Patient = PatientService.GetById(patientID);
+            System.Diagnostics.Debug.WriteLine(Patient.NotificationOffset);
         }
         private void LoadForm(object sender, EventArgs e)
         {
