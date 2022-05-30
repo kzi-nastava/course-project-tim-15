@@ -22,5 +22,10 @@ namespace Klinika.Models
             Quantity = quantity;
             Spent = 0;
         }
+
+        public int GetNewQuantity()
+        {
+            return Quantity - Spent;
+        }
     }
 }

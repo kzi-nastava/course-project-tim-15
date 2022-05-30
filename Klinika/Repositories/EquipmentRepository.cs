@@ -303,5 +303,16 @@ namespace Klinika.Repositories
             }
             return equipment;
         }
+        public static void ModifyRoomsDynamicEquipmentQuantity(int roomID, int equipmentID, int quantity)
+        {
+            string modifyQuery = "UPDATE [RoomEquipment] " +
+                "SET Quantity = @Quantity " +
+                "WHERE RoomID = @RoomID AND EquipmentID = @EquipmentID";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                modifyQuery,
+                ("@RoomID", roomID),
+                ("@EquipmentID", equipmentID),
+                ("@Quantity", quantity));
+        }
     }
 }

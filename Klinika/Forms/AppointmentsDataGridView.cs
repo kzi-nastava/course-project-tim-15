@@ -17,6 +17,7 @@ namespace Klinika.Forms
         private string SearchedRole;
         public AppointmentsDataGridView(User.RoleType viewerRole) : base()
         {
+            Appointments = new List<Appointment>();
             SetViewerRole(viewerRole);
         }
         private void SetViewerRole(User.RoleType viewerRole)

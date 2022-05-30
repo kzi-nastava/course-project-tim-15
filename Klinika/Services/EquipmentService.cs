@@ -20,7 +20,13 @@ namespace Klinika.Services
             var equipment = EquipmentRepository.GetDynamicEquipment();
             return equipment.Where(x => x.RoomID == roomID).ToList();
         }
-
+        public static void UpdateRoomsDynamicEquipment(int roomID, List<Equipment> equipments)
+        {
+            foreach(var equipment in equipments)
+            {
+                EquipmentRepository.ModifyRoomsDynamicEquipmentQuantity(roomID, equipment.ID, equipment.GetNewQuantity());
+            }
+        }
         public static void MakeEquipmentTransferRequest(int equipmentId,int quantity)
         {
             

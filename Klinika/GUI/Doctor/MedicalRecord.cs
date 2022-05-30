@@ -130,7 +130,7 @@ namespace Klinika.GUI.Doctor
         }
         private void FinishButtonClick(object sender, EventArgs e)
         {
-            //if (!IsAppointmentCompleted()) return;
+            if (!IsAppointmentCompleted()) return;
             Close();
             new DynamicEquipment(Parent, Appointment).Show();
         }

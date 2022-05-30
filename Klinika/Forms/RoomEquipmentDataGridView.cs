@@ -12,8 +12,11 @@ namespace Klinika.Forms
 {
     public class RoomEquipmentDataGridView : DataGridView
     {
-        private List<Equipment>? Equipment;
-        public RoomEquipmentDataGridView() : base() { }
+        private List<Equipment> Equipment;
+        public RoomEquipmentDataGridView() : base()
+        {
+            Equipment = new List<Equipment>();
+        }
         public void Fill(List<Equipment> equipments)
         {
             DataTable equipmentData = new DataTable();
@@ -41,6 +44,7 @@ namespace Klinika.Forms
             dt.Rows.Add(newRow);
             Equipment.Add(equipment);
         }
+        public List<Equipment> GetAll() { return Equipment; }
         public int GetSelectedID()
         {
             return Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
