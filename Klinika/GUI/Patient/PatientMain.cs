@@ -296,9 +296,9 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
-        private void SendGradeButton_Click(object sender, EventArgs e)
+        private void SendGradeButtonClick(object sender, EventArgs e)
         {
-            new Questionnaire(this).Show();
+            new Questionnaire(this, Question.Types.DOCTOR).Show();
         }
     }
 }

@@ -292,7 +292,7 @@
             this.SendGradeButton.TabIndex = 5;
             this.SendGradeButton.Text = "Send grade";
             this.SendGradeButton.UseVisualStyleBackColor = true;
-            this.SendGradeButton.Click += new System.EventHandler(this.SendGradeButton_Click);
+            this.SendGradeButton.Click += new System.EventHandler(this.SendGradeButtonClick);
             // 
             // ResetButton
             // 
