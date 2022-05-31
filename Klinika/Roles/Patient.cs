@@ -22,6 +22,7 @@
             this.gender = gender;
             IsBlocked = false;
             whoBlocked = "";
+            NotificationOffset = 10;
         }
         public Patient(
                         int id,
@@ -31,16 +32,14 @@
                         DateTime birthdate,
                         char gender,
                         string email,
-                        string password, 
-                        bool isBlocked,
-                        string whoBlocked,
+                        string password,
                         int notificationOffset) : base(id, name, surname, email, password)
         {
             this.jmbg = jmbg;
             this.birthdate = birthdate;
             this.gender = gender;
-            IsBlocked = isBlocked;
-            this.whoBlocked = whoBlocked;
+            IsBlocked = false;
+            whoBlocked = "";
             NotificationOffset = notificationOffset;
         }
     }

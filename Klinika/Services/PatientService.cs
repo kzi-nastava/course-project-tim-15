@@ -41,10 +41,6 @@ namespace Klinika.Services
             }
             PatientRepository.Modify(patient);
         }
-        public static void SetNotificationOffset(Patient patient)
-        {
-            PatientRepository.Modify(patient.ID, patient.NotificationOffset);
-        }
         public static void Delete(int patientId)
         {
             PatientRepository.Delete(patientId);
