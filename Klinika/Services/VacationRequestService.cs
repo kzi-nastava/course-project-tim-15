@@ -18,5 +18,13 @@ namespace Klinika.Services
         {
             vacationRequest.ID = VacationRequestRepository.Create(vacationRequest);
         }
+        public static bool IsOnVacation(DateTime start, int doctorID)
+        {
+            List<VacationRequest> forSelectedTimeSpan = VacationRequestRepository.GetAll(doctorID).Where(
+                x => x.FromDate < start && x.ToDate > start && x.Status != (char)VacationRequest.Statuses.DENIED).ToList();
+            
+            if (forSelectedTimeSpan.Count == 0) return false;
+            return true;
+        }
     }
 }

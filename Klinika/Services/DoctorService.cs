@@ -93,8 +93,8 @@ namespace Klinika.Services
         {
             List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().Appointments.Where(
                 x => x.DoctorID == doctorID && slot.DoesOverlap(new TimeSlot(x.DateTime, x.Duration)) && !x.IsDeleted && x.ID != forAppointmentID).ToList();
-
-            if (forSelectedTimeSpan.Count == 0) return false;
+            bool onVacation = VacationRequestService.IsOnVacation(slot.from, doctorID);
+            if (forSelectedTimeSpan.Count == 0) return false || onVacation;
             return true;
         }
 

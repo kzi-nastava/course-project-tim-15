@@ -157,8 +157,7 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowInformationMessage("Time span is not valid.");
                 return false;
             }
-            if (EmergencyCheckBox.Checked 
-                || (EmergencyCheckBox.Checked && ToDatePicker.Value - FromDatePicker.Value > TimeSpan.FromDays(5)))
+            if (EmergencyCheckBox.Checked && ToDatePicker.Value - FromDatePicker.Value > TimeSpan.FromDays(5))
             {
                 MessageBoxUtilities.ShowErrorMessage("Emergency break can't be longer than 5 days.");
                 return false;
