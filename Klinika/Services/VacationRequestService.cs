@@ -14,5 +14,9 @@ namespace Klinika.Services
         {
             return VacationRequestRepository.GetAll(doctorID);
         }
+        public static void Create(VacationRequest vacationRequest)
+        {
+            vacationRequest.ID = VacationRequestRepository.Create(vacationRequest);
+        }
     }
 }

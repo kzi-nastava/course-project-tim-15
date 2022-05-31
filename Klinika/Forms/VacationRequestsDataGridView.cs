@@ -27,12 +27,12 @@ namespace Klinika.Forms
             vacationRequestsData.Columns.Add("To Date");
             vacationRequestsData.Columns.Add("Reason");
             vacationRequestsData.Columns.Add("Status");
-            vacationRequestsData.Columns.Add("Emergency");
+            vacationRequestsData.Columns.Add("Emergency", typeof(bool));
             vacationRequestsData.Columns.Add("Deny Reason");
 
             DataSource = vacationRequestsData;
             Columns["ID"].Width = 45;
-            Columns["Emergency"].Width = 55;
+            Columns["Emergency"].Width = 65;
 
             VacationRequests = new List<VacationRequest>();
             foreach (VacationRequest vacationRequest in vacationRequests) Insert(vacationRequest);
@@ -47,7 +47,7 @@ namespace Klinika.Forms
             newRow["From Date"] = vacationRequest.FromDate;
             newRow["To Date"] = vacationRequest.ToDate;
             newRow["Reason"] = vacationRequest.Reason;
-            newRow["Status"] = vacationRequest.Status;
+            newRow["Status"] = ((VacationRequest.Statuses)vacationRequest.Status).ToString();
             newRow["Emergency"] = vacationRequest.Emergency;
             newRow["Deny Reason"] = vacationRequest.DenyReason;
             dt.Rows.Add(newRow);

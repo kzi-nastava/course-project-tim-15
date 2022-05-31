@@ -17,6 +17,18 @@ namespace Klinika.Models
         public char Status { get; set; }
         public bool Emergency { get; set; }
         public string DenyReason { get; set; }
+        public VacationRequest(int doctorID, DateTime fromDate, DateTime toDate,
+            string reason, bool emergency)
+        {
+            ID = -1;
+            DoctorID = doctorID;
+            FromDate = fromDate;
+            ToDate = toDate;
+            Reason = reason;
+            Status = (char)(emergency ? Statuses.ACCEPTED : Statuses.WAITING);
+            Emergency = emergency;
+            DenyReason = "";
+        }
 
         public VacationRequest(int id, int doctorID, DateTime fromDate, DateTime toDate,
             string reason, char status, bool emergency, string denyReason)

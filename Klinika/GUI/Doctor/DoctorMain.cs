@@ -140,7 +140,10 @@ namespace Klinika.GUI.Doctor
         private void SendRequestButton_Click(object sender, EventArgs e)
         {
             if (!VerifyVacationRequest()) return;
-
+            var vacationRequest = new VacationRequest(_Doctor.ID, FromDatePicker.Value, ToDatePicker.Value, 
+                ReasonTextBox.Text, EmergencyCheckBox.Checked);
+            VacationRequestService.Create(vacationRequest);
+            VacationRequestTable.Insert(vacationRequest);
         }
         private bool VerifyVacationRequest()
         {
@@ -154,7 +157,8 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowInformationMessage("Time span is not valid.");
                 return false;
             }
-            if (!EmergencyCheckBox.Checked || ToDatePicker.Value - FromDatePicker.Value > TimeSpan.FromDays(5))
+            if (EmergencyCheckBox.Checked 
+                || (EmergencyCheckBox.Checked && ToDatePicker.Value - FromDatePicker.Value > TimeSpan.FromDays(5)))
             {
                 MessageBoxUtilities.ShowErrorMessage("Emergency break can't be longer than 5 days.");
                 return false;
