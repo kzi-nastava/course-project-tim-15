@@ -300,12 +300,13 @@
             // EmergencyCheckBox
             // 
             this.EmergencyCheckBox.AutoSize = true;
-            this.EmergencyCheckBox.Location = new System.Drawing.Point(24, 256);
+            this.EmergencyCheckBox.Location = new System.Drawing.Point(21, 251);
             this.EmergencyCheckBox.Name = "EmergencyCheckBox";
             this.EmergencyCheckBox.Size = new System.Drawing.Size(104, 24);
             this.EmergencyCheckBox.TabIndex = 11;
             this.EmergencyCheckBox.Text = "Emergency";
             this.EmergencyCheckBox.UseVisualStyleBackColor = true;
+            this.EmergencyCheckBox.CheckedChanged += new System.EventHandler(this.EmergencyCheckBox_CheckedChanged);
             // 
             // ToDatePicker
             // 
@@ -349,6 +350,7 @@
             this.SendRequestButton.TabIndex = 5;
             this.SendRequestButton.Text = "Send Request";
             this.SendRequestButton.UseVisualStyleBackColor = true;
+            this.SendRequestButton.Click += new System.EventHandler(this.SendRequestButton_Click);
             // 
             // textBox1
             // 
@@ -361,7 +363,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(24, 101);
+            this.label4.Location = new System.Drawing.Point(24, 98);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(57, 20);
             this.label4.TabIndex = 3;

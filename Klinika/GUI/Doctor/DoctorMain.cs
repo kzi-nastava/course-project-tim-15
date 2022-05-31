@@ -131,5 +131,15 @@ namespace Klinika.GUI.Doctor
         }
         #endregion
 
+        #region Vacation Requests
+        private void SendRequestButton_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void EmergencyCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
     }
 }
