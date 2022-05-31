@@ -79,6 +79,7 @@
             this.SetGradeButton.TabIndex = 4;
             this.SetGradeButton.Text = "Set";
             this.SetGradeButton.UseVisualStyleBackColor = true;
+            this.SetGradeButton.Click += new System.EventHandler(this.SetGradeButtonClick);
             // 
             // QuestionsTable
             // 
@@ -114,7 +115,7 @@
             this.SendButton.TabIndex = 6;
             this.SendButton.Text = "Send";
             this.SendButton.UseVisualStyleBackColor = true;
-            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
+            this.SendButton.Click += new System.EventHandler(this.SendButtonClick);
             // 
             // CommentTextBox
             // 

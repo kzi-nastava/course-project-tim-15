@@ -9,5 +9,9 @@ namespace Klinika.Services
         {
             return QuestionnaireRepository.GetQuestions(type);
         }
+        public static void Send(Questionnaire questionnaire, List<Answer> answers)
+        {
+            // TODO : Logic for insert in database
+        }
     }
 }

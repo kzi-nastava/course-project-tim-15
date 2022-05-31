@@ -298,7 +298,9 @@ namespace Klinika.GUI.Patient
 
         private void SendGradeButtonClick(object sender, EventArgs e)
         {
-            new Questionnaire(this, Question.Types.DOCTOR).Show();
+            int selected = Convert.ToInt32(UIUtilities.GetCellValue(MedicalRecordTable, "Appointment ID"));
+            var appointment = AppointmentService.GetById(selected);
+            new Questionnaire(this, Question.Types.DOCTOR, appointment.ID, appointment.DoctorID).Show();
         }
 
         private void ClinicQuestionnaireButtonClick(object sender, EventArgs e)
