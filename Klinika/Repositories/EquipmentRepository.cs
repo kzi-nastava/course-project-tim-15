@@ -1,4 +1,6 @@
 ﻿using Klinika.Data;
+using Klinika.Models;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -292,6 +294,38 @@ namespace Klinika.Repositories
             object quantity = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(getQuery, ("@equipId", equipmentId));
             if (quantity != null) return (int)quantity;
             return 0;
+        }
+
+        public static List<Equipment> GetDynamicEquipment()
+        {
+            string getQuery = "SELECT [Equipment].ID, [Equipment].Name, [RoomEquipment].RoomID, [RoomEquipment].Quantity FROM [Equipment] " +
+                              "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +
+                              "LEFT OUTER JOIN [RoomEquipment] ON [Equipment].ID = [RoomEquipment].EquipmentID " +
+                              "WHERE [EquipmentType].Name = 'dynamic'";
+
+            DataTable allDynamicEquipmentInRoom = DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
+
+            List<Equipment> equipment = new List<Equipment>();
+            foreach(DataRow row in allDynamicEquipmentInRoom.Rows)
+            {
+                equipment.Add(new Equipment(
+                    id: Convert.ToInt32(row["ID"]),
+                    name: DatabaseConnection.CheckNull<string>(row["Name"]),
+                    roomID: DatabaseConnection.CheckNull<int>(row["RoomID"]),
+                    quantity: DatabaseConnection.CheckNull<int>(row["Quantity"])));
+            }
+            return equipment;
+        }
+        public static void ModifyRoomsDynamicEquipmentQuantity(int roomID, int equipmentID, int quantity)
+        {
+            string modifyQuery = "UPDATE [RoomEquipment] " +
+                "SET Quantity = @Quantity " +
+                "WHERE RoomID = @RoomID AND EquipmentID = @EquipmentID";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                modifyQuery,
+                ("@RoomID", roomID),
+                ("@EquipmentID", equipmentID),
+                ("@Quantity", quantity));
         }
 
     }

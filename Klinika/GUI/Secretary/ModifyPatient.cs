@@ -64,7 +64,8 @@ namespace Klinika.GUI.Secretary
                 birthdatePicker.Value.Date,
                 genderSelection.SelectedItem.ToString()[0],
                 emailField.Text.Trim(),
-                passwordField.Text.Trim());
+                passwordField.Text.Trim(), 
+                selected.NotificationOffset);
             try
             {
                 PatientService.Modify(modifiedPatient);
