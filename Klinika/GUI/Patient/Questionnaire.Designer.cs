@@ -34,6 +34,8 @@
             this.SetGradeButton = new System.Windows.Forms.Button();
             this.NotificationsTable = new System.Windows.Forms.DataGridView();
             this.SendButton = new System.Windows.Forms.Button();
+            this.CommentTextBox = new System.Windows.Forms.TextBox();
+            this.CommentLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.GradeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NotificationsTable)).BeginInit();
             this.SuspendLayout();
@@ -114,11 +116,30 @@
             this.SendButton.UseVisualStyleBackColor = true;
             this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
+            // CommentTextBox
+            // 
+            this.CommentTextBox.Location = new System.Drawing.Point(420, 329);
+            this.CommentTextBox.Multiline = true;
+            this.CommentTextBox.Name = "CommentTextBox";
+            this.CommentTextBox.Size = new System.Drawing.Size(265, 43);
+            this.CommentTextBox.TabIndex = 7;
+            // 
+            // CommentLabel
+            // 
+            this.CommentLabel.AutoSize = true;
+            this.CommentLabel.Location = new System.Drawing.Point(347, 343);
+            this.CommentLabel.Name = "CommentLabel";
+            this.CommentLabel.Size = new System.Drawing.Size(67, 15);
+            this.CommentLabel.TabIndex = 8;
+            this.CommentLabel.Text = "Comment: ";
+            // 
             // Questionnaire
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(769, 379);
+            this.Controls.Add(this.CommentLabel);
+            this.Controls.Add(this.CommentTextBox);
             this.Controls.Add(this.SendButton);
             this.Controls.Add(this.NotificationsTable);
             this.Controls.Add(this.SetGradeButton);
@@ -142,5 +163,7 @@
         private Button SetGradeButton;
         private DataGridView NotificationsTable;
         private Button SendButton;
+        internal TextBox CommentTextBox;
+        private Label CommentLabel;
     }
 }
