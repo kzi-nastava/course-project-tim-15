@@ -16,23 +16,24 @@ namespace Klinika.Forms
         public VacationRequestsDataGridView() : base()
         {
             VacationRequests = new List<VacationRequest>();
-            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
         }
         public void Fill(List<VacationRequest> vacationRequests)
         {
             DataTable vacationRequestsData = new DataTable();
             vacationRequestsData.Columns.Add("ID");
-            vacationRequestsData.Columns.Add("From Date");
-            vacationRequestsData.Columns.Add("To Date");
+            vacationRequestsData.Columns.Add("From");
+            vacationRequestsData.Columns.Add("To");
             vacationRequestsData.Columns.Add("Reason");
             vacationRequestsData.Columns.Add("Status");
-            vacationRequestsData.Columns.Add("Emergency", typeof(bool));
+            vacationRequestsData.Columns.Add("Urgent", typeof(bool));
             vacationRequestsData.Columns.Add("Deny Reason");
 
             DataSource = vacationRequestsData;
             Columns["ID"].Width = 45;
-            Columns["Emergency"].Width = 65;
+            Columns["From"].Width = 80;
+            Columns["To"].Width = 80;
+            Columns["Status"].Width = 70;
+            Columns["Urgent"].Width = 65;
 
             VacationRequests = new List<VacationRequest>();
             foreach (VacationRequest vacationRequest in vacationRequests) Insert(vacationRequest);
@@ -44,11 +45,11 @@ namespace Klinika.Forms
             DataTable? dt = DataSource as DataTable;
             DataRow newRow = dt.NewRow();
             newRow["ID"] = vacationRequest.ID;
-            newRow["From Date"] = vacationRequest.FromDate;
-            newRow["To Date"] = vacationRequest.ToDate;
+            newRow["From"] = vacationRequest.FromDate.ToString("MM.dd.yyyy");
+            newRow["To"] = vacationRequest.ToDate.ToString("MM.dd.yyyy");
             newRow["Reason"] = vacationRequest.Reason;
             newRow["Status"] = ((VacationRequest.Statuses)vacationRequest.Status).ToString();
-            newRow["Emergency"] = vacationRequest.Emergency;
+            newRow["Urgent"] = vacationRequest.Emergency;
             newRow["Deny Reason"] = vacationRequest.DenyReason;
             dt.Rows.Add(newRow);
             VacationRequests.Add(vacationRequest);
@@ -72,10 +73,10 @@ namespace Klinika.Forms
         {
             SelectedRows[0].SetValues(
                 vacationRequest.ID.ToString(),
-                vacationRequest.FromDate,
-                vacationRequest.ToDate,
+                vacationRequest.FromDate.ToString("MM.dd.yyyy"),
+                vacationRequest.ToDate.ToString("MM.dd.yyyy"),
                 vacationRequest.Reason,
-                vacationRequest.Status,
+                ((VacationRequest.Statuses)vacationRequest.Status).ToString(),
                 vacationRequest.Emergency,
                 vacationRequest.DenyReason);
 

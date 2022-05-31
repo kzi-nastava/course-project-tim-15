@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.AllAppointmentsTab = new System.Windows.Forms.TabPage();
             this.AddAppointmentButton = new System.Windows.Forms.Button();
@@ -37,9 +38,9 @@
             this.PerformButton = new System.Windows.Forms.Button();
             this.ViewMedicalRecordButton = new System.Windows.Forms.Button();
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.UnapprovedDrugsTab = new System.Windows.Forms.TabPage();
             this.ScheduleTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.DOCTOR);
             this.AllAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.DOCTOR);
-            this.UnapprovedDrugsTab = new System.Windows.Forms.TabPage();
             this.DenyDrugButton = new System.Windows.Forms.Button();
             this.ApproveDrugButton = new System.Windows.Forms.Button();
             this.DenyDrugDescription = new System.Windows.Forms.TextBox();
@@ -300,7 +301,7 @@
             // EmergencyCheckBox
             // 
             this.EmergencyCheckBox.AutoSize = true;
-            this.EmergencyCheckBox.Location = new System.Drawing.Point(21, 251);
+            this.EmergencyCheckBox.Location = new System.Drawing.Point(6, 234);
             this.EmergencyCheckBox.Name = "EmergencyCheckBox";
             this.EmergencyCheckBox.Size = new System.Drawing.Size(104, 24);
             this.EmergencyCheckBox.TabIndex = 11;
@@ -310,7 +311,7 @@
             // ToDatePicker
             // 
             this.ToDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.ToDatePicker.Location = new System.Drawing.Point(70, 57);
+            this.ToDatePicker.Location = new System.Drawing.Point(55, 40);
             this.ToDatePicker.Name = "ToDatePicker";
             this.ToDatePicker.Size = new System.Drawing.Size(200, 27);
             this.ToDatePicker.TabIndex = 10;
@@ -318,7 +319,7 @@
             // FromDatePicker
             // 
             this.FromDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.FromDatePicker.Location = new System.Drawing.Point(70, 24);
+            this.FromDatePicker.Location = new System.Drawing.Point(55, 7);
             this.FromDatePicker.Name = "FromDatePicker";
             this.FromDatePicker.Size = new System.Drawing.Size(200, 27);
             this.FromDatePicker.TabIndex = 9;
@@ -326,7 +327,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 65);
+            this.label3.Location = new System.Drawing.Point(9, 48);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(25, 20);
             this.label3.TabIndex = 7;
@@ -335,7 +336,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 32);
+            this.label2.Location = new System.Drawing.Point(9, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(43, 20);
             this.label2.TabIndex = 6;
@@ -343,7 +344,7 @@
             // 
             // SendRequestButton
             // 
-            this.SendRequestButton.Location = new System.Drawing.Point(168, 443);
+            this.SendRequestButton.Location = new System.Drawing.Point(133, 443);
             this.SendRequestButton.Name = "SendRequestButton";
             this.SendRequestButton.Size = new System.Drawing.Size(122, 29);
             this.SendRequestButton.TabIndex = 5;
@@ -353,7 +354,7 @@
             // 
             // ReasonTextBox
             // 
-            this.ReasonTextBox.Location = new System.Drawing.Point(21, 121);
+            this.ReasonTextBox.Location = new System.Drawing.Point(6, 104);
             this.ReasonTextBox.Multiline = true;
             this.ReasonTextBox.Name = "ReasonTextBox";
             this.ReasonTextBox.Size = new System.Drawing.Size(249, 110);
@@ -362,7 +363,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(24, 98);
+            this.label4.Location = new System.Drawing.Point(9, 81);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(57, 20);
             this.label4.TabIndex = 3;
@@ -376,15 +377,23 @@
             this.VacationRequestTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.VacationRequestTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.VacationRequestTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VacationRequestTable.DefaultCellStyle = dataGridViewCellStyle1;
             this.VacationRequestTable.GridColor = System.Drawing.SystemColors.Control;
-            this.VacationRequestTable.Location = new System.Drawing.Point(296, 7);
+            this.VacationRequestTable.Location = new System.Drawing.Point(261, 7);
             this.VacationRequestTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.VacationRequestTable.Name = "VacationRequestTable";
             this.VacationRequestTable.ReadOnly = true;
             this.VacationRequestTable.RowHeadersWidth = 51;
             this.VacationRequestTable.RowTemplate.Height = 25;
             this.VacationRequestTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.VacationRequestTable.Size = new System.Drawing.Size(629, 465);
+            this.VacationRequestTable.Size = new System.Drawing.Size(664, 465);
             this.VacationRequestTable.TabIndex = 2;
             // 
             // DoctorMain
