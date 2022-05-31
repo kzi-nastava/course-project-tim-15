@@ -81,6 +81,10 @@ namespace Klinika.Services
             DateTime end = new DateTime(day.Year, day.Month, day.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
             return IsOccupied(doctorID, new TimeSlot(start, end));
         }
+        public static bool IsOccupied(DateTime from, DateTime to, int doctorID)
+        {
+            return IsOccupied(doctorID, new TimeSlot(from, to));
+        }
         public static bool IsOccupied(DateTime start, int doctorID, int duration = 15, int forAppointmentID = -1)
         {
             return IsOccupied(doctorID, new TimeSlot(start, duration), forAppointmentID);

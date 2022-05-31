@@ -52,9 +52,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.SendRequestButton = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.ReasonTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.VacationRequestTable = new Klinika.Forms.DrugsDataGridView();
+            this.VacationRequestTable = new Klinika.Forms.VacationRequestsDataGridView();
             this.MainTabControl.SuspendLayout();
             this.AllAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).BeginInit();
@@ -286,7 +286,7 @@
             this.VacationRequestTab.Controls.Add(this.label3);
             this.VacationRequestTab.Controls.Add(this.label2);
             this.VacationRequestTab.Controls.Add(this.SendRequestButton);
-            this.VacationRequestTab.Controls.Add(this.textBox1);
+            this.VacationRequestTab.Controls.Add(this.ReasonTextBox);
             this.VacationRequestTab.Controls.Add(this.label4);
             this.VacationRequestTab.Controls.Add(this.VacationRequestTable);
             this.VacationRequestTab.Location = new System.Drawing.Point(4, 29);
@@ -306,7 +306,6 @@
             this.EmergencyCheckBox.TabIndex = 11;
             this.EmergencyCheckBox.Text = "Emergency";
             this.EmergencyCheckBox.UseVisualStyleBackColor = true;
-            this.EmergencyCheckBox.CheckedChanged += new System.EventHandler(this.EmergencyCheckBox_CheckedChanged);
             // 
             // ToDatePicker
             // 
@@ -352,13 +351,13 @@
             this.SendRequestButton.UseVisualStyleBackColor = true;
             this.SendRequestButton.Click += new System.EventHandler(this.SendRequestButton_Click);
             // 
-            // textBox1
+            // ReasonTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(21, 121);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(249, 110);
-            this.textBox1.TabIndex = 4;
+            this.ReasonTextBox.Location = new System.Drawing.Point(21, 121);
+            this.ReasonTextBox.Multiline = true;
+            this.ReasonTextBox.Name = "ReasonTextBox";
+            this.ReasonTextBox.Size = new System.Drawing.Size(249, 110);
+            this.ReasonTextBox.TabIndex = 4;
             // 
             // label4
             // 
@@ -443,8 +442,8 @@
         private Label label3;
         private Label label2;
         private Button SendRequestButton;
-        private TextBox textBox1;
+        private TextBox ReasonTextBox;
         private Label label4;
-        internal Forms.DrugsDataGridView VacationRequestTable;
+        internal Klinika.Forms.VacationRequestsDataGridView VacationRequestTable;
     }
 }
