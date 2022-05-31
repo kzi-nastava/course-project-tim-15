@@ -1,6 +1,5 @@
 ﻿using Klinika.Data;
 using System.Data;
-using System.Data.SqlClient;
 using Klinika.Roles;
 
 namespace Klinika.Repositories
@@ -15,8 +14,10 @@ namespace Klinika.Repositories
             EmailIDPairs = new Dictionary<string, int>();
             IDPatientPairs = new Dictionary<int,Patient>();
 
-            string getAllQuery = "SELECT ID, JMBG, Name, Surname, Birthdate, Gender, Email, Password, IsBlocked as Blocked, WhoBlocked as BlockedBy " +
-                                      "FROM [User] " +
+            string getAllQuery = "SELECT [User].ID, [User].JMBG, [User].Name, [User].Surname, [User].Birthdate, [User].Gender, [User].Email, " +
+                                 "[User].Password, [User].IsBlocked as Blocked, [User].WhoBlocked as BlockedBy, [Patient].NotificationOffset " +
+                                      "FROM [User] JOIN [Patient] " +
+                                      "ON [User].ID = [Patient].UserID " +
                                       "WHERE UserType = 1 AND IsDeleted = 0";
 
             DataTable retrievedPatients = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
@@ -32,18 +33,40 @@ namespace Klinika.Repositories
                                                 DateTime.Parse(patient["Birthdate"].ToString()),
                                                 patient["Gender"].ToString()[0],
                                                 email,
-                                                patient["Password"].ToString());
+                                                patient["Password"].ToString(), 
+                                                Convert.ToInt32(patient["NotificationOffset"]));
 
                 EmailIDPairs.Add(email, id);
                 IDPatientPairs.Add(id, newPatient);
 
             }
                 retrievedPatients.Columns.Remove("Password");
+            retrievedPatients.Columns.Remove("NotificationOffset");
 
             return retrievedPatients;
 
         }
-
+        public static Patient GetSingle (int id)
+        {
+            string getSingleQuerry = "SELECT [User].ID, [User].JMBG, [User].Name, [User].Surname, [User].Birthdate, [User].Gender, " +
+                "[User].Email, [User].Password, [Patient].NotificationOffset " +
+                "FROM [User] JOIN [Patient] " +
+                "ON [User].ID = [Patient].UserID " + 
+                $"WHERE [User].ID = {id}";
+            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSingleQuerry);
+            Patient patient = new Patient(
+                Convert.ToInt32(((object[])result[0])[0]),
+                ((object[])result[0])[1].ToString(),
+                ((object[])result[0])[2].ToString(),
+                ((object[])result[0])[3].ToString(),
+                Convert.ToDateTime(((object[])result[0])[4]),
+                Convert.ToChar(((object[])result[0])[5]),
+                ((object[])result[0])[6].ToString(),
+                ((object[])result[0])[7].ToString(),
+                Convert.ToInt32(((object[])result[0])[8]));
+            return patient;
+        }
+        
         internal static void Modify(Patient patient)
         {
             string modifyQuery = "UPDATE [User] " +
@@ -63,7 +86,10 @@ namespace Klinika.Repositories
             ("@Birthdate", patient.birthdate.Date),
             ("@Gender", patient.gender),
             ("@Password", patient.Password)
-            ); 
+            );
+
+            string modifyQuerry = "UPDATE [Patient] SET NotificationOffset = @notificationOffset WHERE UserID = @Id";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuerry, ("@notificationOffset", patient.NotificationOffset), ("@Id", patient.ID));
         }
 
         //Logical deletion

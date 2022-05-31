@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.PersonalAppointmentsTab = new System.Windows.Forms.TabPage();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.ModifyButton = new System.Windows.Forms.Button();
-            this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT );
             this.NewAppointmentTab = new System.Windows.Forms.TabPage();
             this.RecommendButton = new System.Windows.Forms.Button();
             this.ScheduleButton = new System.Windows.Forms.Button();
@@ -44,7 +44,6 @@
             this.DateLabel = new System.Windows.Forms.Label();
             this.TitleLabel = new System.Windows.Forms.Label();
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT);
             this.MedicalRecordTab = new System.Windows.Forms.TabPage();
             this.ResetButton = new System.Windows.Forms.Button();
             this.SearchButton = new System.Windows.Forms.Button();
@@ -52,6 +51,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.MedicalRecordTable = new System.Windows.Forms.DataGridView();
             this.DoctorsTab = new System.Windows.Forms.TabPage();
+            this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT);
+            this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT);
             this.DoctorSpecializationComboBox = new System.Windows.Forms.ComboBox();
             this.NewAppointmentButton = new System.Windows.Forms.Button();
             this.DoctorsTable = new System.Windows.Forms.DataGridView();
@@ -61,6 +62,12 @@
             this.DoctorSpecializationRadioButton = new System.Windows.Forms.RadioButton();
             this.DoctorSurnameTextBox = new System.Windows.Forms.TextBox();
             this.DoctorNameTextBox = new System.Windows.Forms.TextBox();
+            this.NotificationsTab = new System.Windows.Forms.TabPage();
+            this.MarkAsReadButton = new System.Windows.Forms.Button();
+            this.SetButton = new System.Windows.Forms.Button();
+            this.OffsetNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.SetOffsetLabel = new System.Windows.Forms.Label();
+            this.NotificationsTable = new System.Windows.Forms.DataGridView();
             this.MainTabControl.SuspendLayout();
             this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
@@ -70,6 +77,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.MedicalRecordTable)).BeginInit();
             this.DoctorsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DoctorsTable)).BeginInit();
+            this.NotificationsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OffsetNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NotificationsTable)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -78,6 +88,7 @@
             this.MainTabControl.Controls.Add(this.NewAppointmentTab);
             this.MainTabControl.Controls.Add(this.MedicalRecordTab);
             this.MainTabControl.Controls.Add(this.DoctorsTab);
+            this.MainTabControl.Controls.Add(this.NotificationsTab);
             this.MainTabControl.Location = new System.Drawing.Point(12, 12);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
@@ -302,14 +313,14 @@
             this.MedicalRecordTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.MedicalRecordTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.MedicalRecordTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.MedicalRecordTable.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.MedicalRecordTable.DefaultCellStyle = dataGridViewCellStyle5;
             this.MedicalRecordTable.Location = new System.Drawing.Point(6, 6);
             this.MedicalRecordTable.Name = "MedicalRecordTable";
             this.MedicalRecordTable.ReadOnly = true;
@@ -356,7 +367,7 @@
             this.NewAppointmentButton.UseVisualStyleBackColor = true;
             this.NewAppointmentButton.Click += new System.EventHandler(this.NewAppointmentButtonClick);
             // 
-            // DoctorTable
+            // DoctorsTable
             // 
             this.DoctorsTable.AllowUserToAddRows = false;
             this.DoctorsTable.AllowUserToDeleteRows = false;
@@ -364,17 +375,17 @@
             this.DoctorsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.DoctorsTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.DoctorsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DoctorsTable.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DoctorsTable.DefaultCellStyle = dataGridViewCellStyle6;
             this.DoctorsTable.Location = new System.Drawing.Point(335, 6);
             this.DoctorsTable.MultiSelect = false;
-            this.DoctorsTable.Name = "DoctorTable";
+            this.DoctorsTable.Name = "DoctorsTable";
             this.DoctorsTable.ReadOnly = true;
             this.DoctorsTable.RowHeadersWidth = 51;
             this.DoctorsTable.RowTemplate.Height = 29;
@@ -443,6 +454,89 @@
             this.DoctorNameTextBox.Size = new System.Drawing.Size(151, 27);
             this.DoctorNameTextBox.TabIndex = 3;
             // 
+            // NotificationsTab
+            // 
+            this.NotificationsTab.Controls.Add(this.MarkAsReadButton);
+            this.NotificationsTab.Controls.Add(this.SetButton);
+            this.NotificationsTab.Controls.Add(this.OffsetNumericUpDown);
+            this.NotificationsTab.Controls.Add(this.SetOffsetLabel);
+            this.NotificationsTab.Controls.Add(this.NotificationsTable);
+            this.NotificationsTab.Location = new System.Drawing.Point(4, 29);
+            this.NotificationsTab.Name = "NotificationsTab";
+            this.NotificationsTab.Padding = new System.Windows.Forms.Padding(3);
+            this.NotificationsTab.Size = new System.Drawing.Size(1085, 507);
+            this.NotificationsTab.TabIndex = 4;
+            this.NotificationsTab.Text = "Notifications";
+            this.NotificationsTab.UseVisualStyleBackColor = true;
+            // 
+            // MarkAsReadButton
+            // 
+            this.MarkAsReadButton.Location = new System.Drawing.Point(955, 468);
+            this.MarkAsReadButton.Name = "MarkAsReadButton";
+            this.MarkAsReadButton.Size = new System.Drawing.Size(124, 29);
+            this.MarkAsReadButton.TabIndex = 5;
+            this.MarkAsReadButton.Text = "Mark as read";
+            this.MarkAsReadButton.UseVisualStyleBackColor = true;
+            this.MarkAsReadButton.Click += new System.EventHandler(this.MarkAsReadButtonClick);
+            // 
+            // SetButton
+            // 
+            this.SetButton.Location = new System.Drawing.Point(328, 468);
+            this.SetButton.Name = "SetButton";
+            this.SetButton.Size = new System.Drawing.Size(94, 29);
+            this.SetButton.TabIndex = 4;
+            this.SetButton.Text = "Set";
+            this.SetButton.UseVisualStyleBackColor = true;
+            this.SetButton.Click += new System.EventHandler(this.SetButtonClick);
+            // 
+            // OffsetNumericUpDown
+            // 
+            this.OffsetNumericUpDown.Location = new System.Drawing.Point(161, 470);
+            this.OffsetNumericUpDown.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.OffsetNumericUpDown.Name = "OffsetNumericUpDown";
+            this.OffsetNumericUpDown.Size = new System.Drawing.Size(150, 27);
+            this.OffsetNumericUpDown.TabIndex = 3;
+            this.OffsetNumericUpDown.Enter += new System.EventHandler(this.OffsetNumericUpDownEnter);
+            // 
+            // SetOffsetLabel
+            // 
+            this.SetOffsetLabel.AutoSize = true;
+            this.SetOffsetLabel.Location = new System.Drawing.Point(6, 472);
+            this.SetOffsetLabel.Name = "SetOffsetLabel";
+            this.SetOffsetLabel.Size = new System.Drawing.Size(149, 20);
+            this.SetOffsetLabel.TabIndex = 2;
+            this.SetOffsetLabel.Text = "Set new offset [min]: ";
+            // 
+            // NotificationsTable
+            // 
+            this.NotificationsTable.AllowUserToAddRows = false;
+            this.NotificationsTable.AllowUserToDeleteRows = false;
+            this.NotificationsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.NotificationsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.NotificationsTable.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.NotificationsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.NotificationsTable.DefaultCellStyle = dataGridViewCellStyle4;
+            this.NotificationsTable.Location = new System.Drawing.Point(6, 6);
+            this.NotificationsTable.Name = "NotificationsTable";
+            this.NotificationsTable.ReadOnly = true;
+            this.NotificationsTable.RowHeadersWidth = 51;
+            this.NotificationsTable.RowTemplate.Height = 29;
+            this.NotificationsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.NotificationsTable.Size = new System.Drawing.Size(1073, 451);
+            this.NotificationsTable.TabIndex = 1;
+            this.NotificationsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.NotificationsTable_CellClick);
+            // 
             // PatientMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -469,6 +563,10 @@
             this.DoctorsTab.ResumeLayout(false);
             this.DoctorsTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DoctorsTable)).EndInit();
+            this.NotificationsTab.ResumeLayout(false);
+            this.NotificationsTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OffsetNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NotificationsTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -506,5 +604,11 @@
         private Button NewAppointmentButton;
         private DataGridView DoctorsTable;
         public ComboBox DoctorSpecializationComboBox;
+        private TabPage NotificationsTab;
+        private DataGridView NotificationsTable;
+        private NumericUpDown OffsetNumericUpDown;
+        private Label SetOffsetLabel;
+        private Button MarkAsReadButton;
+        private Button SetButton;
     }
 }

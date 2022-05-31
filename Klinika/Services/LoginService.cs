@@ -44,7 +44,7 @@ namespace Klinika.Services
                     }
                     else
                     {
-                        new GUI.Patient.PatientMain(loggingUser).Show();
+                        new GUI.Patient.PatientMain(loggingUser.ID).Show();
                         break;
                     }
             }

@@ -5,23 +5,26 @@ using Klinika.Services;
 using Klinika.Utilities;
 using System.Data;
 using RDoctor = Klinika.Roles.Doctor;
+using RPatient = Klinika.Roles.Patient;
 
 namespace Klinika.GUI.Patient
 {
     public partial class PatientMain : Form
     {
         RDoctor.Filters SelectedDoctorFilter = RDoctor.Filters.BY_NAME;
-        public User Patient { get; }
+        public RPatient Patient { get; }
 
         #region Form
-        public PatientMain(User patient)
+        public PatientMain(int patientID)
         {
             InitializeComponent();
-            Patient = patient;
+            Patient = PatientService.GetById(patientID);
+            System.Diagnostics.Debug.WriteLine(Patient.NotificationOffset);
         }
         private void LoadForm(object sender, EventArgs e)
         {
             InitPersonalAppointmentsTab();
+            FillNotificationsTable(NotificationService.Get(Patient));
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillSpecializationsComboBox();
         }
@@ -30,6 +33,7 @@ namespace Klinika.GUI.Patient
             if ((sender as TabControl).SelectedIndex == 1) InitNewAppointmentTab();
             if ((sender as TabControl).SelectedIndex == 2) InitMedicalRecorTab();
             if ((sender as TabControl).SelectedIndex == 3) InitDoctorsTab();
+            if ((sender as TabControl).SelectedIndex == 4) InitNotificationsTab();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -180,20 +184,18 @@ namespace Klinika.GUI.Patient
             dataTable.Columns.Add("Specialization");
             dataTable.Columns.Add("Grade");
 
-            if(doctors != null)
+            if (doctors == null) return;
+            foreach(RDoctor doctor in doctors)
             {
-                foreach(RDoctor doctor in doctors)
-                {
-                    DataRow newRow = dataTable.NewRow();
-
-                    newRow["Doctor ID"] = doctor.ID;
-                    newRow["Name"] = doctor.Name;
-                    newRow["Surname"] = doctor.Surname;
-                    newRow["Specialization"] = doctor.specialization;
-                    newRow["Grade"] = QuestionnaireRepository.GetGrade(doctor.ID);
-                    dataTable.Rows.Add(newRow);
-                }
+                DataRow newRow = dataTable.NewRow();
+                newRow["Doctor ID"] = doctor.ID;
+                newRow["Name"] = doctor.Name;
+                newRow["Surname"] = doctor.Surname;
+                newRow["Specialization"] = doctor.specialization;
+                newRow["Grade"] = QuestionnaireRepository.GetGrade(doctor.ID);
+                dataTable.Rows.Add(newRow);
             }
+  
             DoctorsTable.DataSource = dataTable;
             DoctorsTable.ClearSelection();
             NewAppointmentButton.Enabled = false;
@@ -216,8 +218,61 @@ namespace Klinika.GUI.Patient
         private void NewAppointmentButtonClick(object sender, EventArgs e)
         {
             Appointment appointment = new Appointment();
-            appointment.DoctorID = GetSelectedDoctorID(DoctorsTable);
+            appointment.DoctorID = Convert.ToInt32(UIUtilities.GetCellValue(DoctorsTable, "Doctor ID"));
             new PersonalAppointment(this, appointment, true).Show();
+        }
+        #endregion
+
+        #region Notifications Tab
+        private void InitNotificationsTab()
+        {
+            OffsetNumericUpDown.Value = Patient.NotificationOffset;
+            SetButton.Enabled = false;
+        }
+        private void FillNotificationsTable(List<Notification> notifications)
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("ID");
+            dataTable.Columns.Add("DateTime");
+            dataTable.Columns.Add("Message");
+
+            if (notifications == null) return;
+            foreach (Notification notification in notifications)
+            {
+                DataRow newRow = dataTable.NewRow();
+
+                newRow["ID"] = notification.ID;
+                newRow["DateTime"] = notification.DateTime;
+                newRow["Message"] = notification.message;
+                dataTable.Rows.Add(newRow);
+            }
+            NotificationsTable.DataSource = dataTable;
+            NotificationsTable.ClearSelection();
+            MarkAsReadButton.Enabled = false;
+        }
+        private void MarkAsReadButtonClick(object sender, EventArgs e)
+        {
+            if (!UIUtilities.Confirm("Are you sure you want mark as read this notification?")) return;
+            int notificationID = Convert.ToInt32(UIUtilities.GetCellValue(NotificationsTable, "ID")); 
+            NotificationService.MarkAsRead(notificationID);
+            NotificationsTable.Rows.RemoveAt(NotificationsTable.CurrentRow.Index);
+            MarkAsReadButton.Enabled = false;
+        }
+        private void SetButtonClick(object sender, EventArgs e)
+        {
+            if (!UIUtilities.Confirm("Are you sure you want to save changes?")) return;
+            Patient.NotificationOffset = Convert.ToInt32(OffsetNumericUpDown.Value);
+            PatientService.Modify(Patient);
+            FillNotificationsTable(NotificationRepository.Get(Patient));
+            SetButton.Enabled = false;
+        }
+        private void OffsetNumericUpDownEnter(object sender, EventArgs e)
+        {
+            SetButton.Enabled = true;
+        }
+        private void NotificationsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            MarkAsReadButton.Enabled = true;
         }
         #endregion
 
@@ -227,10 +282,6 @@ namespace Klinika.GUI.Patient
             var specializations = SpecializationService.GetAll().ToArray();
             DoctorSpecializationComboBox.Items.AddRange(specializations);
             DoctorSpecializationComboBox.SelectedIndex = 0;
-        }
-        private int GetSelectedDoctorID(DataGridView table)
-        {
-            return Convert.ToInt32(table.SelectedRows[0].Cells["Doctor ID"].Value);
         }
         private int GetSelectedSpecializationID()
         {
