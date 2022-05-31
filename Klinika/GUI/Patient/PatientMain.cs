@@ -300,5 +300,10 @@ namespace Klinika.GUI.Patient
         {
             new Questionnaire(this, Question.Types.DOCTOR).Show();
         }
+
+        private void ClinicQuestionnaireButtonClick(object sender, EventArgs e)
+        {
+            new Questionnaire(this, Question.Types.CLINIC).Show();
+        }
     }
 }

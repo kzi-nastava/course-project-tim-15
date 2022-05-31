@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.GradeLabel = new System.Windows.Forms.Label();
             this.GradeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.SetGradeButton = new System.Windows.Forms.Button();
@@ -88,14 +88,14 @@
             this.QuestionsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.QuestionsTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.QuestionsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            dataGridViewCellStyle.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.QuestionsTable.DefaultCellStyle = dataGridViewCellStyle;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.QuestionsTable.DefaultCellStyle = dataGridViewCellStyle1;
             this.QuestionsTable.Location = new System.Drawing.Point(3, 5);
             this.QuestionsTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.QuestionsTable.Name = "QuestionsTable";
@@ -145,6 +145,8 @@
             this.Controls.Add(this.SetGradeButton);
             this.Controls.Add(this.GradeNumericUpDown);
             this.Controls.Add(this.GradeLabel);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Questionnaire";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Questionnaire";

@@ -69,6 +69,7 @@
             this.OffsetNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.SetOffsetLabel = new System.Windows.Forms.Label();
             this.NotificationsTable = new System.Windows.Forms.DataGridView();
+            this.ClinicQuestionnaireButton = new System.Windows.Forms.Button();
             this.MainTabControl.SuspendLayout();
             this.PersonalAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
@@ -90,7 +91,7 @@
             this.MainTabControl.Controls.Add(this.MedicalRecordTab);
             this.MainTabControl.Controls.Add(this.DoctorsTab);
             this.MainTabControl.Controls.Add(this.NotificationsTab);
-            this.MainTabControl.Location = new System.Drawing.Point(10, 9);
+            this.MainTabControl.Location = new System.Drawing.Point(9, 31);
             this.MainTabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
@@ -581,11 +582,22 @@
             this.NotificationsTable.TabIndex = 1;
             this.NotificationsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.NotificationsTable_CellClick);
             // 
+            // ClinicQuestionnaireButton
+            // 
+            this.ClinicQuestionnaireButton.Location = new System.Drawing.Point(809, 12);
+            this.ClinicQuestionnaireButton.Name = "ClinicQuestionnaireButton";
+            this.ClinicQuestionnaireButton.Size = new System.Drawing.Size(152, 23);
+            this.ClinicQuestionnaireButton.TabIndex = 1;
+            this.ClinicQuestionnaireButton.Text = "Questionnaire for clinic";
+            this.ClinicQuestionnaireButton.UseVisualStyleBackColor = true;
+            this.ClinicQuestionnaireButton.Click += new System.EventHandler(this.ClinicQuestionnaireButtonClick);
+            // 
             // PatientMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(977, 423);
+            this.ClientSize = new System.Drawing.Size(977, 447);
+            this.Controls.Add(this.ClinicQuestionnaireButton);
             this.Controls.Add(this.MainTabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -656,5 +668,6 @@
         private Button MarkAsReadButton;
         private Button SetButton;
         private Button SendGradeButton;
+        private Button ClinicQuestionnaireButton;
     }
 }
