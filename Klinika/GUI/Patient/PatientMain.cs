@@ -108,6 +108,7 @@ namespace Klinika.GUI.Patient
             List<Appointment> appointments = AppointmentService.GetCompleted(Patient.ID);
 
             DataTable anamnesesData = new DataTable();
+            anamnesesData.Columns.Add("Appointment ID");
             anamnesesData.Columns.Add("Doctor");
             anamnesesData.Columns.Add("Doctor Specialization");
             anamnesesData.Columns.Add("DateTime");
@@ -119,9 +120,9 @@ namespace Klinika.GUI.Patient
             {
                 DataRow newRow = anamnesesData.NewRow();
                 Appointment appointment = appointments.Where(x => x.ID == anamnesis.MedicalActionID).FirstOrDefault();
-
+                newRow["Appointment ID"] = anamnesis.MedicalActionID;
                 newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
-                newRow["Doctor Specialization"] = DoctorRepository.GetSpecialization(appointment.DoctorID);
+                newRow["Doctor Specialization"] = DoctorService.GetSpecialization(appointment.DoctorID);
                 newRow["DateTime"] = appointment.DateTime;
                 newRow["Description"] = anamnesis.Description;
                 newRow["Symptoms"] = anamnesis.Symptoms;
@@ -192,7 +193,7 @@ namespace Klinika.GUI.Patient
                 newRow["Name"] = doctor.Name;
                 newRow["Surname"] = doctor.Surname;
                 newRow["Specialization"] = doctor.specialization;
-                newRow["Grade"] = QuestionnaireRepository.GetGrade(doctor.ID);
+                newRow["Grade"] = DoctorService.GetGrade(doctor.ID);
                 dataTable.Rows.Add(newRow);
             }
   
@@ -294,5 +295,10 @@ namespace Klinika.GUI.Patient
             return false;
         }
         #endregion
+
+        private void SendGradeButton_Click(object sender, EventArgs e)
+        {
+            new Questionnaire(this).Show();
+        }
     }
 }

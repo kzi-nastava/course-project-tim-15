@@ -9,7 +9,7 @@ namespace Klinika.Repositories
 {
     internal class QuestionnaireRepository
     {
-        public static double GetGrade(int doctorID)
+        public static int GetGrade(int doctorID)
         {
             string getGradeQuerry = "SELECT AVG(Grade) " +
                 "FROM [Questionnaire] JOIN [Answer] " +
@@ -18,7 +18,7 @@ namespace Klinika.Repositories
 
             var resoult = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(getGradeQuerry, ("@doctorID", doctorID));
 
-            return Convert.ToDouble(resoult);
+            return Convert.ToInt32(resoult);
         }
     }
 }
