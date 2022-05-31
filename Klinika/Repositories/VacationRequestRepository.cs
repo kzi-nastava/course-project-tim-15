@@ -19,6 +19,25 @@ namespace Klinika.Repositories
             var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry, ("@DoctorID", doctorID));
             return GenerateList(result);
         }
+        public static int Create(VacationRequest vacationRequest)
+        {
+            string createQuery = "INSERT INTO [VacationRequest] " +
+                "(DoctorID,FromDate,ToDate,Reason,Status,Emergency,DenyReason) " +
+                "OUTPUT INSERTED.ID " +
+                "VALUES (@DoctorID,@FromDate,@ToDate,@Reason,@Status,@Emergency,@DenyReason)";
+
+            var id = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+                createQuery,
+                ("@DoctorID", vacationRequest.DoctorID),
+                ("@FromDate", vacationRequest.FromDate),
+                ("@ToDate", vacationRequest.ToDate),
+                ("@Reason", vacationRequest.Reason),
+                ("@Status", vacationRequest.Status),
+                ("@Emergency", vacationRequest.Emergency),
+                ("@DenyReason", vacationRequest.DenyReason));
+
+            return id;
+        }
         private static List<VacationRequest> GenerateList(List<object> input)
         {
             var output = new List<VacationRequest>();
