@@ -10,14 +10,6 @@ namespace Klinika.Models
         public string Comment { get; set; }
         public int AppointmentID { get; set; }
 
-        public Questionnaire(int id, int patientID, string comment)
-        {
-            ID = id;
-            PatientID = patientID;
-            TargetID = -1;
-            Comment = comment;
-            AppointmentID = -1;
-        }
         public Questionnaire(int patientID, string comment, int appointmentID = -1, int targetID = -1)
         {
             ID = -1;

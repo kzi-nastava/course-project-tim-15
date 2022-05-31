@@ -106,6 +106,7 @@
             this.QuestionsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.QuestionsTable.Size = new System.Drawing.Size(763, 319);
             this.QuestionsTable.TabIndex = 5;
+            this.QuestionsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.QuestionsTableRowSelected);
             // 
             // SendButton
             // 
@@ -124,6 +125,7 @@
             this.CommentTextBox.Name = "CommentTextBox";
             this.CommentTextBox.Size = new System.Drawing.Size(265, 43);
             this.CommentTextBox.TabIndex = 7;
+            this.CommentTextBox.TextChanged += new System.EventHandler(this.CommentTextBoxTextChanged);
             // 
             // CommentLabel
             // 

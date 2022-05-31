@@ -27,7 +27,8 @@ namespace Klinika.GUI.Patient
         {
             Parent.Enabled = false;
             FillQuestionsTable(QuestionnaireService.GetQuestions(Type));
-            ColectData();
+            SendButton.Enabled = false;
+            SetGradeButton.Enabled = false;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -82,6 +83,17 @@ namespace Klinika.GUI.Patient
         {
             int grade = Convert.ToInt32(GradeNumericUpDown.Value);
             QuestionsTable.SelectedRows[0].Cells["Grade"].Value = grade;
+        }
+
+        private void CommentTextBoxTextChanged(object sender, EventArgs e)
+        {
+            if (CommentTextBox.Text == "") SendButton.Enabled = false;
+            else SendButton.Enabled = true;
+        }
+
+        private void QuestionsTableRowSelected(object sender, DataGridViewCellEventArgs e)
+        {
+            SetGradeButton.Enabled = true;
         }
     }
 }
