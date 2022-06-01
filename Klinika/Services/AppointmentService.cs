@@ -5,16 +5,6 @@ namespace Klinika.Services
 {
     internal class AppointmentService
     {
-        public static string GetTypeFullName(char type)
-        {
-            switch (type)
-            {
-                case 'O':
-                    return "Operation";
-                default:
-                    return "Examination";
-            }
-        }
         public static List<Appointment> GetCompleted(int patientID)
         {
             return AppointmentRepository.GetCompleted(patientID);

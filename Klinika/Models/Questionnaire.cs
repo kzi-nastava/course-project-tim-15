@@ -1,6 +1,4 @@
-﻿
-
-namespace Klinika.Models
+﻿namespace Klinika.Models
 {
     internal class Questionnaire
     {

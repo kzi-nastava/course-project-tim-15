@@ -1,11 +1,4 @@
-﻿using Klinika.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Klinika.Models
+﻿namespace Klinika.Models
 {
     public class Appointment
     {
@@ -77,9 +70,15 @@ namespace Klinika.Models
             }
             return false;
         }
-        public string GetType()
+        public string GetFullType()
         {
-            return AppointmentService.GetTypeFullName(type);
+            switch (type)
+            {
+                case 'O':
+                    return "Operation";
+                default:
+                    return "Examination";
+            }
         }
 
         public bool IsExamination()

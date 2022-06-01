@@ -24,9 +24,9 @@ namespace Klinika.GUI.Doctor
         {
             Parent.Enabled = false;
             FillPatientMainData();
-            FillAnamnesesTable(AnamnesesTable, Record.Anamneses);
-            FillDiseasesTable(DiseasesTable, Record.Diseases);
-            FillAllergensTable(AllergensTable, Record.Allergens);
+            FillAnamnesesTable(AnamnesesTable, Record.anamneses);
+            FillDiseasesTable(DiseasesTable, Record.diseases);
+            FillAllergensTable(AllergensTable, Record.allergens);
             UIUtilities.FillSpecializationComboBox(SpecializationsComboBox);
         }
         public static void FillAnamnesesTable(DataGridView table, List<Anamnesis> anamneses)
@@ -101,10 +101,10 @@ namespace Klinika.GUI.Doctor
         #region Record
         private void FillPatientMainData()
         {
-            PatientNameLabel.Text = PatientService.GetFullName(Record.ID);
-            BloodTypeLabel.Text = Record.BloodType;
-            HeightLabel.Text = $"{Record.Height}cm";
-            WeightLabel.Text = $"{Record.Weight}kg";
+            PatientNameLabel.Text = PatientService.GetFullName(Record.id);
+            BloodTypeLabel.Text = Record.bloodType;
+            HeightLabel.Text = $"{Record.height}cm";
+            WeightLabel.Text = $"{Record.weight}kg";
         }
         private void TableSelectionChanged(object sender, EventArgs e)
         {

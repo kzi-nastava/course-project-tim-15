@@ -56,7 +56,7 @@ namespace Klinika.Forms
             newRow["ID"] = appointment.id;
             newRow[$"{SearchedRole} Full Name"] = GetFullName(appointment);
             newRow["Date & Time"] = appointment.dateTime;
-            newRow["Type"] = appointment.GetType();
+            newRow["Type"] = appointment.GetFullType();
             newRow["Room"] = RoomServices.GetSingle(appointment.roomID).ToString();
             newRow["Duration [min]"] = appointment.duration;
             newRow["Urgent"] = appointment.urgent;
@@ -83,7 +83,7 @@ namespace Klinika.Forms
             SelectedRows[0].SetValues(appointment.id.ToString(),
                 GetFullName(appointment),
                 appointment.dateTime.ToString(),
-                appointment.GetType(),
+                appointment.GetFullType(),
                 RoomServices.GetSingle(appointment.roomID).ToString(),
                 appointment.duration.ToString(),
                 appointment.urgent,

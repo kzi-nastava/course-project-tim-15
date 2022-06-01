@@ -14,15 +14,15 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getRecordQuerry);
             foreach(object row in resoult)
             {
-                record.ID = patientID;
-                record.Height = DatabaseConnection.CheckNull<decimal>(((object[])row)[1]);
-                record.Weight = DatabaseConnection.CheckNull<decimal>(((object[])row)[2]);
-                record.BloodType = DatabaseConnection.CheckNull<string>(((object[])row)[3]);
+                record.id = patientID;
+                record.height = DatabaseConnection.CheckNull<decimal>(((object[])row)[1]);
+                record.weight = DatabaseConnection.CheckNull<decimal>(((object[])row)[2]);
+                record.bloodType = DatabaseConnection.CheckNull<string>(((object[])row)[3]);
             }
 
-            record.Anamneses = AnamnesisRepository.Get(patientID);
-            record.Diseases = GetDiseases(patientID);
-            record.Allergens = GetAllergens(patientID);
+            record.anamneses = AnamnesisRepository.Get(patientID);
+            record.diseases = GetDiseases(patientID);
+            record.allergens = GetAllergens(patientID);
 
             return record;
         }
