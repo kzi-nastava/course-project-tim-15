@@ -1,6 +1,5 @@
 ﻿using Klinika.Data;
 using System.Data;
-using System.Data.SqlClient;
 using Klinika.Roles;
 
 namespace Klinika.Repositories
@@ -43,7 +42,29 @@ namespace Klinika.Repositories
             return retrievedPatients;
 
         }
-
+        public static Patient GetSingle (int id)
+        {
+            string getSingleQuerry = "SELECT [User].ID, [User].JMBG, [User].Name, [User].Surname, [User].Birthdate, [User].Gender, " +
+                "[User].Email, [User].Password, [User].IsBlocked, [User].WhoBlocked, [Patient].NotificationOffset " +
+                "FROM [User] JOIN [Patient] " +
+                "ON [User].ID = [Patient].UserID " + 
+                $"WHERE [User].ID = {id}";
+            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSingleQuerry);
+            Patient patient = new Patient(
+                Convert.ToInt32(((object[])result[0])[0]),
+                ((object[])result[0])[1].ToString(),
+                ((object[])result[0])[2].ToString(),
+                ((object[])result[0])[3].ToString(),
+                Convert.ToDateTime(((object[])result[0])[4]),
+                Convert.ToChar(((object[])result[0])[5]),
+                ((object[])result[0])[6].ToString(),
+                ((object[])result[0])[7].ToString(),
+                Convert.ToBoolean(((object[])result[0])[8]),
+                ((object[])result[0])[9].ToString(),
+                Convert.ToInt32(((object[])result[0])[10]));
+            return patient;
+        }
+        
         internal static void Modify(Patient patient)
         {
             string modifyQuery = "UPDATE [User] " +
@@ -64,6 +85,11 @@ namespace Klinika.Repositories
             ("@Gender", patient.gender),
             ("@Password", patient.Password)
             ); 
+        }
+        public static void Modify(int id, int offset)
+        {
+            string modifyQuerry = "UPDATE [Patient] SET NotificationOffset = @notificationOffset WHERE UserID = @Id";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuerry, ("@notificationOffset", offset), ("@Id", id));
         }
 
         //Logical deletion

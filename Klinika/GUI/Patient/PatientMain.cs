@@ -5,23 +5,26 @@ using Klinika.Services;
 using Klinika.Utilities;
 using System.Data;
 using RDoctor = Klinika.Roles.Doctor;
+using RPatient = Klinika.Roles.Patient;
 
 namespace Klinika.GUI.Patient
 {
     public partial class PatientMain : Form
     {
         RDoctor.Filters SelectedDoctorFilter = RDoctor.Filters.BY_NAME;
-        public User Patient { get; }
+        public RPatient Patient { get; }
 
         #region Form
-        public PatientMain(User patient)
+        public PatientMain(int patientID)
         {
             InitializeComponent();
-            Patient = patient;
+            Patient = PatientService.GetById(patientID);
+            System.Diagnostics.Debug.WriteLine(Patient.NotificationOffset);
         }
         private void LoadForm(object sender, EventArgs e)
         {
             InitPersonalAppointmentsTab();
+            FillNotificationsTable(NotificationService.Get(Patient));
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillSpecializationsComboBox();
         }
@@ -30,6 +33,7 @@ namespace Klinika.GUI.Patient
             if ((sender as TabControl).SelectedIndex == 1) InitNewAppointmentTab();
             if ((sender as TabControl).SelectedIndex == 2) InitMedicalRecorTab();
             if ((sender as TabControl).SelectedIndex == 3) InitDoctorsTab();
+            if ((sender as TabControl).SelectedIndex == 4) InitNotificationsTab();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -218,6 +222,61 @@ namespace Klinika.GUI.Patient
             Appointment appointment = new Appointment();
             appointment.DoctorID = GetSelectedDoctorID(DoctorsTable);
             new PersonalAppointment(this, appointment, true).Show();
+        }
+        #endregion
+
+        #region Notifications Tab
+        private void InitNotificationsTab()
+        {
+            OffsetNumericUpDown.Value = Patient.NotificationOffset;
+            SetButton.Enabled = false;
+        }
+        private void FillNotificationsTable(List<Notification> notifications)
+        {
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("ID");
+            dataTable.Columns.Add("DateTime");
+            dataTable.Columns.Add("Message");
+
+            if (notifications != null)
+            {
+                foreach (Notification notification in notifications)
+                {
+                    DataRow newRow = dataTable.NewRow();
+
+                    newRow["ID"] = notification.ID;
+                    newRow["DateTime"] = notification.DateTime;
+                    newRow["Message"] = notification.message;
+                    dataTable.Rows.Add(newRow);
+                }
+            }
+            NotificationsTable.DataSource = dataTable;
+            NotificationsTable.ClearSelection();
+            MarkAsReadButton.Enabled = false;
+        }
+        private void MarkAsReadButtonClick(object sender, EventArgs e)
+        {
+            if (!UIUtilities.Confirm("Are you sure you want mark as read this notification?")) return;
+            int notificationID = Convert.ToInt32(NotificationsTable.SelectedRows[0].Cells["ID"].Value);
+            NotificationService.MarkAsRead(notificationID);
+            NotificationsTable.Rows.RemoveAt(NotificationsTable.CurrentRow.Index);
+            MarkAsReadButton.Enabled = false;
+        }
+        private void SetButtonClick(object sender, EventArgs e)
+        {
+            if (!UIUtilities.Confirm("Are you sure you want to save changes?")) return;
+            Patient.NotificationOffset = Convert.ToInt32(OffsetNumericUpDown.Value);
+            PatientService.SetNotificationOffset(Patient);
+            FillNotificationsTable(NotificationRepository.Get(Patient));
+            SetButton.Enabled = false;
+        }
+        private void OffsetNumericUpDownEnter(object sender, EventArgs e)
+        {
+            SetButton.Enabled = true;
+        }
+        private void NotificationsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            MarkAsReadButton.Enabled = true;
         }
         #endregion
 

@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Klinika.Data;
-using Klinika.Exceptions;
-using Klinika.GUI.Secretary;
+﻿using System.Data;
 using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Utilities;
@@ -51,6 +41,10 @@ namespace Klinika.Services
             }
             PatientRepository.Modify(patient);
         }
+        public static void SetNotificationOffset(Patient patient)
+        {
+            PatientRepository.Modify(patient.ID, patient.NotificationOffset);
+        }
         public static void Delete(int patientId)
         {
             PatientRepository.Delete(patientId);
@@ -61,14 +55,18 @@ namespace Klinika.Services
             var patient = UserRepository.GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
             return $"{patient.Name} {patient.Surname}";
         }
+        public static Patient GetById(int id)
+        {
+            return PatientRepository.GetSingle(id);
+        }
 
         public static bool IsBlocked(User patient)
         {
             bool isBlocked = AppointmentRepository.GetScheduledAppointmentsCount(patient.ID) > 8 
                 || AppointmentService.GetModifyAppointmentsCount(patient.ID) > 5;
-            if (isBlocked) return true;
+            if (!isBlocked) return false;
             Block(patient, "SYS");
-            return false;
+            return true;
         }
         public static void Block(User patient, string whoBlocked)
         {
