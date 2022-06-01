@@ -102,7 +102,6 @@
             this.AddAppointmentButton.TabIndex = 3;
             this.AddAppointmentButton.Text = "Add";
             this.AddAppointmentButton.UseVisualStyleBackColor = true;
-            this.AddAppointmentButton.Click += new System.EventHandler(this.AddAppointmentButtonClick);
             // 
             // DeleteAppointmentButton
             // 
@@ -113,7 +112,6 @@
             this.DeleteAppointmentButton.TabIndex = 2;
             this.DeleteAppointmentButton.Text = "Delete";
             this.DeleteAppointmentButton.UseVisualStyleBackColor = true;
-            this.DeleteAppointmentButton.Click += new System.EventHandler(this.DeleteAppointmentButtonClick);
             // 
             // EditAppointmentButton
             // 
@@ -124,7 +122,6 @@
             this.EditAppointmentButton.TabIndex = 1;
             this.EditAppointmentButton.Text = "Edit";
             this.EditAppointmentButton.UseVisualStyleBackColor = true;
-            this.EditAppointmentButton.Click += new System.EventHandler(this.EditAppointmentButtonClick);
             // 
             // AllAppointmentsTable
             // 
@@ -141,7 +138,6 @@
             this.AllAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AllAppointmentsTable.Size = new System.Drawing.Size(920, 429);
             this.AllAppointmentsTable.TabIndex = 0;
-            this.AllAppointmentsTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.AllAppointmentsTableRowSelected);
             // 
             // ScheduleTab
             // 
@@ -167,7 +163,6 @@
             this.PerformButton.TabIndex = 3;
             this.PerformButton.Text = "Perform";
             this.PerformButton.UseVisualStyleBackColor = true;
-            this.PerformButton.Click += new System.EventHandler(this.PerformButtonClick);
             // 
             // ViewMedicalRecordButton
             // 
@@ -178,7 +173,6 @@
             this.ViewMedicalRecordButton.TabIndex = 2;
             this.ViewMedicalRecordButton.Text = "View Patient Medical Record";
             this.ViewMedicalRecordButton.UseVisualStyleBackColor = true;
-            this.ViewMedicalRecordButton.Click += new System.EventHandler(this.ViewMedicalRecordButtonClick);
             // 
             // ScheduleDatePicker
             // 
@@ -187,7 +181,6 @@
             this.ScheduleDatePicker.Name = "ScheduleDatePicker";
             this.ScheduleDatePicker.Size = new System.Drawing.Size(253, 27);
             this.ScheduleDatePicker.TabIndex = 1;
-            this.ScheduleDatePicker.ValueChanged += new System.EventHandler(this.ScheduleDatePickerValueChanged);
             // 
             // ScheduleTable
             // 
@@ -204,7 +197,6 @@
             this.ScheduleTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ScheduleTable.Size = new System.Drawing.Size(920, 429);
             this.ScheduleTable.TabIndex = 0;
-            this.ScheduleTable.SelectionChanged += new System.EventHandler(this.ScheduleTableSelectionChanged);
             // 
             // UnapprovedDrugsTab
             // 

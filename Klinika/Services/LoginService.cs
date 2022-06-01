@@ -26,7 +26,7 @@ namespace Klinika.Services
                     new GUI.Secretary.mainWindow().Show();
                     break;
                 case "Doctor":
-                    new GUI.Doctor.DoctorMain(loggingUser.id).Show();
+                    new GUI.Doctor.Main(loggingUser.id).Show();
                     break;
                 case "Manager":
                     new GUI.Manager.Main().Show();

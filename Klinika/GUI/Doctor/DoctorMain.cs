@@ -16,7 +16,7 @@ namespace Klinika.GUI.Doctor
         }
         private void LoadForm(object sender, EventArgs e)
         {
-            InitAllAppointmentsTab();
+            //InitAllAppointmentsTab();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -24,80 +24,12 @@ namespace Klinika.GUI.Doctor
         }
         private void MainTabControlSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (MainTabControl.SelectedIndex == 1) InitScheduleTab();
+            //if (MainTabControl.SelectedIndex == 1) InitScheduleTab();
             if (MainTabControl.SelectedIndex == 2) InitUnapprovedDrugs();
             if (MainTabControl.SelectedIndex == 3) InitVacationRequests();
         }
         #endregion
 
-        #region All Appointments
-        private void InitAllAppointmentsTab()
-        {
-            AllAppointmentsTable.Fill(DoctorService.GetAppointments(doctor.id));
-            EditAppointmentButton.Enabled = false;
-            DeleteAppointmentButton.Enabled = false;
-        }
-        private void AllAppointmentsTableRowSelected(object sender, DataGridViewCellEventArgs e)
-        {
-            EditAppointmentButton.Enabled = true;
-            DeleteAppointmentButton.Enabled = true;
-        }
-        private void EditAppointmentButtonClick(object sender, EventArgs e)
-        {
-            new AppointmentDetails(this, AllAppointmentsTable.GetSelected()).Show();
-        }
-        private void DeleteAppointmentButtonClick(object sender, EventArgs e)
-        {
-            if (!UIUtilities.Confirm("Are you sure you want to delete the selected appointment? This action cannot be undone.")) return;
-            AppointmentService.Delete(AllAppointmentsTable.DeleteSelected());
-        }
-        private void AddAppointmentButtonClick(object sender, EventArgs e)
-        {
-            new AppointmentDetails(this).Show();
-        }
-        #endregion
-
-        #region Schedule
-        private void InitScheduleTab()
-        {
-            var scheduled = DoctorService.GetAppointments(ScheduleDatePicker.Value, doctor.id, 3);
-            ScheduleTable.Fill(scheduled);
-            ViewMedicalRecordButton.Enabled = false;
-            PerformButton.Enabled = false;
-        }
-        private void ScheduleDatePickerValueChanged(object sender, EventArgs e)
-        {
-            InitScheduleTab();
-        }
-        private void ScheduleTableSelectionChanged(object sender, EventArgs e)
-        {
-            ViewMedicalRecordButton.Enabled = true;
-            try
-            {
-                var selected = ScheduleTable.GetSelected();
-                bool canBePerformed = !selected.completed
-                    && selected.dateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
-
-                if (canBePerformed)
-                {
-                    PerformButton.Enabled = true;
-                    return;
-                }
-            }
-            catch { }
-            PerformButton.Enabled = false;
-        }
-        private void ViewMedicalRecordButtonClick(object sender, EventArgs e)
-        {
-            new MedicalRecord(this, ScheduleTable.GetSelected()).Show();
-        }
-        private void PerformButtonClick(object sender, EventArgs e)
-        {
-            var selected = ScheduleTable.GetSelected();
-            if (selected.IsExamination()) new MedicalRecord(this, selected, false).Show();
-            else new DynamicEquipment(this, selected).Show();
-        }
-        #endregion
 
         #region Unapproved Drugs
         private void InitUnapprovedDrugs()

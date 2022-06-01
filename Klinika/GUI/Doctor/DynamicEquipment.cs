@@ -6,9 +6,9 @@ namespace Klinika.GUI.Doctor
 {
     public partial class DynamicEquipment : Form
     {
-        internal readonly DoctorMain parent;
+        internal readonly ViewSchedule parent;
         private readonly Appointment appointment;
-        public DynamicEquipment(DoctorMain parent, Appointment appointment)
+        public DynamicEquipment(ViewSchedule parent, Appointment appointment)
         {
             InitializeComponent();
             this.parent = parent;
