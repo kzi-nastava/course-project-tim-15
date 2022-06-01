@@ -13,7 +13,6 @@ namespace Klinika.Services
         {
             
             var id = QuestionnaireRepository.Create(questionnaire);
-            System.Diagnostics.Debug.WriteLine(id);
             foreach (var answer in answers)
             {
                 answer.QuestionnaireID = id;

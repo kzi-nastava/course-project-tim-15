@@ -44,10 +44,10 @@
             this.DateLabel = new System.Windows.Forms.Label();
             this.TitleLabel = new System.Windows.Forms.Label();
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.MedicalRecordTab = new System.Windows.Forms.TabPage();
-            this.SendGradeButton = new System.Windows.Forms.Button();
             this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT);
             this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.PATIENT);
+            this.MedicalRecordTab = new System.Windows.Forms.TabPage();
+            this.GradeDoctorButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
             this.SearchButton = new System.Windows.Forms.Button();
             this.SearchTextBox = new System.Windows.Forms.TextBox();
@@ -270,7 +270,7 @@
             // 
             // MedicalRecordTab
             // 
-            this.MedicalRecordTab.Controls.Add(this.SendGradeButton);
+            this.MedicalRecordTab.Controls.Add(this.GradeDoctorButton);
             this.MedicalRecordTab.Controls.Add(this.ResetButton);
             this.MedicalRecordTab.Controls.Add(this.SearchButton);
             this.MedicalRecordTab.Controls.Add(this.SearchTextBox);
@@ -285,15 +285,15 @@
             this.MedicalRecordTab.Text = "Medical Record";
             this.MedicalRecordTab.UseVisualStyleBackColor = true;
             // 
-            // SendGradeButton
+            // GradeDoctorButton
             // 
-            this.SendGradeButton.Location = new System.Drawing.Point(781, 353);
-            this.SendGradeButton.Name = "SendGradeButton";
-            this.SendGradeButton.Size = new System.Drawing.Size(75, 23);
-            this.SendGradeButton.TabIndex = 5;
-            this.SendGradeButton.Text = "Send grade";
-            this.SendGradeButton.UseVisualStyleBackColor = true;
-            this.SendGradeButton.Click += new System.EventHandler(this.SendGradeButtonClick);
+            this.GradeDoctorButton.Location = new System.Drawing.Point(765, 353);
+            this.GradeDoctorButton.Name = "GradeDoctorButton";
+            this.GradeDoctorButton.Size = new System.Drawing.Size(91, 23);
+            this.GradeDoctorButton.TabIndex = 5;
+            this.GradeDoctorButton.Text = "Grade doctor";
+            this.GradeDoctorButton.UseVisualStyleBackColor = true;
+            this.GradeDoctorButton.Click += new System.EventHandler(this.GradeDoctorButtonClick);
             // 
             // ResetButton
             // 
@@ -667,7 +667,7 @@
         private Label SetOffsetLabel;
         private Button MarkAsReadButton;
         private Button SetButton;
-        private Button SendGradeButton;
+        private Button GradeDoctorButton;
         private Button ClinicQuestionnaireButton;
     }
 }

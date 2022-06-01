@@ -193,7 +193,7 @@ namespace Klinika.GUI.Patient
                 newRow["Name"] = doctor.Name;
                 newRow["Surname"] = doctor.Surname;
                 newRow["Specialization"] = doctor.specialization;
-                newRow["Grade"] = DoctorService.GetGrade(doctor.ID);
+                newRow["Grade"] = string.Format("{0:0.00}", DoctorService.GetGrade(doctor.ID));
                 dataTable.Rows.Add(newRow);
             }
   
@@ -296,7 +296,7 @@ namespace Klinika.GUI.Patient
         }
         #endregion
 
-        private void SendGradeButtonClick(object sender, EventArgs e)
+        private void GradeDoctorButtonClick(object sender, EventArgs e)
         {
             int selected = Convert.ToInt32(UIUtilities.GetCellValue(MedicalRecordTable, "Appointment ID"));
             if (!AppointmentService.IsGraded(selected))

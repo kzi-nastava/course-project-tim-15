@@ -5,16 +5,16 @@ namespace Klinika.Repositories
 {
     internal class QuestionnaireRepository
     {
-        public static int GetGrade(int doctorID)
+        public static double GetGrade(int doctorID)
         {
-            string getGradeQuerry = "SELECT AVG(Grade) " +
+            string getGradeQuerry = "SELECT AVG(CAST(Grade as Float)) " +
                 "FROM [Questionnaire] JOIN [Answer] " +
                 "ON [Questionnaire].ID = [Answer].QuestionnaireID " +
                 "WHERE [Questionnaire].TargetID = @doctorID";
 
             var resoult = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(getGradeQuerry, ("@doctorID", doctorID));
 
-            return Convert.ToInt32(resoult);
+            return Convert.ToDouble(resoult);
         }
         public static List<Question> GetQuestions(Question.Types type)
         {

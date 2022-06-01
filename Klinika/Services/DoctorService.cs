@@ -57,7 +57,7 @@ namespace Klinika.Services
         {
             return RoomServices.GetExaminationRooms().Where(x => x.ID == officeID).FirstOrDefault();
         }
-        public static int GetGrade(int id)
+        public static double GetGrade(int id)
         {
             return QuestionnaireRepository.GetGrade(id);
         }
