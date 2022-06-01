@@ -18,9 +18,9 @@ namespace Klinika.Services
         public static List<Anamnesis> GetFiltered(int patientID, string searchParam)
         {
             return AnamnesisRepository.Get(patientID).Where(
-                x => x.Description.ToUpper().Contains(searchParam.ToUpper())
-                || x.Symptoms.ToUpper().Contains(searchParam.ToUpper())
-                || x.Conclusion.ToUpper().Contains(searchParam.ToUpper())).ToList();
+                x => x.description.ToUpper().Contains(searchParam.ToUpper())
+                || x.symptoms.ToUpper().Contains(searchParam.ToUpper())
+                || x.conclusion.ToUpper().Contains(searchParam.ToUpper())).ToList();
         }
     }
 }

@@ -36,13 +36,13 @@ namespace Klinika.GUI.Doctor
 
         private void FillFormWithAppointmentData()
         {
-            DatePicker.Value = Appointment.DateTime;
-            TimePicker.Value = Appointment.DateTime;
-            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(PatientService.GetSingle(Appointment.PatientID));
+            DatePicker.Value = Appointment.dateTime;
+            TimePicker.Value = Appointment.dateTime;
+            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(PatientService.GetSingle(Appointment.patientID));
 
-            SetType((Appointment.Types)Appointment.Type, Appointment.Duration);
+            SetType((Appointment.Types)Appointment.type, Appointment.duration);
 
-            IsUrgentCheckBox.Checked = Appointment.Urgent;
+            IsUrgentCheckBox.Checked = Appointment.urgent;
             ConfirmButton.Text = "Save";
         }
         private void SetType(Appointment.Types type, int duration = -1)
@@ -65,9 +65,9 @@ namespace Klinika.GUI.Doctor
         {
             RoomComboBox.Items.Clear();
             RoomComboBox.Items.AddRange(RoomServices.GetOperationRooms());
-            if (Appointment == null || Appointment.RoomID == 1) return 0;
+            if (Appointment == null || Appointment.roomID == 1) return 0;
             var rooms = RoomComboBox.Items.Cast<Room>().Select(x => x).ToList();
-            var room = rooms.Where(x => x.ID == Appointment.RoomID).FirstOrDefault();
+            var room = rooms.Where(x => x.id == Appointment.roomID).FirstOrDefault();
             return RoomComboBox.Items.IndexOf(room);
         }
         private void ExaminationRadioButtonCheckedChanged(object sender, EventArgs e)
@@ -97,13 +97,13 @@ namespace Klinika.GUI.Doctor
                 return false;
             }
             if (DoctorService.IsOccupied(GetSelectedDateTime(), Parent._Doctor.ID, 
-                Convert.ToInt32(DurationTextBox.Text), Appointment == null ? -1 : Appointment.ID))
+                Convert.ToInt32(DurationTextBox.Text), Appointment == null ? -1 : Appointment.id))
             {
                 MessageBoxUtilities.ShowErrorMessage("Already occupied!");
                 return false;
             }
-            if (RoomServices.IsOccupied(GetSelectedDateTime(), (RoomComboBox.SelectedItem as Room).ID,
-                Convert.ToInt32(DurationTextBox.Text), Appointment == null ? -1 : Appointment.ID))
+            if (RoomServices.IsOccupied(GetSelectedDateTime(), (RoomComboBox.SelectedItem as Room).id,
+                Convert.ToInt32(DurationTextBox.Text), Appointment == null ? -1 : Appointment.id))
             {
                 MessageBoxUtilities.ShowErrorMessage("Room is occupied!");
                 return false;
@@ -118,17 +118,17 @@ namespace Klinika.GUI.Doctor
         }
         private void TransferDataFromUI(Appointment appointment)
         {
-            appointment.DoctorID = Parent._Doctor.ID;
-            appointment.PatientID = (PatientComboBox.SelectedItem as User).ID;
-            appointment.RoomID = (RoomComboBox.SelectedItem as Room).ID;
-            appointment.Type = ExaminationRadioButton.Checked ? 'E' : 'O';
-            appointment.Duration = Convert.ToInt32(DurationTextBox.Text);
-            appointment.Urgent = IsUrgentCheckBox.Checked;
-            appointment.Description = "";
+            appointment.doctorID = Parent._Doctor.ID;
+            appointment.patientID = (PatientComboBox.SelectedItem as User).ID;
+            appointment.roomID = (RoomComboBox.SelectedItem as Room).id;
+            appointment.type = ExaminationRadioButton.Checked ? 'E' : 'O';
+            appointment.duration = Convert.ToInt32(DurationTextBox.Text);
+            appointment.urgent = IsUrgentCheckBox.Checked;
+            appointment.description = "";
         }
         private void Modify()
         {
-            Appointment.DateTime = GetSelectedDateTime();
+            Appointment.dateTime = GetSelectedDateTime();
             TransferDataFromUI(Appointment);
             AppointmentService.Modify(Appointment);
             Parent.AllAppointmentsTable.ModifySelected(Appointment);

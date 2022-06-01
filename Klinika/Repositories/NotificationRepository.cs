@@ -36,7 +36,7 @@ namespace Klinika.Repositories
                                             ("@userId", notification.userId),
                                             ("@message", notification.message),
                                             ("@isNotified", notification.isNotified),
-                                            ("@dateTime", notification.DateTime));
+                                            ("@dateTime", notification.dateTime));
         }
         public static void Modify (int id)
         {

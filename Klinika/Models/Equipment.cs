@@ -8,24 +8,24 @@ namespace Klinika.Models
 {
     public class Equipment
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public int RoomID { get; set; }
-        public int Quantity { get; set; }
-        public int Spent { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public int roomID { get; set; }
+        public int quantity { get; set; }
+        public int spent { get; set; }
 
         public Equipment(int id, string name, int roomID, int quantity)
         {
-            ID = id;
-            Name = name;
-            RoomID = roomID;
-            Quantity = quantity;
-            Spent = 0;
+            this.id = id;
+            this.name = name;
+            this.roomID = roomID;
+            this.quantity = quantity;
+            spent = 0;
         }
 
         public int GetNewQuantity()
         {
-            return Quantity - Spent;
+            return quantity - spent;
         }
     }
 }

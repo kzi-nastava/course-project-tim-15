@@ -37,10 +37,10 @@ namespace Klinika.Forms
         {
             DataTable? dt = DataSource as DataTable;
             DataRow newRow = dt.NewRow();
-            newRow["ID"] = equipment.ID;
-            newRow["Name"] = equipment.Name;
-            newRow["Quantity"] = equipment.Quantity;
-            newRow["Spent"] = equipment.Spent;
+            newRow["ID"] = equipment.id;
+            newRow["Name"] = equipment.name;
+            newRow["Quantity"] = equipment.quantity;
+            newRow["Spent"] = equipment.spent;
             dt.Rows.Add(newRow);
             Equipment.Add(equipment);
         }
@@ -51,7 +51,7 @@ namespace Klinika.Forms
         }
         public Equipment GetSelected()
         {
-            return Equipment.Where(x => x.ID == GetSelectedID()).First();
+            return Equipment.Where(x => x.id == GetSelectedID()).First();
         }
         public int DeleteSelected()
         {
@@ -61,12 +61,12 @@ namespace Klinika.Forms
         }
         public void ModifySelected(Equipment equipment)
         {
-            SelectedRows[0].SetValues(equipment.ID.ToString(),
-                equipment.Name,
-                equipment.Quantity,
-                equipment.Spent);
+            SelectedRows[0].SetValues(equipment.id.ToString(),
+                equipment.name,
+                equipment.quantity,
+                equipment.spent);
 
-            Equipment.Remove(Equipment.Where(x => x.ID == equipment.ID).FirstOrDefault());
+            Equipment.Remove(Equipment.Where(x => x.id == equipment.id).FirstOrDefault());
             Equipment.Add(equipment);
         }
     }

@@ -62,14 +62,14 @@ namespace Klinika.GUI.Patient
             if (!UIUtilities.Confirm("Are you sure you want to delete selected appointment?")) return;
 
             Appointment selected = PersonalAppointmentsTable.GetSelected();
-            bool needApproval = DateTime.Now.AddDays(2).Date >= selected.DateTime.Date;
+            bool needApproval = DateTime.Now.AddDays(2).Date >= selected.dateTime.Date;
 
             if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
             PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.Delete);
             if (needApproval) return;
 
-            AppointmentService.Delete(selected.ID);
+            AppointmentService.Delete(selected.id);
             PersonalAppointmentsTable.DeleteSelected();
         }
         #endregion
@@ -119,14 +119,14 @@ namespace Klinika.GUI.Patient
             foreach (Anamnesis anamnesis in anamneses)
             {
                 DataRow newRow = anamnesesData.NewRow();
-                Appointment appointment = appointments.Where(x => x.ID == anamnesis.MedicalActionID).FirstOrDefault();
-                newRow["Appointment ID"] = anamnesis.MedicalActionID;
-                newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
-                newRow["Doctor Specialization"] = DoctorService.GetSpecialization(appointment.DoctorID);
-                newRow["DateTime"] = appointment.DateTime;
-                newRow["Description"] = anamnesis.Description;
-                newRow["Symptoms"] = anamnesis.Symptoms;
-                newRow["Conclusion"] = anamnesis.Conclusion;
+                Appointment appointment = appointments.Where(x => x.id == anamnesis.medicalActionID).FirstOrDefault();
+                newRow["Appointment ID"] = anamnesis.medicalActionID;
+                newRow["Doctor"] = DoctorService.GetFullName(appointment.doctorID);
+                newRow["Doctor Specialization"] = DoctorService.GetSpecialization(appointment.doctorID);
+                newRow["DateTime"] = appointment.dateTime;
+                newRow["Description"] = anamnesis.description;
+                newRow["Symptoms"] = anamnesis.symptoms;
+                newRow["Conclusion"] = anamnesis.conclusion;
                 anamnesesData.Rows.Add(newRow);
             }
             MedicalRecordTable.DataSource = anamnesesData;
@@ -219,7 +219,7 @@ namespace Klinika.GUI.Patient
         private void NewAppointmentButtonClick(object sender, EventArgs e)
         {
             Appointment appointment = new Appointment();
-            appointment.DoctorID = Convert.ToInt32(UIUtilities.GetCellValue(DoctorsTable, "Doctor ID"));
+            appointment.doctorID = Convert.ToInt32(UIUtilities.GetCellValue(DoctorsTable, "Doctor ID"));
             new PersonalAppointment(this, appointment, true).Show();
         }
         #endregion
@@ -242,8 +242,8 @@ namespace Klinika.GUI.Patient
             {
                 DataRow newRow = dataTable.NewRow();
 
-                newRow["ID"] = notification.ID;
-                newRow["DateTime"] = notification.DateTime;
+                newRow["ID"] = notification.id;
+                newRow["DateTime"] = notification.dateTime;
                 newRow["Message"] = notification.message;
                 dataTable.Rows.Add(newRow);
             }
@@ -286,7 +286,7 @@ namespace Klinika.GUI.Patient
         }
         private int GetSelectedSpecializationID()
         {
-            return (DoctorSpecializationComboBox.SelectedItem as Specialization).ID;
+            return (DoctorSpecializationComboBox.SelectedItem as Specialization).id;
         }
         public bool IsDateValid (DateTime dateTime)
         {
@@ -302,7 +302,7 @@ namespace Klinika.GUI.Patient
             if (!AppointmentService.IsGraded(selected))
             {
                 var appointment = AppointmentService.GetById(selected);
-                new Questionnaire(this, Question.Types.DOCTOR, appointment.ID, appointment.DoctorID).Show();
+                new Questionnaire(this, Question.Types.DOCTOR, appointment.id, appointment.doctorID).Show();
                 return;
             }
             MessageBoxUtilities.ShowErrorMessage("You already graded this appointment!");

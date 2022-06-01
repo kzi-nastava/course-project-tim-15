@@ -69,12 +69,12 @@ namespace Klinika.Repositories
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@PatientID, @MedicalActionID, @Type, @Description)";
 
-            patientRequest.ID = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+            patientRequest.id = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
                                                                         createQuerry,
-                                                                        ("@PatientID", patientRequest.PatientID),
-                                                                        ("@MedicalActionID", patientRequest.MedicalActionID),
-                                                                        ("@Type", patientRequest.Type),
-                                                                        ("@Description", patientRequest.Description)
+                                                                        ("@PatientID", patientRequest.patientID),
+                                                                        ("@MedicalActionID", patientRequest.medicalActionID),
+                                                                        ("@Type", patientRequest.type),
+                                                                        ("@Description", patientRequest.description)
                 );
         }
 

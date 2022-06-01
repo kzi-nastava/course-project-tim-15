@@ -34,7 +34,7 @@ namespace Klinika.GUI.Doctor
             if (!ValidateForm()) return;
 
             var prescription = new Prescription(
-                Parent.Appointment.PatientID,
+                Parent.Appointment.patientID,
                 DrugsTable.GetSelectedId(),
                 new TimeSlot(PrescriptionStartDatePicker.Value, PrescriptionEndDatePicker.Value),
                 Convert.ToInt32(IntervalSpinner.Value),

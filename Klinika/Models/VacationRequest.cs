@@ -9,38 +9,38 @@ namespace Klinika.Models
     public class VacationRequest
     {
         public enum Statuses { WAITING = 'W', ACCEPTED = 'A', DENIED = 'D' }
-        public int ID { get; set; }
-        public int DoctorID { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
-        public string Reason { get; set; }
-        public char Status { get; set; }
-        public bool Emergency { get; set; }
-        public string DenyReason { get; set; }
+        public int id { get; set; }
+        public int doctorID { get; set; }
+        public DateTime fromDate { get; set; }
+        public DateTime toDate { get; set; }
+        public string reason { get; set; }
+        public char status { get; set; }
+        public bool emergency { get; set; }
+        public string denyReason { get; set; }
         public VacationRequest(int doctorID, DateTime fromDate, DateTime toDate,
             string reason, bool emergency)
         {
-            ID = -1;
-            DoctorID = doctorID;
-            FromDate = fromDate;
-            ToDate = toDate;
-            Reason = reason;
-            Status = (char)(emergency ? Statuses.ACCEPTED : Statuses.WAITING);
-            Emergency = emergency;
-            DenyReason = "";
+            id = -1;
+            this.doctorID = doctorID;
+            this.fromDate = fromDate;
+            this.toDate = toDate;
+            this.reason = reason;
+            status = (char)(emergency ? Statuses.ACCEPTED : Statuses.WAITING);
+            this.emergency = emergency;
+            denyReason = "";
         }
 
         public VacationRequest(int id, int doctorID, DateTime fromDate, DateTime toDate,
             string reason, char status, bool emergency, string denyReason)
         {
-            ID = id;
-            DoctorID = doctorID;
-            FromDate = fromDate;
-            ToDate = toDate;
-            Reason = reason;
-            Status = status;
-            Emergency = emergency;
-            DenyReason = denyReason;
+            this.id = id;
+            this.doctorID = doctorID;
+            this.fromDate = fromDate;
+            this.toDate = toDate;
+            this.reason = reason;
+            this.status = status;
+            this.emergency = emergency;
+            this.denyReason = denyReason;
         }
     }
 }

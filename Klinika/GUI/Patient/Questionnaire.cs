@@ -46,8 +46,8 @@ namespace Klinika.GUI.Patient
             {
                 DataRow newRow = dataTable.NewRow();
 
-                newRow["ID"] = question.ID;
-                newRow["Question"] = question.Context;
+                newRow["ID"] = question.id;
+                newRow["Question"] = question.context;
                 newRow["Grade"] = 1;
                 dataTable.Rows.Add(newRow);
             }

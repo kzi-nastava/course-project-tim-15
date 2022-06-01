@@ -331,8 +331,8 @@ namespace Klinika.GUI.Secretary
                 {
                     PatientModificationRequest selected = PatientRequestService.GetModificationRequest(requestId);
                     Appointment modified = AppointmentService.GetById(appointmentId);
-                    modified.DoctorID = selected.newDoctorID;
-                    modified.DateTime = selected.newAppointment;
+                    modified.doctorID = selected.newDoctorID;
+                    modified.dateTime = selected.newAppointment;
                     AppointmentService.Modify(modified);
                     appointmentStart = selected.newAppointment;
                 }

@@ -25,7 +25,7 @@ namespace Klinika.Models
 
         public bool IsAllergic(Drug drug)
         {
-            foreach (Ingredient ingredient in drug.Ingredients)
+            foreach (Ingredient ingredient in drug.ingredients)
             {
                 if (Allergens.Contains(ingredient)) return true;
             }

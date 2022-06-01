@@ -53,14 +53,14 @@ namespace Klinika.Forms
         {
             DataTable? dt = DataSource as DataTable;
             DataRow newRow = dt.NewRow();
-            newRow["ID"] = appointment.ID;
+            newRow["ID"] = appointment.id;
             newRow[$"{SearchedRole} Full Name"] = GetFullName(appointment);
-            newRow["Date & Time"] = appointment.DateTime;
+            newRow["Date & Time"] = appointment.dateTime;
             newRow["Type"] = appointment.GetType();
-            newRow["Room"] = RoomServices.GetSingle(appointment.RoomID).ToString();
-            newRow["Duration [min]"] = appointment.Duration;
-            newRow["Urgent"] = appointment.Urgent;
-            newRow["Completed"] = appointment.Completed;
+            newRow["Room"] = RoomServices.GetSingle(appointment.roomID).ToString();
+            newRow["Duration [min]"] = appointment.duration;
+            newRow["Urgent"] = appointment.urgent;
+            newRow["Completed"] = appointment.completed;
             dt.Rows.Add(newRow);
             Appointments.Add(appointment);
         }
@@ -70,7 +70,7 @@ namespace Klinika.Forms
         }
         public Appointment GetSelected()
         {
-            return Appointments.Where(x => x.ID == GetSelectedID()).First();
+            return Appointments.Where(x => x.id == GetSelectedID()).First();
         }
         public int DeleteSelected()
         {
@@ -80,25 +80,25 @@ namespace Klinika.Forms
         }
         public void ModifySelected(Appointment appointment)
         {
-            SelectedRows[0].SetValues(appointment.ID.ToString(),
+            SelectedRows[0].SetValues(appointment.id.ToString(),
                 GetFullName(appointment),
-                appointment.DateTime.ToString(),
+                appointment.dateTime.ToString(),
                 appointment.GetType(),
-                RoomServices.GetSingle(appointment.RoomID).ToString(),
-                appointment.Duration.ToString(),
-                appointment.Urgent,
-                appointment.Completed);
+                RoomServices.GetSingle(appointment.roomID).ToString(),
+                appointment.duration.ToString(),
+                appointment.urgent,
+                appointment.completed);
 
-            Appointments.Remove(Appointments.Where(x => x.ID == appointment.ID).FirstOrDefault());
+            Appointments.Remove(Appointments.Where(x => x.id == appointment.id).FirstOrDefault());
             Appointments.Add(appointment);
         }
         private string GetFullName(Appointment appointment)
         {
             if (ViewerRole == User.RoleType.DOCTOR)
             {
-                return PatientService.GetFullName(appointment.PatientID);
+                return PatientService.GetFullName(appointment.patientID);
             }
-            return DoctorService.GetFullName(appointment.DoctorID);
+            return DoctorService.GetFullName(appointment.doctorID);
         }
     }
 }

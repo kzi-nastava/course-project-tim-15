@@ -18,9 +18,9 @@ namespace Klinika.Services
             List<Specialization> available = new List<Specialization>();
             foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
             {
-                if (!availableSpecializationsIds.Contains(doctor.specialization.ID))
+                if (!availableSpecializationsIds.Contains(doctor.specialization.id))
                 {
-                    availableSpecializationsIds.Add(doctor.specialization.ID);
+                    availableSpecializationsIds.Add(doctor.specialization.id);
                     available.Add(doctor.specialization);
                 }
             }

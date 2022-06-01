@@ -44,13 +44,13 @@ namespace Klinika.Forms
         {
             DataTable? dt = DataSource as DataTable;
             DataRow newRow = dt.NewRow();
-            newRow["ID"] = vacationRequest.ID;
-            newRow["From"] = vacationRequest.FromDate.ToString("MM.dd.yyyy");
-            newRow["To"] = vacationRequest.ToDate.ToString("MM.dd.yyyy");
-            newRow["Reason"] = vacationRequest.Reason;
-            newRow["Status"] = ((VacationRequest.Statuses)vacationRequest.Status).ToString();
-            newRow["Urgent"] = vacationRequest.Emergency;
-            newRow["Deny Reason"] = vacationRequest.DenyReason;
+            newRow["ID"] = vacationRequest.id;
+            newRow["From"] = vacationRequest.fromDate.ToString("MM.dd.yyyy");
+            newRow["To"] = vacationRequest.toDate.ToString("MM.dd.yyyy");
+            newRow["Reason"] = vacationRequest.reason;
+            newRow["Status"] = ((VacationRequest.Statuses)vacationRequest.status).ToString();
+            newRow["Urgent"] = vacationRequest.emergency;
+            newRow["Deny Reason"] = vacationRequest.denyReason;
             dt.Rows.Add(newRow);
             VacationRequests.Add(vacationRequest);
         }
@@ -61,7 +61,7 @@ namespace Klinika.Forms
         }
         public VacationRequest GetSelected()
         {
-            return VacationRequests.Where(x => x.ID == GetSelectedID()).First();
+            return VacationRequests.Where(x => x.id == GetSelectedID()).First();
         }
         public int DeleteSelected()
         {
@@ -72,15 +72,15 @@ namespace Klinika.Forms
         public void ModifySelected(VacationRequest vacationRequest)
         {
             SelectedRows[0].SetValues(
-                vacationRequest.ID.ToString(),
-                vacationRequest.FromDate.ToString("MM.dd.yyyy"),
-                vacationRequest.ToDate.ToString("MM.dd.yyyy"),
-                vacationRequest.Reason,
-                vacationRequest.Status.ToString(),
-                vacationRequest.Emergency,
-                vacationRequest.DenyReason);
+                vacationRequest.id.ToString(),
+                vacationRequest.fromDate.ToString("MM.dd.yyyy"),
+                vacationRequest.toDate.ToString("MM.dd.yyyy"),
+                vacationRequest.reason,
+                vacationRequest.status.ToString(),
+                vacationRequest.emergency,
+                vacationRequest.denyReason);
 
-            VacationRequests.Remove(VacationRequests.Where(x => x.ID == vacationRequest.ID).FirstOrDefault());
+            VacationRequests.Remove(VacationRequests.Where(x => x.id == vacationRequest.id).FirstOrDefault());
             VacationRequests.Add(vacationRequest);
         }
     }

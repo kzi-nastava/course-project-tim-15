@@ -34,12 +34,12 @@ namespace Klinika.Services
         }
         public static void Complete(Appointment appointment)
         {
-            appointment.Completed = true;
+            appointment.completed = true;
             AppointmentRepository.GetInstance().Modify(appointment);
         }
         public static Appointment GetById(int id)
         {
-            return AppointmentRepository.GetInstance().Appointments.Where(x => x.ID == id).FirstOrDefault();
+            return AppointmentRepository.GetInstance().Appointments.Where(x => x.id == id).FirstOrDefault();
         }
         public static int GetModifyAppointmentsCount(int patientID)
         {

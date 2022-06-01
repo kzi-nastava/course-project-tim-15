@@ -56,9 +56,9 @@ namespace Klinika.GUI.Patient
         private void SetupAsModify()
         {
             DatePicker.Enabled = true;
-            DatePicker.Value = Appointment.DateTime.Date;
+            DatePicker.Value = Appointment.dateTime.Date;
             TimePicker.Enabled = true;
-            TimePicker.Value = Appointment.DateTime;
+            TimePicker.Value = Appointment.dateTime;
             DoctorComboBox.Enabled = true;
             SetDoctorComboBoxIndex();
         }
@@ -91,10 +91,10 @@ namespace Klinika.GUI.Patient
         {
             if (!UIUtilities.Confirm("Are you sure you want to save the changes?")) return;
 
-            Appointment.DoctorID = GetSelectedDoctorID();
-            Appointment.DateTime = GetSelectedDateTime();
+            Appointment.doctorID = GetSelectedDoctorID();
+            Appointment.dateTime = GetSelectedDateTime();
 
-            bool needApproval = DateTime.Now.AddDays(2).Date >= Appointment.DateTime.Date;
+            bool needApproval = DateTime.Now.AddDays(2).Date >= Appointment.dateTime.Date;
             if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
             PatientRequestService.Send(!needApproval, Appointment, PatientRequest.Types.Modify);
@@ -118,7 +118,7 @@ namespace Klinika.GUI.Patient
         }
         private void SetDoctorComboBoxIndex()
         {
-            User selected = UserRepository.GetDoctor(Appointment.DoctorID);
+            User selected = UserRepository.GetDoctor(Appointment.doctorID);
             DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(selected);
         }
         private bool ValidateForm()

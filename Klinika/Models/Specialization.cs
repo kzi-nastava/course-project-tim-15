@@ -8,23 +8,23 @@ namespace Klinika.Models
 {
     public class Specialization
     {
-        public int ID { get; set; }
-        public string Name { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
 
         public override string ToString()
         {
-            return Name;
+            return name;
         }
 
         public Specialization()
         {
-            ID = -1;
-            Name = "";
+            id = -1;
+            name = "";
         }
         public Specialization(int _id, string _name)
         {
-            ID = _id;
-            Name = _name;
+            id = _id;
+            name = _name;
         }
     }
 }

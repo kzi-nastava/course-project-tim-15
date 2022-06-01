@@ -27,8 +27,8 @@ namespace Klinika.Forms
             foreach (Drug drug in drugs)
             {
                 DataRow newRow = drugsData.NewRow();
-                newRow["ID"] = drug.ID;
-                newRow["Name"] = drug.Name;
+                newRow["ID"] = drug.id;
+                newRow["Name"] = drug.name;
                 newRow["Ingredients"] = drug.GetIngredientsAsString();
                 drugsData.Rows.Add(newRow);
             }
@@ -48,7 +48,7 @@ namespace Klinika.Forms
         {
             int selectedID = GetSelectedId();
             if(selectedID == -1) return null;
-            return Drugs.Where(x => x.ID == selectedID).FirstOrDefault();
+            return Drugs.Where(x => x.id == selectedID).FirstOrDefault();
         }
     }
 }

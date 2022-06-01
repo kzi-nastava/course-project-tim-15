@@ -26,7 +26,7 @@ namespace Klinika.GUI.Doctor
         private void DynamicEquipmentLoad(object sender, EventArgs e)
         {
             Parent.Enabled = false;
-            EquipmentTable.Fill(EquipmentService.GetDynamicEquipment(Appointment.RoomID));
+            EquipmentTable.Fill(EquipmentService.GetDynamicEquipment(Appointment.roomID));
         }
         private void DynamicEquipmentFormClosing(object sender, FormClosingEventArgs e)
         {
@@ -35,20 +35,20 @@ namespace Klinika.GUI.Doctor
         }
         private void EquipmentTableCellClick(object sender, DataGridViewCellEventArgs e)
         {
-            SpentSpinner.Maximum = EquipmentTable.GetSelected().Quantity;
-            SpentSpinner.Value = EquipmentTable.GetSelected().Spent;
+            SpentSpinner.Maximum = EquipmentTable.GetSelected().quantity;
+            SpentSpinner.Value = EquipmentTable.GetSelected().spent;
             SpentSpinner.Enabled = true;
             ConfirmButton.Enabled = true;
         }
         private void ConfirmButtonClick(object sender, EventArgs e)
         {
-            EquipmentTable.GetSelected().Spent = Convert.ToInt32(SpentSpinner.Value);
+            EquipmentTable.GetSelected().spent = Convert.ToInt32(SpentSpinner.Value);
             EquipmentTable.ModifySelected(EquipmentTable.GetSelected());
         }
         private void FinishButtonClick(object sender, EventArgs e)
         {
             if(!UIUtilities.Confirm("Are you sure you entered correct data and want to save it?")) return;
-            EquipmentService.UpdateRoomsDynamicEquipment(Appointment.RoomID, EquipmentTable.GetAll());
+            EquipmentService.UpdateRoomsDynamicEquipment(Appointment.roomID, EquipmentTable.GetAll());
             Close();
         }
         private void CompleteAppointment()

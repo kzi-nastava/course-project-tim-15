@@ -19,11 +19,11 @@ namespace Klinika.Repositories
             {
                 var anamnesis = new Anamnesis
                 {
-                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
-                    MedicalActionID = Convert.ToInt32(((object[])row)[1].ToString()),
-                    Description = DatabaseConnection.CheckNull<string>(((object[])row)[2]),
-                    Symptoms = DatabaseConnection.CheckNull<string>(((object[])row)[3]),
-                    Conclusion = DatabaseConnection.CheckNull<string>(((object[])row)[4])
+                    id = Convert.ToInt32(((object[])row)[0].ToString()),
+                    medicalActionID = Convert.ToInt32(((object[])row)[1].ToString()),
+                    description = DatabaseConnection.CheckNull<string>(((object[])row)[2]),
+                    symptoms = DatabaseConnection.CheckNull<string>(((object[])row)[3]),
+                    conclusion = DatabaseConnection.CheckNull<string>(((object[])row)[4])
                 };
                 anamneses.Add(anamnesis);
             }
@@ -37,10 +37,10 @@ namespace Klinika.Repositories
 
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
                 createQuery,
-                ("@MedicalActionID", anamnesis.MedicalActionID),
-                ("@Description", anamnesis.Description),
-                ("@Symptoms", anamnesis.Symptoms),
-                ("@Conclusion", anamnesis.Conclusion));
+                ("@MedicalActionID", anamnesis.medicalActionID),
+                ("@Description", anamnesis.description),
+                ("@Symptoms", anamnesis.symptoms),
+                ("@Conclusion", anamnesis.conclusion));
         }
     }
 }

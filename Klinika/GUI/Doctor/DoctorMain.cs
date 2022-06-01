@@ -77,8 +77,8 @@ namespace Klinika.GUI.Doctor
             try
             {
                 var selected = ScheduleTable.GetSelected();
-                bool canBePerformed = !selected.Completed
-                    && selected.DateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
+                bool canBePerformed = !selected.completed
+                    && selected.dateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
 
                 if (canBePerformed)
                 {

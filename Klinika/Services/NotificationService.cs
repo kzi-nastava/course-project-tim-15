@@ -16,21 +16,21 @@ namespace Klinika.Services
         }
         public static void MakeNotificationsForPrescription(Prescription prescription)
         {
-            DateTime start = new DateTime(prescription.DateStarted.Year, prescription.DateStarted.Month, prescription.DateStarted.Day,
-                prescription.DateStarted.Hour + 1, 0, 0);
-            DateTime end = new DateTime(prescription.DateEnded.Year, prescription.DateEnded.Month, prescription.DateEnded.Day,
-                prescription.DateStarted.Hour + 1, 0, 0);
+            DateTime start = new DateTime(prescription.dateStarted.Year, prescription.dateStarted.Month, prescription.dateStarted.Day,
+                prescription.dateStarted.Hour + 1, 0, 0);
+            DateTime end = new DateTime(prescription.dateEnded.Year, prescription.dateEnded.Month, prescription.dateEnded.Day,
+                prescription.dateStarted.Hour + 1, 0, 0);
 
             while (start <= end)
             {
-                Send(new Notification(prescription.PatientID, GenerateMessage(prescription), start));
-                start = start.AddHours(prescription.Interval);
+                Send(new Notification(prescription.patientID, GenerateMessage(prescription), start));
+                start = start.AddHours(prescription.interval);
             }
         }
         private static string GenerateMessage (Prescription prescription)
         {
-            Drug drug = DrugRepository.Instance.Drugs.Where(x => x.ID == prescription.DrugID).FirstOrDefault();
-            return "Drug: " + drug.Name + "\nComment: " + prescription.Comment;
+            Drug drug = DrugRepository.Instance.Drugs.Where(x => x.id == prescription.drugID).FirstOrDefault();
+            return "Drug: " + drug.name + "\nComment: " + prescription.comment;
         }
         public static void MarkAsRead(int id)
         {

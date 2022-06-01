@@ -39,8 +39,8 @@ namespace Klinika.Repositories
             {
                 specializations.Add(new Specialization
                 {
-                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
-                    Name = ((object[])row)[1].ToString()
+                    id = Convert.ToInt32(((object[])row)[0].ToString()),
+                    name = ((object[])row)[1].ToString()
                 });
             }
 
@@ -89,8 +89,8 @@ namespace Klinika.Repositories
             var selection = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSpecializationQuerry);
             Specialization specialization = new Specialization
             {
-                ID = Convert.ToInt32(((object[])selection[0])[0]),
-                Name = ((object[])selection[0])[1].ToString()
+                id = Convert.ToInt32(((object[])selection[0])[0]),
+                name = ((object[])selection[0])[1].ToString()
             };
 
             return specialization;

@@ -28,13 +28,13 @@ namespace Klinika.Services
 
             foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
             {
-                if (doctor.specialization.ID != specializationId) continue;
+                if (doctor.specialization.id != specializationId) continue;
 
                 List<Appointment> scheduled = AppointmentRepository.GetAll(doctor.ID, User.RoleType.DOCTOR);
                 List<TimeSlot> scheduledSlots = new List<TimeSlot>();
                 foreach (Appointment appointment in scheduled)
                 {
-                    scheduledSlots.Add(new TimeSlot(appointment.DateTime, appointment.DateTime.AddMinutes(appointment.Duration)));
+                    scheduledSlots.Add(new TimeSlot(appointment.dateTime, appointment.dateTime.AddMinutes(appointment.duration)));
                 }
                 for (int i = 0; i < scheduledSlots.Count; i++)
                 {
@@ -47,7 +47,7 @@ namespace Klinika.Services
 
         public static List<Rescheduling> SelectTop5(List<Rescheduling> appointmentDatePairs)
         {
-            appointmentDatePairs = appointmentDatePairs.OrderBy(o => o.appointment.DateTime).ToList();
+            appointmentDatePairs = appointmentDatePairs.OrderBy(o => o.appointment.dateTime).ToList();
             return appointmentDatePairs.Take(5).ToList();
         }
     }
