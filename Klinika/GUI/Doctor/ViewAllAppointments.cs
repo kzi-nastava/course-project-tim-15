@@ -6,6 +6,7 @@ namespace Klinika.GUI.Doctor
     public partial class ViewAllAppointments : Form
     {
         internal readonly Main parent;
+        internal Roles.Doctor doctor { get { return parent.doctor; } }
         public ViewAllAppointments(Main parent)
         {
             InitializeComponent();
@@ -25,7 +26,7 @@ namespace Klinika.GUI.Doctor
         #region All Appointments
         private void InitAllAppointmentsTab()
         {
-            AllAppointmentsTable.Fill(DoctorService.GetAppointments(parent.doctor.id));
+            AllAppointmentsTable.Fill(DoctorService.GetAppointments(doctor.id));
             EditAppointmentButton.Enabled = false;
             DeleteAppointmentButton.Enabled = false;
         }

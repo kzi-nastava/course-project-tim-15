@@ -58,7 +58,7 @@ namespace Klinika.GUI.Doctor
         private int SetExaminationRoom()
         {
             RoomComboBox.Items.Clear();
-            RoomComboBox.Items.Add(DoctorService.GetOffice(parent.parent.doctor.officeID));
+            RoomComboBox.Items.Add(DoctorService.GetOffice(parent.doctor.officeID));
             return 0;
         }
         private int SetOperationRoom()
@@ -96,7 +96,7 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowErrorMessage("Patient is not valid!");
                 return false;
             }
-            if (DoctorService.IsOccupied(GetSelectedDateTime(), parent.parent.doctor.id, 
+            if (DoctorService.IsOccupied(GetSelectedDateTime(), parent.doctor.id, 
                 Convert.ToInt32(DurationTextBox.Text), appointment == null ? -1 : appointment.id))
             {
                 MessageBoxUtilities.ShowErrorMessage("Already occupied!");
@@ -118,7 +118,7 @@ namespace Klinika.GUI.Doctor
         }
         private void TransferDataFromUI(Appointment appointment)
         {
-            appointment.doctorID = parent.parent.doctor.id;
+            appointment.doctorID = parent.doctor.id;
             appointment.patientID = (PatientComboBox.SelectedItem as User).id;
             appointment.roomID = (RoomComboBox.SelectedItem as Room).id;
             appointment.type = ExaminationRadioButton.Checked ? 'E' : 'O';

@@ -1,13 +1,4 @@
 ﻿using Klinika.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Klinika.GUI.Doctor
 {
@@ -33,11 +24,11 @@ namespace Klinika.GUI.Doctor
         }
         private void UnapprovedDrugsButton_Click(object sender, EventArgs e)
         {
-
+            new ManageUnapprovedDrugs(this).Show();
         }
         private void VacationRequestButton_Click(object sender, EventArgs e)
         {
-
+            new VacationRequests(this).Show();
         }
     }
 }
