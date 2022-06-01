@@ -269,7 +269,7 @@ namespace Klinika.Repositories
             }
         }
 
-        public static DataTable GetDynamicEquipment()
+        public static DataTable GetDynamicEquipmentInStorage()
         {
             string getQuery = "SELECT [Equipment].ID, [Equipment].Name, ISNULL([Storage].Quantity,0) 'Quantity' FROM [Equipment] " +
                               "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +
@@ -296,7 +296,7 @@ namespace Klinika.Repositories
             return 0;
         }
 
-        public static List<Equipment> GetDynamicEquipment()
+        public static List<Equipment> GetDynamicEquipmentInRooms()
         {
             string getQuery = "SELECT [Equipment].ID, [Equipment].Name, [RoomEquipment].RoomID, [RoomEquipment].Quantity FROM [Equipment] " +
                               "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +

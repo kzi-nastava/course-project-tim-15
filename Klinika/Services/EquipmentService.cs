@@ -13,7 +13,7 @@ namespace Klinika.Services
     {
         public static DataTable GetMissingDynamicEquipment()
         {
-            DataTable allDynamicEquipment = EquipmentRepository.GetDynamicEquipment();
+            DataTable allDynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
             for (int i = allDynamicEquipment.Rows.Count - 1; i >= 0; i--)
             {
                 if ((int)allDynamicEquipment.Rows[i]["Quantity"] > 0) allDynamicEquipment.Rows.RemoveAt(i);
@@ -23,7 +23,7 @@ namespace Klinika.Services
         }
         public static List<Equipment> GetDynamicEquipment(int roomID)
         {
-            var equipment = EquipmentRepository.GetDynamicEquipment();
+            var equipment = EquipmentRepository.GetDynamicEquipmentInRooms();
             return equipment.Where(x => x.RoomID == roomID).ToList();
         }
         public static void UpdateRoomsDynamicEquipment(int roomID, List<Equipment> equipments)
@@ -47,7 +47,7 @@ namespace Klinika.Services
         private static DataTable PairRoomWithAllDynamicEquipment()
         {
             DataTable rooms = RoomRepository.GetAllRooms();
-            DataTable dynamicEquipment = EquipmentRepository.GetDynamicEquipment();
+            DataTable dynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
             DataTable pairs = new DataTable();
             pairs.Columns.Add("RoomID", typeof(int));
             pairs.Columns.Add("Number", typeof(int));
