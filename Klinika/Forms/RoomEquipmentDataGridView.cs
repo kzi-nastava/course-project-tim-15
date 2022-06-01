@@ -1,21 +1,14 @@
 ﻿using Klinika.Models;
-using Klinika.Roles;
-using Klinika.Services;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Klinika.Forms
 {
     public class RoomEquipmentDataGridView : DataGridView
     {
-        private List<Equipment> Equipment;
+        private List<Equipment> equipment;
         public RoomEquipmentDataGridView() : base()
         {
-            Equipment = new List<Equipment>();
+            equipment = new List<Equipment>();
         }
         public void Fill(List<Equipment> equipments)
         {
@@ -28,7 +21,7 @@ namespace Klinika.Forms
             DataSource = equipmentData;
             Columns["ID"].Width = 45;
 
-            Equipment = new List<Equipment>();
+            equipment = new List<Equipment>();
             foreach (Equipment equipment in equipments) Insert(equipment);
 
             ClearSelection();
@@ -37,21 +30,21 @@ namespace Klinika.Forms
         {
             DataTable? dt = DataSource as DataTable;
             DataRow newRow = dt.NewRow();
-            newRow["ID"] = equipment.ID;
-            newRow["Name"] = equipment.Name;
-            newRow["Quantity"] = equipment.Quantity;
-            newRow["Spent"] = equipment.Spent;
+            newRow["ID"] = equipment.id;
+            newRow["Name"] = equipment.name;
+            newRow["Quantity"] = equipment.quantity;
+            newRow["Spent"] = equipment.spent;
             dt.Rows.Add(newRow);
-            Equipment.Add(equipment);
+            this.equipment.Add(equipment);
         }
-        public List<Equipment> GetAll() { return Equipment; }
+        public List<Equipment> GetAll() { return equipment; }
         public int GetSelectedID()
         {
             return Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
         }
         public Equipment GetSelected()
         {
-            return Equipment.Where(x => x.ID == GetSelectedID()).First();
+            return equipment.Where(x => x.id == GetSelectedID()).First();
         }
         public int DeleteSelected()
         {
@@ -61,13 +54,13 @@ namespace Klinika.Forms
         }
         public void ModifySelected(Equipment equipment)
         {
-            SelectedRows[0].SetValues(equipment.ID.ToString(),
-                equipment.Name,
-                equipment.Quantity,
-                equipment.Spent);
+            SelectedRows[0].SetValues(equipment.id.ToString(),
+                equipment.name,
+                equipment.quantity,
+                equipment.spent);
 
-            Equipment.Remove(Equipment.Where(x => x.ID == equipment.ID).FirstOrDefault());
-            Equipment.Add(equipment);
+            this.equipment.Remove(this.equipment.Where(x => x.id == equipment.id).FirstOrDefault());
+            this.equipment.Add(equipment);
         }
     }
 }

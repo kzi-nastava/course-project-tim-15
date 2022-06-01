@@ -13,12 +13,12 @@ namespace Klinika.Repositories
 
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
                 createQuery,
-                ("@PatientID", prescription.PatientID),
-                ("@DrugID", prescription.DrugID),
-                ("@DateStarted", prescription.DateStarted),
-                ("@DateEnded", prescription.DateEnded),
-                ("@Interval", prescription.Interval),
-                ("@Comment", prescription.Comment));
+                ("@PatientID", prescription.patientID),
+                ("@DrugID", prescription.drugID),
+                ("@DateStarted", prescription.dateStarted),
+                ("@DateEnded", prescription.dateEnded),
+                ("@Interval", prescription.interval),
+                ("@Comment", prescription.comment));
         }
     }
 }

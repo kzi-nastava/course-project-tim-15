@@ -1,6 +1,4 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
-using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
 
@@ -8,13 +6,13 @@ namespace Klinika.GUI.Doctor
 {
     public partial class DoctorMain : Form
     {
-        public Roles.Doctor _Doctor { get; }
+        public Roles.Doctor doctor { get; }
 
         #region Form
         public DoctorMain(int doctorID)
         {
             InitializeComponent();
-            _Doctor = DoctorService.GetById(doctorID);
+            doctor = DoctorService.GetById(doctorID);
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -35,7 +33,7 @@ namespace Klinika.GUI.Doctor
         #region All Appointments
         private void InitAllAppointmentsTab()
         {
-            AllAppointmentsTable.Fill(DoctorService.GetAppointments(_Doctor.ID));
+            AllAppointmentsTable.Fill(DoctorService.GetAppointments(doctor.id));
             EditAppointmentButton.Enabled = false;
             DeleteAppointmentButton.Enabled = false;
         }
@@ -62,7 +60,7 @@ namespace Klinika.GUI.Doctor
         #region Schedule
         private void InitScheduleTab()
         {
-            var scheduled = DoctorService.GetAppointments(ScheduleDatePicker.Value, _Doctor.ID, 3);
+            var scheduled = DoctorService.GetAppointments(ScheduleDatePicker.Value, doctor.id, 3);
             ScheduleTable.Fill(scheduled);
             ViewMedicalRecordButton.Enabled = false;
             PerformButton.Enabled = false;
@@ -77,8 +75,8 @@ namespace Klinika.GUI.Doctor
             try
             {
                 var selected = ScheduleTable.GetSelected();
-                bool canBePerformed = !selected.Completed
-                    && selected.DateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
+                bool canBePerformed = !selected.completed
+                    && selected.dateTime.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd");
 
                 if (canBePerformed)
                 {
@@ -135,12 +133,12 @@ namespace Klinika.GUI.Doctor
         #region Vacation Requests
         private void InitVacationRequests()
         {
-            VacationRequestTable.Fill(VacationRequestService.GetAll(_Doctor.ID));
+            VacationRequestTable.Fill(VacationRequestService.GetAll(doctor.id));
         }
         private void SendRequestButton_Click(object sender, EventArgs e)
         {
             if (!VerifyVacationRequest()) return;
-            var vacationRequest = new VacationRequest(_Doctor.ID, FromDatePicker.Value, ToDatePicker.Value, 
+            var vacationRequest = new VacationRequest(doctor.id, FromDatePicker.Value, ToDatePicker.Value, 
                 ReasonTextBox.Text, EmergencyCheckBox.Checked);
             VacationRequestService.Create(vacationRequest);
             VacationRequestTable.Insert(vacationRequest);
@@ -167,7 +165,7 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowErrorMessage("Reason text box must be filled!");
                 return false;
             }
-            if (DoctorService.IsOccupied(_Doctor.ID, new TimeSlot(FromDatePicker.Value, ToDatePicker.Value)))
+            if (DoctorService.IsOccupied(doctor.id, new TimeSlot(FromDatePicker.Value, ToDatePicker.Value)))
             {
                 MessageBoxUtilities.ShowErrorMessage("Doctor is occupied!");
                 return false;

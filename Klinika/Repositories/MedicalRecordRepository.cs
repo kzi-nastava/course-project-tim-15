@@ -14,15 +14,15 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getRecordQuerry);
             foreach(object row in resoult)
             {
-                record.ID = patientID;
-                record.Height = DatabaseConnection.CheckNull<decimal>(((object[])row)[1]);
-                record.Weight = DatabaseConnection.CheckNull<decimal>(((object[])row)[2]);
-                record.BloodType = DatabaseConnection.CheckNull<string>(((object[])row)[3]);
+                record.id = patientID;
+                record.height = DatabaseConnection.CheckNull<decimal>(((object[])row)[1]);
+                record.weight = DatabaseConnection.CheckNull<decimal>(((object[])row)[2]);
+                record.bloodType = DatabaseConnection.CheckNull<string>(((object[])row)[3]);
             }
 
-            record.Anamneses = AnamnesisRepository.Get(patientID);
-            record.Diseases = GetDiseases(patientID);
-            record.Allergens = GetAllergens(patientID);
+            record.anamneses = AnamnesisRepository.Get(patientID);
+            record.diseases = GetDiseases(patientID);
+            record.allergens = GetAllergens(patientID);
 
             return record;
         }
@@ -40,11 +40,11 @@ namespace Klinika.Repositories
             {
                 var disease = new Disease
                 {
-                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
-                    Name = DatabaseConnection.CheckNull<string>(((object[])row)[1]),
-                    Description = DatabaseConnection.CheckNull<string>(((object[])row)[2]),
-                    PatientID = Convert.ToInt32(((object[])row)[3].ToString()),
-                    DateDiagnosed = DatabaseConnection.CheckNull<DateTime>(((object[])row)[4])
+                    id = Convert.ToInt32(((object[])row)[0].ToString()),
+                    name = DatabaseConnection.CheckNull<string>(((object[])row)[1]),
+                    description = DatabaseConnection.CheckNull<string>(((object[])row)[2]),
+                    patientID = Convert.ToInt32(((object[])row)[3].ToString()),
+                    dateDiagnosed = DatabaseConnection.CheckNull<DateTime>(((object[])row)[4])
                 };
                 diseases.Add(disease);
             }
@@ -57,7 +57,7 @@ namespace Klinika.Repositories
 
             foreach(int id in ingredientsIDs)
             {
-                var ingredient = IngredientRepository.Instance.Ingredients.Where(x => x.ID == id).FirstOrDefault();
+                var ingredient = IngredientRepository.Instance.ingredients.Where(x => x.id == id).FirstOrDefault();
                 if (ingredient != null)
                 {
                     allergens.Add(ingredient);

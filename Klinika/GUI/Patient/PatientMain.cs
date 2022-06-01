@@ -11,20 +11,20 @@ namespace Klinika.GUI.Patient
 {
     public partial class PatientMain : Form
     {
-        RDoctor.Filters SelectedDoctorFilter = RDoctor.Filters.BY_NAME;
-        public RPatient Patient { get; }
+        RDoctor.Filters selectedDoctorFilter = RDoctor.Filters.BY_NAME;
+        public RPatient patient { get; }
 
         #region Form
         public PatientMain(int patientID)
         {
             InitializeComponent();
-            Patient = PatientService.GetById(patientID);
-            System.Diagnostics.Debug.WriteLine(Patient.NotificationOffset);
+            patient = PatientService.GetById(patientID);
+            System.Diagnostics.Debug.WriteLine(patient.notificationOffset);
         }
         private void LoadForm(object sender, EventArgs e)
         {
             InitPersonalAppointmentsTab();
-            FillNotificationsTable(NotificationService.Get(Patient));
+            FillNotificationsTable(NotificationService.Get(patient));
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillSpecializationsComboBox();
         }
@@ -44,7 +44,7 @@ namespace Klinika.GUI.Patient
         #region Personal Appointments Tab
         private void InitPersonalAppointmentsTab()
         {
-            PersonalAppointmentsTable.Fill(AppointmentRepository.GetAll(Patient.ID, User.RoleType.PATIENT));
+            PersonalAppointmentsTable.Fill(AppointmentRepository.GetAll(patient.id, User.RoleType.PATIENT));
             ModifyButton.Enabled = false;
             DeleteButton.Enabled = false;
         }
@@ -62,14 +62,14 @@ namespace Klinika.GUI.Patient
             if (!UIUtilities.Confirm("Are you sure you want to delete selected appointment?")) return;
 
             Appointment selected = PersonalAppointmentsTable.GetSelected();
-            bool needApproval = DateTime.Now.AddDays(2).Date >= selected.DateTime.Date;
+            bool needApproval = DateTime.Now.AddDays(2).Date >= selected.dateTime.Date;
 
             if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
             PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.Delete);
             if (needApproval) return;
 
-            AppointmentService.Delete(selected.ID);
+            AppointmentService.Delete(selected.id);
             PersonalAppointmentsTable.DeleteSelected();
         }
         #endregion
@@ -84,7 +84,7 @@ namespace Klinika.GUI.Patient
         {
             if (!IsDateValid(AppointmentDatePicker.Value)) return;
 
-            int doctorID = (DoctorComboBox.SelectedItem as User).ID;
+            int doctorID = (DoctorComboBox.SelectedItem as User).id;
             OccupiedAppointmentsTable.Fill(DoctorService.GetAppointments(AppointmentDatePicker.Value, doctorID));
             ScheduleButton.Enabled = true;
         }
@@ -101,11 +101,11 @@ namespace Klinika.GUI.Patient
         #region Medical Record Tab
         private void InitMedicalRecorTab()
         {
-            FillMedicalRecordTable(AnamnesisService.Get(Patient.ID));
+            FillMedicalRecordTable(AnamnesisService.Get(patient.id));
         }
         private void FillMedicalRecordTable(List<Anamnesis> anamneses)
         {
-            List<Appointment> appointments = AppointmentService.GetCompleted(Patient.ID);
+            List<Appointment> appointments = AppointmentService.GetCompleted(patient.id);
 
             DataTable anamnesesData = new DataTable();
             anamnesesData.Columns.Add("Appointment ID");
@@ -119,14 +119,14 @@ namespace Klinika.GUI.Patient
             foreach (Anamnesis anamnesis in anamneses)
             {
                 DataRow newRow = anamnesesData.NewRow();
-                Appointment appointment = appointments.Where(x => x.ID == anamnesis.MedicalActionID).FirstOrDefault();
-                newRow["Appointment ID"] = anamnesis.MedicalActionID;
-                newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
-                newRow["Doctor Specialization"] = DoctorService.GetSpecialization(appointment.DoctorID);
-                newRow["DateTime"] = appointment.DateTime;
-                newRow["Description"] = anamnesis.Description;
-                newRow["Symptoms"] = anamnesis.Symptoms;
-                newRow["Conclusion"] = anamnesis.Conclusion;
+                Appointment appointment = appointments.Where(x => x.id == anamnesis.medicalActionID).FirstOrDefault();
+                newRow["Appointment ID"] = anamnesis.medicalActionID;
+                newRow["Doctor"] = DoctorService.GetFullName(appointment.doctorID);
+                newRow["Doctor Specialization"] = DoctorService.GetSpecialization(appointment.doctorID);
+                newRow["DateTime"] = appointment.dateTime;
+                newRow["Description"] = anamnesis.description;
+                newRow["Symptoms"] = anamnesis.symptoms;
+                newRow["Conclusion"] = anamnesis.conclusion;
                 anamnesesData.Rows.Add(newRow);
             }
             MedicalRecordTable.DataSource = anamnesesData;
@@ -134,7 +134,7 @@ namespace Klinika.GUI.Patient
         private void SearchButtonClick(object sender, EventArgs e)
         {
             string searchParam = SearchTextBox.Text;
-            List<Anamnesis> searchResoult = AnamnesisService.GetFiltered(Patient.ID, searchParam);
+            List<Anamnesis> searchResoult = AnamnesisService.GetFiltered(patient.id, searchParam);
             FillMedicalRecordTable(searchResoult);
         }
         private void ResetButtonClick(object sender, EventArgs e)
@@ -159,7 +159,7 @@ namespace Klinika.GUI.Patient
             DoctorSurnameTextBox.Text = "";
             DoctorsTable.DataSource = null;
 
-            SelectedDoctorFilter = selected;
+            selectedDoctorFilter = selected;
         }
         private void DoctorNameRadioButtonCheckedChanged(object sender, EventArgs e)
         {
@@ -189,11 +189,11 @@ namespace Klinika.GUI.Patient
             foreach(RDoctor doctor in doctors)
             {
                 DataRow newRow = dataTable.NewRow();
-                newRow["Doctor ID"] = doctor.ID;
-                newRow["Name"] = doctor.Name;
-                newRow["Surname"] = doctor.Surname;
+                newRow["Doctor ID"] = doctor.id;
+                newRow["Name"] = doctor.name;
+                newRow["Surname"] = doctor.surname;
                 newRow["Specialization"] = doctor.specialization;
-                newRow["Grade"] = string.Format("{0:0.00}", DoctorService.GetGrade(doctor.ID));
+                newRow["Grade"] = string.Format("{0:0.00}", DoctorService.GetGrade(doctor.id));
                 dataTable.Rows.Add(newRow);
             }
   
@@ -203,7 +203,7 @@ namespace Klinika.GUI.Patient
         }
         private void DoctorSearchButtonClick(object sender, EventArgs e)
         {
-            List<RDoctor> result = SelectedDoctorFilter switch
+            List<RDoctor> result = selectedDoctorFilter switch
             {
                 RDoctor.Filters.BY_NAME => DoctorService.SearchByName(DoctorNameTextBox.Text),
                 RDoctor.Filters.BY_SURNAME => DoctorService.SearchBySurname(DoctorSurnameTextBox.Text),
@@ -219,7 +219,7 @@ namespace Klinika.GUI.Patient
         private void NewAppointmentButtonClick(object sender, EventArgs e)
         {
             Appointment appointment = new Appointment();
-            appointment.DoctorID = Convert.ToInt32(UIUtilities.GetCellValue(DoctorsTable, "Doctor ID"));
+            appointment.doctorID = Convert.ToInt32(UIUtilities.GetCellValue(DoctorsTable, "Doctor ID"));
             new PersonalAppointment(this, appointment, true).Show();
         }
         #endregion
@@ -227,7 +227,7 @@ namespace Klinika.GUI.Patient
         #region Notifications Tab
         private void InitNotificationsTab()
         {
-            OffsetNumericUpDown.Value = Patient.NotificationOffset;
+            OffsetNumericUpDown.Value = patient.notificationOffset;
             SetButton.Enabled = false;
         }
         private void FillNotificationsTable(List<Notification> notifications)
@@ -242,8 +242,8 @@ namespace Klinika.GUI.Patient
             {
                 DataRow newRow = dataTable.NewRow();
 
-                newRow["ID"] = notification.ID;
-                newRow["DateTime"] = notification.DateTime;
+                newRow["ID"] = notification.id;
+                newRow["DateTime"] = notification.dateTime;
                 newRow["Message"] = notification.message;
                 dataTable.Rows.Add(newRow);
             }
@@ -262,9 +262,9 @@ namespace Klinika.GUI.Patient
         private void SetButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to save changes?")) return;
-            Patient.NotificationOffset = Convert.ToInt32(OffsetNumericUpDown.Value);
-            PatientService.Modify(Patient);
-            FillNotificationsTable(NotificationRepository.Get(Patient));
+            patient.notificationOffset = Convert.ToInt32(OffsetNumericUpDown.Value);
+            PatientService.Modify(patient);
+            FillNotificationsTable(NotificationRepository.Get(patient));
             SetButton.Enabled = false;
         }
         private void OffsetNumericUpDownEnter(object sender, EventArgs e)
@@ -286,7 +286,7 @@ namespace Klinika.GUI.Patient
         }
         private int GetSelectedSpecializationID()
         {
-            return (DoctorSpecializationComboBox.SelectedItem as Specialization).ID;
+            return (DoctorSpecializationComboBox.SelectedItem as Specialization).id;
         }
         public bool IsDateValid (DateTime dateTime)
         {
@@ -302,7 +302,7 @@ namespace Klinika.GUI.Patient
             if (!AppointmentService.IsGraded(selected))
             {
                 var appointment = AppointmentService.GetById(selected);
-                new Questionnaire(this, Question.Types.DOCTOR, appointment.ID, appointment.DoctorID).Show();
+                new Questionnaire(this, Question.Types.DOCTOR, appointment.id, appointment.doctorID).Show();
                 return;
             }
             MessageBoxUtilities.ShowErrorMessage("You already graded this appointment!");

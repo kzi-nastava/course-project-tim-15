@@ -1,41 +1,32 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Klinika.GUI.Patient
 {
     public partial class AppointmentRecommendation : Form
     {
-        private readonly PatientMain Parent;
+        private readonly PatientMain parent;
 
         #region Form
         public AppointmentRecommendation(PatientMain parent)
         {
             InitializeComponent();
-            Parent = parent;
+            this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
         {
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillRecommendedAppointmentTable();
-            Parent.Enabled = false;
+            parent.Enabled = false;
             ScheduleButton.Enabled = false;
             DoctorRadioButton.Checked = true;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
         private void CancelClick(object sender, EventArgs e)
         {
@@ -63,7 +54,7 @@ namespace Klinika.GUI.Patient
 
         private void ShowRecommended()
         {
-            int doctorID = (DoctorComboBox.SelectedItem as User).ID;
+            int doctorID = (DoctorComboBox.SelectedItem as User).id;
             char priority = DoctorRadioButton.Checked ? 'D' : 'T';
             TimeSlot timeSlot = new TimeSlot(FromTimePicker.Value, ToTimePicker.Value);
 
@@ -83,9 +74,9 @@ namespace Klinika.GUI.Patient
                 {
                     DataRow newRow = dataTable.NewRow();
 
-                    newRow["Doctor ID"] = appointment.DoctorID;
-                    newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
-                    newRow["DateTime"] = appointment.DateTime;
+                    newRow["Doctor ID"] = appointment.doctorID;
+                    newRow["Doctor"] = DoctorService.GetFullName(appointment.doctorID);
+                    newRow["DateTime"] = appointment.dateTime;
                     dataTable.Rows.Add(newRow);
                 }
             }
@@ -109,9 +100,9 @@ namespace Klinika.GUI.Patient
         }
         private void Create()
         {
-            Appointment appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
+            Appointment appointment = new Appointment(GetSelectedDoctorID(), parent.patient.id, GetSelectedDateTime());
             AppointmentService.Create(appointment);
-            Parent.PersonalAppointmentsTable.Insert(appointment);
+            parent.PersonalAppointmentsTable.Insert(appointment);
         }
     }
 }

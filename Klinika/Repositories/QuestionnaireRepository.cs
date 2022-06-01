@@ -1,5 +1,5 @@
-﻿using Klinika.Models;
-using Klinika.Data;
+﻿using Klinika.Data;
+using Klinika.Models;
 
 namespace Klinika.Repositories
 {
@@ -33,17 +33,17 @@ namespace Klinika.Repositories
         }
         public static int Create(Questionnaire questionnaire)
         {
-            string targe1 = questionnaire.TargetID == -1 ? "" : ",TargetID";
-            string target2 = questionnaire.TargetID == -1 ? "" : ", " + questionnaire.TargetID;
+            string targe1 = questionnaire.targetID == -1 ? "" : ",TargetID";
+            string target2 = questionnaire.targetID == -1 ? "" : ", " + questionnaire.targetID;
 
             string createQuerry = "INSERT INTO [Questionnaire] " +
                 $"(PatientID {targe1},Comment,MedicalActionID) " +
                 "OUTPUT INSERTED.ID " +
                 $"VALUES(@patientID {target2}, @comment, @medicalAction)";
             var result = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(createQuerry,
-                ("@patientID", questionnaire.PatientID),
-                ("@comment", questionnaire.Comment),
-                ("@medicalAction", questionnaire.AppointmentID));
+                ("@patientID", questionnaire.patientID),
+                ("@comment", questionnaire.comment),
+                ("@medicalAction", questionnaire.appointmentID));
             return Convert.ToInt32(result);
         }
         public static void CreateAnswer (Answer answer)
@@ -52,9 +52,9 @@ namespace Klinika.Repositories
                 "(QuestionnaireID,QuestionID,Grade) " +
                 "VALUES(@questionnaireID, @questionID, @grade)";
             DatabaseConnection.GetInstance().ExecuteSelectCommand(createQuerry,
-                ("@questionnaireID", answer.QuestionnaireID),
-                ("@questionID", answer.QuestionID),
-                ("@grade", answer.Grade));
+                ("@questionnaireID", answer.questionnaireID),
+                ("@questionID", answer.questionID),
+                ("@grade", answer.grade));
         }
         public static bool IsGraded (int appointmentID)
         {

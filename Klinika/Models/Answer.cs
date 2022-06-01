@@ -1,17 +1,16 @@
-﻿
-namespace Klinika.Models
+﻿namespace Klinika.Models
 {
     internal class Answer
     {
-        public int QuestionnaireID { get; set; }
-        public int QuestionID { get; set; }
-        public int Grade { get; set; }
+        public int questionnaireID { get; set; }
+        public int questionID { get; set; }
+        public int grade { get; set; }
         
         public Answer(int questionID, int grade)
         {
-            QuestionnaireID = -1;
-            QuestionID = questionID;
-            Grade = grade;
+            questionnaireID = -1;
+            this.questionID = questionID;
+            this.grade = grade;
         }
     }
 }

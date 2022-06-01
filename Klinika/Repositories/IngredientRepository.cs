@@ -5,7 +5,7 @@ namespace Klinika.Repositories
 {
     public class IngredientRepository
     {
-        public List<Ingredient> Ingredients { get; }
+        public List<Ingredient> ingredients { get; }
 
         private static IngredientRepository? instance;
         public static IngredientRepository Instance
@@ -21,7 +21,7 @@ namespace Klinika.Repositories
         }
         private IngredientRepository()
         {
-            Ingredients = GetAll();
+            ingredients = GetAll();
         }
         private List<Ingredient> GetAll()
         {
@@ -32,9 +32,9 @@ namespace Klinika.Repositories
             {
                 var ingredient = new Ingredient
                 {
-                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
-                    Name = ((object[])row)[1].ToString(),
-                    Type = ((object[])row)[2].ToString()
+                    id = Convert.ToInt32(((object[])row)[0].ToString()),
+                    name = ((object[])row)[1].ToString(),
+                    type = ((object[])row)[2].ToString()
                 };
                 ingredients.Add(ingredient);
             }

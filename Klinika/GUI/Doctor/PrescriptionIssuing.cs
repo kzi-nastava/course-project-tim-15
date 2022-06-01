@@ -1,5 +1,4 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Services;
 using Klinika.Utilities;
 
@@ -7,24 +6,24 @@ namespace Klinika.GUI.Doctor
 {
     public partial class PrescriptionIssuing : Form
     {
-        internal readonly MedicalRecord Parent;
+        internal readonly MedicalRecord parent;
 
         #region Form
         public PrescriptionIssuing(MedicalRecord parent)
         {
             InitializeComponent();
-            Parent = parent;
+            this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
         {
-            Parent.Enabled = false;
+            parent.Enabled = false;
             PrescriptionStartDatePicker.MinDate = DateTime.Now;
             PrescriptionEndDatePicker.MinDate = DateTime.Now;
             DrugsTable.Fill(DrugService.GetApproved());
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
         #endregion
 
@@ -34,7 +33,7 @@ namespace Klinika.GUI.Doctor
             if (!ValidateForm()) return;
 
             var prescription = new Prescription(
-                Parent.Appointment.PatientID,
+                parent.appointment.patientID,
                 DrugsTable.GetSelectedId(),
                 new TimeSlot(PrescriptionStartDatePicker.Value, PrescriptionEndDatePicker.Value),
                 Convert.ToInt32(IntervalSpinner.Value),
@@ -77,7 +76,7 @@ namespace Klinika.GUI.Doctor
         }
         private bool IsDrugPrescriptible(Drug selected)
         {
-            if (!Parent.Record.IsAllergic(selected)) return true;
+            if (!parent.record.IsAllergic(selected)) return true;
             var msg = "Patient is allergic to ingredient found in the selected drug\n" + "Are you sure you want to prescript it?";
             return UIUtilities.Confirm(msg);
         }

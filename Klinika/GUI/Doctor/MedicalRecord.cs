@@ -8,25 +8,25 @@ namespace Klinika.GUI.Doctor
 {
     public partial class MedicalRecord : Form
     {
-        internal readonly DoctorMain Parent;
-        public Appointment Appointment;
-        public Models.MedicalRecord Record;
+        internal readonly DoctorMain parent;
+        public Appointment appointment;
+        public Models.MedicalRecord record;
         #region Form
         public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
         {
             InitializeComponent();
-            Parent = parent;
-            Appointment = appointment;
-            Record = MedicalRecordService.Get(appointment.PatientID);
+            this.parent = parent;
+            this.appointment = appointment;
+            record = MedicalRecordService.Get(appointment.patientID);
             if (!isPreview) AnamnesisGroup.Visible = true;
         }
         private void LoadForm(object sender, EventArgs e)
         {
-            Parent.Enabled = false;
+            parent.Enabled = false;
             FillPatientMainData();
-            FillAnamnesesTable(AnamnesesTable, Record.Anamneses);
-            FillDiseasesTable(DiseasesTable, Record.Diseases);
-            FillAllergensTable(AllergensTable, Record.Allergens);
+            FillAnamnesesTable(AnamnesesTable, record.anamneses);
+            FillDiseasesTable(DiseasesTable, record.diseases);
+            FillAllergensTable(AllergensTable, record.allergens);
             UIUtilities.FillSpecializationComboBox(SpecializationsComboBox);
         }
         public static void FillAnamnesesTable(DataGridView table, List<Anamnesis> anamneses)
@@ -40,10 +40,10 @@ namespace Klinika.GUI.Doctor
             foreach (Anamnesis anamnesis in anamneses)
             {
                 DataRow newRow = anamnesesData.NewRow();
-                newRow["ID"] = anamnesis.ID;
-                newRow["Description"] = anamnesis.Description;
-                newRow["Symptoms"] = anamnesis.Symptoms;
-                newRow["Conclusion"] = anamnesis.Conclusion;
+                newRow["ID"] = anamnesis.id;
+                newRow["Description"] = anamnesis.description;
+                newRow["Symptoms"] = anamnesis.symptoms;
+                newRow["Conclusion"] = anamnesis.conclusion;
                 anamnesesData.Rows.Add(newRow);
             }
 
@@ -62,10 +62,10 @@ namespace Klinika.GUI.Doctor
             foreach (Disease disease in diseases)
             {
                 DataRow newRow = diseasesData.NewRow();
-                newRow["ID"] = disease.ID;
-                newRow["Name"] = disease.Name;
-                newRow["Description"] = disease.Description;
-                newRow["Date"] = disease.DateDiagnosed.ToString("yyyy/MM/dd");
+                newRow["ID"] = disease.id;
+                newRow["Name"] = disease.name;
+                newRow["Description"] = disease.description;
+                newRow["Date"] = disease.dateDiagnosed.ToString("yyyy/MM/dd");
                 diseasesData.Rows.Add(newRow);
             }
 
@@ -83,9 +83,9 @@ namespace Klinika.GUI.Doctor
             foreach (Ingredient ingredient in allergens)
             {
                 DataRow newRow = allergensData.NewRow();
-                newRow["ID"] = ingredient.ID;
-                newRow["Name"] = ingredient.Name;
-                newRow["Type"] = ingredient.Type;
+                newRow["ID"] = ingredient.id;
+                newRow["Name"] = ingredient.name;
+                newRow["Type"] = ingredient.type;
                 allergensData.Rows.Add(newRow);
             }
 
@@ -95,16 +95,16 @@ namespace Klinika.GUI.Doctor
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
         #endregion
         #region Record
         private void FillPatientMainData()
         {
-            PatientNameLabel.Text = PatientService.GetFullName(Record.ID);
-            BloodTypeLabel.Text = Record.BloodType;
-            HeightLabel.Text = $"{Record.Height}cm";
-            WeightLabel.Text = $"{Record.Weight}kg";
+            PatientNameLabel.Text = PatientService.GetFullName(record.id);
+            BloodTypeLabel.Text = record.bloodType;
+            HeightLabel.Text = $"{record.height}cm";
+            WeightLabel.Text = $"{record.weight}kg";
         }
         private void TableSelectionChanged(object sender, EventArgs e)
         {
@@ -122,7 +122,7 @@ namespace Klinika.GUI.Doctor
         {
             if (!ValidateAnamnesis(skipValidation)) return false;
 
-            var anamnesis = new Anamnesis(Appointment.ID, DescriptionTextBox.Text,
+            var anamnesis = new Anamnesis(appointment.id, DescriptionTextBox.Text,
                 SymptomsTextBox.Text, ConclusionTextBox.Text);
 
             AnamnesisService.Create(anamnesis);
@@ -132,7 +132,7 @@ namespace Klinika.GUI.Doctor
         {
             if (!IsAppointmentCompleted()) return;
             Close();
-            new DynamicEquipment(Parent, Appointment).Show();
+            new DynamicEquipment(parent, appointment).Show();
         }
         #endregion
         #region Refer
@@ -150,16 +150,16 @@ namespace Klinika.GUI.Doctor
         private void SpecializationsComboBoxSelectedValueChanged(object sender, EventArgs e)
         {
             if(SpecializationsComboBox.SelectedIndex == -1) return;
-            int selectedID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
+            int selectedID = (SpecializationsComboBox.SelectedItem as Specialization).id;
             UIUtilities.FillSpecializedDoctorComboBox(DoctorsComboBox, selectedID);
         }
         private bool TryCreateReferal()
         {
             if (!ReferCheckBox.Checked) return false;
 
-            int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).ID;
-            int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).ID;
-            ReferralService.Create(Appointment.PatientID, specializationID, doctorID);
+            int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).id;
+            int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).id;
+            ReferralService.Create(appointment.patientID, specializationID, doctorID);
 
             MessageBoxUtilities.ShowInformationMessage("Referal made successfully!");
             return true;

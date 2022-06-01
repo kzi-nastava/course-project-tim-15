@@ -1,18 +1,18 @@
 ﻿using Klinika.Data;
-using System.Data;
 using Klinika.Roles;
+using System.Data;
 
 namespace Klinika.Repositories
 {
     internal class PatientRepository : Repository
     {
-        public static Dictionary<string, int>? EmailIDPairs { get; private set; }
-        public static Dictionary<int,Patient>? IDPatientPairs { get; private set; }
+        public static Dictionary<string, int>? emailIDPairs { get; private set; }
+        public static Dictionary<int,Patient>? idPatientPairs { get; private set; }
 
         public static DataTable GetAll()
         {
-            EmailIDPairs = new Dictionary<string, int>();
-            IDPatientPairs = new Dictionary<int,Patient>();
+            emailIDPairs = new Dictionary<string, int>();
+            idPatientPairs = new Dictionary<int,Patient>();
 
             string getAllQuery = "SELECT [User].ID, [User].JMBG, [User].Name, [User].Surname, [User].Birthdate, [User].Gender, [User].Email, " +
                                  "[User].Password, [User].IsBlocked as Blocked, [User].WhoBlocked as BlockedBy, [Patient].NotificationOffset " +
@@ -36,8 +36,8 @@ namespace Klinika.Repositories
                                                 patient["Password"].ToString(), 
                                                 Convert.ToInt32(patient["NotificationOffset"]));
 
-                EmailIDPairs.Add(email, id);
-                IDPatientPairs.Add(id, newPatient);
+                emailIDPairs.Add(email, id);
+                idPatientPairs.Add(id, newPatient);
 
             }
                 retrievedPatients.Columns.Remove("Password");
@@ -79,17 +79,17 @@ namespace Klinika.Repositories
                                  "WHERE ID = @ID";
 
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuery,
-            ("@ID", patient.ID),
+            ("@ID", patient.id),
             ("@JMBG", patient.jmbg),
-            ("@Name", patient.Name),
-            ("@Surname", patient.Surname),
+            ("@Name", patient.name),
+            ("@Surname", patient.surname),
             ("@Birthdate", patient.birthdate.Date),
             ("@Gender", patient.gender),
-            ("@Password", patient.Password)
+            ("@Password", patient.password)
             );
 
             string modifyQuerry = "UPDATE [Patient] SET NotificationOffset = @notificationOffset WHERE UserID = @Id";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuerry, ("@notificationOffset", patient.NotificationOffset), ("@Id", patient.ID));
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuerry, ("@notificationOffset", patient.notificationOffset), ("@Id", patient.id));
         }
 
         //Logical deletion
@@ -97,10 +97,10 @@ namespace Klinika.Repositories
         {
             string deleteQuery = "UPDATE [User] SET IsDeleted = 1 WHERE ID = @ID";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuery, ("@ID", id));
-            if (EmailIDPairs != null)
+            if (emailIDPairs != null)
             {
                 
-                EmailIDPairs.Remove(IDPatientPairs[id].Email);
+                emailIDPairs.Remove(idPatientPairs[id].email);
             }
         }
 
@@ -114,20 +114,20 @@ namespace Klinika.Repositories
             int createdID = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
                 createQuery,
                 ("@JMBG", newPatient.jmbg),
-                ("@Name", newPatient.Name),
-                ("@Surname", newPatient.Surname),
+                ("@Name", newPatient.name),
+                ("@Surname", newPatient.surname),
                 ("@Birthdate", newPatient.birthdate.Date),
                 ("@Gender", newPatient.gender),
-                ("@Email", newPatient.Email),
-                ("@Password", newPatient.Password),
+                ("@Email", newPatient.email),
+                ("@Password", newPatient.password),
                 ("@UserType", 1)
                 );
             
             MedicalRecordRepository.Create(createdID);
 
-            if (EmailIDPairs != null)
+            if (emailIDPairs != null)
             {
-                EmailIDPairs.Add(newPatient.Email, createdID);
+                emailIDPairs.Add(newPatient.email, createdID);
             }
         }
         public static void Block(int id, string whoBlocked)

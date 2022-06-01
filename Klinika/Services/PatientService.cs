@@ -1,7 +1,7 @@
-﻿using System.Data;
-using Klinika.Repositories;
+﻿using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Utilities;
+using System.Data;
 
 namespace Klinika.Services
 {
@@ -9,11 +9,11 @@ namespace Klinika.Services
     {
         public static Patient? GetSingle(string email)
         {
-            return PatientRepository.IDPatientPairs[PatientRepository.EmailIDPairs[email]];
+            return PatientRepository.idPatientPairs[PatientRepository.emailIDPairs[email]];
         }
         public static User? GetSingle(int id)
         {
-            return UserRepository.GetInstance().Users.Where(x => x.ID == id).FirstOrDefault();
+            return UserRepository.GetInstance().Users.Where(x => x.id == id).FirstOrDefault();
         }
         public static DataTable GetAll()
         {
@@ -48,8 +48,8 @@ namespace Klinika.Services
 
         public static string GetFullName(int ID)
         {
-            var patient = UserRepository.GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
-            return $"{patient.Name} {patient.Surname}";
+            var patient = UserRepository.GetInstance().Users.Where(x => x.id == ID).FirstOrDefault();
+            return $"{patient.name} {patient.surname}";
         }
         public static Patient GetById(int id)
         {
@@ -58,22 +58,22 @@ namespace Klinika.Services
 
         public static bool IsBlocked(User patient)
         {
-            bool isBlocked = AppointmentRepository.GetScheduledAppointmentsCount(patient.ID) > 8 
-                || AppointmentService.GetModifyAppointmentsCount(patient.ID) > 5;
+            bool isBlocked = AppointmentRepository.GetScheduledAppointmentsCount(patient.id) > 8 
+                || AppointmentService.GetModifyAppointmentsCount(patient.id) > 5;
             if (!isBlocked) return false;
             Block(patient, "SYS");
             return true;
         }
         public static void Block(User patient, string whoBlocked)
         {
-            patient.IsBlocked = true;
-            PatientRepository.Block(patient.ID, whoBlocked);
+            patient.isBlocked = true;
+            PatientRepository.Block(patient.id, whoBlocked);
         }
         public static void Unblock(Patient patient)
         {
             patient.whoBlocked = "";
-            patient.IsBlocked = false;
-            PatientRepository.Unblock(patient.ID);
+            patient.isBlocked = false;
+            PatientRepository.Unblock(patient.id);
         }
     }
 }

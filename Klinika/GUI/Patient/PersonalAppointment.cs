@@ -1,7 +1,6 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
-using System.Data;
 using Klinika.Services;
 using Klinika.Utilities;
 
@@ -9,14 +8,14 @@ namespace Klinika.GUI.Patient
 {
     public partial class PersonalAppointment : Form
     {
-        private readonly PatientMain Parent;
-        private Appointment? Appointment;
-        private readonly bool IsDoctorSelected;
+        private readonly PatientMain parent;
+        private Appointment? appointment;
+        private readonly bool isDoctorSelected;
         private bool IsCreate
         {
             get
             {
-                return Appointment == null || IsDoctorSelected;
+                return appointment == null || isDoctorSelected;
             }
         }
 
@@ -24,13 +23,13 @@ namespace Klinika.GUI.Patient
         public PersonalAppointment(PatientMain parent, Appointment? appointment, bool isDoctorSelected = false)
         {
             InitializeComponent();
-            Parent = parent;
-            Appointment = appointment;
-            IsDoctorSelected = isDoctorSelected;
+            this.parent = parent;
+            this.appointment = appointment;
+            this.isDoctorSelected = isDoctorSelected;
         }
         private void LoadForm(object sender, EventArgs e)
         {
-            Parent.Enabled = false;
+            parent.Enabled = false;
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillFormDetails();
         }
@@ -42,29 +41,29 @@ namespace Klinika.GUI.Patient
         private void SetupAsCreate()
         {
             DoctorComboBox.Enabled = false;
-            DoctorComboBox.SelectedIndex = Parent.DoctorComboBox.SelectedIndex;
+            DoctorComboBox.SelectedIndex = parent.DoctorComboBox.SelectedIndex;
 
-            if (IsDoctorSelected)
+            if (isDoctorSelected)
             {
                 SetDoctorComboBoxIndex();
                 return; 
             }
 
             DatePicker.Enabled = false;
-            DatePicker.Value = Parent.AppointmentDatePicker.Value;
+            DatePicker.Value = parent.AppointmentDatePicker.Value;
         }
         private void SetupAsModify()
         {
             DatePicker.Enabled = true;
-            DatePicker.Value = Appointment.DateTime.Date;
+            DatePicker.Value = appointment.dateTime.Date;
             TimePicker.Enabled = true;
-            TimePicker.Value = Appointment.DateTime;
+            TimePicker.Value = appointment.dateTime;
             DoctorComboBox.Enabled = true;
             SetDoctorComboBoxIndex();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
         #endregion
 
@@ -79,11 +78,11 @@ namespace Klinika.GUI.Patient
         {
             if (!UIUtilities.Confirm("Are you sure you want to create this Appoinment ?")) return;
 
-            Appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
-            AppointmentRepository.GetInstance().Create(Appointment);
+            appointment = new Appointment(GetSelectedDoctorID(), parent.patient.id, GetSelectedDateTime());
+            AppointmentRepository.GetInstance().Create(appointment);
 
-            Parent.PersonalAppointmentsTable.Insert(Appointment);
-            if (!IsDoctorSelected) Parent.OccupiedAppointmentsTable.Insert(Appointment);
+            parent.PersonalAppointmentsTable.Insert(appointment);
+            if (!isDoctorSelected) parent.OccupiedAppointmentsTable.Insert(appointment);
 
             Close();
         }
@@ -91,23 +90,23 @@ namespace Klinika.GUI.Patient
         {
             if (!UIUtilities.Confirm("Are you sure you want to save the changes?")) return;
 
-            Appointment.DoctorID = GetSelectedDoctorID();
-            Appointment.DateTime = GetSelectedDateTime();
+            appointment.doctorID = GetSelectedDoctorID();
+            appointment.dateTime = GetSelectedDateTime();
 
-            bool needApproval = DateTime.Now.AddDays(2).Date >= Appointment.DateTime.Date;
+            bool needApproval = DateTime.Now.AddDays(2).Date >= appointment.dateTime.Date;
             if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
-            PatientRequestService.Send(!needApproval, Appointment, PatientRequest.Types.Modify);
+            PatientRequestService.Send(!needApproval, appointment, PatientRequest.Types.Modify);
             if (!needApproval)
             {
-                AppointmentService.Modify(Appointment);
-                Parent.PersonalAppointmentsTable.ModifySelected(Appointment);
+                AppointmentService.Modify(appointment);
+                parent.PersonalAppointmentsTable.ModifySelected(appointment);
             }
             Close();
         }  
         private int GetSelectedDoctorID()
         {
-            return (DoctorComboBox.SelectedItem as User).ID;
+            return (DoctorComboBox.SelectedItem as User).id;
         }
         private DateTime GetSelectedDateTime()
         {
@@ -118,12 +117,12 @@ namespace Klinika.GUI.Patient
         }
         private void SetDoctorComboBoxIndex()
         {
-            User selected = UserRepository.GetDoctor(Appointment.DoctorID);
+            User selected = UserRepository.GetDoctor(appointment.doctorID);
             DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(selected);
         }
         private bool ValidateForm()
         {
-            if (!Parent.IsDateValid(GetSelectedDateTime())) return false;
+            if (!parent.IsDateValid(GetSelectedDateTime())) return false;
             if (!DoctorService.IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID())) return true;
             MessageBoxUtilities.ShowErrorMessage("This time is occupied!");
             return false;

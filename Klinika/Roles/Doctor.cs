@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Models;
-using Klinika.Repositories;
-using Klinika.Data;
-using System.Data;
-using Klinika.Services;
+﻿using Klinika.Models;
 
 namespace Klinika.Roles
 {
@@ -16,12 +7,12 @@ namespace Klinika.Roles
         public enum Filters { BY_NAME, BY_SURNAME, BY_SPECIALIZATION, NONE }
 
         public Specialization specialization { get; }
-        public int OfficeID { get; }
+        public int officeID { get; }
 
         public Doctor(int id, string name, string surname, Specialization specialization, int officeID) : base(id, name, surname)
         {
             this.specialization = specialization;
-            OfficeID = officeID;
+            this.officeID = officeID;
         }
     }
 }

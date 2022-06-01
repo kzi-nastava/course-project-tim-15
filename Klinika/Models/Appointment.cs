@@ -1,90 +1,89 @@
-﻿using Klinika.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Klinika.Models
+﻿namespace Klinika.Models
 {
     public class Appointment
     {
         public enum Types { EXAMINATION = 'E', OPERATION = 'O' }
-        public int ID { get; set; }
-        public int DoctorID { get; set; }
-        public int PatientID { get; set; }
-        public DateTime DateTime { get; set; }
-        public int RoomID { get; set; }
-        public bool Completed { get; set; }
-        public char Type { get; set; }
-        public int Duration { get; set; }
-        public bool Urgent { get; set; }
-        public string? Description { get; set; }
-        public bool IsDeleted { get; set; }
+        public int id { get; set; }
+        public int doctorID { get; set; }
+        public int patientID { get; set; }
+        public DateTime dateTime { get; set; }
+        public int roomID { get; set; }
+        public bool completed { get; set; }
+        public char type { get; set; }
+        public int duration { get; set; }
+        public bool urgent { get; set; }
+        public string? description { get; set; }
+        public bool isDeleted { get; set; }
 
         public Appointment()
         {
-            DoctorID = -1;
-            DateTime = DateTime.Now;
-            IsDeleted = false;
-            Completed = false;
-            RoomID = 1;
+            doctorID = -1;
+            dateTime = DateTime.Now;
+            isDeleted = false;
+            completed = false;
+            roomID = 1;
         }
         public Appointment(DateTime dateTime)
         {
-            DateTime = dateTime;
-            IsDeleted = false;
-            Completed = false;
-            RoomID = 1;
+            this.dateTime = dateTime;
+            isDeleted = false;
+            completed = false;
+            roomID = 1;
         }
         public Appointment(int doctorID, int patientID, DateTime dateTime)
         {
-            ID = -1;
-            DoctorID = doctorID;
-            PatientID = patientID;
-            DateTime = dateTime;
-            RoomID = 1;
-            Completed = false;
-            Type = 'E';
-            Duration = 15;
-            Urgent = false;
-            Description = "";
-            IsDeleted = false;
+            id = -1;
+            this.doctorID = doctorID;
+            this.patientID = patientID;
+            this.dateTime = dateTime;
+            roomID = 1;
+            completed = false;
+            type = 'E';
+            duration = 15;
+            urgent = false;
+            description = "";
+            isDeleted = false;
         }
-        public Appointment (int id, int doctorID, int patientId, DateTime dateTime, int roomID,
+        public Appointment (int id, int doctorID, int patientID, DateTime dateTime, int roomID,
                             bool completed, char type, int duration, bool urgent, string? description,
                             bool isDeleted)
         {
-            ID = id;
-            DoctorID = doctorID;
-            PatientID = patientId;
-            DateTime = dateTime;
-            RoomID = roomID;
-            Completed = completed;
-            Type = type;
-            Duration = duration;
-            Urgent = urgent;
-            Description = description;
-            IsDeleted = isDeleted;
+            this.id = id;
+            this.doctorID = doctorID;
+            this.patientID = patientID;
+            this.dateTime = dateTime;
+            this.roomID = roomID;
+            this.completed = completed;
+            this.type = type;
+            this.duration = duration;
+            this.urgent = urgent;
+            this.description = description;
+            this.isDeleted = isDeleted;
         }
         public bool IsBetween(TimeSlot timeSlot, int offsetMin = 0)
         {
-            DateTime start = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
-            DateTime end = new DateTime(DateTime.Year, DateTime.Month, DateTime.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
-            if (DateTime.AddMinutes(offsetMin) >= start && DateTime.AddMinutes(offsetMin) <= end)
+            DateTime start = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
+            DateTime end = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
+            if (dateTime.AddMinutes(offsetMin) >= start && dateTime.AddMinutes(offsetMin) <= end)
             {
                 return true;
             }
             return false;
         }
-        public string GetType()
+        public string GetFullType()
         {
-            return AppointmentService.GetTypeFullName(Type);
+            switch (type)
+            {
+                case 'O':
+                    return "Operation";
+                default:
+                    return "Examination";
+            }
         }
 
         public bool IsExamination()
         {
-            return Type == (char)Types.EXAMINATION;
+            return type == (char)Types.EXAMINATION;
         }
 
     }

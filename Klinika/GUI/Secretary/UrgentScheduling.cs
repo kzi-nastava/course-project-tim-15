@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Klinika.Services;
+﻿using Klinika.Exceptions;
 using Klinika.Models;
-using Klinika.Exceptions;
+using Klinika.Services;
 using Klinika.Utilities;
 
 namespace Klinika.GUI.Secretary
@@ -74,11 +65,11 @@ namespace Klinika.GUI.Secretary
 
         private void ScheduleForSuitableDoctor(Roles.Doctor suitable,TimeSlot firstAvailable)
         {
-            doctorField.Text = suitable.ID + ". " + suitable.Name + " " + suitable.Surname;
+            doctorField.Text = suitable.id + ". " + suitable.name + " " + suitable.surname;
 
             appointmentSelection.Text = firstAvailable.from.ToString();
 
-            AppointmentService.Create(new Appointment(-1, suitable.ID,
+            AppointmentService.Create(new Appointment(-1, suitable.id,
                                         UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
                                         firstAvailable.from,
                                         1,
@@ -99,7 +90,7 @@ namespace Klinika.GUI.Secretary
             GetMostMovableAppointments(UIUtilities.ExtractID(specializationSelection.SelectedItem.ToString()));
             foreach(Rescheduling rescheduling in reschedulings)
             {
-                string appointmentStart = rescheduling.appointment.DateTime.ToString("yyyy-MM-dd HH:mm");
+                string appointmentStart = rescheduling.appointment.dateTime.ToString("yyyy-MM-dd HH:mm");
                 appointmentSelection.Items.Add(new EnhancedComboBoxItem(appointmentStart, rescheduling));
             }
         }
@@ -110,7 +101,7 @@ namespace Klinika.GUI.Secretary
 
             foreach (Specialization specialization in available)
             {
-                specializationSelection.Items.Add(specialization.ID + ". " + specialization.Name);
+                specializationSelection.Items.Add(specialization.id + ". " + specialization.name);
             }
         }
 
@@ -118,15 +109,15 @@ namespace Klinika.GUI.Secretary
         {
             Rescheduling selected = (Rescheduling)((appointmentSelection.SelectedItem as EnhancedComboBoxItem).value);
             Appointment toReschedule = selected.appointment;
-            DateTime previousAppointment = toReschedule.DateTime;
-            toReschedule.DateTime = selected.to;
+            DateTime previousAppointment = toReschedule.dateTime;
+            toReschedule.dateTime = selected.to;
             AppointmentService.Modify(toReschedule);
-            Appointment urgent = new Appointment(-1, toReschedule.DoctorID, UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
+            Appointment urgent = new Appointment(-1, toReschedule.doctorID, UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
                                                  previousAppointment,
                                                  1, false, 'E', 15, true,"", false);
             AppointmentService.Create(urgent);
             NotifyAll(toReschedule,previousAppointment);
-            Roles.Doctor doctor = DoctorService.GetById(toReschedule.DoctorID);
+            Roles.Doctor doctor = DoctorService.GetById(toReschedule.doctorID);
             doctorField.Text = doctor.GetIdAndFullName();
             appointmentSelection.Text = previousAppointment.ToString("yyyy-MM-dd HH:mm");
             MessageBoxUtilities.ShowSuccessMessage("Urgent appointment successfully scheduled!");
@@ -135,12 +126,12 @@ namespace Klinika.GUI.Secretary
 
         private void NotifyAll(Appointment selected,DateTime previousAppointment)
         {
-            string message = "Appointment number " + selected.ID + " modified! New time: " + selected.DateTime.ToString("yyyy-MM-dd HH:mm");
+            string message = "Appointment number " + selected.id + " modified! New time: " + selected.dateTime.ToString("yyyy-MM-dd HH:mm");
 
-            NotificationService.Send(new Notification(selected.PatientID, message));
-            NotificationService.Send(new Notification(selected.DoctorID, message));
+            NotificationService.Send(new Notification(selected.patientID, message));
+            NotificationService.Send(new Notification(selected.doctorID, message));
             message = "New urgent appointment on " + previousAppointment.ToString("yyyy-MM-dd HH:mm") + ".";
-            NotificationService.Send(new Notification(selected.DoctorID, message));
+            NotificationService.Send(new Notification(selected.doctorID, message));
         }
 
     }

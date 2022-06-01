@@ -1,10 +1,5 @@
 ﻿using Klinika.Data;
 using Klinika.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Klinika.Repositories
 {
@@ -28,13 +23,13 @@ namespace Klinika.Repositories
 
             var id = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
                 createQuery,
-                ("@DoctorID", vacationRequest.DoctorID),
-                ("@FromDate", vacationRequest.FromDate),
-                ("@ToDate", vacationRequest.ToDate),
-                ("@Reason", vacationRequest.Reason),
-                ("@Status", vacationRequest.Status),
-                ("@Emergency", vacationRequest.Emergency),
-                ("@DenyReason", vacationRequest.DenyReason));
+                ("@DoctorID", vacationRequest.doctorID),
+                ("@FromDate", vacationRequest.fromDate),
+                ("@ToDate", vacationRequest.toDate),
+                ("@Reason", vacationRequest.reason),
+                ("@Status", vacationRequest.status),
+                ("@Emergency", vacationRequest.emergency),
+                ("@DenyReason", vacationRequest.denyReason));
 
             return id;
         }

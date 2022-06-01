@@ -1,14 +1,8 @@
 ﻿using Klinika.Data;
 using Klinika.Models;
 using Klinika.Roles;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Services;
 
 namespace Klinika.Repositories
 {
@@ -39,8 +33,8 @@ namespace Klinika.Repositories
             {
                 specializations.Add(new Specialization
                 {
-                    ID = Convert.ToInt32(((object[])row)[0].ToString()),
-                    Name = ((object[])row)[1].ToString()
+                    id = Convert.ToInt32(((object[])row)[0].ToString()),
+                    name = ((object[])row)[1].ToString()
                 });
             }
 
@@ -72,7 +66,7 @@ namespace Klinika.Repositories
             var specializedDoctors = new List<User>();
             foreach (int doctorID in doctorIDs)
             {
-                var doctor = UserRepository.GetInstance().Users.FirstOrDefault(x => x.ID == doctorID);
+                var doctor = UserRepository.GetInstance().Users.FirstOrDefault(x => x.id == doctorID);
                 specializedDoctors.Add(doctor);
             }
 
@@ -89,8 +83,8 @@ namespace Klinika.Repositories
             var selection = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSpecializationQuerry);
             Specialization specialization = new Specialization
             {
-                ID = Convert.ToInt32(((object[])selection[0])[0]),
-                Name = ((object[])selection[0])[1].ToString()
+                id = Convert.ToInt32(((object[])selection[0])[0]),
+                name = ((object[])selection[0])[1].ToString()
             };
 
             return specialization;

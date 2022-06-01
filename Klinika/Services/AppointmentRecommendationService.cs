@@ -1,11 +1,6 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Klinika.Services
 {
@@ -23,8 +18,8 @@ namespace Klinika.Services
             List<Appointment> available = new List<Appointment>();
             foreach (User doctor in UserRepository.GetDoctors())
             {
-                if (doctor.ID == bestMatch.DoctorID) continue;
-                Appointment personalBest = FindClosestMatch(doctor.ID, timeSlot, deadlineDate);
+                if (doctor.id == bestMatch.doctorID) continue;
+                Appointment personalBest = FindClosestMatch(doctor.id, timeSlot, deadlineDate);
                 if (personalBest.IsBetween(timeSlot))
                 {
                     return new List<Appointment>() { personalBest };
@@ -51,8 +46,8 @@ namespace Klinika.Services
                 DateTime day = DateTime.Now.AddDays(i + 1);
                 if (!DoctorService.IsOccupied(doctorID, timeSlot, day))
                 {
-                    best.DoctorID = doctorID;
-                    best.DateTime = new DateTime(day.Year, DateTime.Now.Month, day.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
+                    best.doctorID = doctorID;
+                    best.dateTime = new DateTime(day.Year, DateTime.Now.Month, day.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
                     return best;
                 }
 
@@ -60,7 +55,7 @@ namespace Klinika.Services
 
                 if (bestMatch.IsBetween(timeSlot)) return bestMatch;
 
-                if (IsMoreAccurate(timeSlot.from, bestMatch.DateTime, best.DateTime))
+                if (IsMoreAccurate(timeSlot.from, bestMatch.dateTime, best.dateTime))
                 {
                     best = bestMatch;
                 }
@@ -75,20 +70,20 @@ namespace Klinika.Services
             {
                 for (int i = -15; i <= 15; i += 30)
                 {
-                    DateTime current = appointment.DateTime.AddMinutes(i);
+                    DateTime current = appointment.dateTime.AddMinutes(i);
                     if (appointment.IsBetween(timeSlot, i)
-                        && !DoctorService.IsOccupied(current, appointment.DoctorID))
+                        && !DoctorService.IsOccupied(current, appointment.doctorID))
                     {
-                        bestMatch.DoctorID = appointment.DoctorID;
-                        bestMatch.DateTime = current;
+                        bestMatch.doctorID = appointment.doctorID;
+                        bestMatch.dateTime = current;
                         return bestMatch;
                     }
 
-                    if (IsMoreAccurate(timeSlot.from, timeSlot.to, bestMatch.DateTime)
-                        && !DoctorService.IsOccupied(current, appointment.DoctorID))
+                    if (IsMoreAccurate(timeSlot.from, timeSlot.to, bestMatch.dateTime)
+                        && !DoctorService.IsOccupied(current, appointment.doctorID))
                     {
-                        bestMatch.DoctorID = appointment.DoctorID;
-                        bestMatch.DateTime = current;
+                        bestMatch.doctorID = appointment.doctorID;
+                        bestMatch.dateTime = current;
                     }
                 }
             }
@@ -99,8 +94,8 @@ namespace Klinika.Services
             DateTime start = new DateTime(day.Year, day.Month, day.Day, 0, 0, 0);
             DateTime end = new DateTime(day.AddDays(1).Year, day.AddDays(1).Month, day.AddDays(1).Day, 0, 0, 0);
 
-            return AppointmentRepository.GetInstance().Appointments.Where(
-                x => x.DoctorID == doctorID && x.DateTime >= start && x.DateTime < end && !x.IsDeleted).ToList();
+            return AppointmentRepository.GetInstance().appointments.Where(
+                x => x.doctorID == doctorID && x.dateTime >= start && x.dateTime < end && !x.isDeleted).ToList();
         }
         private static bool IsMoreAccurate(DateTime referentDate, DateTime first, DateTime second)
         {
@@ -119,7 +114,7 @@ namespace Klinika.Services
             Appointment best = available[0];
             for (int i = 1; i < available.Count; i++)
             {
-                if (IsMoreAccurate(timeSlot.from, available[i].DateTime, best.DateTime))
+                if (IsMoreAccurate(timeSlot.from, available[i].dateTime, best.dateTime))
                 {
                     best = available[i];
                 }

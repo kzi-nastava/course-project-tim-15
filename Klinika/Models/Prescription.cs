@@ -1,29 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Klinika.Models
+﻿namespace Klinika.Models
 {
     public class Prescription
     {
-        public int PatientID { get; set; }
-        public int DrugID { get; set; }
-        public DateTime DateStarted { get; set; }
-        public DateTime DateEnded { get; set; }
-        public int Interval { get; set; }
-        public string? Comment { get; set; }
+        public int patientID { get; set; }
+        public int drugID { get; set; }
+        public DateTime dateStarted { get; set; }
+        public DateTime dateEnded { get; set; }
+        public int interval { get; set; }
+        public string? comment { get; set; }
 
         public Prescription() { }
         public Prescription(int patientID, int drugID, TimeSlot timeSlot, int interval, string comment)
         {
-            PatientID = patientID;
-            DrugID = drugID;
-            DateStarted = timeSlot.from;
-            DateEnded = timeSlot.to;
-            Interval = interval;
-            Comment = comment;
+            this.patientID = patientID;
+            this.drugID = drugID;
+            dateStarted = timeSlot.from;
+            dateEnded = timeSlot.to;
+            this.interval = interval;
+            this.comment = comment;
         }
     }
 }

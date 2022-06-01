@@ -15,7 +15,7 @@ namespace Klinika.Services
             var id = QuestionnaireRepository.Create(questionnaire);
             foreach (var answer in answers)
             {
-                answer.QuestionnaireID = id;
+                answer.questionnaireID = id;
                 QuestionnaireRepository.CreateAnswer(answer);
             }
         }

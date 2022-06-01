@@ -1,11 +1,6 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Klinika.Services
 {
@@ -13,13 +8,13 @@ namespace Klinika.Services
     {
         public static void Send(bool isApproved, Appointment appointment, PatientRequest.Types type)
         {
-            PatientRequest patientRequest = new PatientRequest(appointment.PatientID, appointment.ID,
+            PatientRequest patientRequest = new PatientRequest(appointment.patientID, appointment.id,
                         type, GenerateDescription(appointment), isApproved);
             PatientRequestRepository.Create(patientRequest);
         }
         public static PatientModificationRequest GetModificationRequest(int requestId)
         {
-            return PatientRequestRepository.IdRequestPairs[requestId];
+            return PatientRequestRepository.idRequestPairs[requestId];
         }
         public static DataTable GetAll()
         {
@@ -36,8 +31,8 @@ namespace Klinika.Services
 
         private static string GenerateDescription(Appointment appointment)
         {
-            return "DateTime=" + appointment.DateTime.ToString("yyyy-MM-dd HH:mm:ss.000")
-                + ";DoctorID=" + appointment.DoctorID.ToString();
+            return "DateTime=" + appointment.dateTime.ToString("yyyy-MM-dd HH:mm:ss.000")
+                + ";DoctorID=" + appointment.doctorID.ToString();
         }
     }
 }

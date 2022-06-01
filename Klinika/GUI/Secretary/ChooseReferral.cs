@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Klinika.Services;
+﻿using Klinika.Exceptions;
 using Klinika.Models;
-using Klinika.Exceptions;
+using Klinika.Services;
 using Klinika.Utilities;
 
 namespace Klinika.GUI.Secretary
