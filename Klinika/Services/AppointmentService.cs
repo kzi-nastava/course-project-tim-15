@@ -29,7 +29,7 @@ namespace Klinika.Services
         }
         public static Appointment GetById(int id)
         {
-            return AppointmentRepository.GetInstance().Appointments.Where(x => x.id == id).FirstOrDefault();
+            return AppointmentRepository.GetInstance().appointments.Where(x => x.id == id).FirstOrDefault();
         }
         public static int GetModifyAppointmentsCount(int patientID)
         {

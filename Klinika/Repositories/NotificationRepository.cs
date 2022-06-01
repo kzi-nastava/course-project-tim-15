@@ -9,12 +9,12 @@ namespace Klinika.Repositories
         public static List<Notification> Get(Patient patient)
         {
             var notifications = new List<Notification>();
-            DateTime time = DateTime.Now.AddMinutes(patient.NotificationOffset);
+            DateTime time = DateTime.Now.AddMinutes(patient.notificationOffset);
             string getQuerry = "SELECT * " +
                 "FROM [Notification] " +
                 "WHERE [Notification].UserID = @userID AND [Notification].DateTime <= @dateTime AND [Notification].IsNotified = 0";
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuerry,
-                                            ("@userId", patient.ID),
+                                            ("@userId", patient.id),
                                             ("@dateTime", time));
 
             foreach (object row in resoult)

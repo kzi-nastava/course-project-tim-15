@@ -14,7 +14,7 @@ namespace Klinika.Services
         }
         public static PatientModificationRequest GetModificationRequest(int requestId)
         {
-            return PatientRequestRepository.IdRequestPairs[requestId];
+            return PatientRequestRepository.idRequestPairs[requestId];
         }
         public static DataTable GetAll()
         {

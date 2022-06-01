@@ -25,7 +25,7 @@ namespace Klinika.Utilities
 
         public static void FillPatientSelectionList(ComboBox patientSelection)
         {
-            foreach (KeyValuePair<int, Patient> pair in PatientRepository.IDPatientPairs)
+            foreach (KeyValuePair<int, Patient> pair in PatientRepository.idPatientPairs)
             {
                 patientSelection.Items.Add(pair.Value.GetIdAndFullName());
             }

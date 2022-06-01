@@ -27,7 +27,7 @@ namespace Klinika.Services
             foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
             {
                 if (doctor.specialization.id != specializationId) continue;
-                if (!IsOccupied(from, doctor.ID)) return doctor;
+                if (!IsOccupied(from, doctor.id)) return doctor;
             }
             return null;
         }
@@ -37,7 +37,7 @@ namespace Klinika.Services
             {
                 if (doctor.specialization.id == specializationId)
                 {
-                    TimeSlot? firstAvailable = ScheduleService.GetFirstSlotAvailableUnderTwoHours(doctor.ID);
+                    TimeSlot? firstAvailable = ScheduleService.GetFirstSlotAvailableUnderTwoHours(doctor.id);
                     if (firstAvailable != null) return (doctor,firstAvailable);
                 }
             }
@@ -62,16 +62,16 @@ namespace Klinika.Services
         }
         public static Doctor GetById(int id)
         {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.ID == id).FirstOrDefault();
+            return DoctorRepository.GetInstance().doctors.Where(x => x.id == id).FirstOrDefault();
         }
 
         public static List<Doctor> SearchByName(string keyword)
         {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.Name.ToUpper().Contains(keyword.ToUpper())).ToList();
+            return DoctorRepository.GetInstance().doctors.Where(x => x.name.ToUpper().Contains(keyword.ToUpper())).ToList();
         }
         public static List<Doctor> SearchBySurname(string keyword)
         {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.Surname.ToUpper().Contains(keyword.ToUpper())).ToList();
+            return DoctorRepository.GetInstance().doctors.Where(x => x.surname.ToUpper().Contains(keyword.ToUpper())).ToList();
         }
         public static List<Doctor> SearchBySpecialization(int id)
         {
@@ -90,7 +90,7 @@ namespace Klinika.Services
         }
         public static bool IsOccupied(int doctorID, TimeSlot slot, int forAppointmentID = -1)
         {
-            List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().Appointments.Where(
+            List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().appointments.Where(
                 x => x.doctorID == doctorID && slot.DoesOverlap(new TimeSlot(x.dateTime, x.duration)) && !x.isDeleted && x.id != forAppointmentID).ToList();
             bool onVacation = VacationRequestService.IsOnVacation(slot.from, doctorID);
             if (forSelectedTimeSpan.Count == 0) return false || onVacation;

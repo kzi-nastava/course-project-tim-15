@@ -8,25 +8,25 @@ namespace Klinika.GUI.Doctor
 {
     public partial class MedicalRecord : Form
     {
-        internal readonly DoctorMain Parent;
-        public Appointment Appointment;
-        public Models.MedicalRecord Record;
+        internal readonly DoctorMain parent;
+        public Appointment appointment;
+        public Models.MedicalRecord record;
         #region Form
         public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
         {
             InitializeComponent();
-            Parent = parent;
-            Appointment = appointment;
-            Record = MedicalRecordService.Get(appointment.patientID);
+            this.parent = parent;
+            this.appointment = appointment;
+            record = MedicalRecordService.Get(appointment.patientID);
             if (!isPreview) AnamnesisGroup.Visible = true;
         }
         private void LoadForm(object sender, EventArgs e)
         {
-            Parent.Enabled = false;
+            parent.Enabled = false;
             FillPatientMainData();
-            FillAnamnesesTable(AnamnesesTable, Record.anamneses);
-            FillDiseasesTable(DiseasesTable, Record.diseases);
-            FillAllergensTable(AllergensTable, Record.allergens);
+            FillAnamnesesTable(AnamnesesTable, record.anamneses);
+            FillDiseasesTable(DiseasesTable, record.diseases);
+            FillAllergensTable(AllergensTable, record.allergens);
             UIUtilities.FillSpecializationComboBox(SpecializationsComboBox);
         }
         public static void FillAnamnesesTable(DataGridView table, List<Anamnesis> anamneses)
@@ -95,16 +95,16 @@ namespace Klinika.GUI.Doctor
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
         #endregion
         #region Record
         private void FillPatientMainData()
         {
-            PatientNameLabel.Text = PatientService.GetFullName(Record.id);
-            BloodTypeLabel.Text = Record.bloodType;
-            HeightLabel.Text = $"{Record.height}cm";
-            WeightLabel.Text = $"{Record.weight}kg";
+            PatientNameLabel.Text = PatientService.GetFullName(record.id);
+            BloodTypeLabel.Text = record.bloodType;
+            HeightLabel.Text = $"{record.height}cm";
+            WeightLabel.Text = $"{record.weight}kg";
         }
         private void TableSelectionChanged(object sender, EventArgs e)
         {
@@ -122,7 +122,7 @@ namespace Klinika.GUI.Doctor
         {
             if (!ValidateAnamnesis(skipValidation)) return false;
 
-            var anamnesis = new Anamnesis(Appointment.id, DescriptionTextBox.Text,
+            var anamnesis = new Anamnesis(appointment.id, DescriptionTextBox.Text,
                 SymptomsTextBox.Text, ConclusionTextBox.Text);
 
             AnamnesisService.Create(anamnesis);
@@ -132,7 +132,7 @@ namespace Klinika.GUI.Doctor
         {
             if (!IsAppointmentCompleted()) return;
             Close();
-            new DynamicEquipment(Parent, Appointment).Show();
+            new DynamicEquipment(parent, appointment).Show();
         }
         #endregion
         #region Refer
@@ -158,8 +158,8 @@ namespace Klinika.GUI.Doctor
             if (!ReferCheckBox.Checked) return false;
 
             int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).id;
-            int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).ID;
-            ReferralService.Create(Appointment.patientID, specializationID, doctorID);
+            int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).id;
+            ReferralService.Create(appointment.patientID, specializationID, doctorID);
 
             MessageBoxUtilities.ShowInformationMessage("Referal made successfully!");
             return true;

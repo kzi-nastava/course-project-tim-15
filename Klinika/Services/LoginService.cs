@@ -20,13 +20,13 @@ namespace Klinika.Services
             }
             User loggingUser = UserRepository.GetInstance().users[email];
 
-            switch (loggingUser.Role)
+            switch (loggingUser.role)
             {
                 case "Secretary":
                     new GUI.Secretary.mainWindow().Show();
                     break;
                 case "Doctor":
-                    new GUI.Doctor.DoctorMain(loggingUser.ID).Show();
+                    new GUI.Doctor.DoctorMain(loggingUser.id).Show();
                     break;
                 case "Manager":
                     new GUI.Manager.Main().Show();
@@ -39,7 +39,7 @@ namespace Klinika.Services
                     }
                     else
                     {
-                        new GUI.Patient.PatientMain(loggingUser.ID).Show();
+                        new GUI.Patient.PatientMain(loggingUser.id).Show();
                         break;
                     }
             }

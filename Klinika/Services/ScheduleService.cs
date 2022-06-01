@@ -25,7 +25,7 @@ namespace Klinika.Services
             {
                 if (doctor.specialization.id != specializationId) continue;
 
-                List<Appointment> scheduled = AppointmentRepository.GetAll(doctor.ID, User.RoleType.DOCTOR);
+                List<Appointment> scheduled = AppointmentRepository.GetAll(doctor.id, User.RoleType.DOCTOR);
                 List<TimeSlot> scheduledSlots = new List<TimeSlot>();
                 foreach (Appointment appointment in scheduled)
                 {

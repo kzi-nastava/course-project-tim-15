@@ -66,7 +66,7 @@ namespace Klinika.Repositories
             var specializedDoctors = new List<User>();
             foreach (int doctorID in doctorIDs)
             {
-                var doctor = UserRepository.GetInstance().Users.FirstOrDefault(x => x.ID == doctorID);
+                var doctor = UserRepository.GetInstance().Users.FirstOrDefault(x => x.id == doctorID);
                 specializedDoctors.Add(doctor);
             }
 

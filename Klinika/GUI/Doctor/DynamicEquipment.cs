@@ -6,23 +6,23 @@ namespace Klinika.GUI.Doctor
 {
     public partial class DynamicEquipment : Form
     {
-        internal readonly DoctorMain Parent;
-        private readonly Appointment Appointment;
+        internal readonly DoctorMain parent;
+        private readonly Appointment appointment;
         public DynamicEquipment(DoctorMain parent, Appointment appointment)
         {
             InitializeComponent();
-            Parent = parent;
-            Appointment = appointment;
+            this.parent = parent;
+            this.appointment = appointment;
         }
         private void DynamicEquipmentLoad(object sender, EventArgs e)
         {
-            Parent.Enabled = false;
-            EquipmentTable.Fill(EquipmentService.GetDynamicEquipment(Appointment.roomID));
+            parent.Enabled = false;
+            EquipmentTable.Fill(EquipmentService.GetDynamicEquipment(appointment.roomID));
         }
         private void DynamicEquipmentFormClosing(object sender, FormClosingEventArgs e)
         {
             CompleteAppointment();
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
         private void EquipmentTableCellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -39,13 +39,13 @@ namespace Klinika.GUI.Doctor
         private void FinishButtonClick(object sender, EventArgs e)
         {
             if(!UIUtilities.Confirm("Are you sure you entered correct data and want to save it?")) return;
-            EquipmentService.UpdateRoomsDynamicEquipment(Appointment.roomID, EquipmentTable.GetAll());
+            EquipmentService.UpdateRoomsDynamicEquipment(appointment.roomID, EquipmentTable.GetAll());
             Close();
         }
         private void CompleteAppointment()
         {
-            AppointmentService.Complete(Appointment);
-            Parent.ScheduleTable.ModifySelected(Appointment);
+            AppointmentService.Complete(appointment);
+            parent.ScheduleTable.ModifySelected(appointment);
         }
 
     }

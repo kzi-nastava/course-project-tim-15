@@ -8,25 +8,25 @@ namespace Klinika.GUI.Patient
 {
     public partial class AppointmentRecommendation : Form
     {
-        private readonly PatientMain Parent;
+        private readonly PatientMain parent;
 
         #region Form
         public AppointmentRecommendation(PatientMain parent)
         {
             InitializeComponent();
-            Parent = parent;
+            this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
         {
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillRecommendedAppointmentTable();
-            Parent.Enabled = false;
+            parent.Enabled = false;
             ScheduleButton.Enabled = false;
             DoctorRadioButton.Checked = true;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
         private void CancelClick(object sender, EventArgs e)
         {
@@ -54,7 +54,7 @@ namespace Klinika.GUI.Patient
 
         private void ShowRecommended()
         {
-            int doctorID = (DoctorComboBox.SelectedItem as User).ID;
+            int doctorID = (DoctorComboBox.SelectedItem as User).id;
             char priority = DoctorRadioButton.Checked ? 'D' : 'T';
             TimeSlot timeSlot = new TimeSlot(FromTimePicker.Value, ToTimePicker.Value);
 
@@ -100,9 +100,9 @@ namespace Klinika.GUI.Patient
         }
         private void Create()
         {
-            Appointment appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
+            Appointment appointment = new Appointment(GetSelectedDoctorID(), parent.patient.id, GetSelectedDateTime());
             AppointmentService.Create(appointment);
-            Parent.PersonalAppointmentsTable.Insert(appointment);
+            parent.PersonalAppointmentsTable.Insert(appointment);
         }
     }
 }

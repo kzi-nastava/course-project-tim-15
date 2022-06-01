@@ -149,12 +149,12 @@ namespace Klinika.GUI.Secretary
         public void ModifyRowOfPatientTable(ref DataRow row, Roles.Patient patient)
         {
             row["JMBG"] = patient.jmbg;
-            row["Name"] = patient.Name;
-            row["Surname"] = patient.Surname;
+            row["Name"] = patient.name;
+            row["Surname"] = patient.surname;
             row["Birthdate"] = patient.birthdate.Date;
             row["Gender"] = patient.gender;
-            row["Email"] = patient.Email;
-            row["Blocked"] = patient.IsBlocked;
+            row["Email"] = patient.email;
+            row["Blocked"] = patient.isBlocked;
             row["BlockedBy"] = patient.whoBlocked;
         }
 

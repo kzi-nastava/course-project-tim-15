@@ -1,21 +1,14 @@
 ﻿using Klinika.Models;
-using Klinika.Roles;
-using Klinika.Services;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Klinika.Forms
 {
     public class VacationRequestsDataGridView : DataGridView
     {
-        private List<VacationRequest> VacationRequests;
+        private List<VacationRequest> vacationRequests;
         public VacationRequestsDataGridView() : base()
         {
-            VacationRequests = new List<VacationRequest>();
+            vacationRequests = new List<VacationRequest>();
         }
         public void Fill(List<VacationRequest> vacationRequests)
         {
@@ -35,7 +28,7 @@ namespace Klinika.Forms
             Columns["Status"].Width = 70;
             Columns["Urgent"].Width = 65;
 
-            VacationRequests = new List<VacationRequest>();
+            this.vacationRequests = new List<VacationRequest>();
             foreach (VacationRequest vacationRequest in vacationRequests) Insert(vacationRequest);
 
             ClearSelection();
@@ -52,16 +45,16 @@ namespace Klinika.Forms
             newRow["Urgent"] = vacationRequest.emergency;
             newRow["Deny Reason"] = vacationRequest.denyReason;
             dt.Rows.Add(newRow);
-            VacationRequests.Add(vacationRequest);
+            vacationRequests.Add(vacationRequest);
         }
-        public List<VacationRequest> GetAll() { return VacationRequests; }
+        public List<VacationRequest> GetAll() { return vacationRequests; }
         public int GetSelectedID()
         {
             return Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
         }
         public VacationRequest GetSelected()
         {
-            return VacationRequests.Where(x => x.id == GetSelectedID()).First();
+            return vacationRequests.Where(x => x.id == GetSelectedID()).First();
         }
         public int DeleteSelected()
         {
@@ -80,8 +73,8 @@ namespace Klinika.Forms
                 vacationRequest.emergency,
                 vacationRequest.denyReason);
 
-            VacationRequests.Remove(VacationRequests.Where(x => x.id == vacationRequest.id).FirstOrDefault());
-            VacationRequests.Add(vacationRequest);
+            vacationRequests.Remove(vacationRequests.Where(x => x.id == vacationRequest.id).FirstOrDefault());
+            vacationRequests.Add(vacationRequest);
         }
     }
 }

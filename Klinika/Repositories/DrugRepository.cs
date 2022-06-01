@@ -5,7 +5,7 @@ namespace Klinika.Repositories
 {
     public class DrugRepository
     {
-        public List<Drug> Drugs { get; }
+        public List<Drug> drugs { get; }
 
         private static DrugRepository? instance;
         public static DrugRepository Instance
@@ -21,7 +21,7 @@ namespace Klinika.Repositories
         }
         public DrugRepository()
         {
-            Drugs = new List<Drug>();
+            drugs = new List<Drug>();
             GetAll();
         }
 
@@ -42,19 +42,19 @@ namespace Klinika.Repositories
                     name = ((object[])row)[1].ToString(),
                     approved = ((object[])row)[2].ToString()
                 };
-                Drugs.Add(drug);
+                drugs.Add(drug);
             }
         }
         private void GetIngredients()
         {
-            foreach (Drug drug in Drugs)
+            foreach (Drug drug in drugs)
             {
                 string getDrugsIngredientsQuery = $"SELECT IngredientID FROM [DrugIngredient] WHERE DrugID = {drug.id}";
                 var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDrugsIngredientsQuery);
                 foreach (object row in result)
                 {
                     var IngredientID = Convert.ToInt32(((object[])row)[0].ToString());
-                    var ingredient =  IngredientRepository.Instance.Ingredients.Where(x => x.id == IngredientID).FirstOrDefault();
+                    var ingredient =  IngredientRepository.Instance.ingredients.Where(x => x.id == IngredientID).FirstOrDefault();
                     if (ingredient != null) drug.ingredients.Add(ingredient);
                 }
             }
@@ -62,11 +62,11 @@ namespace Klinika.Repositories
 
         public List<Drug> GetApproved()
         {
-            return Drugs.Where(x => x.approved == "A").ToList();
+            return drugs.Where(x => x.approved == "A").ToList();
         }
         public List<Drug> GetUnapproved()
         {
-            return Drugs.Where(x => x.approved == "C").ToList();
+            return drugs.Where(x => x.approved == "C").ToList();
         }
 
         public static void CreateUnapproved(int id, string description)
@@ -89,7 +89,7 @@ namespace Klinika.Repositories
                 ("@Type", type),
                 ("@ID", id));
 
-            Drugs.Where(x => x.id == id).First().approved = type.ToString();
+            drugs.Where(x => x.id == id).First().approved = type.ToString();
         }
     }
 }

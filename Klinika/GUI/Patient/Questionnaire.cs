@@ -8,30 +8,30 @@ namespace Klinika.GUI.Patient
 {
     public partial class Questionnaire : Form
     {
-        private readonly PatientMain Parent;
-        private readonly Question.Types Type;
-        private MQuestionnaire This;
-        private int AppointmentID;
-        private int TargetID;
+        private readonly PatientMain parent;
+        private readonly Question.Types type;
+        private MQuestionnaire questionnaire;
+        private int appointmentID;
+        private int targetID;
 
         #region Form
         public Questionnaire(PatientMain parent, Question.Types type, int appointmentID = -1, int targetID = -1)
         {
             InitializeComponent();
-            Parent = parent;
-            Type = type;
-            AppointmentID = appointmentID;
-            TargetID = targetID;
+            this.parent = parent;
+            this.type = type;
+            this.appointmentID = appointmentID;
+            this.targetID = targetID;
          }
         private void LoadForm(object sender, EventArgs e)
         {
-            Parent.Enabled = false;
-            FillQuestionsTable(QuestionnaireService.GetQuestions(Type));
+            parent.Enabled = false;
+            FillQuestionsTable(QuestionnaireService.GetQuestions(type));
             SetGradeButton.Enabled = false;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
         #endregion
 
@@ -66,14 +66,14 @@ namespace Klinika.GUI.Patient
                 answers.Add(new Answer(questionID, grade));
             }
             string comment = CommentTextBox.Text;
-            This = new MQuestionnaire(Parent.Patient.ID, comment, AppointmentID, TargetID);
+            questionnaire = new MQuestionnaire(parent.patient.id, comment, appointmentID, targetID);
             return answers;
         }
         private void SendButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to send this Questionnaire?")) return;
             var result = ColectData();
-            QuestionnaireService.Send(This, result);
+            QuestionnaireService.Send(questionnaire, result);
             Close();
         }
         private void SetGradeButtonClick(object sender, EventArgs e)

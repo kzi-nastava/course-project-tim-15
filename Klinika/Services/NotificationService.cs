@@ -29,7 +29,7 @@ namespace Klinika.Services
         }
         private static string GenerateMessage (Prescription prescription)
         {
-            Drug drug = DrugRepository.Instance.Drugs.Where(x => x.id == prescription.drugID).FirstOrDefault();
+            Drug drug = DrugRepository.Instance.drugs.Where(x => x.id == prescription.drugID).FirstOrDefault();
             return "Drug: " + drug.name + "\nComment: " + prescription.comment;
         }
         public static void MarkAsRead(int id)

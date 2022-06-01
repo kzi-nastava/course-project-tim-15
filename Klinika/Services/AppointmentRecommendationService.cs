@@ -18,8 +18,8 @@ namespace Klinika.Services
             List<Appointment> available = new List<Appointment>();
             foreach (User doctor in UserRepository.GetDoctors())
             {
-                if (doctor.ID == bestMatch.doctorID) continue;
-                Appointment personalBest = FindClosestMatch(doctor.ID, timeSlot, deadlineDate);
+                if (doctor.id == bestMatch.doctorID) continue;
+                Appointment personalBest = FindClosestMatch(doctor.id, timeSlot, deadlineDate);
                 if (personalBest.IsBetween(timeSlot))
                 {
                     return new List<Appointment>() { personalBest };
@@ -94,7 +94,7 @@ namespace Klinika.Services
             DateTime start = new DateTime(day.Year, day.Month, day.Day, 0, 0, 0);
             DateTime end = new DateTime(day.AddDays(1).Year, day.AddDays(1).Month, day.AddDays(1).Day, 0, 0, 0);
 
-            return AppointmentRepository.GetInstance().Appointments.Where(
+            return AppointmentRepository.GetInstance().appointments.Where(
                 x => x.doctorID == doctorID && x.dateTime >= start && x.dateTime < end && !x.isDeleted).ToList();
         }
         private static bool IsMoreAccurate(DateTime referentDate, DateTime first, DateTime second)

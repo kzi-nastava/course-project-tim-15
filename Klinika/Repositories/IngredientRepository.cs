@@ -5,7 +5,7 @@ namespace Klinika.Repositories
 {
     public class IngredientRepository
     {
-        public List<Ingredient> Ingredients { get; }
+        public List<Ingredient> ingredients { get; }
 
         private static IngredientRepository? instance;
         public static IngredientRepository Instance
@@ -21,7 +21,7 @@ namespace Klinika.Repositories
         }
         private IngredientRepository()
         {
-            Ingredients = GetAll();
+            ingredients = GetAll();
         }
         private List<Ingredient> GetAll()
         {

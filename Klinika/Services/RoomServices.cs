@@ -16,7 +16,7 @@ namespace Klinika.Services
         }
         private static bool IsOccupied(int roomID, TimeSlot slot, int forAppointmentID = -1)
         {
-            List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().Appointments.Where(
+            List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().appointments.Where(
                 x => x.roomID == roomID && slot.DoesOverlap(new TimeSlot(x.dateTime, x.duration)) && !x.isDeleted && x.id != forAppointmentID).ToList();
 
             if (forSelectedTimeSpan.Count == 0) return false;

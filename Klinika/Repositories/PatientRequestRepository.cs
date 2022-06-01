@@ -6,11 +6,11 @@ namespace Klinika.Repositories
 {
     internal class PatientRequestRepository : Repository
     {
-        public static Dictionary<int, PatientModificationRequest>? IdRequestPairs { get; set; }
+        public static Dictionary<int, PatientModificationRequest>? idRequestPairs { get; set; }
 
         public static DataTable? GetAll()
         {
-            IdRequestPairs = new Dictionary<int, PatientModificationRequest>();
+            idRequestPairs = new Dictionary<int, PatientModificationRequest>();
             string getAllQuery = "SELECT [PatientRequest].ID, [User].Name + ' ' + [User].Surname AS Patient, " +
                                  "[MedicalAction].ID AS ExaminationID, [MedicalAction].DoctorID, " +
                                  "[MedicalAction].DateTime, " +
@@ -35,7 +35,7 @@ namespace Klinika.Repositories
                                                                     Convert.ToInt32(request["DoctorID"]),
                                                                     DateTime.Parse(request["DateTime"].ToString()),
                                                                     request["Description"].ToString());
-                        IdRequestPairs.Add(Convert.ToInt32(request["ID"]), modification);
+                        idRequestPairs.Add(Convert.ToInt32(request["ID"]), modification);
                     }
                 }
             }

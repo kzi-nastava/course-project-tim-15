@@ -5,14 +5,14 @@ namespace Klinika.Forms
 {
     public class DrugsDataGridView : DataGridView
     {
-        private List<Drug> Drugs;
+        private List<Drug> drugs;
         public DrugsDataGridView() : base()
         {
-            Drugs = new List<Drug>();
+            drugs = new List<Drug>();
         }
         public void Fill(List<Drug> drugs)
         {
-            Drugs = drugs;
+            this.drugs = drugs;
 
             DataTable drugsData = new DataTable();
             drugsData.Columns.Add("ID");
@@ -43,7 +43,7 @@ namespace Klinika.Forms
         {
             int selectedID = GetSelectedId();
             if(selectedID == -1) return null;
-            return Drugs.Where(x => x.id == selectedID).FirstOrDefault();
+            return drugs.Where(x => x.id == selectedID).FirstOrDefault();
         }
     }
 }

@@ -65,11 +65,11 @@ namespace Klinika.GUI.Secretary
 
         private void ScheduleForSuitableDoctor(Roles.Doctor suitable,TimeSlot firstAvailable)
         {
-            doctorField.Text = suitable.ID + ". " + suitable.Name + " " + suitable.Surname;
+            doctorField.Text = suitable.id + ". " + suitable.name + " " + suitable.surname;
 
             appointmentSelection.Text = firstAvailable.from.ToString();
 
-            AppointmentService.Create(new Appointment(-1, suitable.ID,
+            AppointmentService.Create(new Appointment(-1, suitable.id,
                                         UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
                                         firstAvailable.from,
                                         1,

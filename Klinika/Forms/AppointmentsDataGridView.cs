@@ -1,35 +1,30 @@
 ﻿using Klinika.Models;
 using Klinika.Roles;
 using Klinika.Services;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Klinika.Forms
 {
     public class AppointmentsDataGridView : DataGridView
     {
-        private List<Appointment> Appointments;
-        private User.RoleType ViewerRole;
-        private string SearchedRole;
+        private List<Appointment> appointments;
+        private User.RoleType viewerRole;
+        private string searchedRole;
         public AppointmentsDataGridView(User.RoleType viewerRole) : base()
         {
-            Appointments = new List<Appointment>();
+            appointments = new List<Appointment>();
             SetViewerRole(viewerRole);
         }
         private void SetViewerRole(User.RoleType viewerRole)
         {
-            ViewerRole = viewerRole;
-            SearchedRole = viewerRole == User.RoleType.DOCTOR ? "Patient" : "Doctor";
+            this.viewerRole = viewerRole;
+            searchedRole = viewerRole == User.RoleType.DOCTOR ? "Patient" : "Doctor";
         }
         public void Fill(List<Appointment> appointments)
         {
             DataTable appointmetnsData = new DataTable();
             appointmetnsData.Columns.Add("ID");
-            appointmetnsData.Columns.Add($"{SearchedRole} Full Name");
+            appointmetnsData.Columns.Add($"{searchedRole} Full Name");
             appointmetnsData.Columns.Add("Date & Time");
             appointmetnsData.Columns.Add("Type");
             appointmetnsData.Columns.Add("Room");
@@ -44,7 +39,7 @@ namespace Klinika.Forms
             Columns["Urgent"].Width = 80;
             Columns["Completed"].Width = 90;
 
-            Appointments = new List<Appointment>();
+            this.appointments = new List<Appointment>();
             foreach (Appointment appointment in appointments) Insert(appointment);
 
             ClearSelection();
@@ -54,7 +49,7 @@ namespace Klinika.Forms
             DataTable? dt = DataSource as DataTable;
             DataRow newRow = dt.NewRow();
             newRow["ID"] = appointment.id;
-            newRow[$"{SearchedRole} Full Name"] = GetFullName(appointment);
+            newRow[$"{searchedRole} Full Name"] = GetFullName(appointment);
             newRow["Date & Time"] = appointment.dateTime;
             newRow["Type"] = appointment.GetFullType();
             newRow["Room"] = RoomServices.GetSingle(appointment.roomID).ToString();
@@ -62,7 +57,7 @@ namespace Klinika.Forms
             newRow["Urgent"] = appointment.urgent;
             newRow["Completed"] = appointment.completed;
             dt.Rows.Add(newRow);
-            Appointments.Add(appointment);
+            appointments.Add(appointment);
         }
         public int GetSelectedID()
         {
@@ -70,7 +65,7 @@ namespace Klinika.Forms
         }
         public Appointment GetSelected()
         {
-            return Appointments.Where(x => x.id == GetSelectedID()).First();
+            return appointments.Where(x => x.id == GetSelectedID()).First();
         }
         public int DeleteSelected()
         {
@@ -89,12 +84,12 @@ namespace Klinika.Forms
                 appointment.urgent,
                 appointment.completed);
 
-            Appointments.Remove(Appointments.Where(x => x.id == appointment.id).FirstOrDefault());
-            Appointments.Add(appointment);
+            appointments.Remove(appointments.Where(x => x.id == appointment.id).FirstOrDefault());
+            appointments.Add(appointment);
         }
         private string GetFullName(Appointment appointment)
         {
-            if (ViewerRole == User.RoleType.DOCTOR)
+            if (viewerRole == User.RoleType.DOCTOR)
             {
                 return PatientService.GetFullName(appointment.patientID);
             }

@@ -8,16 +8,16 @@ namespace Klinika.Repositories
 {
     internal class AppointmentRepository : Repository
     {
-        public List<Appointment> Appointments { get; set; }
+        public List<Appointment> appointments { get; set; }
         public void DeleteFromList(int ID)
         {
-            Appointments.Where(x => x.id == ID).FirstOrDefault().isDeleted = true;
+            appointments.Where(x => x.id == ID).FirstOrDefault().isDeleted = true;
         }
 
         private static AppointmentRepository instance;
         private AppointmentRepository()
         {
-            Appointments = GetAll();
+            appointments = GetAll();
         }
         public static AppointmentRepository GetInstance()
         {
@@ -111,7 +111,7 @@ namespace Klinika.Repositories
                 ("@Description", appointment.description),
                 ("@IsDeleted", appointment.isDeleted));
 
-            Appointments.Add(appointment);
+            appointments.Add(appointment);
         }
         public void Modify(Appointment appointment)
         {
@@ -142,8 +142,8 @@ namespace Klinika.Repositories
                 ("@Description", appointment.description),
                 ("@IsDeleted", appointment.isDeleted));
 
-            Appointments.Remove(Appointments.Where(x => x.id == appointment.id).FirstOrDefault());
-            Appointments.Add(appointment);
+            appointments.Remove(appointments.Where(x => x.id == appointment.id).FirstOrDefault());
+            appointments.Add(appointment);
         }
         public static void Delete(int ID)
         {

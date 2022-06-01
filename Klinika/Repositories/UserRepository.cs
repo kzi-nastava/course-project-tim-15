@@ -38,7 +38,7 @@ namespace Klinika.Repositories
                                      row["Password"].ToString(),
                                      row["UserType"].ToString(),
                                      Convert.ToBoolean(row["IsBlocked"]));
-                users.TryAdd(user.Email, user);
+                users.TryAdd(user.email, user);
                 Users.Add(user);
             }
 
@@ -46,17 +46,17 @@ namespace Klinika.Repositories
 
         public static User[] GetPatients()
         {
-            return GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.PATIENT.ToString()).ToArray();
+            return GetInstance().Users.Where(x => x.role.ToUpper() == User.RoleType.PATIENT.ToString()).ToArray();
         }
 
         public static List<User> GetDoctors()
         {
-             return GetInstance().Users.Where(x => x.Role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToList();
+             return GetInstance().Users.Where(x => x.role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToList();
         }
 
         public static User? GetDoctor(int ID)
         {
-            return GetInstance().Users.Where(x => x.ID == ID).FirstOrDefault();
+            return GetInstance().Users.Where(x => x.id == ID).FirstOrDefault();
         }
     }
 }

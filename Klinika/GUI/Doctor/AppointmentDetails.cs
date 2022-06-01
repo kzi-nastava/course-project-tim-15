@@ -7,21 +7,21 @@ namespace Klinika.GUI.Doctor
 {
     public partial class AppointmentDetails : Form
     {
-        internal readonly DoctorMain Parent;
-        private Appointment? Appointment;
+        internal readonly DoctorMain parent;
+        private Appointment? appointment;
 
         public AppointmentDetails(DoctorMain parent, Appointment? appointment = null)
         {
             InitializeComponent();
-            Parent = parent;
-            Appointment = appointment;
+            this.parent = parent;
+            this.appointment = appointment;
         }
         private void LoadForm(object sender, EventArgs e)
         {
-            Parent.Enabled = false;
+            parent.Enabled = false;
             UIUtilities.FillPatientComboBox(PatientComboBox);
 
-            if (Appointment == null)
+            if (appointment == null)
             {
                 SetType(Appointment.Types.EXAMINATION);
                 return;
@@ -31,18 +31,18 @@ namespace Klinika.GUI.Doctor
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
 
         private void FillFormWithAppointmentData()
         {
-            DatePicker.Value = Appointment.dateTime;
-            TimePicker.Value = Appointment.dateTime;
-            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(PatientService.GetSingle(Appointment.patientID));
+            DatePicker.Value = appointment.dateTime;
+            TimePicker.Value = appointment.dateTime;
+            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(PatientService.GetSingle(appointment.patientID));
 
-            SetType((Appointment.Types)Appointment.type, Appointment.duration);
+            SetType((Appointment.Types)appointment.type, appointment.duration);
 
-            IsUrgentCheckBox.Checked = Appointment.urgent;
+            IsUrgentCheckBox.Checked = appointment.urgent;
             ConfirmButton.Text = "Save";
         }
         private void SetType(Appointment.Types type, int duration = -1)
@@ -58,16 +58,16 @@ namespace Klinika.GUI.Doctor
         private int SetExaminationRoom()
         {
             RoomComboBox.Items.Clear();
-            RoomComboBox.Items.Add(DoctorService.GetOffice(Parent._Doctor.OfficeID));
+            RoomComboBox.Items.Add(DoctorService.GetOffice(parent.doctor.officeID));
             return 0;
         }
         private int SetOperationRoom()
         {
             RoomComboBox.Items.Clear();
             RoomComboBox.Items.AddRange(RoomServices.GetOperationRooms());
-            if (Appointment == null || Appointment.roomID == 1) return 0;
+            if (appointment == null || appointment.roomID == 1) return 0;
             var rooms = RoomComboBox.Items.Cast<Room>().Select(x => x).ToList();
-            var room = rooms.Where(x => x.id == Appointment.roomID).FirstOrDefault();
+            var room = rooms.Where(x => x.id == appointment.roomID).FirstOrDefault();
             return RoomComboBox.Items.IndexOf(room);
         }
         private void ExaminationRadioButtonCheckedChanged(object sender, EventArgs e)
@@ -78,7 +78,7 @@ namespace Klinika.GUI.Doctor
         {
             if (!ValidateForm()) return;
 
-            if (Appointment != null) Modify();
+            if (appointment != null) Modify();
             else Create();
 
             Close();
@@ -96,14 +96,14 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowErrorMessage("Patient is not valid!");
                 return false;
             }
-            if (DoctorService.IsOccupied(GetSelectedDateTime(), Parent._Doctor.ID, 
-                Convert.ToInt32(DurationTextBox.Text), Appointment == null ? -1 : Appointment.id))
+            if (DoctorService.IsOccupied(GetSelectedDateTime(), parent.doctor.id, 
+                Convert.ToInt32(DurationTextBox.Text), appointment == null ? -1 : appointment.id))
             {
                 MessageBoxUtilities.ShowErrorMessage("Already occupied!");
                 return false;
             }
             if (RoomServices.IsOccupied(GetSelectedDateTime(), (RoomComboBox.SelectedItem as Room).id,
-                Convert.ToInt32(DurationTextBox.Text), Appointment == null ? -1 : Appointment.id))
+                Convert.ToInt32(DurationTextBox.Text), appointment == null ? -1 : appointment.id))
             {
                 MessageBoxUtilities.ShowErrorMessage("Room is occupied!");
                 return false;
@@ -118,8 +118,8 @@ namespace Klinika.GUI.Doctor
         }
         private void TransferDataFromUI(Appointment appointment)
         {
-            appointment.doctorID = Parent._Doctor.ID;
-            appointment.patientID = (PatientComboBox.SelectedItem as User).ID;
+            appointment.doctorID = parent.doctor.id;
+            appointment.patientID = (PatientComboBox.SelectedItem as User).id;
             appointment.roomID = (RoomComboBox.SelectedItem as Room).id;
             appointment.type = ExaminationRadioButton.Checked ? 'E' : 'O';
             appointment.duration = Convert.ToInt32(DurationTextBox.Text);
@@ -128,17 +128,17 @@ namespace Klinika.GUI.Doctor
         }
         private void Modify()
         {
-            Appointment.dateTime = GetSelectedDateTime();
-            TransferDataFromUI(Appointment);
-            AppointmentService.Modify(Appointment);
-            Parent.AllAppointmentsTable.ModifySelected(Appointment);
+            appointment.dateTime = GetSelectedDateTime();
+            TransferDataFromUI(appointment);
+            AppointmentService.Modify(appointment);
+            parent.AllAppointmentsTable.ModifySelected(appointment);
         }
         private void Create()
         {
             var appointment = new Appointment(GetSelectedDateTime());
             TransferDataFromUI(appointment);
             AppointmentService.Create(appointment);
-            Parent.AllAppointmentsTable.Insert(appointment);
+            parent.AllAppointmentsTable.Insert(appointment);
         }
     }
 }
