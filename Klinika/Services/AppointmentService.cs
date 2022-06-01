@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Exceptions;
-using Klinika.Models;
+﻿using Klinika.Models;
 using Klinika.Repositories;
-using Klinika.Roles;
 
 namespace Klinika.Services
 {
@@ -63,6 +56,10 @@ namespace Klinika.Services
                 if (date > startDate) counter += 1;
             }
             return counter;
+        }
+        public static bool IsGraded(int id)
+        {
+            return QuestionnaireRepository.IsGraded(id);
         }
     }
 }

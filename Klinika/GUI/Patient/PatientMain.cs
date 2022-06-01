@@ -298,12 +298,16 @@ namespace Klinika.GUI.Patient
 
         private void SendGradeButtonClick(object sender, EventArgs e)
         {
+            
             int selected = Convert.ToInt32(UIUtilities.GetCellValue(MedicalRecordTable, "Appointment ID"));
-            var appointment = AppointmentService.GetById(selected);
-            System.Diagnostics.Debug.WriteLine(appointment.DoctorID);
-            new Questionnaire(this, Question.Types.DOCTOR, appointment.ID, appointment.DoctorID).Show();
+            if (!AppointmentService.IsGraded(selected))
+            {
+                var appointment = AppointmentService.GetById(selected);
+                new Questionnaire(this, Question.Types.DOCTOR, appointment.ID, appointment.DoctorID).Show();
+                return;
+            }
+            MessageBoxUtilities.ShowErrorMessage("You already graded this appointment!");
         }
-
         private void ClinicQuestionnaireButtonClick(object sender, EventArgs e)
         {
             new Questionnaire(this, Question.Types.CLINIC).Show();

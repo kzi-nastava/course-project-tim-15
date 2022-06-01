@@ -46,7 +46,6 @@ namespace Klinika.Repositories
                 ("@medicalAction", questionnaire.AppointmentID));
             return Convert.ToInt32(result);
         }
-
         public static void CreateAnswer (Answer answer)
         {
             string createQuerry = "INSERT INTO [ANSWER] " +
@@ -56,6 +55,12 @@ namespace Klinika.Repositories
                 ("@questionnaireID", answer.QuestionnaireID),
                 ("@questionID", answer.QuestionID),
                 ("@grade", answer.Grade));
+        }
+        public static bool IsGraded (int appointmentID)
+        {
+            string isGradedQuerry = "SELECT COUNT(*) FROM [Questionnaire] WHERE MedicalActionID = @id";
+            var result = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(isGradedQuerry, ("@id", appointmentID));
+            return Convert.ToBoolean(result);
         }
     }
 }

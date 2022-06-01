@@ -79,19 +79,16 @@ namespace Klinika.GUI.Patient
             QuestionnaireService.Send(This, result);
             Close();
         }
-
         private void SetGradeButtonClick(object sender, EventArgs e)
         {
             int grade = Convert.ToInt32(GradeNumericUpDown.Value);
             QuestionsTable.SelectedRows[0].Cells["Grade"].Value = grade;
         }
-
         private void CommentTextBoxTextChanged(object sender, EventArgs e)
         {
             if (CommentTextBox.Text == "") SendButton.Enabled = false;
             else SendButton.Enabled = true;
         }
-
         private void QuestionsTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
             SetGradeButton.Enabled = true;
