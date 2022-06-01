@@ -3,23 +3,23 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class DrugsDataGridView : DataGridView
+    public class DrugsDataGridView : CustomTable<Drug>
     {
-        private List<Drug> drugs;
-        public DrugsDataGridView() : base()
+        public DrugsDataGridView() : base() { }
+        protected override void CreateTable()
         {
-            drugs = new List<Drug>();
-        }
-        public void Fill(List<Drug> drugs)
-        {
-            this.drugs = drugs;
-
             DataTable drugsData = new DataTable();
             drugsData.Columns.Add("ID");
             drugsData.Columns.Add("Name");
             drugsData.Columns.Add("Ingredients");
-
-            foreach (Drug drug in drugs)
+            DataSource = drugsData;
+            //Columns[0].Width = 30;
+            //Columns[1].Width = 90;
+        }
+        public override void Fill(List<Drug> items)
+        {
+            DataTable drugsData = (DataTable)DataSource;
+            foreach (Drug drug in items)
             {
                 DataRow newRow = drugsData.NewRow();
                 newRow["ID"] = drug.id;
@@ -27,23 +27,33 @@ namespace Klinika.Forms
                 newRow["Ingredients"] = drug.GetIngredientsAsString();
                 drugsData.Rows.Add(newRow);
             }
-
-            DataSource = drugsData;
-            Columns[0].Width = 30;
-            Columns[1].Width = 90;
             ClearSelection();
         }
-        public int GetSelectedId()
+        public override int GetSelectedID()
         {
-            if(SelectedRows.Count == 0) return -1;
+            if (SelectedRows.Count == 0) return -1;
             int selectedId = Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
             return selectedId;
         }
-        public Drug GetSelectedDrug()
+        public override Drug GetSelected()
         {
-            int selectedID = GetSelectedId();
-            if(selectedID == -1) return null;
-            return drugs.Where(x => x.id == selectedID).FirstOrDefault();
+            int selectedID = GetSelectedID();
+            if (selectedID == -1) return null;
+            return items.Where(x => x.id == selectedID).FirstOrDefault();
         }
+
+        public override int DeleteSelected()
+        {
+            throw new NotImplementedException();
+        }
+        public override void Insert(Drug item)
+        {
+            throw new NotImplementedException();
+        }
+        public override void ModifySelected(Drug item)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

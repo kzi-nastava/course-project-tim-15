@@ -34,7 +34,7 @@ namespace Klinika.GUI.Doctor
 
             var prescription = new Prescription(
                 parent.appointment.patientID,
-                DrugsTable.GetSelectedId(),
+                DrugsTable.GetSelectedID(),
                 new TimeSlot(PrescriptionStartDatePicker.Value, PrescriptionEndDatePicker.Value),
                 Convert.ToInt32(IntervalSpinner.Value),
                 CommentTextBox.Text);
@@ -62,7 +62,7 @@ namespace Klinika.GUI.Doctor
         private bool ValidateDrug()
         {
             if (!IsDrugSelected()) return false;
-            if (!IsDrugPrescriptible(DrugsTable.GetSelectedDrug())) return false;
+            if (!IsDrugPrescriptible(DrugsTable.GetSelected())) return false;
             return true;
         }
         private bool IsDrugSelected()

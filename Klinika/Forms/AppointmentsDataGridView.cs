@@ -14,7 +14,7 @@ namespace Klinika.Forms
         {
             appointments = new List<Appointment>();
             SetViewerRole(viewerRole);
-        }
+        }   
         private void SetViewerRole(User.RoleType viewerRole)
         {
             this.viewerRole = viewerRole;

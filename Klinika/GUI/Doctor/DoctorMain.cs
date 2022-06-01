@@ -119,13 +119,13 @@ namespace Klinika.GUI.Doctor
         private void ApproveDrugButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to approve this drug?")) return;
-            DrugService.ApproveDrug(UnapprovedDrugsTable.GetSelectedId());
+            DrugService.ApproveDrug(UnapprovedDrugsTable.GetSelectedID());
             InitUnapprovedDrugs();
         }
         private void DenyDrugButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to deny this drug?")) return;
-            DrugService.DenyDrug(UnapprovedDrugsTable.GetSelectedId(), DenyDrugDescription.Text);
+            DrugService.DenyDrug(UnapprovedDrugsTable.GetSelectedID(), DenyDrugDescription.Text);
             InitUnapprovedDrugs();
         }
         #endregion
