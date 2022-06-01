@@ -10,7 +10,7 @@ namespace Klinika.Repositories
         {
             DataTable? retrievedEquipment = null;
             DataTable? retrivedStorage = null;
-            string getAllQuery = "SELECT [RoomEquipment].RoomID, [RoomEquipment].EquipmentID, [Room].Number, [RoomType].Name as 'Room Type', [Equipment].Name as Equipment, " +
+            string getAllQuery = "SELECT [RoomEquipment].RoomID, [Room].Number, [RoomType].Name as 'Room Type',[RoomEquipment].EquipmentID, [Equipment].Name as Equipment, " +
                                  "[EquipmentType].Name as 'Equipment Type', [RoomEquipment].Quantity " +
                                  "FROM [RoomEquipment], [Room], [Equipment], [EquipmentType], [RoomType] " +
                                  "WHERE [RoomEquipment].RoomID = [Room].ID AND [RoomEquipment].EquipmentID = [Equipment].ID " +
@@ -276,15 +276,23 @@ namespace Klinika.Repositories
             return DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
         }
 
-
-        public static DataTable GetReqisteredEquipmentPerRoom(int roomId)
+        public static int GetQuantity(int roomId, int equipmentId)
         {
-            string getQuery = "SELECT[RoomEquipment].EquipmentID,[RoomEquipment].Quantity " +
-                              "FROM[RoomEquipment] " +
-                              "LEFT OUTER JOIN[Equipment] ON[RoomEquipment].EquipmentID = [Equipment].ID " +
-                              "LEFT OUTER JOIN[EquipmentType] ON[EquipmentType].ID = [Equipment].TypeID " +
-                              "WHERE[RoomEquipment].RoomID = 9 AND[EquipmentType].Name = 'dynamic'";
-            return DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
+            string getQuery = "SELECT Quantity FROM [RoomEquipment] " +
+                              "WHERE RoomID = @roomId AND EquipmentID = @equipId";
+            object quantity = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(getQuery, ("@roomId", roomId), ("@equipId", equipmentId));
+            if (quantity != null) return (int)quantity;
+            return 0;
         }
+
+        public static int GetQuantityFromStorage(int equipmentId)
+        {
+            string getQuery = "SELECT Quantity FROM [Storage] " +
+                              "WHERE EquipmentID = @equipId";
+            object quantity = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(getQuery, ("@equipId", equipmentId));
+            if (quantity != null) return (int)quantity;
+            return 0;
+        }
+
     }
 }

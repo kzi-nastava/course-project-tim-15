@@ -59,7 +59,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.dynamicEquipmentTable = new System.Windows.Forms.DataGridView();
             this.dynamicEquipmentTransfers = new System.Windows.Forms.TabPage();
-            this.roomsTable = new System.Windows.Forms.DataGridView();
+            this.getFromButton = new System.Windows.Forms.Button();
+            this.lowStockDynamicEquipmentTable = new System.Windows.Forms.DataGridView();
             this.patients.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.patientsTable)).BeginInit();
             this.tabs.SuspendLayout();
@@ -70,7 +71,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.quantityPicker)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicEquipmentTable)).BeginInit();
             this.dynamicEquipmentTransfers.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lowStockDynamicEquipmentTable)).BeginInit();
             this.SuspendLayout();
             // 
             // patients
@@ -440,7 +441,8 @@
             // 
             // dynamicEquipmentTransfers
             // 
-            this.dynamicEquipmentTransfers.Controls.Add(this.roomsTable);
+            this.dynamicEquipmentTransfers.Controls.Add(this.getFromButton);
+            this.dynamicEquipmentTransfers.Controls.Add(this.lowStockDynamicEquipmentTable);
             this.dynamicEquipmentTransfers.Location = new System.Drawing.Point(4, 29);
             this.dynamicEquipmentTransfers.Name = "dynamicEquipmentTransfers";
             this.dynamicEquipmentTransfers.Padding = new System.Windows.Forms.Padding(3);
@@ -449,22 +451,34 @@
             this.dynamicEquipmentTransfers.Text = "Dynamic equipment transfers";
             this.dynamicEquipmentTransfers.UseVisualStyleBackColor = true;
             // 
-            // roomsTable
+            // getFromButton
             // 
-            this.roomsTable.AllowUserToAddRows = false;
-            this.roomsTable.AllowUserToDeleteRows = false;
-            this.roomsTable.AllowUserToOrderColumns = true;
-            this.roomsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.roomsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.roomsTable.Location = new System.Drawing.Point(3, 3);
-            this.roomsTable.MultiSelect = false;
-            this.roomsTable.Name = "roomsTable";
-            this.roomsTable.ReadOnly = true;
-            this.roomsTable.RowHeadersWidth = 51;
-            this.roomsTable.RowTemplate.Height = 29;
-            this.roomsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.roomsTable.Size = new System.Drawing.Size(940, 478);
-            this.roomsTable.TabIndex = 8;
+            this.getFromButton.Enabled = false;
+            this.getFromButton.Location = new System.Drawing.Point(349, 430);
+            this.getFromButton.Name = "getFromButton";
+            this.getFromButton.Size = new System.Drawing.Size(209, 29);
+            this.getFromButton.TabIndex = 9;
+            this.getFromButton.Text = "Get from room/storage";
+            this.getFromButton.UseVisualStyleBackColor = true;
+            this.getFromButton.Click += new System.EventHandler(this.getFromButton_Click);
+            // 
+            // lowStockDynamicEquipmentTable
+            // 
+            this.lowStockDynamicEquipmentTable.AllowUserToAddRows = false;
+            this.lowStockDynamicEquipmentTable.AllowUserToDeleteRows = false;
+            this.lowStockDynamicEquipmentTable.AllowUserToOrderColumns = true;
+            this.lowStockDynamicEquipmentTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.lowStockDynamicEquipmentTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.lowStockDynamicEquipmentTable.Location = new System.Drawing.Point(3, 3);
+            this.lowStockDynamicEquipmentTable.MultiSelect = false;
+            this.lowStockDynamicEquipmentTable.Name = "lowStockDynamicEquipmentTable";
+            this.lowStockDynamicEquipmentTable.ReadOnly = true;
+            this.lowStockDynamicEquipmentTable.RowHeadersWidth = 51;
+            this.lowStockDynamicEquipmentTable.RowTemplate.Height = 29;
+            this.lowStockDynamicEquipmentTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.lowStockDynamicEquipmentTable.Size = new System.Drawing.Size(940, 397);
+            this.lowStockDynamicEquipmentTable.TabIndex = 8;
+            this.lowStockDynamicEquipmentTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.lowStockDynamicEquipmentTable_CellClick);
             // 
             // mainWindow
             // 
@@ -489,7 +503,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.quantityPicker)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicEquipmentTable)).EndInit();
             this.dynamicEquipmentTransfers.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lowStockDynamicEquipmentTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -527,6 +541,7 @@
         private Label label5;
         public DataGridView dynamicEquipmentTable;
         private TabPage dynamicEquipmentTransfers;
-        public DataGridView roomsTable;
+        public DataGridView lowStockDynamicEquipmentTable;
+        private Button getFromButton;
     }
 }

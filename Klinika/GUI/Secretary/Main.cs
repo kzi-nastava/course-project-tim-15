@@ -267,13 +267,25 @@ namespace Klinika.GUI.Secretary
                 }
                 else
                 {
-                    UIUtilities.Fill(roomsTable, RoomServices.GetAll());
+                    
+                    UIUtilities.Fill(lowStockDynamicEquipmentTable, EquipmentService.GetDynamicEquipmentInRooms());
+                    MarkOutOfStockDynamicEquipment(lowStockDynamicEquipmentTable);
                 }
             }
             catch (DatabaseConnectionException error)
             {
                 MessageBoxUtilities.ShowErrorMessage(error.Message);
             }
+        }
+
+        private void MarkOutOfStockDynamicEquipment(DataGridView dynamicEquipmentTable)
+        {
+            foreach(DataGridViewRow row in dynamicEquipmentTable.Rows)
+            {
+                if ((int)row.Cells["Quantity"].Value > 0) continue;
+                row.DefaultCellStyle.BackColor = Color.Red;
+            }
+            
         }
 
         private void SetRequestsTabButtonStates()
@@ -467,6 +479,36 @@ namespace Klinika.GUI.Secretary
             catch(DatabaseConnectionException error)
             {
                 MessageBoxUtilities.ShowErrorMessage(error.Message);
+            }
+        }
+
+        private void lowStockDynamicEquipmentTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            getFromButton.Enabled = true; 
+        }
+
+        private void getFromButton_Click(object sender, EventArgs e)
+        {
+            EquipmentTransfer newTransfer = new EquipmentTransfer((int)UIUtilities.GetCellValue(lowStockDynamicEquipmentTable, "RoomID"),
+                (int)UIUtilities.GetCellValue(lowStockDynamicEquipmentTable, "EquipmentID"));
+            new Manager.PickDate(newTransfer, true,this).Show();
+        }
+
+        public void UpdateLowStockDynamicEquipmentTable(EquipmentTransfer transfer)
+        {
+            lowStockDynamicEquipmentTable.SelectedRows[0].Cells["Quantity"].Value =
+            (int)lowStockDynamicEquipmentTable.SelectedRows[0].Cells["Quantity"].Value + transfer.quantity;
+            lowStockDynamicEquipmentTable.SelectedRows[0].DefaultCellStyle.BackColor = Color.White;
+
+            if(transfer.fromId != 0)
+            {
+                foreach(DataGridViewRow row in lowStockDynamicEquipmentTable.Rows)
+                {
+                    if ((int)row.Cells["RoomID"].Value != transfer.fromId || (int)row.Cells["EquipmentID"].Value != transfer.equipment) continue;
+                    row.Cells["Quantity"].Value = (int)row.Cells["Quantity"].Value - transfer.quantity;
+                    if ((int)row.Cells["Quantity"].Value == 0) row.DefaultCellStyle.BackColor = Color.Red;
+                    break;
+                }    
             }
         }
     }

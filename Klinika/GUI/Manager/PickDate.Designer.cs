@@ -33,7 +33,8 @@
             this.quantityTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.roomComboBox = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.roomSource = new System.Windows.Forms.Label();
+            this.maxQuantityLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // dateTimePicker
@@ -45,7 +46,7 @@
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(269, 176);
+            this.startButton.Location = new System.Drawing.Point(269, 207);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(140, 29);
             this.startButton.TabIndex = 1;
@@ -78,21 +79,31 @@
             this.roomComboBox.TabIndex = 4;
             this.roomComboBox.SelectedIndexChanged += new System.EventHandler(this.roomComboBox_SelectedIndexChanged);
             // 
-            // label2
+            // roomSource
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(158, 111);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(125, 20);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Destination room";
+            this.roomSource.AutoSize = true;
+            this.roomSource.Location = new System.Drawing.Point(158, 111);
+            this.roomSource.Name = "roomSource";
+            this.roomSource.Size = new System.Drawing.Size(125, 20);
+            this.roomSource.TabIndex = 5;
+            this.roomSource.Text = "Destination room";
+            // 
+            // maxQuantityLabel
+            // 
+            this.maxQuantityLabel.AutoSize = true;
+            this.maxQuantityLabel.Location = new System.Drawing.Point(269, 164);
+            this.maxQuantityLabel.Name = "maxQuantityLabel";
+            this.maxQuantityLabel.Size = new System.Drawing.Size(140, 20);
+            this.maxQuantityLabel.TabIndex = 6;
+            this.maxQuantityLabel.Text = "Maximum quantity: ";
             // 
             // PickDate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(681, 217);
-            this.Controls.Add(this.label2);
+            this.ClientSize = new System.Drawing.Size(681, 248);
+            this.Controls.Add(this.maxQuantityLabel);
+            this.Controls.Add(this.roomSource);
             this.Controls.Add(this.roomComboBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.quantityTextBox);
@@ -113,6 +124,7 @@
         private TextBox quantityTextBox;
         private Label label1;
         private ComboBox roomComboBox;
-        private Label label2;
+        private Label roomSource;
+        private Label maxQuantityLabel;
     }
 }

@@ -32,13 +32,10 @@ namespace Klinika.Services
             {
                 rooms.Add(new Models.EnhancedComboBoxItem(row["Number"].ToString(), row["ID"].ToString()));
             }
+            rooms.Add(new Models.EnhancedComboBoxItem("Storage", "0"));
             rooms = rooms.OrderBy(x => x.text).ToList();
             return rooms;
         }
 
-        public static DataTable GetAll()
-        {
-            return RoomRepository.GetAllRooms();
-        }
     }
 }
