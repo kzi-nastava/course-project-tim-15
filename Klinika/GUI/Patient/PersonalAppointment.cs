@@ -1,7 +1,6 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
-using System.Data;
 using Klinika.Services;
 using Klinika.Utilities;
 

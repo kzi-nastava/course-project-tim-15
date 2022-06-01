@@ -1,5 +1,5 @@
-﻿using System.Data;
-using Klinika.Repositories;
+﻿using Klinika.Repositories;
+using System.Data;
 
 namespace Klinika.Services
 {

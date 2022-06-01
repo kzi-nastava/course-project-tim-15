@@ -1,6 +1,6 @@
 ﻿using Klinika.Data;
-using System.Data;
 using Klinika.Roles;
+using System.Data;
 
 namespace Klinika.Repositories
 {

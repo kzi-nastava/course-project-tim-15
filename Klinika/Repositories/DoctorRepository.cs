@@ -1,14 +1,8 @@
 ﻿using Klinika.Data;
 using Klinika.Models;
 using Klinika.Roles;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Services;
 
 namespace Klinika.Repositories
 {

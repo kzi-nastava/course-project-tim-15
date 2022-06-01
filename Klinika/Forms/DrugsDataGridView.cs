@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Klinika.Models;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Models;
 
 namespace Klinika.Forms
 {

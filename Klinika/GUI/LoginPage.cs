@@ -1,6 +1,5 @@
 using Klinika.Exceptions;
 using Klinika.Repositories;
-using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
 

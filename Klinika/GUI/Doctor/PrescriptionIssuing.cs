@@ -1,5 +1,4 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Services;
 using Klinika.Utilities;
 

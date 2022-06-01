@@ -1,7 +1,6 @@
 ﻿using Klinika.Data;
 using Klinika.Models;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
 using static Klinika.Roles.User;
 

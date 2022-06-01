@@ -1,10 +1,6 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Repositories;
 
 namespace Klinika.Services
 {

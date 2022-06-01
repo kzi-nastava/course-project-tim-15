@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Klinika.Repositories;
 using Klinika.Roles;
-using Klinika.Repositories;
-using System.Text.RegularExpressions;
 using Klinika.Services;
+using System.Text.RegularExpressions;
 
 namespace Klinika.Utilities
 {
