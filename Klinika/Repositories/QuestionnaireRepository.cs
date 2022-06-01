@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Klinika.Models;
 using Klinika.Data;
 
 namespace Klinika.Repositories
@@ -11,7 +7,7 @@ namespace Klinika.Repositories
     {
         public static double GetGrade(int doctorID)
         {
-            string getGradeQuerry = "SELECT AVG(Grade) " +
+            string getGradeQuerry = "SELECT AVG(CAST(Grade as Float)) " +
                 "FROM [Questionnaire] JOIN [Answer] " +
                 "ON [Questionnaire].ID = [Answer].QuestionnaireID " +
                 "WHERE [Questionnaire].TargetID = @doctorID";
@@ -19,6 +15,52 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(getGradeQuerry, ("@doctorID", doctorID));
 
             return Convert.ToDouble(resoult);
+        }
+        public static List<Question> GetQuestions(Question.Types type)
+        {
+            string getQuestionsQuerry = "SELECT ID, Name FROM [Question] WHERE Type = @Type";
+            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuestionsQuerry, ("@Type", (char)type));
+            var questions = new List<Question>();
+            foreach (object row in result)
+            {
+                var question = new Question(
+                    Convert.ToInt32(((object[])row)[0].ToString()),
+                    ((object[])row)[1].ToString(),
+                    type);
+                questions.Add(question);
+            }
+            return questions;
+        }
+        public static int Create(Questionnaire questionnaire)
+        {
+            string targe1 = questionnaire.TargetID == -1 ? "" : ",TargetID";
+            string target2 = questionnaire.TargetID == -1 ? "" : ", " + questionnaire.TargetID;
+
+            string createQuerry = "INSERT INTO [Questionnaire] " +
+                $"(PatientID {targe1},Comment,MedicalActionID) " +
+                "OUTPUT INSERTED.ID " +
+                $"VALUES(@patientID {target2}, @comment, @medicalAction)";
+            var result = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(createQuerry,
+                ("@patientID", questionnaire.PatientID),
+                ("@comment", questionnaire.Comment),
+                ("@medicalAction", questionnaire.AppointmentID));
+            return Convert.ToInt32(result);
+        }
+        public static void CreateAnswer (Answer answer)
+        {
+            string createQuerry = "INSERT INTO [ANSWER] " +
+                "(QuestionnaireID,QuestionID,Grade) " +
+                "VALUES(@questionnaireID, @questionID, @grade)";
+            DatabaseConnection.GetInstance().ExecuteSelectCommand(createQuerry,
+                ("@questionnaireID", answer.QuestionnaireID),
+                ("@questionID", answer.QuestionID),
+                ("@grade", answer.Grade));
+        }
+        public static bool IsGraded (int appointmentID)
+        {
+            string isGradedQuerry = "SELECT COUNT(*) FROM [Questionnaire] WHERE MedicalActionID = @id";
+            var result = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(isGradedQuerry, ("@id", appointmentID));
+            return Convert.ToBoolean(result);
         }
     }
 }

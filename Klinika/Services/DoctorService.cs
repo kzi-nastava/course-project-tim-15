@@ -57,6 +57,14 @@ namespace Klinika.Services
         {
             return RoomServices.GetExaminationRooms().Where(x => x.ID == officeID).FirstOrDefault();
         }
+        public static double GetGrade(int id)
+        {
+            return QuestionnaireRepository.GetGrade(id);
+        }
+        public static Specialization GetSpecialization (int id)
+        {
+            return DoctorRepository.GetSpecialization(id);
+        }
         public static Doctor GetById(int id)
         {
             return DoctorRepository.GetInstance().doctors.Where(x => x.ID == id).FirstOrDefault();
