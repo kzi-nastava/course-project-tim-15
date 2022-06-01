@@ -11,7 +11,14 @@ namespace Klinika.Services
         }
         public static void Send(Questionnaire questionnaire, List<Answer> answers)
         {
-            // TODO : Logic for insert in database
+            
+            var id = QuestionnaireRepository.Create(questionnaire);
+            System.Diagnostics.Debug.WriteLine(id);
+            foreach (var answer in answers)
+            {
+                answer.QuestionnaireID = id;
+                QuestionnaireRepository.CreateAnswer(answer);
+            }
         }
     }
 }

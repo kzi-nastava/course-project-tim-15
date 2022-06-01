@@ -31,5 +31,31 @@ namespace Klinika.Repositories
             }
             return questions;
         }
+        public static int Create(Questionnaire questionnaire)
+        {
+            string targe1 = questionnaire.TargetID == -1 ? "" : ",TargetID";
+            string target2 = questionnaire.TargetID == -1 ? "" : ", " + questionnaire.TargetID;
+
+            string createQuerry = "INSERT INTO [Questionnaire] " +
+                $"(PatientID {targe1},Comment,MedicalActionID) " +
+                "OUTPUT INSERTED.ID " +
+                $"VALUES(@patientID {target2}, @comment, @medicalAction)";
+            var result = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(createQuerry,
+                ("@patientID", questionnaire.PatientID),
+                ("@comment", questionnaire.Comment),
+                ("@medicalAction", questionnaire.AppointmentID));
+            return Convert.ToInt32(result);
+        }
+
+        public static void CreateAnswer (Answer answer)
+        {
+            string createQuerry = "INSERT INTO [ANSWER] " +
+                "(QuestionnaireID,QuestionID,Grade) " +
+                "VALUES(@questionnaireID, @questionID, @grade)";
+            DatabaseConnection.GetInstance().ExecuteSelectCommand(createQuerry,
+                ("@questionnaireID", answer.QuestionnaireID),
+                ("@questionID", answer.QuestionID),
+                ("@grade", answer.Grade));
+        }
     }
 }

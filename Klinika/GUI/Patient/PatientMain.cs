@@ -300,6 +300,7 @@ namespace Klinika.GUI.Patient
         {
             int selected = Convert.ToInt32(UIUtilities.GetCellValue(MedicalRecordTable, "Appointment ID"));
             var appointment = AppointmentService.GetById(selected);
+            System.Diagnostics.Debug.WriteLine(appointment.DoctorID);
             new Questionnaire(this, Question.Types.DOCTOR, appointment.ID, appointment.DoctorID).Show();
         }
 
