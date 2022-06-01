@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Klinika.Repositories;
 
 namespace Klinika.Services
 {
@@ -33,6 +34,11 @@ namespace Klinika.Services
             }
             rooms = rooms.OrderBy(x => x.text).ToList();
             return rooms;
+        }
+
+        public static DataTable GetAll()
+        {
+            return RoomRepository.GetAllRooms();
         }
     }
 }

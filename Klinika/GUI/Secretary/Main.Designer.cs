@@ -53,20 +53,24 @@
             this.label2 = new System.Windows.Forms.Label();
             this.patientSelection = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.equipmentRequests = new System.Windows.Forms.TabPage();
+            this.dynamicEquipmentRequests = new System.Windows.Forms.TabPage();
             this.orderButton = new System.Windows.Forms.Button();
             this.quantityPicker = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.dynamicEquipmentTable = new System.Windows.Forms.DataGridView();
+            this.dynamicEquipmentTransfers = new System.Windows.Forms.TabPage();
+            this.roomsTable = new System.Windows.Forms.DataGridView();
             this.patients.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.patientsTable)).BeginInit();
             this.tabs.SuspendLayout();
             this.requests.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).BeginInit();
             this.referrals.SuspendLayout();
-            this.equipmentRequests.SuspendLayout();
+            this.dynamicEquipmentRequests.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.quantityPicker)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicEquipmentTable)).BeginInit();
+            this.dynamicEquipmentTransfers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
             this.SuspendLayout();
             // 
             // patients
@@ -171,7 +175,8 @@
             this.tabs.Controls.Add(this.patients);
             this.tabs.Controls.Add(this.requests);
             this.tabs.Controls.Add(this.referrals);
-            this.tabs.Controls.Add(this.equipmentRequests);
+            this.tabs.Controls.Add(this.dynamicEquipmentRequests);
+            this.tabs.Controls.Add(this.dynamicEquipmentTransfers);
             this.tabs.Location = new System.Drawing.Point(12, 21);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
@@ -358,19 +363,19 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Patient:";
             // 
-            // equipmentRequests
+            // dynamicEquipmentRequests
             // 
-            this.equipmentRequests.Controls.Add(this.orderButton);
-            this.equipmentRequests.Controls.Add(this.quantityPicker);
-            this.equipmentRequests.Controls.Add(this.label5);
-            this.equipmentRequests.Controls.Add(this.dynamicEquipmentTable);
-            this.equipmentRequests.Location = new System.Drawing.Point(4, 29);
-            this.equipmentRequests.Name = "equipmentRequests";
-            this.equipmentRequests.Padding = new System.Windows.Forms.Padding(3);
-            this.equipmentRequests.Size = new System.Drawing.Size(946, 487);
-            this.equipmentRequests.TabIndex = 3;
-            this.equipmentRequests.Text = "Missing dynamic equipment";
-            this.equipmentRequests.UseVisualStyleBackColor = true;
+            this.dynamicEquipmentRequests.Controls.Add(this.orderButton);
+            this.dynamicEquipmentRequests.Controls.Add(this.quantityPicker);
+            this.dynamicEquipmentRequests.Controls.Add(this.label5);
+            this.dynamicEquipmentRequests.Controls.Add(this.dynamicEquipmentTable);
+            this.dynamicEquipmentRequests.Location = new System.Drawing.Point(4, 29);
+            this.dynamicEquipmentRequests.Name = "dynamicEquipmentRequests";
+            this.dynamicEquipmentRequests.Padding = new System.Windows.Forms.Padding(3);
+            this.dynamicEquipmentRequests.Size = new System.Drawing.Size(946, 487);
+            this.dynamicEquipmentRequests.TabIndex = 3;
+            this.dynamicEquipmentRequests.Text = "Dynamic equipment ordering";
+            this.dynamicEquipmentRequests.UseVisualStyleBackColor = true;
             // 
             // orderButton
             // 
@@ -433,6 +438,34 @@
             this.dynamicEquipmentTable.TabIndex = 7;
             this.dynamicEquipmentTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dynamicEquipmentTable_CellClick);
             // 
+            // dynamicEquipmentTransfers
+            // 
+            this.dynamicEquipmentTransfers.Controls.Add(this.roomsTable);
+            this.dynamicEquipmentTransfers.Location = new System.Drawing.Point(4, 29);
+            this.dynamicEquipmentTransfers.Name = "dynamicEquipmentTransfers";
+            this.dynamicEquipmentTransfers.Padding = new System.Windows.Forms.Padding(3);
+            this.dynamicEquipmentTransfers.Size = new System.Drawing.Size(946, 487);
+            this.dynamicEquipmentTransfers.TabIndex = 4;
+            this.dynamicEquipmentTransfers.Text = "Dynamic equipment transfers";
+            this.dynamicEquipmentTransfers.UseVisualStyleBackColor = true;
+            // 
+            // roomsTable
+            // 
+            this.roomsTable.AllowUserToAddRows = false;
+            this.roomsTable.AllowUserToDeleteRows = false;
+            this.roomsTable.AllowUserToOrderColumns = true;
+            this.roomsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.roomsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.roomsTable.Location = new System.Drawing.Point(3, 3);
+            this.roomsTable.MultiSelect = false;
+            this.roomsTable.Name = "roomsTable";
+            this.roomsTable.ReadOnly = true;
+            this.roomsTable.RowHeadersWidth = 51;
+            this.roomsTable.RowTemplate.Height = 29;
+            this.roomsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.roomsTable.Size = new System.Drawing.Size(940, 478);
+            this.roomsTable.TabIndex = 8;
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -451,10 +484,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).EndInit();
             this.referrals.ResumeLayout(false);
             this.referrals.PerformLayout();
-            this.equipmentRequests.ResumeLayout(false);
-            this.equipmentRequests.PerformLayout();
+            this.dynamicEquipmentRequests.ResumeLayout(false);
+            this.dynamicEquipmentRequests.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.quantityPicker)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dynamicEquipmentTable)).EndInit();
+            this.dynamicEquipmentTransfers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -486,10 +521,12 @@
         private Label label4;
         public Button scheduleButton;
         private Button urgentSchedulingButton;
-        private TabPage equipmentRequests;
+        private TabPage dynamicEquipmentRequests;
         private Button orderButton;
         private NumericUpDown quantityPicker;
         private Label label5;
         public DataGridView dynamicEquipmentTable;
+        private TabPage dynamicEquipmentTransfers;
+        public DataGridView roomsTable;
     }
 }

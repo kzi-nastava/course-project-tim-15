@@ -89,7 +89,7 @@ namespace Klinika.Repositories
             try
             {
                 //If storage is one of the transfer rooms
-                if(transfer.toId == 0)
+                if (transfer.toId == 0)
                 {
                     SqlCommand fromTransfer = new SqlCommand(transferFromQuery, DatabaseConnection.GetInstance().database);
                     fromTransfer.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
@@ -132,7 +132,7 @@ namespace Klinika.Repositories
                     DatabaseConnection.GetInstance().database.Close();
                 }
 
-                else if(transfer.fromId == 0)
+                else if (transfer.fromId == 0)
                 {
                     transferFromQuery = "UPDATE [Storage] " +
                         "SET Quantity = @Quantity " +
@@ -267,19 +267,24 @@ namespace Klinika.Repositories
             }
         }
 
-        public static DataTable GetMissingDynamicEquipment()
+        public static DataTable GetDynamicEquipment()
         {
             string getQuery = "SELECT [Equipment].ID, [Equipment].Name, ISNULL([Storage].Quantity,0) 'Quantity' FROM [Equipment] " +
                               "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +
                               "LEFT OUTER JOIN [Storage] ON [Equipment].ID = [Storage].EquipmentID " +
                               "WHERE [EquipmentType].Name = 'dynamic'";
-            DataTable allDynamicEquipmentInStorage = DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
-            for (int i = allDynamicEquipmentInStorage.Rows.Count - 1; i >= 0; i--)
-            {
-                if ((int)allDynamicEquipmentInStorage.Rows[i]["Quantity"] > 0) allDynamicEquipmentInStorage.Rows.RemoveAt(i);   
-            }
-            allDynamicEquipmentInStorage.Columns.Remove("Quantity");
-            return allDynamicEquipmentInStorage;
+            return DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
+        }
+
+
+        public static DataTable GetReqisteredEquipmentPerRoom(int roomId)
+        {
+            string getQuery = "SELECT[RoomEquipment].EquipmentID,[RoomEquipment].Quantity " +
+                              "FROM[RoomEquipment] " +
+                              "LEFT OUTER JOIN[Equipment] ON[RoomEquipment].EquipmentID = [Equipment].ID " +
+                              "LEFT OUTER JOIN[EquipmentType] ON[EquipmentType].ID = [Equipment].TypeID " +
+                              "WHERE[RoomEquipment].RoomID = 9 AND[EquipmentType].Name = 'dynamic'";
+            return DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
         }
     }
 }

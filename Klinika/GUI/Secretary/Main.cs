@@ -261,9 +261,13 @@ namespace Klinika.GUI.Secretary
                 {
                     UIUtilities.FillPatientSelectionList(patientSelection);
                 }
-                else if (tabs.SelectedTab == equipmentRequests)
+                else if (tabs.SelectedTab == dynamicEquipmentRequests)
                 {
                     UIUtilities.Fill(dynamicEquipmentTable, EquipmentService.GetMissingDynamicEquipment());
+                }
+                else
+                {
+                    UIUtilities.Fill(roomsTable, RoomServices.GetAll());
                 }
             }
             catch (DatabaseConnectionException error)
