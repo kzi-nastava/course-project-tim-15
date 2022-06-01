@@ -167,7 +167,7 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowErrorMessage("Reason text box must be filled!");
                 return false;
             }
-            if (DoctorService.IsOccupied(FromDatePicker.Value, ToDatePicker.Value, _Doctor.ID))
+            if (DoctorService.IsOccupied(_Doctor.ID, new TimeSlot(FromDatePicker.Value, ToDatePicker.Value)))
             {
                 MessageBoxUtilities.ShowErrorMessage("Doctor is occupied!");
                 return false;

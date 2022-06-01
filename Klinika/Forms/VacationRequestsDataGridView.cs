@@ -76,7 +76,7 @@ namespace Klinika.Forms
                 vacationRequest.FromDate.ToString("MM.dd.yyyy"),
                 vacationRequest.ToDate.ToString("MM.dd.yyyy"),
                 vacationRequest.Reason,
-                ((VacationRequest.Statuses)vacationRequest.Status).ToString(),
+                vacationRequest.Status.ToString(),
                 vacationRequest.Emergency,
                 vacationRequest.DenyReason);
 
