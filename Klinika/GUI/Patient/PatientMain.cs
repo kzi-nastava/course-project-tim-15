@@ -298,7 +298,6 @@ namespace Klinika.GUI.Patient
 
         private void SendGradeButtonClick(object sender, EventArgs e)
         {
-            
             int selected = Convert.ToInt32(UIUtilities.GetCellValue(MedicalRecordTable, "Appointment ID"));
             if (!AppointmentService.IsGraded(selected))
             {

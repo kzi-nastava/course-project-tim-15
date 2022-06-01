@@ -57,7 +57,6 @@ namespace Klinika.GUI.Patient
             QuestionsTable.Columns["Grade"].Width = 45;
             QuestionsTable.ClearSelection();
         }
-
         private List<Answer> ColectData()
         {
             var answers = new List<Answer>();
@@ -71,7 +70,6 @@ namespace Klinika.GUI.Patient
             This = new MQuestionnaire(Parent.Patient.ID, comment, AppointmentID, TargetID);
             return answers;
         }
-
         private void SendButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to send this Questionnaire?")) return;

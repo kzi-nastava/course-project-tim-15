@@ -13,12 +13,5 @@
             Context = context;
             Type = (char)type;
         }
-        public Question(int id, string context, char type)
-        {
-            ID = id;
-            Context = context;
-            Type = type;
-        }
-
     }
 }
