@@ -28,23 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.AllAppointmentsTab = new System.Windows.Forms.TabPage();
             this.AddAppointmentButton = new System.Windows.Forms.Button();
             this.DeleteAppointmentButton = new System.Windows.Forms.Button();
             this.EditAppointmentButton = new System.Windows.Forms.Button();
-            this.AllAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.DOCTOR);
             this.ScheduleTab = new System.Windows.Forms.TabPage();
             this.PerformButton = new System.Windows.Forms.Button();
             this.ViewMedicalRecordButton = new System.Windows.Forms.Button();
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.ScheduleTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.DOCTOR);
             this.UnapprovedDrugsTab = new System.Windows.Forms.TabPage();
+            this.ScheduleTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.DOCTOR);
+            this.AllAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Klinika.Roles.User.RoleType.DOCTOR);
             this.DenyDrugButton = new System.Windows.Forms.Button();
             this.ApproveDrugButton = new System.Windows.Forms.Button();
             this.DenyDrugDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.UnapprovedDrugsTable = new Klinika.Forms.DrugsDataGridView();
+            this.VacationRequestTab = new System.Windows.Forms.TabPage();
+            this.EmergencyCheckBox = new System.Windows.Forms.CheckBox();
+            this.ToDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.FromDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.SendRequestButton = new System.Windows.Forms.Button();
+            this.ReasonTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.VacationRequestTable = new Klinika.Forms.VacationRequestsDataGridView();
             this.MainTabControl.SuspendLayout();
             this.AllAppointmentsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).BeginInit();
@@ -52,6 +63,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ScheduleTable)).BeginInit();
             this.UnapprovedDrugsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.UnapprovedDrugsTable)).BeginInit();
+            this.VacationRequestTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.VacationRequestTable)).BeginInit();
             this.SuspendLayout();
             // 
             // MainTabControl
@@ -59,6 +72,7 @@
             this.MainTabControl.Controls.Add(this.AllAppointmentsTab);
             this.MainTabControl.Controls.Add(this.ScheduleTab);
             this.MainTabControl.Controls.Add(this.UnapprovedDrugsTab);
+            this.MainTabControl.Controls.Add(this.VacationRequestTab);
             this.MainTabControl.Location = new System.Drawing.Point(11, 12);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
@@ -227,7 +241,7 @@
             this.ApproveDrugButton.UseVisualStyleBackColor = true;
             this.ApproveDrugButton.Click += new System.EventHandler(this.ApproveDrugButtonClick);
             // 
-            // DenydDrugDescription
+            // DenyDrugDescription
             // 
             this.DenyDrugDescription.Location = new System.Drawing.Point(10, 327);
             this.DenyDrugDescription.Multiline = true;
@@ -265,6 +279,123 @@
             this.UnapprovedDrugsTable.TabIndex = 2;
             this.UnapprovedDrugsTable.SelectionChanged += new System.EventHandler(this.UnapprovedDrugsTableSelectionChanged);
             // 
+            // VacationRequestTab
+            // 
+            this.VacationRequestTab.Controls.Add(this.EmergencyCheckBox);
+            this.VacationRequestTab.Controls.Add(this.ToDatePicker);
+            this.VacationRequestTab.Controls.Add(this.FromDatePicker);
+            this.VacationRequestTab.Controls.Add(this.label3);
+            this.VacationRequestTab.Controls.Add(this.label2);
+            this.VacationRequestTab.Controls.Add(this.SendRequestButton);
+            this.VacationRequestTab.Controls.Add(this.ReasonTextBox);
+            this.VacationRequestTab.Controls.Add(this.label4);
+            this.VacationRequestTab.Controls.Add(this.VacationRequestTable);
+            this.VacationRequestTab.Location = new System.Drawing.Point(4, 29);
+            this.VacationRequestTab.Name = "VacationRequestTab";
+            this.VacationRequestTab.Padding = new System.Windows.Forms.Padding(3);
+            this.VacationRequestTab.Size = new System.Drawing.Size(931, 479);
+            this.VacationRequestTab.TabIndex = 3;
+            this.VacationRequestTab.Text = "Vacation Request";
+            this.VacationRequestTab.UseVisualStyleBackColor = true;
+            // 
+            // EmergencyCheckBox
+            // 
+            this.EmergencyCheckBox.AutoSize = true;
+            this.EmergencyCheckBox.Location = new System.Drawing.Point(6, 234);
+            this.EmergencyCheckBox.Name = "EmergencyCheckBox";
+            this.EmergencyCheckBox.Size = new System.Drawing.Size(104, 24);
+            this.EmergencyCheckBox.TabIndex = 11;
+            this.EmergencyCheckBox.Text = "Emergency";
+            this.EmergencyCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // ToDatePicker
+            // 
+            this.ToDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.ToDatePicker.Location = new System.Drawing.Point(55, 40);
+            this.ToDatePicker.Name = "ToDatePicker";
+            this.ToDatePicker.Size = new System.Drawing.Size(200, 27);
+            this.ToDatePicker.TabIndex = 10;
+            // 
+            // FromDatePicker
+            // 
+            this.FromDatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.FromDatePicker.Location = new System.Drawing.Point(55, 7);
+            this.FromDatePicker.Name = "FromDatePicker";
+            this.FromDatePicker.Size = new System.Drawing.Size(200, 27);
+            this.FromDatePicker.TabIndex = 9;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(9, 48);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(25, 20);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "To";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(9, 15);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(43, 20);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "From";
+            // 
+            // SendRequestButton
+            // 
+            this.SendRequestButton.Location = new System.Drawing.Point(133, 443);
+            this.SendRequestButton.Name = "SendRequestButton";
+            this.SendRequestButton.Size = new System.Drawing.Size(122, 29);
+            this.SendRequestButton.TabIndex = 5;
+            this.SendRequestButton.Text = "Send Request";
+            this.SendRequestButton.UseVisualStyleBackColor = true;
+            this.SendRequestButton.Click += new System.EventHandler(this.SendRequestButton_Click);
+            // 
+            // ReasonTextBox
+            // 
+            this.ReasonTextBox.Location = new System.Drawing.Point(6, 104);
+            this.ReasonTextBox.Multiline = true;
+            this.ReasonTextBox.Name = "ReasonTextBox";
+            this.ReasonTextBox.Size = new System.Drawing.Size(249, 110);
+            this.ReasonTextBox.TabIndex = 4;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(9, 81);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(57, 20);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Reason";
+            // 
+            // VacationRequestTable
+            // 
+            this.VacationRequestTable.AllowUserToAddRows = false;
+            this.VacationRequestTable.AllowUserToDeleteRows = false;
+            this.VacationRequestTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.VacationRequestTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.VacationRequestTable.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.VacationRequestTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VacationRequestTable.DefaultCellStyle = dataGridViewCellStyle1;
+            this.VacationRequestTable.GridColor = System.Drawing.SystemColors.Control;
+            this.VacationRequestTable.Location = new System.Drawing.Point(261, 7);
+            this.VacationRequestTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.VacationRequestTable.Name = "VacationRequestTable";
+            this.VacationRequestTable.ReadOnly = true;
+            this.VacationRequestTable.RowHeadersWidth = 51;
+            this.VacationRequestTable.RowTemplate.Height = 25;
+            this.VacationRequestTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.VacationRequestTable.Size = new System.Drawing.Size(664, 465);
+            this.VacationRequestTable.TabIndex = 2;
+            // 
             // DoctorMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -287,6 +418,9 @@
             this.UnapprovedDrugsTab.ResumeLayout(false);
             this.UnapprovedDrugsTab.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.UnapprovedDrugsTable)).EndInit();
+            this.VacationRequestTab.ResumeLayout(false);
+            this.VacationRequestTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.VacationRequestTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -310,5 +444,15 @@
         private Button ApproveDrugButton;
         private TextBox DenyDrugDescription;
         private Label label1;
+        private TabPage VacationRequestTab;
+        private CheckBox EmergencyCheckBox;
+        internal DateTimePicker ToDatePicker;
+        internal DateTimePicker FromDatePicker;
+        private Label label3;
+        private Label label2;
+        private Button SendRequestButton;
+        private TextBox ReasonTextBox;
+        private Label label4;
+        internal Klinika.Forms.VacationRequestsDataGridView VacationRequestTable;
     }
 }
