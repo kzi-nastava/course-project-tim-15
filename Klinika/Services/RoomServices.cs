@@ -1,6 +1,10 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Klinika.Repositories;
 
 namespace Klinika.Services
 {
@@ -40,9 +44,11 @@ namespace Klinika.Services
             {
                 rooms.Add(new Models.EnhancedComboBoxItem(row["Number"].ToString(), row["ID"].ToString()));
             }
+            rooms.Add(new Models.EnhancedComboBoxItem("Storage", "0"));
             rooms = rooms.OrderBy(x => x.text).ToList();
             return rooms;
         }
+
         public static Room[] GetOperationRooms()
         {
             return RoomRepository.Get().Where(x => x.Type == 1).ToArray();

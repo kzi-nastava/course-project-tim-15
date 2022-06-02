@@ -184,20 +184,18 @@ namespace Klinika.GUI.Patient
             dataTable.Columns.Add("Specialization");
             dataTable.Columns.Add("Grade");
 
-            if(doctors != null)
+            if (doctors == null) return;
+            foreach(RDoctor doctor in doctors)
             {
-                foreach(RDoctor doctor in doctors)
-                {
-                    DataRow newRow = dataTable.NewRow();
-
-                    newRow["Doctor ID"] = doctor.ID;
-                    newRow["Name"] = doctor.Name;
-                    newRow["Surname"] = doctor.Surname;
-                    newRow["Specialization"] = doctor.specialization;
-                    newRow["Grade"] = QuestionnaireRepository.GetGrade(doctor.ID);
-                    dataTable.Rows.Add(newRow);
-                }
+                DataRow newRow = dataTable.NewRow();
+                newRow["Doctor ID"] = doctor.ID;
+                newRow["Name"] = doctor.Name;
+                newRow["Surname"] = doctor.Surname;
+                newRow["Specialization"] = doctor.specialization;
+                newRow["Grade"] = QuestionnaireRepository.GetGrade(doctor.ID);
+                dataTable.Rows.Add(newRow);
             }
+  
             DoctorsTable.DataSource = dataTable;
             DoctorsTable.ClearSelection();
             NewAppointmentButton.Enabled = false;
@@ -220,7 +218,7 @@ namespace Klinika.GUI.Patient
         private void NewAppointmentButtonClick(object sender, EventArgs e)
         {
             Appointment appointment = new Appointment();
-            appointment.DoctorID = GetSelectedDoctorID(DoctorsTable);
+            appointment.DoctorID = Convert.ToInt32(UIUtilities.GetCellValue(DoctorsTable, "Doctor ID"));
             new PersonalAppointment(this, appointment, true).Show();
         }
         #endregion
@@ -238,17 +236,15 @@ namespace Klinika.GUI.Patient
             dataTable.Columns.Add("DateTime");
             dataTable.Columns.Add("Message");
 
-            if (notifications != null)
+            if (notifications == null) return;
+            foreach (Notification notification in notifications)
             {
-                foreach (Notification notification in notifications)
-                {
-                    DataRow newRow = dataTable.NewRow();
+                DataRow newRow = dataTable.NewRow();
 
-                    newRow["ID"] = notification.ID;
-                    newRow["DateTime"] = notification.DateTime;
-                    newRow["Message"] = notification.message;
-                    dataTable.Rows.Add(newRow);
-                }
+                newRow["ID"] = notification.ID;
+                newRow["DateTime"] = notification.DateTime;
+                newRow["Message"] = notification.message;
+                dataTable.Rows.Add(newRow);
             }
             NotificationsTable.DataSource = dataTable;
             NotificationsTable.ClearSelection();
@@ -257,7 +253,7 @@ namespace Klinika.GUI.Patient
         private void MarkAsReadButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want mark as read this notification?")) return;
-            int notificationID = Convert.ToInt32(NotificationsTable.SelectedRows[0].Cells["ID"].Value);
+            int notificationID = Convert.ToInt32(UIUtilities.GetCellValue(NotificationsTable, "ID")); 
             NotificationService.MarkAsRead(notificationID);
             NotificationsTable.Rows.RemoveAt(NotificationsTable.CurrentRow.Index);
             MarkAsReadButton.Enabled = false;
@@ -266,7 +262,7 @@ namespace Klinika.GUI.Patient
         {
             if (!UIUtilities.Confirm("Are you sure you want to save changes?")) return;
             Patient.NotificationOffset = Convert.ToInt32(OffsetNumericUpDown.Value);
-            PatientService.SetNotificationOffset(Patient);
+            PatientService.Modify(Patient);
             FillNotificationsTable(NotificationRepository.Get(Patient));
             SetButton.Enabled = false;
         }
@@ -286,10 +282,6 @@ namespace Klinika.GUI.Patient
             var specializations = SpecializationService.GetAll().ToArray();
             DoctorSpecializationComboBox.Items.AddRange(specializations);
             DoctorSpecializationComboBox.SelectedIndex = 0;
-        }
-        private int GetSelectedDoctorID(DataGridView table)
-        {
-            return Convert.ToInt32(table.SelectedRows[0].Cells["Doctor ID"].Value);
         }
         private int GetSelectedSpecializationID()
         {

@@ -37,5 +37,12 @@ namespace Klinika.Models
             this.equipment = equipment;
             this.transfer = transfer;
         }
+
+        public EquipmentTransfer(int toId, int equipment)
+        {
+            this.toId = toId;
+            this.equipment = equipment;
+            transfer = DateTime.Now.Date;
+        }
     }
 }
