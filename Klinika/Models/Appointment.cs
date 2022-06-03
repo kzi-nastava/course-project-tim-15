@@ -1,4 +1,6 @@
-﻿namespace Klinika.Models
+﻿using Klinika.Services;
+
+namespace Klinika.Models
 {
     public class Appointment
     {
@@ -36,7 +38,7 @@
             this.doctorID = doctorID;
             this.patientID = patientID;
             this.dateTime = dateTime;
-            roomID = 1;
+            roomID = DoctorService.GetById(doctorID).officeID;
             completed = false;
             type = 'E';
             duration = 15;

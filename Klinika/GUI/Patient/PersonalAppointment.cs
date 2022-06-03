@@ -10,8 +10,10 @@ namespace Klinika.GUI.Patient
     {
         private readonly NewAppointment? parentNewAppointment;
         private readonly ViewSchedule? parentViewSchedule;
+        private readonly SearchDoctors? parentSearchDoctor;
         private Appointment? appointment;
         private readonly bool isDoctorSelected;
+        private int patientID;
         private bool IsCreate
         {
             get
@@ -21,12 +23,23 @@ namespace Klinika.GUI.Patient
         }
 
         #region Form
-        public PersonalAppointment(ViewSchedule parent, Appointment? appointment, bool isDoctorSelected = false)
+        public PersonalAppointment(ViewSchedule parent, Appointment appointment)
         {
             InitializeComponent();
             parentViewSchedule = parent;
             this.appointment = appointment;
-            this.isDoctorSelected = isDoctorSelected;
+            isDoctorSelected = false;
+            parentViewSchedule.Enabled = false;
+            patientID = parent.parent.patient.id;
+        }
+        public PersonalAppointment(SearchDoctors parent, Appointment appointment)
+        {
+            InitializeComponent();
+            parentSearchDoctor = parent;
+            this.appointment = appointment;
+            isDoctorSelected = true;
+            parentSearchDoctor.Enabled = false;
+            patientID = parent.parent.patient.id;
         }
         public PersonalAppointment(NewAppointment parent)
         {
@@ -34,10 +47,11 @@ namespace Klinika.GUI.Patient
             parentNewAppointment = parent;
             appointment = null;
             isDoctorSelected = false;
+            parentNewAppointment.Enabled = false;
+            patientID = parent.parent.patient.id;
         }
         private void LoadForm(object sender, EventArgs e)
         {
-            //parent.Enabled = false;
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillFormDetails();
         }
@@ -48,14 +62,13 @@ namespace Klinika.GUI.Patient
         }
         private void SetupAsCreate()
         {
-            DoctorComboBox.Enabled = false;
-            DoctorComboBox.SelectedIndex = parentNewAppointment.DoctorComboBox.SelectedIndex;
-
             if (isDoctorSelected)
             {
                 SetDoctorComboBoxIndex();
-                return; 
+                return;
             }
+            DoctorComboBox.Enabled = false;
+            DoctorComboBox.SelectedIndex = parentNewAppointment.DoctorComboBox.SelectedIndex;
 
             DatePicker.Enabled = false;
             DatePicker.Value = parentNewAppointment.AppointmentDatePicker.Value;
@@ -71,7 +84,9 @@ namespace Klinika.GUI.Patient
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            //parent.Enabled = true;
+            if (parentViewSchedule != null) parentViewSchedule.Enabled = true;
+            if (parentSearchDoctor != null) parentSearchDoctor.Enabled = true;
+            if (parentNewAppointment != null) parentNewAppointment.Enabled = true;
         }
         #endregion
 
@@ -86,10 +101,9 @@ namespace Klinika.GUI.Patient
         {
             if (!UIUtilities.Confirm("Are you sure you want to create this Appoinment ?")) return;
 
-            appointment = new Appointment(GetSelectedDoctorID(), parentNewAppointment.parent.patient.id, GetSelectedDateTime());
+            appointment = new Appointment(GetSelectedDoctorID(), patientID, GetSelectedDateTime());
             AppointmentRepository.GetInstance().Create(appointment);
 
-            //parentViewSchedule.PersonalAppointmentsTable.Insert(appointment);
             if (!isDoctorSelected) parentNewAppointment.OccupiedAppointmentsTable.Insert(appointment);
 
             Close();

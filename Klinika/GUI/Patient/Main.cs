@@ -28,7 +28,7 @@ namespace Klinika.GUI.Patient
         }
         private void SearchDoctorsButtonClick(object sender, EventArgs e)
         {
-
+            new SearchDoctors(this).Show();
         }
         private void NotificationsButtonClick(object sender, EventArgs e)
         {
@@ -38,7 +38,5 @@ namespace Klinika.GUI.Patient
         {
 
         }
-
-        
     }
 }
