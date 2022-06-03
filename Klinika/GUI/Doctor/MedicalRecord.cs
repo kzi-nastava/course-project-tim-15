@@ -42,10 +42,6 @@ namespace Klinika.GUI.Doctor
             HeightLabel.Text = $"{record.height}cm";
             WeightLabel.Text = $"{record.weight}kg";
         }
-        private void TableSelectionChanged(object sender, EventArgs e)
-        {
-            (sender as DataGridView).ClearSelection();
-        }
         #endregion
         #region Add Anamnesis
         private bool ValidateAnamnesis(bool skipValidation)
