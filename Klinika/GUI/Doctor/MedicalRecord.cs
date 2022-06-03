@@ -2,7 +2,6 @@
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
-using System.Data;
 
 namespace Klinika.GUI.Doctor
 {
