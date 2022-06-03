@@ -8,7 +8,8 @@ namespace Klinika.GUI.Patient
 {
     public partial class PersonalAppointment : Form
     {
-        private readonly PatientMain parent;
+        private readonly NewAppointment? parentNewAppointment;
+        private readonly ViewSchedule? parentViewSchedule;
         private Appointment? appointment;
         private readonly bool isDoctorSelected;
         private bool IsCreate
@@ -20,16 +21,23 @@ namespace Klinika.GUI.Patient
         }
 
         #region Form
-        public PersonalAppointment(PatientMain parent, Appointment? appointment, bool isDoctorSelected = false)
+        public PersonalAppointment(ViewSchedule parent, Appointment? appointment, bool isDoctorSelected = false)
         {
             InitializeComponent();
-            this.parent = parent;
+            parentViewSchedule = parent;
             this.appointment = appointment;
             this.isDoctorSelected = isDoctorSelected;
         }
+        public PersonalAppointment(NewAppointment parent)
+        {
+            InitializeComponent();
+            parentNewAppointment = parent;
+            appointment = null;
+            isDoctorSelected = false;
+        }
         private void LoadForm(object sender, EventArgs e)
         {
-            parent.Enabled = false;
+            //parent.Enabled = false;
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
             FillFormDetails();
         }
@@ -41,7 +49,7 @@ namespace Klinika.GUI.Patient
         private void SetupAsCreate()
         {
             DoctorComboBox.Enabled = false;
-            DoctorComboBox.SelectedIndex = parent.DoctorComboBox.SelectedIndex;
+            DoctorComboBox.SelectedIndex = parentNewAppointment.DoctorComboBox.SelectedIndex;
 
             if (isDoctorSelected)
             {
@@ -50,7 +58,7 @@ namespace Klinika.GUI.Patient
             }
 
             DatePicker.Enabled = false;
-            DatePicker.Value = parent.AppointmentDatePicker.Value;
+            DatePicker.Value = parentNewAppointment.AppointmentDatePicker.Value;
         }
         private void SetupAsModify()
         {
@@ -63,7 +71,7 @@ namespace Klinika.GUI.Patient
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            parent.Enabled = true;
+            //parent.Enabled = true;
         }
         #endregion
 
@@ -78,11 +86,11 @@ namespace Klinika.GUI.Patient
         {
             if (!UIUtilities.Confirm("Are you sure you want to create this Appoinment ?")) return;
 
-            appointment = new Appointment(GetSelectedDoctorID(), parent.patient.id, GetSelectedDateTime());
+            appointment = new Appointment(GetSelectedDoctorID(), parentNewAppointment.parent.patient.id, GetSelectedDateTime());
             AppointmentRepository.GetInstance().Create(appointment);
 
-            parent.PersonalAppointmentsTable.Insert(appointment);
-            if (!isDoctorSelected) parent.OccupiedAppointmentsTable.Insert(appointment);
+            //parentViewSchedule.PersonalAppointmentsTable.Insert(appointment);
+            if (!isDoctorSelected) parentNewAppointment.OccupiedAppointmentsTable.Insert(appointment);
 
             Close();
         }
@@ -100,7 +108,7 @@ namespace Klinika.GUI.Patient
             if (!needApproval)
             {
                 AppointmentService.Modify(appointment);
-                parent.PersonalAppointmentsTable.ModifySelected(appointment);
+                parentViewSchedule.PersonalAppointmentsTable.ModifySelected(appointment);
             }
             Close();
         }  
@@ -122,9 +130,15 @@ namespace Klinika.GUI.Patient
         }
         private bool ValidateForm()
         {
-            if (!parent.IsDateValid(GetSelectedDateTime())) return false;
+            if (!IsDateValid(GetSelectedDateTime())) return false;
             if (!DoctorService.IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID())) return true;
             MessageBoxUtilities.ShowErrorMessage("This time is occupied!");
+            return false;
+        }
+        public bool IsDateValid(DateTime dateTime)
+        {
+            if (dateTime > DateTime.Now) return true;
+            MessageBoxUtilities.ShowErrorMessage("Date is not valid!");
             return false;
         }
     }

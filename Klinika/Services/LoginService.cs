@@ -39,7 +39,7 @@ namespace Klinika.Services
                     }
                     else
                     {
-                        new GUI.Patient.PatientMain(loggingUser.id).Show();
+                        new GUI.Patient.Main(loggingUser.id).Show();
                         break;
                     }
             }

@@ -55,7 +55,7 @@ namespace Klinika.GUI.Patient
         }
         private void ModifyAppointmentButtonClick(object sender, EventArgs e)
         {
-            new PersonalAppointment(this, PersonalAppointmentsTable.GetSelected()).Show();
+            //new PersonalAppointment(this, PersonalAppointmentsTable.GetSelected()).Show();
         }
         private void DeleteAppointmentButtonClick(object sender, EventArgs e)
         {
@@ -90,11 +90,11 @@ namespace Klinika.GUI.Patient
         }
         private void ScheduleAppointmentButtonClick(object sender, EventArgs e)
         {
-            new PersonalAppointment(this, null).Show();
+            //new PersonalAppointment(this, null).Show();
         }
         private void RecommendButtonClick(object sender, EventArgs e)
         {
-            new AppointmentRecommendation(this).Show();
+            //new AppointmentRecommendation(this).Show();
         }
         #endregion
 
@@ -220,7 +220,7 @@ namespace Klinika.GUI.Patient
         {
             Appointment appointment = new Appointment();
             appointment.doctorID = Convert.ToInt32(UIUtilities.GetCellValue(DoctorsTable, "Doctor ID"));
-            new PersonalAppointment(this, appointment, true).Show();
+            //new PersonalAppointment(this, appointment, true).Show();
         }
         #endregion
 
@@ -288,7 +288,7 @@ namespace Klinika.GUI.Patient
         {
             return (DoctorSpecializationComboBox.SelectedItem as Specialization).id;
         }
-        public bool IsDateValid (DateTime dateTime)
+        public bool IsDateValid (DateTime dateTime) //2
         {
             if (dateTime > DateTime.Now) return true;
             MessageBoxUtilities.ShowErrorMessage("Date is not valid!");
