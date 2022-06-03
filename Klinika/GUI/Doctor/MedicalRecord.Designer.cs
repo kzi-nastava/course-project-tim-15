@@ -39,7 +39,7 @@
             this.HeightLabel = new System.Windows.Forms.Label();
             this.WeightLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.AnamnesesTable = new System.Windows.Forms.DataGridView();
+            this.AnamnesesTable = new Klinika.Forms.AnamnesesTable();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.DiseasesTable = new System.Windows.Forms.DataGridView();
@@ -174,7 +174,6 @@
             this.AnamnesesTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AnamnesesTable.Size = new System.Drawing.Size(512, 495);
             this.AnamnesesTable.TabIndex = 8;
-            this.AnamnesesTable.SelectionChanged += new System.EventHandler(this.TableSelectionChanged);
             // 
             // groupBox2
             // 
@@ -456,7 +455,7 @@
         private Label HeightLabel;
         private Label WeightLabel;
         private GroupBox groupBox1;
-        private DataGridView AnamnesesTable;
+        private Klinika.Forms.AnamnesesTable AnamnesesTable;
         private GroupBox groupBox2;
         private GroupBox groupBox3;
         private DataGridView DiseasesTable;

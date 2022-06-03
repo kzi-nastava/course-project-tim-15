@@ -24,32 +24,10 @@ namespace Klinika.GUI.Doctor
         {
             parent.Enabled = false;
             FillPatientMainData();
-            FillAnamnesesTable(AnamnesesTable, record.anamneses);
+            AnamnesesTable.Fill(record.anamneses);
             FillDiseasesTable(DiseasesTable, record.diseases);
             FillAllergensTable(AllergensTable, record.allergens);
             UIUtilities.FillSpecializationComboBox(SpecializationsComboBox);
-        }
-        public static void FillAnamnesesTable(DataGridView table, List<Anamnesis> anamneses)
-        {
-            DataTable anamnesesData = new DataTable();
-            anamnesesData.Columns.Add("ID");
-            anamnesesData.Columns.Add("Description");
-            anamnesesData.Columns.Add("Symptoms");
-            anamnesesData.Columns.Add("Conclusion");
-
-            foreach (Anamnesis anamnesis in anamneses)
-            {
-                DataRow newRow = anamnesesData.NewRow();
-                newRow["ID"] = anamnesis.id;
-                newRow["Description"] = anamnesis.description;
-                newRow["Symptoms"] = anamnesis.symptoms;
-                newRow["Conclusion"] = anamnesis.conclusion;
-                anamnesesData.Rows.Add(newRow);
-            }
-
-            table.DataSource = anamnesesData;
-            table.Columns[0].Width = 30;
-            table.ClearSelection();
         }
         public static void FillDiseasesTable(DataGridView table, List<Disease> diseases)
         {
