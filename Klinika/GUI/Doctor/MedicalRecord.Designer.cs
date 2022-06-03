@@ -39,12 +39,12 @@
             this.HeightLabel = new System.Windows.Forms.Label();
             this.WeightLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.AnamnesesTable = new System.Windows.Forms.DataGridView();
+            this.AnamnesesTable = new Klinika.Forms.AnamnesesTable();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.DiseasesTable = new System.Windows.Forms.DataGridView();
+            this.DiseasesTable = new Klinika.Forms.DiseasesTable();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.AllergensTable = new System.Windows.Forms.DataGridView();
+            this.AllergensTable = new Klinika.Forms.AllergensTable();
             this.AnamnesisGroup = new System.Windows.Forms.GroupBox();
             this.PerscriptionHint = new System.Windows.Forms.Label();
             this.PerscriptionButton = new System.Windows.Forms.Button();
@@ -174,7 +174,6 @@
             this.AnamnesesTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AnamnesesTable.Size = new System.Drawing.Size(512, 495);
             this.AnamnesesTable.TabIndex = 8;
-            this.AnamnesesTable.SelectionChanged += new System.EventHandler(this.TableSelectionChanged);
             // 
             // groupBox2
             // 
@@ -225,7 +224,6 @@
             this.DiseasesTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DiseasesTable.Size = new System.Drawing.Size(374, 495);
             this.DiseasesTable.TabIndex = 9;
-            this.DiseasesTable.SelectionChanged += new System.EventHandler(this.TableSelectionChanged);
             // 
             // groupBox4
             // 
@@ -264,7 +262,6 @@
             this.AllergensTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AllergensTable.Size = new System.Drawing.Size(281, 495);
             this.AllergensTable.TabIndex = 10;
-            this.AllergensTable.SelectionChanged += new System.EventHandler(this.TableSelectionChanged);
             // 
             // AnamnesisGroup
             // 
@@ -456,12 +453,12 @@
         private Label HeightLabel;
         private Label WeightLabel;
         private GroupBox groupBox1;
-        private DataGridView AnamnesesTable;
+        private Klinika.Forms.AnamnesesTable AnamnesesTable;
         private GroupBox groupBox2;
         private GroupBox groupBox3;
-        private DataGridView DiseasesTable;
+        private Klinika.Forms.DiseasesTable DiseasesTable;
         private GroupBox groupBox4;
-        private DataGridView AllergensTable;
+        private Klinika.Forms.AllergensTable AllergensTable;
         private GroupBox AnamnesisGroup;
         private Button FinishButton;
         internal TextBox ConclusionTextBox;

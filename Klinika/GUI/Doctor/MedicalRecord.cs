@@ -2,7 +2,6 @@
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
-using System.Data;
 
 namespace Klinika.GUI.Doctor
 {
@@ -24,74 +23,10 @@ namespace Klinika.GUI.Doctor
         {
             parent.Enabled = false;
             FillPatientMainData();
-            FillAnamnesesTable(AnamnesesTable, record.anamneses);
-            FillDiseasesTable(DiseasesTable, record.diseases);
-            FillAllergensTable(AllergensTable, record.allergens);
+            AnamnesesTable.Fill(record.anamneses);
+            DiseasesTable.Fill(record.diseases);
+            AllergensTable.Fill(record.allergens);
             UIUtilities.FillSpecializationComboBox(SpecializationsComboBox);
-        }
-        public static void FillAnamnesesTable(DataGridView table, List<Anamnesis> anamneses)
-        {
-            DataTable anamnesesData = new DataTable();
-            anamnesesData.Columns.Add("ID");
-            anamnesesData.Columns.Add("Description");
-            anamnesesData.Columns.Add("Symptoms");
-            anamnesesData.Columns.Add("Conclusion");
-
-            foreach (Anamnesis anamnesis in anamneses)
-            {
-                DataRow newRow = anamnesesData.NewRow();
-                newRow["ID"] = anamnesis.id;
-                newRow["Description"] = anamnesis.description;
-                newRow["Symptoms"] = anamnesis.symptoms;
-                newRow["Conclusion"] = anamnesis.conclusion;
-                anamnesesData.Rows.Add(newRow);
-            }
-
-            table.DataSource = anamnesesData;
-            table.Columns[0].Width = 30;
-            table.ClearSelection();
-        }
-        public static void FillDiseasesTable(DataGridView table, List<Disease> diseases)
-        {
-            DataTable diseasesData = new DataTable();
-            diseasesData.Columns.Add("ID");
-            diseasesData.Columns.Add("Name");
-            diseasesData.Columns.Add("Description");
-            diseasesData.Columns.Add("Date");
-
-            foreach (Disease disease in diseases)
-            {
-                DataRow newRow = diseasesData.NewRow();
-                newRow["ID"] = disease.id;
-                newRow["Name"] = disease.name;
-                newRow["Description"] = disease.description;
-                newRow["Date"] = disease.dateDiagnosed.ToString("yyyy/MM/dd");
-                diseasesData.Rows.Add(newRow);
-            }
-
-            table.DataSource = diseasesData;
-            table.Columns[0].Width = 30;
-            table.ClearSelection();
-        }
-        public static void FillAllergensTable(DataGridView table, List<Ingredient> allergens)
-        {
-            DataTable allergensData = new DataTable();
-            allergensData.Columns.Add("ID");
-            allergensData.Columns.Add("Name");
-            allergensData.Columns.Add("Type");
-
-            foreach (Ingredient ingredient in allergens)
-            {
-                DataRow newRow = allergensData.NewRow();
-                newRow["ID"] = ingredient.id;
-                newRow["Name"] = ingredient.name;
-                newRow["Type"] = ingredient.type;
-                allergensData.Rows.Add(newRow);
-            }
-
-            table.DataSource = allergensData;
-            table.Columns[0].Width = 30;
-            table.ClearSelection();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -105,10 +40,6 @@ namespace Klinika.GUI.Doctor
             BloodTypeLabel.Text = record.bloodType;
             HeightLabel.Text = $"{record.height}cm";
             WeightLabel.Text = $"{record.weight}kg";
-        }
-        private void TableSelectionChanged(object sender, EventArgs e)
-        {
-            (sender as DataGridView).ClearSelection();
         }
         #endregion
         #region Add Anamnesis
