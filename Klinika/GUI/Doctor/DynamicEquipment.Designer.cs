@@ -108,8 +108,8 @@
             this.Name = "DynamicEquipment";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Dynamic Equipment";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DynamicEquipmentFormClosing);
-            this.Load += new System.EventHandler(this.DynamicEquipmentLoad);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
+            this.Load += new System.EventHandler(this.LoadForm);
             ((System.ComponentModel.ISupportInitialize)(this.EquipmentTable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SpentSpinner)).EndInit();
             this.ResumeLayout(false);

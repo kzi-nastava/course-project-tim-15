@@ -8,11 +8,11 @@ namespace Klinika.GUI.Doctor
 {
     public partial class MedicalRecord : Form
     {
-        internal readonly DoctorMain parent;
+        internal readonly ViewSchedule parent;
         public Appointment appointment;
         public Models.MedicalRecord record;
         #region Form
-        public MedicalRecord(DoctorMain parent, Appointment appointment, bool isPreview = true)
+        public MedicalRecord(ViewSchedule parent, Appointment appointment, bool isPreview = true)
         {
             InitializeComponent();
             this.parent = parent;

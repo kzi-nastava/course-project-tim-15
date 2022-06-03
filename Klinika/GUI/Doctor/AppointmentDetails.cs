@@ -7,10 +7,10 @@ namespace Klinika.GUI.Doctor
 {
     public partial class AppointmentDetails : Form
     {
-        internal readonly DoctorMain parent;
+        internal readonly ViewAllAppointments parent;
         private Appointment? appointment;
 
-        public AppointmentDetails(DoctorMain parent, Appointment? appointment = null)
+        public AppointmentDetails(ViewAllAppointments parent, Appointment? appointment = null)
         {
             InitializeComponent();
             this.parent = parent;

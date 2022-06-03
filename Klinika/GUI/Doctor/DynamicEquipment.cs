@@ -6,20 +6,20 @@ namespace Klinika.GUI.Doctor
 {
     public partial class DynamicEquipment : Form
     {
-        internal readonly DoctorMain parent;
+        internal readonly ViewSchedule parent;
         private readonly Appointment appointment;
-        public DynamicEquipment(DoctorMain parent, Appointment appointment)
+        public DynamicEquipment(ViewSchedule parent, Appointment appointment)
         {
             InitializeComponent();
             this.parent = parent;
             this.appointment = appointment;
         }
-        private void DynamicEquipmentLoad(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
             EquipmentTable.Fill(EquipmentService.GetDynamicEquipment(appointment.roomID));
         }
-        private void DynamicEquipmentFormClosing(object sender, FormClosingEventArgs e)
+        private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             CompleteAppointment();
             parent.Enabled = true;
