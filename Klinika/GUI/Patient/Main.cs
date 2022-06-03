@@ -32,7 +32,7 @@ namespace Klinika.GUI.Patient
         }
         private void NotificationsButtonClick(object sender, EventArgs e)
         {
-
+            new Notifications(this).Show();
         }
         private void QuestionnaireForClinicButtonClick(object sender, EventArgs e)
         {

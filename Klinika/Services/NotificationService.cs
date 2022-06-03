@@ -36,5 +36,9 @@ namespace Klinika.Services
         {
             NotificationRepository.Modify(id);
         }
+        public static List<Notification> GetAllForPatient (Patient patient)
+        {
+            return NotificationRepository.Get(patient);
+        }
     }
 }
