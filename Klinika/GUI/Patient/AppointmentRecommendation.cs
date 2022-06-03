@@ -8,10 +8,10 @@ namespace Klinika.GUI.Patient
 {
     public partial class AppointmentRecommendation : Form
     {
-        private readonly PatientMain parent;
+        private readonly NewAppointment parent;
 
         #region Form
-        public AppointmentRecommendation(PatientMain parent)
+        public AppointmentRecommendation(NewAppointment parent)
         {
             InitializeComponent();
             this.parent = parent;
@@ -102,7 +102,6 @@ namespace Klinika.GUI.Patient
         {
             Appointment appointment = new Appointment(GetSelectedDoctorID(), parent.patient.id, GetSelectedDateTime());
             AppointmentService.Create(appointment);
-            parent.PersonalAppointmentsTable.Insert(appointment);
         }
     }
 }

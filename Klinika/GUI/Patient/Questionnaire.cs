@@ -8,33 +8,38 @@ namespace Klinika.GUI.Patient
 {
     public partial class Questionnaire : Form
     {
-        private readonly PatientMain parent;
+        private readonly Form parent;
         private readonly Question.Types type;
         private MQuestionnaire questionnaire;
         private int appointmentID;
         private int targetID;
+        private int patientID;
 
         #region Form
-        public Questionnaire(PatientMain parent, Question.Types type, int appointmentID = -1, int targetID = -1)
+        public Questionnaire(Form parent, int patientID, Question.Types type, int appointmentID = -1, int targetID = -1)
         {
             InitializeComponent();
             this.parent = parent;
             this.type = type;
             this.appointmentID = appointmentID;
             this.targetID = targetID;
+            this.patientID = patientID;
          }
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            FillQuestionsTable(QuestionnaireService.GetQuestions(type));
-            SetGradeButton.Enabled = false;
+            Initialize();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
         #endregion
-
+        private void Initialize()
+        {
+            FillQuestionsTable(QuestionnaireService.GetQuestions(type));
+            SetGradeButton.Enabled = false;
+        }
         private void FillQuestionsTable(List<Question> questions)
         {
             DataTable dataTable = new DataTable();
@@ -53,7 +58,7 @@ namespace Klinika.GUI.Patient
             }
             QuestionsTable.DataSource = dataTable;
             QuestionsTable.Columns["ID"].Width = 25;
-            QuestionsTable.Columns["Grade"].Width = 45;
+            QuestionsTable.Columns["Grade"].Width = 70;
             QuestionsTable.ClearSelection();
         }
         private List<Answer> ColectData()
@@ -66,7 +71,7 @@ namespace Klinika.GUI.Patient
                 answers.Add(new Answer(questionID, grade));
             }
             string comment = CommentTextBox.Text;
-            questionnaire = new MQuestionnaire(parent.patient.id, comment, appointmentID, targetID);
+            questionnaire = new MQuestionnaire(patientID, comment, appointmentID, targetID);
             return answers;
         }
         private void SendButtonClick(object sender, EventArgs e)
