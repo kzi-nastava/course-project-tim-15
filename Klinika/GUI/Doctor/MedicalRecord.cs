@@ -26,28 +26,8 @@ namespace Klinika.GUI.Doctor
             FillPatientMainData();
             AnamnesesTable.Fill(record.anamneses);
             DiseasesTable.Fill(record.diseases);
-            FillAllergensTable(AllergensTable, record.allergens);
+            AllergensTable.Fill(record.allergens);
             UIUtilities.FillSpecializationComboBox(SpecializationsComboBox);
-        }
-        public static void FillAllergensTable(DataGridView table, List<Ingredient> allergens)
-        {
-            DataTable allergensData = new DataTable();
-            allergensData.Columns.Add("ID");
-            allergensData.Columns.Add("Name");
-            allergensData.Columns.Add("Type");
-
-            foreach (Ingredient ingredient in allergens)
-            {
-                DataRow newRow = allergensData.NewRow();
-                newRow["ID"] = ingredient.id;
-                newRow["Name"] = ingredient.name;
-                newRow["Type"] = ingredient.type;
-                allergensData.Rows.Add(newRow);
-            }
-
-            table.DataSource = allergensData;
-            table.Columns[0].Width = 30;
-            table.ClearSelection();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {

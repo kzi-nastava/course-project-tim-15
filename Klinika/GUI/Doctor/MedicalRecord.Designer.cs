@@ -44,7 +44,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.DiseasesTable = new Klinika.Forms.DiseasesTable();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.AllergensTable = new System.Windows.Forms.DataGridView();
+            this.AllergensTable = new Klinika.Forms.AllergensTable();
             this.AnamnesisGroup = new System.Windows.Forms.GroupBox();
             this.PerscriptionHint = new System.Windows.Forms.Label();
             this.PerscriptionButton = new System.Windows.Forms.Button();
@@ -262,7 +262,6 @@
             this.AllergensTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AllergensTable.Size = new System.Drawing.Size(281, 495);
             this.AllergensTable.TabIndex = 10;
-            this.AllergensTable.SelectionChanged += new System.EventHandler(this.TableSelectionChanged);
             // 
             // AnamnesisGroup
             // 
@@ -459,7 +458,7 @@
         private GroupBox groupBox3;
         private Klinika.Forms.DiseasesTable DiseasesTable;
         private GroupBox groupBox4;
-        private DataGridView AllergensTable;
+        private Klinika.Forms.AllergensTable AllergensTable;
         private GroupBox AnamnesisGroup;
         private Button FinishButton;
         internal TextBox ConclusionTextBox;
