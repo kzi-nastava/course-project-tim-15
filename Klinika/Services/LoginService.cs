@@ -43,7 +43,6 @@ namespace Klinika.Services
                         break;
                     }
             }
-
             return null;
         }
     }

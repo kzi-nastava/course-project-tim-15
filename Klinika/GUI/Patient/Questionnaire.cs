@@ -28,14 +28,18 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            FillQuestionsTable(QuestionnaireService.GetQuestions(type));
-            SetGradeButton.Enabled = false;
+            Initialize();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
         #endregion
+        private void Initialize()
+        {
+            FillQuestionsTable(QuestionnaireService.GetQuestions(type));
+            SetGradeButton.Enabled = false;
+        }
         private void FillQuestionsTable(List<Question> questions)
         {
             DataTable dataTable = new DataTable();

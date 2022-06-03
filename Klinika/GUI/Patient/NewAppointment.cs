@@ -2,6 +2,7 @@
 using Klinika.Roles;
 using Klinika.Utilities;
 using System.Data;
+using Klinika.Models;
 
 namespace Klinika.GUI.Patient
 {
@@ -39,7 +40,10 @@ namespace Klinika.GUI.Patient
         }
         private void ScheduleButtonClick(object sender, EventArgs e)
         {
-            new PersonalAppointment(this).Show();
+            var doctor = (DoctorComboBox.SelectedItem as User);
+            var appointment = new Appointment(doctor.id, patient.id, AppointmentDatePicker.Value);
+            var dto = new PersonalAppointmentDTO(this, appointment, true, true, OccupiedAppointmentsTable);
+            new PersonalAppointment(dto).Show();
         }
         private void RecommendButtonClick(object sender, EventArgs e)
         {

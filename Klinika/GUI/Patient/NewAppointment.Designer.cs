@@ -168,9 +168,9 @@
         private Label TitleLabel;
         internal Forms.AppointmentsDataGridView OccupiedAppointmentsTable;
         private Label DateLabel;
-        public DateTimePicker AppointmentDatePicker;
+        internal DateTimePicker AppointmentDatePicker;
         private Label DoctorLabel;
-        public ComboBox DoctorComboBox;
+        internal ComboBox DoctorComboBox;
         private Button FindAppointmentsButton;
         private Button ScheduleButton;
         private Button RecommendButton;

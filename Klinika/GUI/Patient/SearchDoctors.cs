@@ -84,9 +84,9 @@ namespace Klinika.GUI.Patient
         }
         private void NewAppointmentButtonClick(object sender, EventArgs e)
         {
-            Appointment appointment = new Appointment();
-            appointment.doctorID = Convert.ToInt32(UIUtilities.GetCellValue(DoctorsTable, "Doctor ID"));
-            new PersonalAppointment(this, appointment).Show();
+            var doctorID = Convert.ToInt32(UIUtilities.GetCellValue(DoctorsTable, "Doctor ID"));
+            var dto = new PersonalAppointmentDTO(this, new Appointment(patient.id, doctorID), true, false);
+            new PersonalAppointment(dto).Show();
         }
         private void DoctorSearchButtonClick(object sender, EventArgs e)
         {

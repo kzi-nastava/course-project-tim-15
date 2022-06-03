@@ -32,7 +32,8 @@ namespace Klinika.GUI.Patient
         }
         private void ModifyButtonClick(object sender, EventArgs e)
         {
-            new PersonalAppointment(this, PersonalAppointmentsTable.GetSelected()).Show();
+            var dto = new PersonalAppointmentDTO(this, PersonalAppointmentsTable.GetSelected(), false, false, PersonalAppointmentsTable);
+            new PersonalAppointment(dto).Show();
         }
         private void DeleteButtonClick(object sender, EventArgs e)
         {
