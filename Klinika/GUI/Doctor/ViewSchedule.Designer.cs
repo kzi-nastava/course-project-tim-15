@@ -96,8 +96,8 @@
             this.Name = "ViewSchedule";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "View Schedule";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ViewSchedule_FormClosing);
-            this.Load += new System.EventHandler(this.ViewSchedule_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
+            this.Load += new System.EventHandler(this.LoadForm);
             ((System.ComponentModel.ISupportInitialize)(this.ScheduleTable)).EndInit();
             this.ResumeLayout(false);
 

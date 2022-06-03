@@ -14,12 +14,12 @@ namespace Klinika.GUI.Doctor
             this.parent = parent;
             this.appointment = appointment;
         }
-        private void DynamicEquipmentLoad(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
             EquipmentTable.Fill(EquipmentService.GetDynamicEquipment(appointment.roomID));
         }
-        private void DynamicEquipmentFormClosing(object sender, FormClosingEventArgs e)
+        private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             CompleteAppointment();
             parent.Enabled = true;

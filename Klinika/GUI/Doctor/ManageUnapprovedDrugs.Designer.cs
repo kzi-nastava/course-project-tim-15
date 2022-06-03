@@ -112,8 +112,8 @@
             this.Name = "ManageUnapprovedDrugs";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ManageUnapprovedDrugs";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ManageUnapprovedDrugs_FormClosing);
-            this.Load += new System.EventHandler(this.ManageUnapprovedDrugs_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
+            this.Load += new System.EventHandler(this.LoadForm);
             ((System.ComponentModel.ISupportInitialize)(this.UnapprovedDrugsTable)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

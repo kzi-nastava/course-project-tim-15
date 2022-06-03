@@ -85,7 +85,7 @@
             this.AllAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AllAppointmentsTable.Size = new System.Drawing.Size(776, 400);
             this.AllAppointmentsTable.TabIndex = 0;
-            this.AllAppointmentsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AllAppointmentsTable_CellClick);
+            this.AllAppointmentsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AllAppointmentsTableCellClick);
             // 
             // ViewAllAppointments
             // 
@@ -102,8 +102,8 @@
             this.Name = "ViewAllAppointments";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ViewAllAppointments";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ViewAllAppointments_FormClosing);
-            this.Load += new System.EventHandler(this.ViewAllAppointments_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
+            this.Load += new System.EventHandler(this.LoadForm);
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).EndInit();
             this.ResumeLayout(false);
 

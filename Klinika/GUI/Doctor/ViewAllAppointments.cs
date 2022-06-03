@@ -13,12 +13,12 @@ namespace Klinika.GUI.Doctor
             this.parent = parent;
         }
 
-        private void ViewAllAppointments_Load(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
             InitAllAppointmentsTab();
         }
-        private void ViewAllAppointments_FormClosing(object sender, FormClosingEventArgs e)
+        private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
@@ -30,7 +30,7 @@ namespace Klinika.GUI.Doctor
             EditAppointmentButton.Enabled = false;
             DeleteAppointmentButton.Enabled = false;
         }
-        private void AllAppointmentsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void AllAppointmentsTableCellClick(object sender, DataGridViewCellEventArgs e)
         {
             EditAppointmentButton.Enabled = true;
             DeleteAppointmentButton.Enabled = true;

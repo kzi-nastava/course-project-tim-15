@@ -11,12 +11,12 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             this.parent = parent;
         }
-        private void ManageUnapprovedDrugs_Load(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
             InitUnapprovedDrugs();
         }
-        private void ManageUnapprovedDrugs_FormClosing(object sender, FormClosingEventArgs e)
+        private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }

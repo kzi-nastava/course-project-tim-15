@@ -42,7 +42,7 @@
             this.AllAppointmetnsButton.TabIndex = 0;
             this.AllAppointmetnsButton.Text = "View All Appointmetns";
             this.AllAppointmetnsButton.UseVisualStyleBackColor = true;
-            this.AllAppointmetnsButton.Click += new System.EventHandler(this.AllAppointmetnsButton_Click);
+            this.AllAppointmetnsButton.Click += new System.EventHandler(this.AllAppointmetnsButtonClick);
             // 
             // ViewScheduleButton
             // 
@@ -52,7 +52,7 @@
             this.ViewScheduleButton.TabIndex = 1;
             this.ViewScheduleButton.Text = "View Schedule";
             this.ViewScheduleButton.UseVisualStyleBackColor = true;
-            this.ViewScheduleButton.Click += new System.EventHandler(this.ViewScheduleButton_Click);
+            this.ViewScheduleButton.Click += new System.EventHandler(this.ViewScheduleButtonClick);
             // 
             // UnapprovedDrugsButton
             // 
@@ -62,7 +62,7 @@
             this.UnapprovedDrugsButton.TabIndex = 2;
             this.UnapprovedDrugsButton.Text = "Unapproved Drugs";
             this.UnapprovedDrugsButton.UseVisualStyleBackColor = true;
-            this.UnapprovedDrugsButton.Click += new System.EventHandler(this.UnapprovedDrugsButton_Click);
+            this.UnapprovedDrugsButton.Click += new System.EventHandler(this.UnapprovedDrugsButtonClick);
             // 
             // VacationRequestButton
             // 
@@ -72,7 +72,7 @@
             this.VacationRequestButton.TabIndex = 3;
             this.VacationRequestButton.Text = "Vacation Request";
             this.VacationRequestButton.UseVisualStyleBackColor = true;
-            this.VacationRequestButton.Click += new System.EventHandler(this.VacationRequestButton_Click);
+            this.VacationRequestButton.Click += new System.EventHandler(this.VacationRequestButtonClick);
             // 
             // Main
             // 
@@ -89,7 +89,7 @@
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Doctor";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
             this.ResumeLayout(false);
 
         }

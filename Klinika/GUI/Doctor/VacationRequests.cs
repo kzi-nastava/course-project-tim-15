@@ -13,12 +13,12 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             this.parent = parent;
         }
-        private void VacationRequests_Load(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
             InitVacationRequests();
         }
-        private void VacationRequests_FormClosing(object sender, FormClosingEventArgs e)
+        private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
@@ -26,7 +26,7 @@ namespace Klinika.GUI.Doctor
         {
             VacationRequestTable.Fill(VacationRequestService.GetAll(doctor.id));
         }
-        private void SendRequestButton_Click(object sender, EventArgs e)
+        private void SendRequestButtonClick(object sender, EventArgs e)
         {
             if (!VerifyVacationRequest()) return;
             var vacationRequest = new VacationRequest(doctor.id, FromDatePicker.Value, ToDatePicker.Value,

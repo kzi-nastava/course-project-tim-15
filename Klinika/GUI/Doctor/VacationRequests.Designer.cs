@@ -97,7 +97,7 @@
             this.SendRequestButton.TabIndex = 15;
             this.SendRequestButton.Text = "Send Request";
             this.SendRequestButton.UseVisualStyleBackColor = true;
-            this.SendRequestButton.Click += new System.EventHandler(this.SendRequestButton_Click);
+            this.SendRequestButton.Click += new System.EventHandler(this.SendRequestButtonClick);
             // 
             // ReasonTextBox
             // 
@@ -163,8 +163,8 @@
             this.Name = "VacationRequests";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vacation Requests";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.VacationRequests_FormClosing);
-            this.Load += new System.EventHandler(this.VacationRequests_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
+            this.Load += new System.EventHandler(this.LoadForm);
             ((System.ComponentModel.ISupportInitialize)(this.VacationRequestTable)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

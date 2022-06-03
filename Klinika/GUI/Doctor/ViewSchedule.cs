@@ -11,12 +11,12 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             this.parent = parent;
         }
-        private void ViewSchedule_Load(object sender, EventArgs e)
+        private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
             InitScheduleTab();
         }
-        private void ViewSchedule_FormClosing(object sender, FormClosingEventArgs e)
+        private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
