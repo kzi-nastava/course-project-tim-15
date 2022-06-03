@@ -30,7 +30,7 @@
         {
             this.ModifyButton = new System.Windows.Forms.Button();
             this.DeleteButton = new System.Windows.Forms.Button();
-            this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView();
+            this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Roles.User.RoleType.PATIENT);
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
             this.SuspendLayout();
             // 

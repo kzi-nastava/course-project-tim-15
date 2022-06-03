@@ -302,14 +302,14 @@ namespace Klinika.GUI.Patient
             if (!AppointmentService.IsGraded(selected))
             {
                 var appointment = AppointmentService.GetById(selected);
-                new Questionnaire(this, Question.Types.DOCTOR, appointment.id, appointment.doctorID).Show();
+                //new Questionnaire(this, Question.Types.DOCTOR, appointment.id, appointment.doctorID).Show();
                 return;
             }
             MessageBoxUtilities.ShowErrorMessage("You already graded this appointment!");
         }
         private void ClinicQuestionnaireButtonClick(object sender, EventArgs e)
         {
-            new Questionnaire(this, Question.Types.CLINIC).Show();
+            //new Questionnaire(this, Question.Types.CLINIC).Show();
         }
     }
 }

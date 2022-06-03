@@ -38,9 +38,10 @@
             // 
             // ViewScheduleButton
             // 
-            this.ViewScheduleButton.Location = new System.Drawing.Point(12, 12);
+            this.ViewScheduleButton.Location = new System.Drawing.Point(14, 16);
+            this.ViewScheduleButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.ViewScheduleButton.Name = "ViewScheduleButton";
-            this.ViewScheduleButton.Size = new System.Drawing.Size(142, 23);
+            this.ViewScheduleButton.Size = new System.Drawing.Size(197, 31);
             this.ViewScheduleButton.TabIndex = 0;
             this.ViewScheduleButton.Text = "View Schedule";
             this.ViewScheduleButton.UseVisualStyleBackColor = true;
@@ -48,9 +49,10 @@
             // 
             // NewAppointmentButton
             // 
-            this.NewAppointmentButton.Location = new System.Drawing.Point(12, 41);
+            this.NewAppointmentButton.Location = new System.Drawing.Point(14, 55);
+            this.NewAppointmentButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.NewAppointmentButton.Name = "NewAppointmentButton";
-            this.NewAppointmentButton.Size = new System.Drawing.Size(142, 23);
+            this.NewAppointmentButton.Size = new System.Drawing.Size(197, 31);
             this.NewAppointmentButton.TabIndex = 1;
             this.NewAppointmentButton.Text = "New Appointment";
             this.NewAppointmentButton.UseVisualStyleBackColor = true;
@@ -58,9 +60,10 @@
             // 
             // MedicalRecordButton
             // 
-            this.MedicalRecordButton.Location = new System.Drawing.Point(12, 70);
+            this.MedicalRecordButton.Location = new System.Drawing.Point(14, 93);
+            this.MedicalRecordButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MedicalRecordButton.Name = "MedicalRecordButton";
-            this.MedicalRecordButton.Size = new System.Drawing.Size(144, 23);
+            this.MedicalRecordButton.Size = new System.Drawing.Size(197, 31);
             this.MedicalRecordButton.TabIndex = 2;
             this.MedicalRecordButton.Text = "Medical Record";
             this.MedicalRecordButton.UseVisualStyleBackColor = true;
@@ -68,9 +71,10 @@
             // 
             // SearchDoctorsButton
             // 
-            this.SearchDoctorsButton.Location = new System.Drawing.Point(12, 99);
+            this.SearchDoctorsButton.Location = new System.Drawing.Point(14, 132);
+            this.SearchDoctorsButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.SearchDoctorsButton.Name = "SearchDoctorsButton";
-            this.SearchDoctorsButton.Size = new System.Drawing.Size(144, 23);
+            this.SearchDoctorsButton.Size = new System.Drawing.Size(197, 31);
             this.SearchDoctorsButton.TabIndex = 3;
             this.SearchDoctorsButton.Text = "Search Doctors";
             this.SearchDoctorsButton.UseVisualStyleBackColor = true;
@@ -78,9 +82,10 @@
             // 
             // NotificationsButton
             // 
-            this.NotificationsButton.Location = new System.Drawing.Point(14, 128);
+            this.NotificationsButton.Location = new System.Drawing.Point(16, 171);
+            this.NotificationsButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.NotificationsButton.Name = "NotificationsButton";
-            this.NotificationsButton.Size = new System.Drawing.Size(142, 23);
+            this.NotificationsButton.Size = new System.Drawing.Size(195, 31);
             this.NotificationsButton.TabIndex = 4;
             this.NotificationsButton.Text = "Notifications";
             this.NotificationsButton.UseVisualStyleBackColor = true;
@@ -88,9 +93,10 @@
             // 
             // QuestionnaireForClinicButton
             // 
-            this.QuestionnaireForClinicButton.Location = new System.Drawing.Point(14, 157);
+            this.QuestionnaireForClinicButton.Location = new System.Drawing.Point(16, 209);
+            this.QuestionnaireForClinicButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.QuestionnaireForClinicButton.Name = "QuestionnaireForClinicButton";
-            this.QuestionnaireForClinicButton.Size = new System.Drawing.Size(142, 23);
+            this.QuestionnaireForClinicButton.Size = new System.Drawing.Size(195, 31);
             this.QuestionnaireForClinicButton.TabIndex = 5;
             this.QuestionnaireForClinicButton.Text = "Questionnaire For Clinic";
             this.QuestionnaireForClinicButton.UseVisualStyleBackColor = true;
@@ -98,9 +104,9 @@
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(166, 187);
+            this.ClientSize = new System.Drawing.Size(223, 250);
             this.Controls.Add(this.QuestionnaireForClinicButton);
             this.Controls.Add(this.NotificationsButton);
             this.Controls.Add(this.SearchDoctorsButton);
@@ -108,6 +114,7 @@
             this.Controls.Add(this.NewAppointmentButton);
             this.Controls.Add(this.ViewScheduleButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Main";

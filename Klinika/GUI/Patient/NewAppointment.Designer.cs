@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.TitleLabel = new System.Windows.Forms.Label();
-            this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView();
+            this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Roles.User.RoleType.PATIENT);
             this.DateLabel = new System.Windows.Forms.Label();
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
             this.DoctorLabel = new System.Windows.Forms.Label();

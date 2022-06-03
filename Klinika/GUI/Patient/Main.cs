@@ -24,7 +24,7 @@ namespace Klinika.GUI.Patient
         }
         private void MedicalRecordButtonClick(object sender, EventArgs e)
         {
-
+            new MedicalRecord(this).Show();
         }
         private void SearchDoctorsButtonClick(object sender, EventArgs e)
         {
