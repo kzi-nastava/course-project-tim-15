@@ -100,9 +100,8 @@ namespace Klinika.GUI.Patient
         }
         private void Create()
         {
-            Appointment appointment = new Appointment(GetSelectedDoctorID(), parent.parent.patient.id, GetSelectedDateTime());
+            Appointment appointment = new Appointment(GetSelectedDoctorID(), parent.patient.id, GetSelectedDateTime());
             AppointmentService.Create(appointment);
-            //parent.PersonalAppointmentsTable.Insert(appointment);
         }
     }
 }

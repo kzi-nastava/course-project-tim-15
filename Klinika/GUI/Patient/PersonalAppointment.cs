@@ -30,7 +30,7 @@ namespace Klinika.GUI.Patient
             this.appointment = appointment;
             isDoctorSelected = false;
             parentViewSchedule.Enabled = false;
-            patientID = parent.parent.patient.id;
+            patientID = parent.patient.id;
         }
         public PersonalAppointment(SearchDoctors parent, Appointment appointment)
         {
@@ -39,7 +39,7 @@ namespace Klinika.GUI.Patient
             this.appointment = appointment;
             isDoctorSelected = true;
             parentSearchDoctor.Enabled = false;
-            patientID = parent.parent.patient.id;
+            patientID = parent.patient.id;
         }
         public PersonalAppointment(NewAppointment parent)
         {
@@ -48,7 +48,7 @@ namespace Klinika.GUI.Patient
             appointment = null;
             isDoctorSelected = false;
             parentNewAppointment.Enabled = false;
-            patientID = parent.parent.patient.id;
+            patientID = parent.patient.id;
         }
         private void LoadForm(object sender, EventArgs e)
         {

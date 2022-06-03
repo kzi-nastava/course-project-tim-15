@@ -16,13 +16,13 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            InitNotificationsTab();
+            Initialize();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
-        private void InitNotificationsTab()
+        private void Initialize()
         {
             OffsetNumericUpDown.Value = parent.patient.notificationOffset;
             SetButton.Enabled = false;

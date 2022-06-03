@@ -3,21 +3,13 @@ using Klinika.Roles;
 using Klinika.Utilities;
 using Klinika.Models;
 using Klinika.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Klinika.GUI.Patient
 {
     public partial class ViewSchedule : Form
     {
         internal Main parent;
+        internal Roles.Patient patient { get { return parent.patient; } }
         public ViewSchedule(Main parent)
         {
             InitializeComponent();
@@ -26,15 +18,15 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            InitPersonalAppointmentsTab();
+            Initialize();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
-        private void InitPersonalAppointmentsTab()
+        private void Initialize()
         {
-            PersonalAppointmentsTable.Fill(AppointmentRepository.GetAll(parent.patient.id, User.RoleType.PATIENT));
+            PersonalAppointmentsTable.Fill(AppointmentRepository.GetAll(patient.id, User.RoleType.PATIENT));
             ModifyButton.Enabled = false;
             DeleteButton.Enabled = false;
         }

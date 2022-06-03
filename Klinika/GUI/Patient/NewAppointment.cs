@@ -8,6 +8,7 @@ namespace Klinika.GUI.Patient
     public partial class NewAppointment : Form
     {
         internal Main parent;
+        internal Roles.Patient patient { get { return parent.patient; } }
         public NewAppointment(Main parent)
         {
             InitializeComponent();
@@ -20,10 +21,10 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            InitNewAppointmentTab();
+            Initialize();
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
         }
-        private void InitNewAppointmentTab()
+        private void Initialize()
         {
             ScheduleButton.Enabled = false;
             OccupiedAppointmentsTable.DataSource = new DataTable();

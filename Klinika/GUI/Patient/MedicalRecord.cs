@@ -16,13 +16,13 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            InitMedicalRecorTab();
+            Initialize();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
-        private void InitMedicalRecorTab()
+        private void Initialize()
         {
             FillMedicalRecordTable(AnamnesisService.Get(parent.patient.id));
         }
@@ -67,7 +67,7 @@ namespace Klinika.GUI.Patient
         }
         private void ResetButtonClick(object sender, EventArgs e)
         {
-            InitMedicalRecorTab();
+            Initialize();
             SearchTextBox.Text = "";
         }
         private void SearchButtonClick(object sender, EventArgs e)

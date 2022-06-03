@@ -1,4 +1,5 @@
 ﻿using Klinika.Services;
+using Klinika.Models;
 
 namespace Klinika.GUI.Patient
 {
@@ -36,7 +37,7 @@ namespace Klinika.GUI.Patient
         }
         private void QuestionnaireForClinicButtonClick(object sender, EventArgs e)
         {
-
+            new Questionnaire(this, patient.id, Question.Types.CLINIC).Show();
         }
     }
 }

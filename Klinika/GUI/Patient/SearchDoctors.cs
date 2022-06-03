@@ -9,6 +9,7 @@ namespace Klinika.GUI.Patient
     public partial class SearchDoctors : Form
     {
         internal Main parent;
+        internal Roles.Patient patient { get { return parent.patient; } }
         RDoctor.Filters selectedDoctorFilter = RDoctor.Filters.BY_NAME;
         public SearchDoctors(Main parent)
         {
@@ -18,13 +19,13 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            InitDoctorsTab();
+            Initialize();
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
-        private void InitDoctorsTab()
+        private void Initialize()
         {
             DoctorNameRadioButton.Checked = true;
             FillSpecializationsComboBox();
