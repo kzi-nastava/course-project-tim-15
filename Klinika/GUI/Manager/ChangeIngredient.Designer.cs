@@ -45,20 +45,20 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(266, 139);
+            this.label1.Location = new System.Drawing.Point(231, 139);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 20);
+            this.label1.Size = new System.Drawing.Size(121, 20);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Drug Name";
+            this.label1.Text = "Ingredient Name";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(266, 198);
+            this.label2.Location = new System.Drawing.Point(231, 198);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 20);
+            this.label2.Size = new System.Drawing.Size(112, 20);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Drug Type";
+            this.label2.Text = "Ingredient Type";
             // 
             // typeBox
             // 

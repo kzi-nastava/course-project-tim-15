@@ -321,5 +321,10 @@ namespace Klinika.GUI.Manager
                 this.Main_Load(null, EventArgs.Empty);
             }
         }
+
+        private void addDrugButton_Click(object sender, EventArgs e)
+        {
+            new ChangeDrug(-1, this).Show();
+        }
     }
 }

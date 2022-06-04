@@ -47,7 +47,7 @@
             this.numberTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTable = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
+            this.addDrugButton = new System.Windows.Forms.Button();
             this.drugsTable = new System.Windows.Forms.DataGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.deleteIngredientsButton = new System.Windows.Forms.Button();
@@ -262,7 +262,7 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.button1);
+            this.tabPage3.Controls.Add(this.addDrugButton);
             this.tabPage3.Controls.Add(this.drugsTable);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
             this.tabPage3.Name = "tabPage3";
@@ -271,14 +271,15 @@
             this.tabPage3.Text = "Drugs";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // addDrugButton
             // 
-            this.button1.Location = new System.Drawing.Point(43, 334);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 29);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.addDrugButton.Location = new System.Drawing.Point(43, 334);
+            this.addDrugButton.Name = "addDrugButton";
+            this.addDrugButton.Size = new System.Drawing.Size(94, 29);
+            this.addDrugButton.TabIndex = 1;
+            this.addDrugButton.Text = "Add New";
+            this.addDrugButton.UseVisualStyleBackColor = true;
+            this.addDrugButton.Click += new System.EventHandler(this.addDrugButton_Click);
             // 
             // drugsTable
             // 
@@ -393,7 +394,7 @@
         private TabPage tabPage4;
         private DataGridView drugsTable;
         private DataGridView ingredientsTable;
-        private Button button1;
+        private Button addDrugButton;
         private Button deleteIngredientsButton;
         private Button modifyIngredientsButton;
         private Button addIngredientsButton;

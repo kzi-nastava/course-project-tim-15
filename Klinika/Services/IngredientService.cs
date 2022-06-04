@@ -29,5 +29,14 @@ namespace Klinika.Services
             }
             Repositories.IngredientRepository.Reload();
         }
+        public static List<Models.EnhancedComboBoxItem> GetIngredientList()
+        {
+            List<Models.EnhancedComboBoxItem> ingredients = new List<Models.EnhancedComboBoxItem>();
+            foreach(Models.Ingredient ingredient in Repositories.IngredientRepository.Instance.ingredients)
+            {
+                ingredients.Add(new Models.EnhancedComboBoxItem(ingredient.name, ingredient.id));
+            }
+            return ingredients;
+        }
     }
 }
