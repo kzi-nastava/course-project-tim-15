@@ -19,6 +19,10 @@ namespace Klinika.Repositories
                 return instance;
             }
         }
+        public static void Reload()
+        {
+            instance = new DrugRepository();
+        }
         public DrugRepository()
         {
             drugs = new List<Drug>();
@@ -59,6 +63,48 @@ namespace Klinika.Repositories
                 }
             }
         }
+
+        internal static void Fix(int id)
+        {
+            string modifyQuery = "UPDATE [Drug] SET Approved = 'C' WHERE ID = @ID";
+
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                modifyQuery,
+                ("@ID", id));
+
+            modifyQuery = "UPDATE [UnapprovedDrug] SET IsFixed = 1 WHERE DrugID = @ID";
+
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                modifyQuery,
+                ("@ID", id));
+        }
+
+        internal static void CreateUnapprovedDrug(Drug drug)
+        {
+            string createQuery = "INSERT INTO [Drug] " +
+                "(Name, Approved) " +
+                "VALUES (@Name, 'C')";
+
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+                createQuery,
+                ("@Name", drug.name));
+        }
+
+        internal static void AddIngredients(int id, List<int> ingredientIds)
+        {
+            string insertQuery = "INSERT INTO [DrugIngredient] (DrugID, IngredientID) VALUES (@Drug, @Ing)";
+            foreach (int ingredientId in ingredientIds)
+            {
+                DatabaseConnection.GetInstance().ExecuteNonQueryCommand(insertQuery, ("@Drug", id), ("@Ing", ingredientId));
+            }
+        }
+
+        internal static void RemoveIngredients(int id)
+        {
+            string deleteQuery = "DELETE FROM [DrugIngredient] WHERE DrugID = @DrugID";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuery, ("@DrugID", id));
+        }
+
         public List<Ingredient> GetIngredientsOfOne(int id)
         {
             List<Ingredient> ingredients = new List<Ingredient>();

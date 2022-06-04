@@ -1,5 +1,6 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
+using System.Data;
 
 namespace Klinika.Services
 {
@@ -35,10 +36,27 @@ namespace Klinika.Services
             List<Ingredient> ingredients = Repositories.DrugRepository.Instance.GetIngredientsOfOne(id);
             return ingredients;
         }
-
         public static string GetNote(int id)
         {
             return Repositories.DrugRepository.GetNote(id);
+        }
+        public static void AddDrug(Models.Drug drug, DataTable table)
+        {
+            if (drug.id == -1)
+            {
+                Repositories.DrugRepository.CreateUnapprovedDrug(drug);
+            }
+            else
+            {
+                Repositories.DrugRepository.RemoveIngredients(drug.id);
+                Repositories.DrugRepository.Fix(drug.id);
+                List<int> ingredientIds = new List<int>();
+                foreach (DataRow dataRow in table.Rows)
+                {
+                    ingredientIds.Add(int.Parse(dataRow["id"].ToString()));
+                }
+                Repositories.DrugRepository.AddIngredients(drug.id, ingredientIds);
+            }
         }
     }
 }

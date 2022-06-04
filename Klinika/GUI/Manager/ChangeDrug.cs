@@ -91,5 +91,15 @@ namespace Klinika.GUI.Manager
             //table.AcceptChanges();
             ingredientsTable.DataSource = table;
         }
+
+        private void addDrugButton_Click(object sender, EventArgs e)
+        {
+            if(nameBox.Text != "")
+            {
+                drug.name = nameBox.Text;
+            }
+            Services.DrugService.AddDrug(drug, table); 
+            MessageBox.Show("Drug sent for approval!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

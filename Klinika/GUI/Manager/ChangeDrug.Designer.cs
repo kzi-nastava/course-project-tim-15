@@ -47,6 +47,7 @@
             this.addDrugButton.TabIndex = 10;
             this.addDrugButton.Text = "Add Drug";
             this.addDrugButton.UseVisualStyleBackColor = true;
+            this.addDrugButton.Click += new System.EventHandler(this.addDrugButton_Click);
             // 
             // label1
             // 
