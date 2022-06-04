@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace Klinika.Services
 {
@@ -34,9 +35,19 @@ namespace Klinika.Services
             List<Models.EnhancedComboBoxItem> ingredients = new List<Models.EnhancedComboBoxItem>();
             foreach(Models.Ingredient ingredient in Repositories.IngredientRepository.Instance.ingredients)
             {
-                ingredients.Add(new Models.EnhancedComboBoxItem(ingredient.name, ingredient.id));
+                ingredients.Add(new Models.EnhancedComboBoxItem(ingredient.name, ingredient));
             }
             return ingredients;
+        }
+
+        public static bool CheckTable(DataTable table, int id)
+        {
+            foreach (DataRow dataRow in table.Rows)
+            {
+                if (dataRow["id"].ToString() == id.ToString())
+                    return false;
+            }
+            return true;
         }
     }
 }

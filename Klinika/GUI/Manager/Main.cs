@@ -55,7 +55,7 @@ namespace Klinika.GUI.Manager
             table.Columns.Add("Name", typeof(string));
             table.Columns.Add("Approved", typeof(string));
 
-            List<Models.Drug> drugs = Services.DrugService.GetUnapproved();
+            List<Models.Drug> drugs = Services.DrugService.GetDenied();
             foreach (Models.Drug drug in drugs)
             {
                 DataRow dr = table.NewRow();
@@ -324,7 +324,18 @@ namespace Klinika.GUI.Manager
 
         private void addDrugButton_Click(object sender, EventArgs e)
         {
-            new ChangeDrug(-1, this).Show();
+            Models.Drug drug = new Models.Drug();
+            drug.id = -1;
+            new ChangeDrug(drug, this).Show();
+        }
+
+        private void modifyDrugButton_Click(object sender, EventArgs e)
+        {
+            Models.Drug drug = new Models.Drug();
+            drug.id = int.Parse(drugsTable.SelectedRows[0].Cells["id"].Value.ToString());
+            drug.name = drugsTable.SelectedRows[0].Cells["Name"].Value.ToString();
+            drug.approved = drugsTable.SelectedRows[0].Cells["Approved"].Value.ToString();
+            new ChangeDrug(drug, this).Show();
         }
     }
 }

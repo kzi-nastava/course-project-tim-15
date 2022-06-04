@@ -54,6 +54,7 @@
             this.modifyIngredientsButton = new System.Windows.Forms.Button();
             this.addIngredientsButton = new System.Windows.Forms.Button();
             this.ingredientsTable = new System.Windows.Forms.DataGridView();
+            this.modifyDrugButton = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
@@ -262,6 +263,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.modifyDrugButton);
             this.tabPage3.Controls.Add(this.addDrugButton);
             this.tabPage3.Controls.Add(this.drugsTable);
             this.tabPage3.Location = new System.Drawing.Point(4, 29);
@@ -346,6 +348,16 @@
             this.ingredientsTable.Size = new System.Drawing.Size(762, 311);
             this.ingredientsTable.TabIndex = 0;
             // 
+            // modifyDrugButton
+            // 
+            this.modifyDrugButton.Location = new System.Drawing.Point(180, 334);
+            this.modifyDrugButton.Name = "modifyDrugButton";
+            this.modifyDrugButton.Size = new System.Drawing.Size(94, 29);
+            this.modifyDrugButton.TabIndex = 2;
+            this.modifyDrugButton.Text = "Modify";
+            this.modifyDrugButton.UseVisualStyleBackColor = true;
+            this.modifyDrugButton.Click += new System.EventHandler(this.modifyDrugButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -398,5 +410,6 @@
         private Button deleteIngredientsButton;
         private Button modifyIngredientsButton;
         private Button addIngredientsButton;
+        private Button modifyDrugButton;
     }
 }

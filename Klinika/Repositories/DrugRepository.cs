@@ -59,6 +59,19 @@ namespace Klinika.Repositories
                 }
             }
         }
+        public List<Ingredient> GetIngredientsOfOne(int id)
+        {
+            List<Ingredient> ingredients = new List<Ingredient>();
+            string getDrugsIngredientsQuery = $"SELECT IngredientID FROM [DrugIngredient] WHERE DrugID = {id}";
+            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDrugsIngredientsQuery);
+            foreach (object row in result)
+            {
+                var IngredientID = Convert.ToInt32(((object[])row)[0].ToString());
+                var ingredient = IngredientRepository.Instance.ingredients.Where(x => x.id == IngredientID).FirstOrDefault();
+                if (ingredient != null) ingredients.Add(ingredient);
+            }
+            return ingredients;
+        }
 
         public List<Drug> GetApproved()
         {
@@ -67,6 +80,10 @@ namespace Klinika.Repositories
         public List<Drug> GetUnapproved()
         {
             return drugs.Where(x => x.approved == "C").ToList();
+        }
+        public List<Drug> GetDenied()
+        {
+            return drugs.Where(x => x.approved == "D").ToList();
         }
 
         public static void CreateUnapproved(int id, string description)
@@ -90,6 +107,12 @@ namespace Klinika.Repositories
                 ("@ID", id));
 
             drugs.Where(x => x.id == id).First().approved = type.ToString();
+        }
+
+        public static string GetNote(int id)
+        {
+            string getUnapprovedDrugQuery = $"SELECT * FROM [UnapprovedDrug] WHERE DrugID = {id} AND IsFixed = 0";
+            return ((object[])DatabaseConnection.GetInstance().ExecuteSelectCommand(getUnapprovedDrugQuery)[0])[1].ToString();
         }
     }
 }

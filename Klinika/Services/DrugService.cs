@@ -13,6 +13,10 @@ namespace Klinika.Services
         {
             return DrugRepository.Instance.GetApproved();
         }
+        public static List<Drug> GetDenied()
+        {
+            return DrugRepository.Instance.GetDenied();
+        }
         public static List<Drug> GetUnapproved()
         {
             return DrugRepository.Instance.GetUnapproved();
@@ -25,6 +29,16 @@ namespace Klinika.Services
         {
             DrugRepository.Instance.ModifyType(id, 'D');
             DrugRepository.CreateUnapproved(id, description);
+        }
+        public static List<Ingredient> GetIngredients(int id)
+        {
+            List<Ingredient> ingredients = Repositories.DrugRepository.Instance.GetIngredientsOfOne(id);
+            return ingredients;
+        }
+
+        public static string GetNote(int id)
+        {
+            return Repositories.DrugRepository.GetNote(id);
         }
     }
 }
