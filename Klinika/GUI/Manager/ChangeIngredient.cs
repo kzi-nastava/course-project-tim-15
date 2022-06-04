@@ -16,11 +16,8 @@ namespace Klinika.GUI.Manager
         Main main;
         public ChangeIngredient(int id, Main m)
         {
+            this.id = id;
             main = m;
-            if (id == -1)
-            {
-                button.Text = "Modify";
-            }
             InitializeComponent();
         }
 
@@ -31,8 +28,9 @@ namespace Klinika.GUI.Manager
             ingredient.name = nameBox.Text;
             ingredient.type = typeBox.Text;
             Services.IngredientService.Modify(ingredient);
+
             main.Main_Load(null, EventArgs.Empty);
-            if (id == -1)
+            if (id != -1)
             {
                 MessageBox.Show("Ingredient successfully modified!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -46,6 +44,10 @@ namespace Klinika.GUI.Manager
         private void ChangeIngredient_Load(object sender, EventArgs e)
         {
 
+            if (id != -1)
+            {
+                button1.Text = "Modify";
+            }
         }
     }
 }

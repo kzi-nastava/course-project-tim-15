@@ -19,6 +19,11 @@ namespace Klinika.Repositories
                 return instance;
             }
         }
+        public static IngredientRepository Reload()
+        {
+            instance = new IngredientRepository();
+            return instance;
+        }
         private IngredientRepository()
         {
             ingredients = GetAll();
@@ -52,12 +57,12 @@ namespace Klinika.Repositories
             string createQuery = "INSERT INTO [Ingredient] " +
                 "(Name, Type, IsDeleted) " +
                 "VALUES (@Name, @Type, 0)";
-            DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(createQuery, ("@Name", ingredient.name), ("@Type", ingredient.type));
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createQuery, ("@Name", ingredient.name), ("@Type", ingredient.type));
         }
 
         public void Modify(Ingredient ingredient)
         {
-            string modifyQuery = "UPDATE [Ingredient] SET Type = @Type , Name = @Name  WHERE ID = @ID";
+            string modifyQuery = "UPDATE [Ingredient] SET Type = @Type, Name = @Name  WHERE ID = @ID";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuery, ("@Type", ingredient.type), ("@Name", ingredient.name), ("@ID", ingredient.id));
         }
     }

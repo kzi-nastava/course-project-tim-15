@@ -15,6 +15,7 @@ namespace Klinika.Services
         public static void Delete(int id)
         {
             Repositories.IngredientRepository.Instance.Delete(id);
+            Repositories.IngredientRepository.Reload();
         }
         public static void Modify(Models.Ingredient ingredient)
         {
@@ -26,6 +27,7 @@ namespace Klinika.Services
             {
                 Repositories.IngredientRepository.Instance.Modify(ingredient);
             }
+            Repositories.IngredientRepository.Reload();
         }
     }
 }

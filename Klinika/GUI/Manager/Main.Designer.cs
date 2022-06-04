@@ -47,13 +47,13 @@
             this.numberTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTable = new System.Windows.Forms.DataGridView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.drugsTable = new System.Windows.Forms.DataGridView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.ingredientsTable = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
-            this.addIngredientsButton = new System.Windows.Forms.Button();
-            this.modifyIngredientsButton = new System.Windows.Forms.Button();
             this.deleteIngredientsButton = new System.Windows.Forms.Button();
+            this.modifyIngredientsButton = new System.Windows.Forms.Button();
+            this.addIngredientsButton = new System.Windows.Forms.Button();
+            this.ingredientsTable = new System.Windows.Forms.DataGridView();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
@@ -271,6 +271,15 @@
             this.tabPage3.Text = "Drugs";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(43, 334);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 29);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // drugsTable
             // 
             this.drugsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -278,6 +287,7 @@
             this.drugsTable.Name = "drugsTable";
             this.drugsTable.RowHeadersWidth = 51;
             this.drugsTable.RowTemplate.Height = 29;
+            this.drugsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.drugsTable.Size = new System.Drawing.Size(769, 308);
             this.drugsTable.TabIndex = 0;
             // 
@@ -294,34 +304,15 @@
             this.tabPage4.Text = "Ingredients";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // ingredientsTable
+            // deleteIngredientsButton
             // 
-            this.ingredientsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ingredientsTable.Location = new System.Drawing.Point(3, 3);
-            this.ingredientsTable.Name = "ingredientsTable";
-            this.ingredientsTable.RowHeadersWidth = 51;
-            this.ingredientsTable.RowTemplate.Height = 29;
-            this.ingredientsTable.Size = new System.Drawing.Size(762, 311);
-            this.ingredientsTable.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(43, 334);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 29);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // addIngredientsButton
-            // 
-            this.addIngredientsButton.Location = new System.Drawing.Point(44, 332);
-            this.addIngredientsButton.Name = "addIngredientsButton";
-            this.addIngredientsButton.Size = new System.Drawing.Size(94, 29);
-            this.addIngredientsButton.TabIndex = 1;
-            this.addIngredientsButton.Text = "Add New";
-            this.addIngredientsButton.UseVisualStyleBackColor = true;
-            this.addIngredientsButton.Click += new System.EventHandler(this.addIngredientsButton_Click);
+            this.deleteIngredientsButton.Location = new System.Drawing.Point(348, 332);
+            this.deleteIngredientsButton.Name = "deleteIngredientsButton";
+            this.deleteIngredientsButton.Size = new System.Drawing.Size(94, 29);
+            this.deleteIngredientsButton.TabIndex = 3;
+            this.deleteIngredientsButton.Text = "Delete";
+            this.deleteIngredientsButton.UseVisualStyleBackColor = true;
+            this.deleteIngredientsButton.Click += new System.EventHandler(this.deleteIngredientsButton_Click);
             // 
             // modifyIngredientsButton
             // 
@@ -333,15 +324,26 @@
             this.modifyIngredientsButton.UseVisualStyleBackColor = true;
             this.modifyIngredientsButton.Click += new System.EventHandler(this.modifyIngredientsButton_Click);
             // 
-            // deleteIngredientsButton
+            // addIngredientsButton
             // 
-            this.deleteIngredientsButton.Location = new System.Drawing.Point(348, 332);
-            this.deleteIngredientsButton.Name = "deleteIngredientsButton";
-            this.deleteIngredientsButton.Size = new System.Drawing.Size(94, 29);
-            this.deleteIngredientsButton.TabIndex = 3;
-            this.deleteIngredientsButton.Text = "Delete";
-            this.deleteIngredientsButton.UseVisualStyleBackColor = true;
-            this.deleteIngredientsButton.Click += new System.EventHandler(this.deleteIngredientsButton_Click);
+            this.addIngredientsButton.Location = new System.Drawing.Point(44, 332);
+            this.addIngredientsButton.Name = "addIngredientsButton";
+            this.addIngredientsButton.Size = new System.Drawing.Size(94, 29);
+            this.addIngredientsButton.TabIndex = 1;
+            this.addIngredientsButton.Text = "Add New";
+            this.addIngredientsButton.UseVisualStyleBackColor = true;
+            this.addIngredientsButton.Click += new System.EventHandler(this.addIngredientsButton_Click);
+            // 
+            // ingredientsTable
+            // 
+            this.ingredientsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ingredientsTable.Location = new System.Drawing.Point(3, 3);
+            this.ingredientsTable.Name = "ingredientsTable";
+            this.ingredientsTable.RowHeadersWidth = 51;
+            this.ingredientsTable.RowTemplate.Height = 29;
+            this.ingredientsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ingredientsTable.Size = new System.Drawing.Size(762, 311);
+            this.ingredientsTable.TabIndex = 0;
             // 
             // Main
             // 

@@ -307,7 +307,7 @@ namespace Klinika.GUI.Manager
 
         private void modifyIngredientsButton_Click(object sender, EventArgs e)
         {
-            new ChangeIngredient((int)ingredientsTable.SelectedRows[0].Cells["id"].Value, this).Show();
+            new ChangeIngredient(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()), this).Show();
         }
 
         private void deleteIngredientsButton_Click(object sender, EventArgs e)
@@ -315,8 +315,9 @@ namespace Klinika.GUI.Manager
             DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected ingredient? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (deletionConfirmation == DialogResult.Yes)
             {
-                Services.IngredientService.Delete((int)ingredientsTable.SelectedRows[0].Cells["id"].Value);
+                Services.IngredientService.Delete(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()));
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Services.IngredientService.GetAll();
                 this.Main_Load(null, EventArgs.Empty);
             }
         }
