@@ -53,32 +53,33 @@ namespace Klinika.GUI.Doctor
         {
             var startDate = PrescriptionStartDatePicker.Value;
             var endDate = PrescriptionEndDatePicker.Value;
-
             if (startDate < endDate) return true;
-
             MessageBoxUtilities.ShowErrorMessage("Date is not valid!");
             return false;
         }
         private bool ValidateDrug()
         {
-            if (!IsDrugSelected()) return false;
-            if (!IsDrugPrescriptible(DrugsTable.GetSelectedDrug())) return false;
-            return true;
-        }
-        private bool IsDrugSelected()
-        {
-            if (DrugsTable.SelectedRows.Count == 0)
+            if (!IsDrugSelected())
             {
                 MessageBoxUtilities.ShowErrorMessage("Drug not selected!");
                 return false;
             }
+            if (!IsDrugPrescriptible(DrugsTable.GetSelectedDrug()))
+            {
+                var msg = "Patient is allergic to ingredient found in the selected drug\n" + "Are you sure you want to prescript it?";
+                return UIUtilities.Confirm(msg);
+            }
+            return true;
+        }
+        private bool IsDrugSelected()
+        {
+            if (DrugsTable.SelectedRows.Count == 0) return false;
             return true;
         }
         private bool IsDrugPrescriptible(Drug selected)
         {
             if (!parent.record.IsAllergic(selected)) return true;
-            var msg = "Patient is allergic to ingredient found in the selected drug\n" + "Are you sure you want to prescript it?";
-            return UIUtilities.Confirm(msg);
+            return false;
         }
         #endregion
     }

@@ -2,14 +2,14 @@
 
 namespace Klinika.Models
 {
-    public class PersnalAppointmentDTO
+    public class PersonalAppointmentDTO
     {
         internal Form parent { get; }
         internal Appointment? appointment { get; set; }
         internal bool isDatePicked { get; }
         internal bool isCreate { get; }
         internal AppointmentsDataGridView? appointmentsTable { get; }
-        public PersnalAppointmentDTO(Form parent, Appointment appointment, bool isCreate, bool isDatePicked, AppointmentsDataGridView appointmentsTable = null)
+        public PersonalAppointmentDTO(Form parent, Appointment appointment, bool isCreate, bool isDatePicked, AppointmentsDataGridView appointmentsTable = null)
         {
             this.parent = parent;
             this.appointment = appointment;
