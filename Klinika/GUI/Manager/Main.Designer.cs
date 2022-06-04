@@ -46,17 +46,32 @@
             this.equipmentTextBox = new System.Windows.Forms.TextBox();
             this.numberTextBox = new System.Windows.Forms.TextBox();
             this.equipmentTable = new System.Windows.Forms.DataGridView();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.addDrugButton = new System.Windows.Forms.Button();
+            this.drugsTable = new System.Windows.Forms.DataGridView();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.deleteIngredientsButton = new System.Windows.Forms.Button();
+            this.modifyIngredientsButton = new System.Windows.Forms.Button();
+            this.addIngredientsButton = new System.Windows.Forms.Button();
+            this.ingredientsTable = new System.Windows.Forms.DataGridView();
+            this.modifyDrugButton = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.equipmentTable)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.drugsTable)).BeginInit();
+            this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ingredientsTable)).BeginInit();
             this.SuspendLayout();
             // 
             // tabs
             // 
             this.tabs.Controls.Add(this.tabPage1);
             this.tabs.Controls.Add(this.tabPage2);
+            this.tabs.Controls.Add(this.tabPage3);
+            this.tabs.Controls.Add(this.tabPage4);
             this.tabs.Location = new System.Drawing.Point(12, 12);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
@@ -246,6 +261,103 @@
             this.equipmentTable.Size = new System.Drawing.Size(756, 250);
             this.equipmentTable.TabIndex = 0;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.modifyDrugButton);
+            this.tabPage3.Controls.Add(this.addDrugButton);
+            this.tabPage3.Controls.Add(this.drugsTable);
+            this.tabPage3.Location = new System.Drawing.Point(4, 29);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(768, 393);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Drugs";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // addDrugButton
+            // 
+            this.addDrugButton.Location = new System.Drawing.Point(43, 334);
+            this.addDrugButton.Name = "addDrugButton";
+            this.addDrugButton.Size = new System.Drawing.Size(94, 29);
+            this.addDrugButton.TabIndex = 1;
+            this.addDrugButton.Text = "Add New";
+            this.addDrugButton.UseVisualStyleBackColor = true;
+            this.addDrugButton.Click += new System.EventHandler(this.addDrugButton_Click);
+            // 
+            // drugsTable
+            // 
+            this.drugsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.drugsTable.Location = new System.Drawing.Point(3, 3);
+            this.drugsTable.Name = "drugsTable";
+            this.drugsTable.RowHeadersWidth = 51;
+            this.drugsTable.RowTemplate.Height = 29;
+            this.drugsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.drugsTable.Size = new System.Drawing.Size(769, 308);
+            this.drugsTable.TabIndex = 0;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.deleteIngredientsButton);
+            this.tabPage4.Controls.Add(this.modifyIngredientsButton);
+            this.tabPage4.Controls.Add(this.addIngredientsButton);
+            this.tabPage4.Controls.Add(this.ingredientsTable);
+            this.tabPage4.Location = new System.Drawing.Point(4, 29);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(768, 393);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Ingredients";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // deleteIngredientsButton
+            // 
+            this.deleteIngredientsButton.Location = new System.Drawing.Point(348, 332);
+            this.deleteIngredientsButton.Name = "deleteIngredientsButton";
+            this.deleteIngredientsButton.Size = new System.Drawing.Size(94, 29);
+            this.deleteIngredientsButton.TabIndex = 3;
+            this.deleteIngredientsButton.Text = "Delete";
+            this.deleteIngredientsButton.UseVisualStyleBackColor = true;
+            this.deleteIngredientsButton.Click += new System.EventHandler(this.deleteIngredientsButton_Click);
+            // 
+            // modifyIngredientsButton
+            // 
+            this.modifyIngredientsButton.Location = new System.Drawing.Point(206, 332);
+            this.modifyIngredientsButton.Name = "modifyIngredientsButton";
+            this.modifyIngredientsButton.Size = new System.Drawing.Size(94, 29);
+            this.modifyIngredientsButton.TabIndex = 2;
+            this.modifyIngredientsButton.Text = "Modify";
+            this.modifyIngredientsButton.UseVisualStyleBackColor = true;
+            this.modifyIngredientsButton.Click += new System.EventHandler(this.modifyIngredientsButton_Click);
+            // 
+            // addIngredientsButton
+            // 
+            this.addIngredientsButton.Location = new System.Drawing.Point(44, 332);
+            this.addIngredientsButton.Name = "addIngredientsButton";
+            this.addIngredientsButton.Size = new System.Drawing.Size(94, 29);
+            this.addIngredientsButton.TabIndex = 1;
+            this.addIngredientsButton.Text = "Add New";
+            this.addIngredientsButton.UseVisualStyleBackColor = true;
+            this.addIngredientsButton.Click += new System.EventHandler(this.addIngredientsButton_Click);
+            // 
+            // ingredientsTable
+            // 
+            this.ingredientsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ingredientsTable.Location = new System.Drawing.Point(3, 3);
+            this.ingredientsTable.Name = "ingredientsTable";
+            this.ingredientsTable.RowHeadersWidth = 51;
+            this.ingredientsTable.RowTemplate.Height = 29;
+            this.ingredientsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ingredientsTable.Size = new System.Drawing.Size(762, 311);
+            this.ingredientsTable.TabIndex = 0;
+            // 
+            // modifyDrugButton
+            // 
+            this.modifyDrugButton.Location = new System.Drawing.Point(180, 334);
+            this.modifyDrugButton.Name = "modifyDrugButton";
+            this.modifyDrugButton.Size = new System.Drawing.Size(94, 29);
+            this.modifyDrugButton.TabIndex = 2;
+            this.modifyDrugButton.Text = "Modify";
+            this.modifyDrugButton.UseVisualStyleBackColor = true;
+            this.modifyDrugButton.Click += new System.EventHandler(this.modifyDrugButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -262,6 +374,10 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.equipmentTable)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.drugsTable)).EndInit();
+            this.tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ingredientsTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -286,5 +402,14 @@
         private ComboBox quantityComboBox;
         private Button dateButton;
         private Button renovateButton;
+        private TabPage tabPage3;
+        private TabPage tabPage4;
+        private DataGridView drugsTable;
+        private DataGridView ingredientsTable;
+        private Button addDrugButton;
+        private Button deleteIngredientsButton;
+        private Button modifyIngredientsButton;
+        private Button addIngredientsButton;
+        private Button modifyDrugButton;
     }
 }

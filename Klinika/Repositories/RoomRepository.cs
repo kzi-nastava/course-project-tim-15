@@ -261,7 +261,7 @@ namespace Klinika.Repositories
 
             foreach (DataRow row in renovations.Rows)
             {
-                RenovateRoom(int.Parse(row["ID"].ToString()), int.Parse(row["RoomID"].ToString()));
+                //RenovateRoom(int.Parse(row["ID"].ToString()), int.Parse(row["RoomID"].ToString()));
             }
         }
     }
