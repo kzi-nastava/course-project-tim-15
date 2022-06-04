@@ -6,10 +6,6 @@ namespace Klinika.Services
 {
     internal class NotificationService
     {
-        public static List<Notification> Get(Patient patient)
-        {
-            return NotificationRepository.Get(patient);
-        }
         public static void Send(Notification notification)
         {
             NotificationRepository.Send(notification);
@@ -36,7 +32,7 @@ namespace Klinika.Services
         {
             NotificationRepository.Modify(id);
         }
-        public static List<Notification> GetAllForPatient (Patient patient)
+        public static List<Notification> GetAll (Patient patient)
         {
             return NotificationRepository.Get(patient);
         }

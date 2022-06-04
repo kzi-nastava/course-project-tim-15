@@ -1,4 +1,6 @@
-﻿namespace Klinika.GUI.Patient
+﻿using Klinika.Forms;
+
+namespace Klinika.GUI.Patient
 {
     partial class MedicalRecord
     {
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.MedicalRecordTable = new System.Windows.Forms.DataGridView();
+            this.MedicalRecordTable = new Klinika.Forms.MedicalRecordDataGridView();
             this.GradeDoctorButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
             this.SearchButton = new System.Windows.Forms.Button();
@@ -136,7 +138,7 @@
 
         #endregion
 
-        private DataGridView MedicalRecordTable;
+        private MedicalRecordDataGridView MedicalRecordTable;
         private Button GradeDoctorButton;
         private Button ResetButton;
         private Button SearchButton;

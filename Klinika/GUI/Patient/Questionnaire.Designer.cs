@@ -1,4 +1,5 @@
-﻿namespace Klinika.GUI.Patient
+﻿using Klinika.Forms;
+namespace Klinika.GUI.Patient
 {
     partial class Questionnaire
     {
@@ -32,7 +33,7 @@
             this.GradeLabel = new System.Windows.Forms.Label();
             this.GradeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.SetGradeButton = new System.Windows.Forms.Button();
-            this.QuestionsTable = new System.Windows.Forms.DataGridView();
+            this.QuestionsTable = new Klinika.Forms.QuestionsDataGridView();
             this.SendButton = new System.Windows.Forms.Button();
             this.CommentTextBox = new System.Windows.Forms.TextBox();
             this.CommentLabel = new System.Windows.Forms.Label();
@@ -165,7 +166,7 @@
         private Label GradeLabel;
         private NumericUpDown GradeNumericUpDown;
         private Button SetGradeButton;
-        private DataGridView QuestionsTable;
+        private QuestionsDataGridView QuestionsTable;
         private Button SendButton;
         internal TextBox CommentTextBox;
         private Label CommentLabel;

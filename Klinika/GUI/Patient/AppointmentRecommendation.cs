@@ -2,7 +2,6 @@
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
-using System.Data;
 
 namespace Klinika.GUI.Patient
 {
@@ -19,7 +18,7 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
-            FillRecommendedAppointmentTable();
+            RecommendedAppointmentTable.Fill();
             parent.Enabled = false;
             ScheduleButton.Enabled = false;
             DoctorRadioButton.Checked = true;
@@ -59,36 +58,11 @@ namespace Klinika.GUI.Patient
             TimeSlot timeSlot = new TimeSlot(FromTimePicker.Value, ToTimePicker.Value);
 
             List<Appointment> recommended = AppointmentRecommendationService.Find(doctorID, timeSlot, DeadlineDatePicker.Value, priority);
-            FillRecommendedAppointmentTable(recommended);
-        }
-        private void FillRecommendedAppointmentTable(List<Appointment> appointments = null)
-        {
-            DataTable dataTable = new DataTable();
-            dataTable.Columns.Add("Doctor ID");
-            dataTable.Columns.Add("Doctor");
-            dataTable.Columns.Add("DateTime");
-
-            if (appointments != null)
-            {
-                foreach (Appointment appointment in appointments)
-                {
-                    DataRow newRow = dataTable.NewRow();
-
-                    newRow["Doctor ID"] = appointment.doctorID;
-                    newRow["Doctor"] = DoctorService.GetFullName(appointment.doctorID);
-                    newRow["DateTime"] = appointment.dateTime;
-                    dataTable.Rows.Add(newRow);
-                }
-            }
-            RecommendedAppointmentTable.DataSource = dataTable;
+            RecommendedAppointmentTable.Fill(recommended);
         }
         private void RecommendedAppointmentTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
             ScheduleButton.Enabled = true;
-        }
-        private int GetSelectedDoctorID()
-        {
-            return Convert.ToInt32(RecommendedAppointmentTable.SelectedRows[0].Cells["Doctor ID"].Value);
         }
         private DateTime GetSelectedDateTime()
         {
@@ -100,7 +74,7 @@ namespace Klinika.GUI.Patient
         }
         private void Create()
         {
-            Appointment appointment = new Appointment(GetSelectedDoctorID(), parent.patient.id, GetSelectedDateTime());
+            Appointment appointment = new Appointment(RecommendedAppointmentTable.GetSelectedID(), parent.patient.id, GetSelectedDateTime());
             AppointmentService.Create(appointment);
         }
     }

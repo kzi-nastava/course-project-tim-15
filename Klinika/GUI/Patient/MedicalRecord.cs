@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Klinika.Models;
+﻿using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
 
@@ -24,42 +23,14 @@ namespace Klinika.GUI.Patient
         }
         private void Initialize()
         {
-            FillMedicalRecordTable(AnamnesisService.Get(parent.patient.id));
-        }
-        private void FillMedicalRecordTable(List<Anamnesis> anamneses)
-        {
-            List<Appointment> appointments = AppointmentService.GetCompleted(parent.patient.id);
-
-            DataTable anamnesesData = new DataTable();
-            anamnesesData.Columns.Add("Appointment ID");
-            anamnesesData.Columns.Add("Doctor");
-            anamnesesData.Columns.Add("Doctor Specialization");
-            anamnesesData.Columns.Add("DateTime");
-            anamnesesData.Columns.Add("Description");
-            anamnesesData.Columns.Add("Symptoms");
-            anamnesesData.Columns.Add("Conclusion");
-
-            foreach (Anamnesis anamnesis in anamneses)
-            {
-                DataRow newRow = anamnesesData.NewRow();
-                Appointment appointment = appointments.Where(x => x.id == anamnesis.medicalActionID).FirstOrDefault();
-                newRow["Appointment ID"] = anamnesis.medicalActionID;
-                newRow["Doctor"] = DoctorService.GetFullName(appointment.doctorID);
-                newRow["Doctor Specialization"] = DoctorService.GetSpecialization(appointment.doctorID);
-                newRow["DateTime"] = appointment.dateTime;
-                newRow["Description"] = anamnesis.description;
-                newRow["Symptoms"] = anamnesis.symptoms;
-                newRow["Conclusion"] = anamnesis.conclusion;
-                anamnesesData.Rows.Add(newRow);
-            }
-            MedicalRecordTable.DataSource = anamnesesData;
+            MedicalRecordTable.Fill(AnamnesisService.Get(parent.patient.id), parent.patient.id);
         }
         private void GradeDoctorButtonClick(object sender, EventArgs e)
         {
-            int selected = Convert.ToInt32(UIUtilities.GetCellValue(MedicalRecordTable, "Appointment ID"));
-            if (!AppointmentService.IsGraded(selected))
+            Appointment selected = MedicalRecordTable.GetSelected();
+            if (!AppointmentService.IsGraded(selected.id))
             {
-                var appointment = AppointmentService.GetById(selected);
+                var appointment = AppointmentService.GetById(selected.id);
                 new Questionnaire(this, parent.patient.id, Question.Types.DOCTOR, appointment.id, appointment.doctorID).Show();
                 return;
             }
@@ -74,7 +45,7 @@ namespace Klinika.GUI.Patient
         {
             string searchParam = SearchTextBox.Text;
             List<Anamnesis> searchResoult = AnamnesisService.GetFiltered(parent.patient.id, searchParam);
-            FillMedicalRecordTable(searchResoult);
+            MedicalRecordTable.Fill(searchResoult, parent.patient.id);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
-using System.Data;
 using MQuestionnaire = Klinika.Models.Questionnaire;
 
 namespace Klinika.GUI.Patient
@@ -28,48 +27,17 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            Initialize();
+            QuestionsTable.Fill(QuestionService.GetByType(type));
+            SetGradeButton.Enabled = false;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
             parent.Enabled = true;
         }
         #endregion
-        private void Initialize()
+        private List<Answer> CollectData()
         {
-            FillQuestionsTable(QuestionnaireService.GetQuestions(type));
-            SetGradeButton.Enabled = false;
-        }
-        private void FillQuestionsTable(List<Question> questions)
-        {
-            DataTable dataTable = new DataTable();
-            dataTable.Columns.Add("ID");
-            dataTable.Columns.Add("Question");
-            dataTable.Columns.Add("Grade");
-            if (questions == null) return;
-            foreach (Question question in questions)
-            {
-                DataRow newRow = dataTable.NewRow();
-
-                newRow["ID"] = question.id;
-                newRow["Question"] = question.context;
-                newRow["Grade"] = 1;
-                dataTable.Rows.Add(newRow);
-            }
-            QuestionsTable.DataSource = dataTable;
-            QuestionsTable.Columns["ID"].Width = 25;
-            QuestionsTable.Columns["Grade"].Width = 70;
-            QuestionsTable.ClearSelection();
-        }
-        private List<Answer> ColectData()
-        {
-            var answers = new List<Answer>();
-            foreach (DataGridViewRow row in QuestionsTable.Rows)
-            {
-                int questionID = Convert.ToInt32(row.Cells[0].Value);
-                int grade = Convert.ToInt32(row.Cells[2].Value);
-                answers.Add(new Answer(questionID, grade));
-            }
+            var answers = QuestionsTable.GetAll();
             string comment = CommentTextBox.Text;
             questionnaire = new MQuestionnaire(patientID, comment, appointmentID, targetID);
             return answers;
@@ -77,14 +45,13 @@ namespace Klinika.GUI.Patient
         private void SendButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to send this Questionnaire?")) return;
-            var result = ColectData();
-            QuestionnaireService.Send(questionnaire, result);
+            QuestionnaireService.Send(questionnaire, CollectData());
             Close();
         }
         private void SetGradeButtonClick(object sender, EventArgs e)
         {
             int grade = Convert.ToInt32(GradeNumericUpDown.Value);
-            QuestionsTable.SelectedRows[0].Cells["Grade"].Value = grade;
+            QuestionsTable.SetGrade(grade);
         }
         private void QuestionsTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
