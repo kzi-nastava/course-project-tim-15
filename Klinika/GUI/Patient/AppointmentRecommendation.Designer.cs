@@ -1,4 +1,5 @@
-﻿namespace Klinika.GUI.Patient
+﻿using Klinika.Forms;
+namespace Klinika.GUI.Patient
 {
     partial class AppointmentRecommendation
     {
@@ -40,7 +41,7 @@
             this.PriorityGroupBox = new System.Windows.Forms.GroupBox();
             this.TimeRadioButton = new System.Windows.Forms.RadioButton();
             this.DoctorRadioButton = new System.Windows.Forms.RadioButton();
-            this.RecommendedAppointmentTable = new System.Windows.Forms.DataGridView();
+            this.RecommendedAppointmentTable = new Klinika.Forms.RecommendedAppointmentsDataGridView();
             this.CancelButton = new System.Windows.Forms.Button();
             this.ScheduleButton = new System.Windows.Forms.Button();
             this.RecommendButton = new System.Windows.Forms.Button();
@@ -257,7 +258,7 @@
         private GroupBox PriorityGroupBox;
         private RadioButton DoctorRadioButton;
         private RadioButton TimeRadioButton;
-        private DataGridView RecommendedAppointmentTable;
+        private RecommendedAppointmentsDataGridView RecommendedAppointmentTable;
         private Button CancelButton;
         private Button ScheduleButton;
         private Button RecommendButton;
