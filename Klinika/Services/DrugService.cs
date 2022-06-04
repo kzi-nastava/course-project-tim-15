@@ -5,6 +5,10 @@ namespace Klinika.Services
 {
     public class DrugService
     {
+        public static List<Drug> GetAll()
+        {
+            return DrugRepository.Instance.drugs;
+        }
         public static List<Drug> GetApproved()
         {
             return DrugRepository.Instance.GetApproved();
