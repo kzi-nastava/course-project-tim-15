@@ -15,7 +15,7 @@ namespace Klinika.Forms
             dataTable.Columns.Add("Specialization");
             dataTable.Columns.Add("Grade");
             DataSource = dataTable;
-            //if (doctors == null) return;
+            if (doctors == null) return;
             foreach (Doctor doctor in doctors) Insert(doctor);
             ClearSelection();
         }
