@@ -27,7 +27,7 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            QuestionsTable.Fill(QuestionnaireService.GetQuestions(type));
+            QuestionsTable.Fill(QuestionService.GetByType(type));
             SetGradeButton.Enabled = false;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
