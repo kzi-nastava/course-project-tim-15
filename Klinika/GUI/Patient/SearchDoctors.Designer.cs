@@ -1,4 +1,6 @@
-﻿namespace Klinika.GUI.Patient
+﻿using Klinika.Forms;
+
+namespace Klinika.GUI.Patient
 {
     partial class SearchDoctors
     {
@@ -37,7 +39,7 @@
             this.DoctorSearchButton = new System.Windows.Forms.Button();
             this.DoctorSurnameTextBox = new System.Windows.Forms.TextBox();
             this.DoctorNameTextBox = new System.Windows.Forms.TextBox();
-            this.DoctorsTable = new System.Windows.Forms.DataGridView();
+            this.DoctorsTable = new Klinika.Forms.DoctorsDataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.DoctorsTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -185,6 +187,6 @@
         private Button DoctorSearchButton;
         private TextBox DoctorSurnameTextBox;
         private TextBox DoctorNameTextBox;
-        private DataGridView DoctorsTable;
+        private DoctorsDataGridView DoctorsTable;
     }
 }

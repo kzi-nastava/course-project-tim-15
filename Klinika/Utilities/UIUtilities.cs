@@ -40,11 +40,11 @@ namespace Klinika.Utilities
             comboBox.Items.AddRange(UserRepository.GetPatients().ToArray());
             comboBox.SelectedIndex = 0;
         }
-        public static void FillSpecializationComboBox(ComboBox comboBox)
+        public static void FillSpecializationComboBox(ComboBox comboBox, int index = -1)
         {
             var specializations = SpecializationService.GetAll().ToArray();
             comboBox.Items.AddRange(specializations); 
-            comboBox.SelectedIndex = -1;
+            comboBox.SelectedIndex = index;
         }
         public static void FillSpecializedDoctorComboBox(ComboBox comboBox, int specializationID)
         {
