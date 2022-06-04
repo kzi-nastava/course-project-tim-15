@@ -24,14 +24,14 @@ namespace Klinika.GUI.Patient
         {
             OffsetNumericUpDown.Value = parent.patient.notificationOffset;
             SetButton.Enabled = false;
-            NotificationsTable.Fill(NotificationService.GetAllForPatient(parent.patient));
+            NotificationsTable.Fill(NotificationService.GetAll(parent.patient));
         }
         private void SetButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to save changes?")) return;
             parent.patient.notificationOffset = Convert.ToInt32(OffsetNumericUpDown.Value);
             PatientService.Modify(parent.patient);
-            NotificationsTable.Fill(NotificationService.GetAllForPatient(parent.patient));
+            NotificationsTable.Fill(NotificationService.GetAll(parent.patient));
             SetButton.Enabled = false;
         }
         private void MarkAsReadButtonClick(object sender, EventArgs e)
