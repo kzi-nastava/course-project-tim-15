@@ -18,6 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Forms\PatientsRequestsTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Forms\PatientsTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="Forms\RoomEquipmentDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>

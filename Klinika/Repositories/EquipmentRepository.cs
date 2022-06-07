@@ -220,13 +220,24 @@ namespace Klinika.Repositories
             }
         }
 
-        public static DataTable GetDynamicEquipmentInStorage()
+        public static List<Equipment> GetDynamicEquipmentInStorage()
         {
+            List<Equipment> dynamicEquipmentInStorage = new List<Equipment>();
             string getQuery = "SELECT [Equipment].ID, [Equipment].Name, ISNULL([Storage].Quantity,0) 'Quantity' FROM [Equipment] " +
                               "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +
                               "LEFT OUTER JOIN [Storage] ON [Equipment].ID = [Storage].EquipmentID " +
                               "WHERE [EquipmentType].Name = 'dynamic'";
-            return DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
+            DataTable retrieved = DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
+            foreach(DataRow equipment in retrieved.Rows)
+            {
+                dynamicEquipmentInStorage.Add(new Equipment((int)equipment["ID"],
+                                                            equipment["Name"].ToString(),
+                                                            (int)equipment["Quantity"],
+                                                            0,
+                                                            Equipment.EquipmentType.DYNAMIC
+                                                            ));
+            }
+            return dynamicEquipmentInStorage;
         }
 
         public static int GetQuantity(int roomId, int equipmentId)

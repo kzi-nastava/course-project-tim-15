@@ -6,9 +6,9 @@ namespace Klinika.GUI.Secretary
 {
     public partial class AddPatient : Form
     {
-        private mainWindow parent;
+        private PatientsManagement parent;
 
-        public AddPatient(mainWindow parent)
+        public AddPatient(PatientsManagement parent)
         {
             this.parent = parent;
             InitializeComponent();

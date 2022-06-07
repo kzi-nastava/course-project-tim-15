@@ -15,31 +15,11 @@ namespace Klinika.GUI.Secretary
         }
 
 
-        private void addPatientButton_Click(object sender, EventArgs e)
-        {
-            new AddPatient(this).Show();
-        }
-
-        private void mainWindow_Load(object sender, EventArgs e)
-        {
-            UIUtilities.Fill(patientsTable, PatientService.GetAll());
-            patientsTable.ClearSelection();
-        }
-
-        private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
         }
 
-        private void deletePatientButton_Click(object sender, EventArgs e)
-        {
-            DeletePatient();
-        }
-
-        private void modifyPatientButton_Click(object sender, EventArgs e)
-        {
-            ShowModifyPatientForm();
-        }
 
         private void patientsTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -96,24 +76,6 @@ namespace Klinika.GUI.Secretary
             FindSuitableDoctor();
         }
 
-        private void urgentSchedulingButton_Click(object sender, EventArgs e)
-        {
-            new UrgentScheduling().Show();
-        }
-
-        private void ShowModifyPatientForm()
-        {
-            string selectedPatientEmail = UIUtilities.GetCellValue(patientsTable, "Email").ToString();
-            Roles.Patient selected = PatientService.GetSingle(selectedPatientEmail);
-            new ModifyPatient(this,selected).Show();
-        }
-
-        private void ShowModificationDetailsForm()
-        {
-            int selectedRequestId = (int)UIUtilities.GetCellValue(requestsTable, "ID");
-            PatientModificationRequest selected = PatientRequestService.GetModificationRequest(selectedRequestId);
-            new ModificationRequestDetails(selected).Show();
-        }
 
         public void SetRefferalTabFieldValues(ChosenReferral referral)
         {
@@ -222,7 +184,8 @@ namespace Klinika.GUI.Secretary
 
         private void UnblockPatient()
         {
-            DialogResult unblockingConfirmation = MessageBoxUtilities.ShowConfirmationMessage("Are you sure you want to unblock the selected patient?");
+            DialogResult unblockingConfirmation = MessageBoxUtilities.
+                ConfirmationMessage("Are you sure you want to unblock the selected patient?");
             if (unblockingConfirmation == DialogResult.No) return;
             string email = UIUtilities.GetCellValue(patientsTable, "Email").ToString();
             try

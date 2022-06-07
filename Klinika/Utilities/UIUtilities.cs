@@ -7,20 +7,9 @@ namespace Klinika.Utilities
 {
     internal class UIUtilities
     {
-        public static void Fill(DataGridView table, DataTable data)
-        {
-            table.DataSource = data;
-            table.ClearSelection();
-        }
-
         public static int ExtractID(string objectWithId)
         {
             return Convert.ToInt32(objectWithId.Split('.')[0]);
-        }
-
-        public static object GetCellValue(DataGridView table, string columnName)
-        {
-            return table.SelectedRows[0].Cells[columnName].Value;
         }
 
         public static void FillPatientSelectionList(ComboBox patientSelection)

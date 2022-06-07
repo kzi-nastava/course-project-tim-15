@@ -1,4 +1,6 @@
-﻿namespace Klinika.Forms.Base
+﻿using System.Data;
+
+namespace Klinika.Forms.Base
 {
     public abstract class ReadonlyTableBase<T> : DataGridView
     {
@@ -13,5 +15,10 @@
             SelectionChanged += delegate { ClearSelection(); };
         }
         abstract public void Fill(List<T> items);
+
+        public object GetCellValue(string columnName)
+        {
+            return SelectedRows[0].Cells[columnName].Value;
+        }
     }
 }
