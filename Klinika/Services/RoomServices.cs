@@ -1,10 +1,6 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Repositories;
 
 namespace Klinika.Services
 {
@@ -20,8 +16,8 @@ namespace Klinika.Services
         }
         private static bool IsOccupied(int roomID, TimeSlot slot, int forAppointmentID = -1)
         {
-            List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().Appointments.Where(
-                x => x.RoomID == roomID && slot.DoesOverlap(new TimeSlot(x.DateTime, x.Duration)) && !x.IsDeleted && x.ID != forAppointmentID).ToList();
+            List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().appointments.Where(
+                x => x.roomID == roomID && slot.DoesOverlap(new TimeSlot(x.dateTime, x.duration)) && !x.isDeleted && x.id != forAppointmentID).ToList();
 
             if (forSelectedTimeSpan.Count == 0) return false;
             return true;
@@ -51,15 +47,15 @@ namespace Klinika.Services
 
         public static Room[] GetOperationRooms()
         {
-            return RoomRepository.Get().Where(x => x.Type == 1).ToArray();
+            return RoomRepository.Get().Where(x => x.type == 1).ToArray();
         }
         public static List<Room> GetExaminationRooms()
         {
-            return RoomRepository.Get().Where(x => x.Type == 2).ToList();
+            return RoomRepository.Get().Where(x => x.type == 2).ToList();
         }
         public static Room? GetSingle(int id)
         {
-            return RoomRepository.Get().Where(x => x.ID == id).FirstOrDefault();
+            return RoomRepository.Get().Where(x => x.id == id).FirstOrDefault();
         }
     }
 }

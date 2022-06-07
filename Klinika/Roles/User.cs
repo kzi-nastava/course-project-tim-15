@@ -14,64 +14,64 @@
         #endregion
 
         #region Variables
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
-        public bool IsBlocked { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string surname { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
+        public string role { get; set; }
+        public bool isBlocked { get; set; }
 
         public override string ToString()
         {
-            return $"{Name} {Surname}";
+            return $"{name} {surname}";
         }
         #endregion
 
         #region Constructors
         public User(string email, string password, string role, bool isBlocked)
         {
-            ID = -1;
-            Name = "";
-            Surname = "";
-            Email = email;
-            Password = password;
-            Role = role;
-            IsBlocked = isBlocked;
+            id = -1;
+            name = "";
+            surname = "";
+            this.email = email;
+            this.password = password;
+            this.role = role;
+            this.isBlocked = isBlocked;
         }
         public User (int id, string? name, string? surname, string email, string password, string role, bool isBlocked)
         {
-            ID = id;
-            Name = name;
-            Surname = surname;
-            Email = email;
-            Password = password;
-            Role = role;
-            IsBlocked = isBlocked;
+            this.id = id;
+            this.name = name;
+            this.surname = surname;
+            this.email = email;
+            this.password = password;
+            this.role = role;
+            this.isBlocked = isBlocked;
         }
 
 
         public User(int id, string name,string surname)
         {
-            ID = id;
-            Name = name;
-            Surname = surname;
+            this.id = id;
+            this.name = name;
+            this.surname = surname;
         }
 
         public User(int id, string? name, string? surname, string email, string password)
         {
-            ID = id;
-            Name = name;
-            Surname = surname;
-            Email = email;
-            Password = password;
+            this.id = id;
+            this.name = name;
+            this.surname = surname;
+            this.email = email;
+            this.password = password;
         }
         #endregion
 
 
         public string GetIdAndFullName()
         {
-            return ID + ". " + Name + " " + Surname;
+            return id + ". " + name + " " + surname;
         }
     }
 }

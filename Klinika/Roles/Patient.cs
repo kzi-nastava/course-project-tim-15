@@ -6,7 +6,7 @@
         public DateTime birthdate { get; }
         public string whoBlocked { get; set; }
         public char gender { get; }
-        public int NotificationOffset { get; set; }
+        public int notificationOffset { get; set; }
         public Patient(
                         int id,
                         string jmbg,
@@ -20,9 +20,9 @@
             this.jmbg = jmbg;
             this.birthdate = birthdate;
             this.gender = gender;
-            IsBlocked = false;
+            isBlocked = false;
             whoBlocked = "";
-            NotificationOffset = 10;
+            notificationOffset = 10;
         }
         public Patient(
                         int id,
@@ -38,9 +38,9 @@
             this.jmbg = jmbg;
             this.birthdate = birthdate;
             this.gender = gender;
-            IsBlocked = false;
+            isBlocked = false;
             whoBlocked = "";
-            NotificationOffset = notificationOffset;
+            this.notificationOffset = notificationOffset;
         }
     }
 }

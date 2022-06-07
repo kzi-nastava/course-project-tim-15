@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Klinika.Models
+﻿namespace Klinika.Models
 {
     public class Room
     {
-        public int ID { get; set; }
-        public int Type { get; set; }
-        public int Number { get; set; }
+        public int id { get; set; }
+        public int type { get; set; }
+        public int number { get; set; }
 
         public Room(int id, int type, int number)
         {
-            ID = id;
-            Type = type;
-            Number = number;
+            this.id = id;
+            this.type = type;
+            this.number = number;
         }
 
         public override string ToString()
         {
-            return $"Room No.{Number}";
+            return $"Room No.{number}";
         }
     }
 }

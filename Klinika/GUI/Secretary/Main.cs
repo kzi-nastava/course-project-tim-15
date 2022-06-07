@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Klinika.Services;
-using Klinika.Data;
+﻿using Klinika.Exceptions;
 using Klinika.Models;
-using Klinika.Exceptions;
+using Klinika.Services;
 using Klinika.Utilities;
+using System.Data;
 
 namespace Klinika.GUI.Secretary
 {
@@ -159,12 +149,12 @@ namespace Klinika.GUI.Secretary
         public void ModifyRowOfPatientTable(ref DataRow row, Roles.Patient patient)
         {
             row["JMBG"] = patient.jmbg;
-            row["Name"] = patient.Name;
-            row["Surname"] = patient.Surname;
+            row["Name"] = patient.name;
+            row["Surname"] = patient.surname;
             row["Birthdate"] = patient.birthdate.Date;
             row["Gender"] = patient.gender;
-            row["Email"] = patient.Email;
-            row["Blocked"] = patient.IsBlocked;
+            row["Email"] = patient.email;
+            row["Blocked"] = patient.isBlocked;
             row["BlockedBy"] = patient.whoBlocked;
         }
 
@@ -331,8 +321,8 @@ namespace Klinika.GUI.Secretary
                 {
                     PatientModificationRequest selected = PatientRequestService.GetModificationRequest(requestId);
                     Appointment modified = AppointmentService.GetById(appointmentId);
-                    modified.DoctorID = selected.newDoctorID;
-                    modified.DateTime = selected.newAppointment;
+                    modified.doctorID = selected.newDoctorID;
+                    modified.dateTime = selected.newAppointment;
                     AppointmentService.Modify(modified);
                     appointmentStart = selected.newAppointment;
                 }

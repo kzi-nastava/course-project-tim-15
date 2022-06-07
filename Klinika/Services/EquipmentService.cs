@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Klinika.Models;
 using Klinika.Repositories;
 using System.Data;
-using Klinika.Models;
 
 namespace Klinika.Services
 {
@@ -24,13 +19,13 @@ namespace Klinika.Services
         public static List<Equipment> GetDynamicEquipment(int roomID)
         {
             var equipment = EquipmentRepository.GetDynamicEquipmentInRooms();
-            return equipment.Where(x => x.RoomID == roomID).ToList();
+            return equipment.Where(x => x.roomID == roomID).ToList();
         }
         public static void UpdateRoomsDynamicEquipment(int roomID, List<Equipment> equipments)
         {
             foreach(var equipment in equipments)
             {
-                EquipmentRepository.ModifyRoomsDynamicEquipmentQuantity(roomID, equipment.ID, equipment.GetNewQuantity());
+                EquipmentRepository.ModifyRoomsDynamicEquipmentQuantity(roomID, equipment.id, equipment.GetNewQuantity());
             }
         }
         public static void MakeEquipmentTransferRequest(int equipmentId,int quantity)

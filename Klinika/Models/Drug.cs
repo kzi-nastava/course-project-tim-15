@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Klinika.Models
+﻿namespace Klinika.Models
 {
     public class Drug
     {
-        public int ID { get; set; }
-        public string? Name { get; set; }
-        public string? Approved { get; set; }
-        public List<Ingredient> Ingredients { get; set; }
-        public string GetIngredientsAsString()
-        {
-            return string.Join(", ", Ingredients.Select(x => x.Name));
-        }
-
+        public int id { get; set; }
+        public string? name { get; set; }
+        public string? approved { get; set; }
+        public List<Ingredient> ingredients { get; set; }
         public Drug()
         {
-            Ingredients = new List<Ingredient>();
+            ingredients = new List<Ingredient>();
+        }
+
+        public string GetIngredientsAsString()
+        {
+            return string.Join(", ", ingredients.Select(x => x.name));
         }
     }
 }

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Klinika.Repositories;
 using Klinika.Roles;
-using Klinika.Repositories;
-using System.Data;
-using Klinika.Models;
 using Klinika.Services;
+using System.Data;
 
 namespace Klinika.Utilities
 {
@@ -31,7 +25,7 @@ namespace Klinika.Utilities
 
         public static void FillPatientSelectionList(ComboBox patientSelection)
         {
-            foreach (KeyValuePair<int, Patient> pair in PatientRepository.IDPatientPairs)
+            foreach (KeyValuePair<int, Patient> pair in PatientRepository.idPatientPairs)
             {
                 patientSelection.Items.Add(pair.Value.GetIdAndFullName());
             }
@@ -46,11 +40,11 @@ namespace Klinika.Utilities
             comboBox.Items.AddRange(UserRepository.GetPatients().ToArray());
             comboBox.SelectedIndex = 0;
         }
-        public static void FillSpecializationComboBox(ComboBox comboBox)
+        public static void FillSpecializationComboBox(ComboBox comboBox, int index = -1)
         {
             var specializations = SpecializationService.GetAll().ToArray();
             comboBox.Items.AddRange(specializations); 
-            comboBox.SelectedIndex = -1;
+            comboBox.SelectedIndex = index;
         }
         public static void FillSpecializedDoctorComboBox(ComboBox comboBox, int specializationID)
         {

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Klinika.Repositories;
 using Klinika.Roles;
-using Klinika.Repositories;
-using System.Text.RegularExpressions;
 using Klinika.Services;
+using System.Text.RegularExpressions;
 
 namespace Klinika.Utilities
 {
@@ -34,12 +29,12 @@ namespace Klinika.Utilities
                 error_message = "There is no user with specified email!";
             }
 
-            else if (!allUsers[email].Password.Equals(password))
+            else if (!allUsers[email].password.Equals(password))
             {
                 error_message = "Password does not match email!";
             }
 
-            else if (allUsers[email].IsBlocked == true)
+            else if (allUsers[email].isBlocked == true)
             {
                 error_message = "The user is blocked!";
             }
@@ -82,12 +77,12 @@ namespace Klinika.Utilities
                 error_messsage = "JMBG format is not valid!";
             }
 
-            else if (string.IsNullOrEmpty(patient.Name))
+            else if (string.IsNullOrEmpty(patient.name))
             {
                 error_messsage = "Name left empty!";
             }
 
-            else if (string.IsNullOrEmpty(patient.Surname))
+            else if (string.IsNullOrEmpty(patient.surname))
             {
                 error_messsage = "Surname left empty!";
             }
@@ -97,29 +92,29 @@ namespace Klinika.Utilities
                 error_messsage = "Invalid birthdate!";
             }
 
-            else if (string.IsNullOrEmpty(patient.Email) && !isModification)
+            else if (string.IsNullOrEmpty(patient.email) && !isModification)
             {
                 error_messsage = "Email left empty!";
             }
 
-            else if (PatientRepository.EmailIDPairs != null &&
-                     PatientRepository.EmailIDPairs.ContainsKey(patient.Email) &&
+            else if (PatientRepository.emailIDPairs != null &&
+                     PatientRepository.emailIDPairs.ContainsKey(patient.email) &&
                      !isModification)
             {
                 error_messsage = "Email already in use!";
             }
 
-            else if (!IsValidEmail(patient.Email) && !isModification)
+            else if (!IsValidEmail(patient.email) && !isModification)
             {
                 error_messsage = "Incorrect email format!";
             }
 
-            else if (string.IsNullOrEmpty(patient.Password))
+            else if (string.IsNullOrEmpty(patient.password))
             {
                 error_messsage = "Password left empty!";
             }
 
-            else if (patient.Password.Length < 4)
+            else if (patient.password.Length < 4)
             {
                 error_messsage = "Password is too short!";
             }

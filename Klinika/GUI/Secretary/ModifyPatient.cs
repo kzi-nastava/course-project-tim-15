@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Klinika.Exceptions;
+﻿using Klinika.Exceptions;
 using Klinika.Services;
 using Klinika.Utilities;
 
@@ -38,8 +29,8 @@ namespace Klinika.GUI.Secretary
         private void SetFormFieldValues()
         {
             jmbgField.Text = selected.jmbg;
-            nameField.Text = selected.Name;
-            surnameField.Text = selected.Surname;
+            nameField.Text = selected.name;
+            surnameField.Text = selected.surname;
             birthdatePicker.Value = selected.birthdate;
             if (selected.gender == 'F')
             {
@@ -50,14 +41,14 @@ namespace Klinika.GUI.Secretary
             {
                 genderSelection.SelectedItem = "Male";
             }
-            emailField.Text = selected.Email;
-            passwordField.Text = selected.Password;
+            emailField.Text = selected.email;
+            passwordField.Text = selected.password;
         }
 
         private void Modify()
         {
             Roles.Patient modifiedPatient = new Roles.Patient(
-                selected.ID,
+                selected.id,
                 jmbgField.Text.Trim(),
                 nameField.Text.Trim(),
                 surnameField.Text.Trim(),
@@ -65,7 +56,7 @@ namespace Klinika.GUI.Secretary
                 genderSelection.SelectedItem.ToString()[0],
                 emailField.Text.Trim(),
                 passwordField.Text.Trim(), 
-                selected.NotificationOffset);
+                selected.notificationOffset);
             try
             {
                 PatientService.Modify(modifiedPatient);

@@ -1,41 +1,31 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Klinika.GUI.Patient
 {
     public partial class AppointmentRecommendation : Form
     {
-        private readonly PatientMain Parent;
+        private readonly NewAppointment parent;
 
         #region Form
-        public AppointmentRecommendation(PatientMain parent)
+        public AppointmentRecommendation(NewAppointment parent)
         {
             InitializeComponent();
-            Parent = parent;
+            this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
         {
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
-            FillRecommendedAppointmentTable();
-            Parent.Enabled = false;
+            RecommendedAppointmentTable.Fill();
+            parent.Enabled = false;
             ScheduleButton.Enabled = false;
             DoctorRadioButton.Checked = true;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
-            Parent.Enabled = true;
+            parent.Enabled = true;
         }
         private void CancelClick(object sender, EventArgs e)
         {
@@ -63,41 +53,16 @@ namespace Klinika.GUI.Patient
 
         private void ShowRecommended()
         {
-            int doctorID = (DoctorComboBox.SelectedItem as User).ID;
+            int doctorID = (DoctorComboBox.SelectedItem as User).id;
             char priority = DoctorRadioButton.Checked ? 'D' : 'T';
             TimeSlot timeSlot = new TimeSlot(FromTimePicker.Value, ToTimePicker.Value);
 
             List<Appointment> recommended = AppointmentRecommendationService.Find(doctorID, timeSlot, DeadlineDatePicker.Value, priority);
-            FillRecommendedAppointmentTable(recommended);
-        }
-        private void FillRecommendedAppointmentTable(List<Appointment> appointments = null)
-        {
-            DataTable dataTable = new DataTable();
-            dataTable.Columns.Add("Doctor ID");
-            dataTable.Columns.Add("Doctor");
-            dataTable.Columns.Add("DateTime");
-
-            if (appointments != null)
-            {
-                foreach (Appointment appointment in appointments)
-                {
-                    DataRow newRow = dataTable.NewRow();
-
-                    newRow["Doctor ID"] = appointment.DoctorID;
-                    newRow["Doctor"] = DoctorService.GetFullName(appointment.DoctorID);
-                    newRow["DateTime"] = appointment.DateTime;
-                    dataTable.Rows.Add(newRow);
-                }
-            }
-            RecommendedAppointmentTable.DataSource = dataTable;
+            RecommendedAppointmentTable.Fill(recommended);
         }
         private void RecommendedAppointmentTableRowSelected(object sender, DataGridViewCellEventArgs e)
         {
             ScheduleButton.Enabled = true;
-        }
-        private int GetSelectedDoctorID()
-        {
-            return Convert.ToInt32(RecommendedAppointmentTable.SelectedRows[0].Cells["Doctor ID"].Value);
         }
         private DateTime GetSelectedDateTime()
         {
@@ -109,9 +74,8 @@ namespace Klinika.GUI.Patient
         }
         private void Create()
         {
-            Appointment appointment = new Appointment(GetSelectedDoctorID(), Parent.Patient.ID, GetSelectedDateTime());
+            Appointment appointment = new Appointment(RecommendedAppointmentTable.GetSelectedID(), parent.patient.id, GetSelectedDateTime());
             AppointmentService.Create(appointment);
-            Parent.PersonalAppointmentsTable.Insert(appointment);
         }
     }
 }

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
 
 namespace Klinika.GUI.Manager
 {
@@ -56,6 +48,52 @@ namespace Klinika.GUI.Manager
             quantityComboBox.SelectedIndex = 0;
         }
 
+        private void FillDrugs()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("id", typeof(string));
+            table.Columns.Add("Name", typeof(string));
+            table.Columns.Add("Approved", typeof(string));
+
+            List<Models.Drug> drugs = Services.DrugService.GetDenied();
+            foreach (Models.Drug drug in drugs)
+            {
+                DataRow dr = table.NewRow();
+
+                dr[0] = drug.id;
+                dr[1] = drug.name;
+                dr[2] = drug.approved;
+
+                table.Rows.Add(dr);
+            }
+
+            drugsTable.DataSource = table;
+            drugsTable.Columns[0].Visible = false;
+        }
+
+        private void FillIngedients()
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("id", typeof(string));
+            table.Columns.Add("Name", typeof(string));
+            table.Columns.Add("Type", typeof(string));
+
+            List<Models.Ingredient> ingredients = Services.IngredientService.GetAll();
+            foreach (Models.Ingredient ingredient in ingredients)
+            {
+                DataRow dr = table.NewRow();
+
+                dr[0] = ingredient.id;
+                dr[1] = ingredient.name;
+                dr[2] = ingredient.type;
+
+                table.Rows.Add(dr);
+            }
+
+            ingredientsTable.DataSource = table;
+            ingredientsTable.Columns[0].Visible = false;
+        }
+
         private void FillTables()
         {
             DataTable rooms = Repositories.RoomRepository.GetAll();
@@ -72,6 +110,9 @@ namespace Klinika.GUI.Manager
             equipmentTable.Columns["EquipmentID"].Visible = false;
             equipmentTable.Columns["RoomID"].Visible = false;
             equipmentTable.ClearSelection();
+
+            FillDrugs();
+            FillIngedients();
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -257,6 +298,44 @@ namespace Klinika.GUI.Manager
         private void renovateButton_Click(object sender, EventArgs e)
         {
             new Renovation((int)roomsTable.SelectedRows[0].Cells["ID"].Value, this).Show();
+        }
+
+        private void addIngredientsButton_Click(object sender, EventArgs e)
+        {
+            new ChangeIngredient(-1, this).Show();
+        }
+
+        private void modifyIngredientsButton_Click(object sender, EventArgs e)
+        {
+            new ChangeIngredient(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()), this).Show();
+        }
+
+        private void deleteIngredientsButton_Click(object sender, EventArgs e)
+        {
+            DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected ingredient? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (deletionConfirmation == DialogResult.Yes)
+            {
+                Services.IngredientService.Delete(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()));
+                MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Services.IngredientService.GetAll();
+                this.Main_Load(null, EventArgs.Empty);
+            }
+        }
+
+        private void addDrugButton_Click(object sender, EventArgs e)
+        {
+            Models.Drug drug = new Models.Drug();
+            drug.id = -1;
+            new ChangeDrug(drug, this).Show();
+        }
+
+        private void modifyDrugButton_Click(object sender, EventArgs e)
+        {
+            Models.Drug drug = new Models.Drug();
+            drug.id = int.Parse(drugsTable.SelectedRows[0].Cells["id"].Value.ToString());
+            drug.name = drugsTable.SelectedRows[0].Cells["Name"].Value.ToString();
+            drug.approved = drugsTable.SelectedRows[0].Cells["Approved"].Value.ToString();
+            new ChangeDrug(drug, this).Show();
         }
     }
 }
