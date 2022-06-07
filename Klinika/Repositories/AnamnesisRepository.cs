@@ -1,11 +1,12 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class AnamnesisRepository
+    public class AnamnesisRepository : IAnamnesisRepo
     {
-        public static List<Anamnesis> Get(int patientID)
+        public List<Anamnesis> GetAll(int patientID)
         {
             List<Anamnesis> anamneses = new List<Anamnesis>();
 
@@ -29,7 +30,7 @@ namespace Klinika.Repositories
             }
             return anamneses;
         }
-        public static void Create(Anamnesis anamnesis)
+        public void Create(Anamnesis anamnesis)
         {
             string createQuery = "INSERT INTO [Anamnesis] " +
                     "(MedicalActionID,Description,Symptoms,Conclusion) " +

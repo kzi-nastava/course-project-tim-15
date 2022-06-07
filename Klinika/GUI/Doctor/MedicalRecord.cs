@@ -7,6 +7,9 @@ namespace Klinika.GUI.Doctor
 {
     public partial class MedicalRecord : Form
     {
+        private readonly AnamnesisService anamnesisService;
+        private readonly MedicalRecordService medicalRecordService;
+        private readonly ReferralService referralService;
         internal readonly ViewSchedule parent;
         public Appointment appointment;
         public Models.MedicalRecord record;
@@ -20,12 +23,15 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             this.parent = parent;
             this.appointment = appointment;
-            record = MedicalRecordService.Get(appointment.patientID);
+            referralService = new ReferralService();
+            anamnesisService = new AnamnesisService();
+            medicalRecordService = new MedicalRecordService();
             if (!isPreview) AnamnesisGroup.Visible = true;
         }
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
+            record = medicalRecordService.Get(appointment.patientID);
             FillPatientMainData();
             AnamnesesTable.Fill(record.anamneses);
             DiseasesTable.Fill(record.diseases);
@@ -91,7 +97,7 @@ namespace Klinika.GUI.Doctor
 
             int specializationID = (SpecializationsComboBox.SelectedItem as Specialization).id;
             int doctorID = DoctorsComboBox.SelectedIndex == -1 ? -1 : (DoctorsComboBox.SelectedItem as User).id;
-            ReferralService.Create(appointment.patientID, specializationID, doctorID);
+            referralService.Create(appointment.patientID, specializationID, doctorID);
 
             MessageBoxUtilities.ShowInformationMessage("Referal made successfully!");
             return true;
@@ -103,7 +109,7 @@ namespace Klinika.GUI.Doctor
             var anamnesis = new Anamnesis(appointment.id, DescriptionTextBox.Text,
                 SymptomsTextBox.Text, ConclusionTextBox.Text);
 
-            AnamnesisService.Create(anamnesis);
+            anamnesisService.Create(anamnesis);
             return true;
         }
         private bool IsAppointmentCompleted()

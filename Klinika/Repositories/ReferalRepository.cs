@@ -1,11 +1,12 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using System.Data;
 
 namespace Klinika.Repositories
 {
-    internal class ReferalRepository : Repository
+    internal class ReferalRepository : Repository, IReferralRepo
     {
-        public static void Create(int _patientID, int _specializationID, int _doctorID)
+        public void Create(int _patientID, int _specializationID, int _doctorID)
         {
             string createQuerry = "INSERT INTO [Referal] " +
                 "(PatientID, DoctorID, SpecializationID, IsUsed, Date) " +

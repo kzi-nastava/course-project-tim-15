@@ -1,10 +1,16 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 namespace Klinika.Repositories
 {
-    internal class MedicalRecordRepository
+    internal class MedicalRecordRepository : IMedicalRecordRepo
     {
-        public static MedicalRecord Get(int patientID)
+        private readonly IAnamnesisRepo anamnesisRepo;
+        public MedicalRecordRepository()
+        {
+            anamnesisRepo = new AnamnesisRepository();
+        }
+        public MedicalRecord Get(int patientID)
         {
             MedicalRecord record = new MedicalRecord();
             string getRecordQuerry = "SELECT * " +
@@ -20,13 +26,18 @@ namespace Klinika.Repositories
                 record.bloodType = DatabaseConnection.CheckNull<string>(((object[])row)[3]);
             }
 
-            record.anamneses = AnamnesisRepository.Get(patientID);
+            record.anamneses = anamnesisRepo.GetAll(patientID);
             record.diseases = GetDiseases(patientID);
             record.allergens = GetAllergens(patientID);
 
             return record;
         }
-        private static List<Disease> GetDiseases(int patientID)
+        public void Create(int patientID)
+        {
+            string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createMedicalRecordQuery, ("@ID", patientID));
+        }
+        private List<Disease> GetDiseases(int patientID)
         {
             List<Disease> diseases = new List<Disease>();
 
@@ -50,7 +61,7 @@ namespace Klinika.Repositories
             }
             return diseases;
         }
-        private static List<Ingredient> GetAllergens(int patientID)
+        private List<Ingredient> GetAllergens(int patientID)
         {
             List<Ingredient> allergens = new List<Ingredient>();
             var ingredientsIDs = GetAllergensIds(patientID);
@@ -66,7 +77,7 @@ namespace Klinika.Repositories
 
             return allergens;
         }
-        private static List<int> GetAllergensIds(int patientID)
+        private List<int> GetAllergensIds(int patientID)
         {
             List<int> ids = new List<int>();
 
@@ -83,12 +94,6 @@ namespace Klinika.Repositories
             }
 
             return ids;
-        }
-        
-        public static void Create(int patientID)
-        {
-            string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createMedicalRecordQuery, ("@ID", patientID));
         }
     }
 }

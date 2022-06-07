@@ -1,38 +1,35 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class DrugRepository
+    public class DrugRepository : IDrugRepo
     {
         public List<Drug> drugs { get; }
 
+        // TODO remove singleton
         private static DrugRepository? instance;
         public static DrugRepository Instance
         {
             get
             {
-                if(instance == null)
+                if (instance == null)
                 {
                     instance = new DrugRepository();
                 }
                 return instance;
             }
         }
-        public static void Reload()
-        {
-            instance = new DrugRepository();
-        }
         public DrugRepository()
         {
             drugs = new List<Drug>();
-            GetAll();
-        }
-
-        private void GetAll()
-        {
             GetBasicInfo();
             GetIngredients();
+        }
+        public List<Drug> GetAll()
+        {
+            return drugs;
         }
         private void GetBasicInfo()
         {
@@ -79,7 +76,7 @@ namespace Klinika.Repositories
                 ("@ID", id));
         }
 
-        internal static void CreateUnapprovedDrug(Drug drug)
+        internal void CreateUnapprovedDrug(Drug drug)
         {
             string createQuery = "INSERT INTO [Drug] " +
                 "(Name, Approved) " +
@@ -132,7 +129,7 @@ namespace Klinika.Repositories
             return drugs.Where(x => x.approved == "D").ToList();
         }
 
-        public static void CreateUnapproved(int id, string description)
+        public void CreateUnapproved(int id, string description)
         {
             string createQuery = "INSERT INTO [UnapprovedDrug] " +
                 "(DrugID,Description) " +

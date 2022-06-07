@@ -1,11 +1,12 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class VacationRequestRepository
+    public class VacationRequestRepository : IVacationRequestRepo
     {
-        public static List<VacationRequest> GetAll(int doctorID)
+        public List<VacationRequest> GetAll(int doctorID)
         {
             string getAllQuerry = "SELECT * " +
                                   "FROM [VacationRequest] " +
@@ -14,7 +15,7 @@ namespace Klinika.Repositories
             var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry, ("@DoctorID", doctorID));
             return GenerateList(result);
         }
-        public static int Create(VacationRequest vacationRequest)
+        public int Create(VacationRequest vacationRequest)
         {
             string createQuery = "INSERT INTO [VacationRequest] " +
                 "(DoctorID,FromDate,ToDate,Reason,Status,Emergency,DenyReason) " +

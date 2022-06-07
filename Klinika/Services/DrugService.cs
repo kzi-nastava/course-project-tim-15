@@ -1,35 +1,41 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using System.Data;
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     public class DrugService
     {
-        public static List<Drug> GetAll()
+        private readonly IDrugRepo drugRepo;
+        public DrugService()
         {
-            return DrugRepository.Instance.drugs;
+            drugRepo = new DrugRepository();
         }
-        public static List<Drug> GetApproved()
+        public List<Drug> GetAll()
         {
-            return DrugRepository.Instance.GetApproved();
+            return drugRepo.GetAll();
         }
-        public static List<Drug> GetDenied()
+        public List<Drug> GetApproved()
         {
-            return DrugRepository.Instance.GetDenied();
+            return drugRepo.GetApproved();
         }
-        public static List<Drug> GetUnapproved()
+        public List<Drug> GetDenied()
         {
-            return DrugRepository.Instance.GetUnapproved();
+            return drugRepo.GetDenied();
         }
-        public static void ApproveDrug(int id)
+        public List<Drug> GetUnapproved()
         {
-            DrugRepository.Instance.ModifyType(id, 'A');
+            return drugRepo.GetUnapproved();
         }
-        public static void DenyDrug(int id, string description)
+        public void ApproveDrug(int id)
         {
-            DrugRepository.Instance.ModifyType(id, 'D');
-            DrugRepository.CreateUnapproved(id, description);
+            drugRepo.ModifyType(id, 'A');
+        }
+        public void DenyDrug(int id, string description)
+        {
+            drugRepo.ModifyType(id, 'D');
+            drugRepo.CreateUnapproved(id, description);
         }
         public static List<Ingredient> GetIngredients(int id)
         {
@@ -44,7 +50,8 @@ namespace Klinika.Services
         {
             if (drug.id == -1)
             {
-                Repositories.DrugRepository.CreateUnapprovedDrug(drug);
+                // TODO
+                // Repositories.DrugRepository.CreateUnapprovedDrug(drug);
             }
             else
             {

@@ -6,6 +6,8 @@ namespace Klinika.GUI.Doctor
 {
     public partial class PrescriptionIssuing : Form
     {
+        private readonly DrugService drugService;
+        private readonly PrescriptionService prescriptionService;
         internal readonly MedicalRecord parent;
 
         #region Form
@@ -13,13 +15,15 @@ namespace Klinika.GUI.Doctor
         {
             InitializeComponent();
             this.parent = parent;
+            drugService = new DrugService();
+            prescriptionService = new PrescriptionService();
         }
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
             PrescriptionStartDatePicker.MinDate = DateTime.Now;
             PrescriptionEndDatePicker.MinDate = DateTime.Now;
-            DrugsTable.Fill(DrugService.GetApproved());
+            DrugsTable.Fill(drugService.GetApproved());
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -38,7 +42,7 @@ namespace Klinika.GUI.Doctor
                 new TimeSlot(PrescriptionStartDatePicker.Value, PrescriptionEndDatePicker.Value),
                 Convert.ToInt32(IntervalSpinner.Value),
                 CommentTextBox.Text);
-            PrescriptionService.StorePrescription(prescription);
+            prescriptionService.StorePrescription(prescription);
 
             MessageBoxUtilities.ShowInformationMessage("Drug prescripted!");
             Close();

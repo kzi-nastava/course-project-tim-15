@@ -1,14 +1,19 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     public class PrescriptionService
     {
-        public PrescriptionService() { }
-        public static void StorePrescription(Prescription prescription)
+        private readonly IPrescriptionRepo prescriptionRepo;
+        public PrescriptionService()
         {
-            PrescriptionRepository.Create(prescription);
+            prescriptionRepo = new PrescriptionRepository();
+        }
+        public void StorePrescription(Prescription prescription)
+        {
+            prescriptionRepo.Create(prescription);
             NotificationService.MakeNotificationsForPrescription(prescription);
         }
     }

@@ -1,11 +1,12 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class PrescriptionRepository
+    public class PrescriptionRepository : IPrescriptionRepo
     {
-        public static void Create(Prescription prescription)
+        public void Create(Prescription prescription)
         {
             string createQuery = "INSERT INTO [Prescription] " +
                 "(PatientID,DrugID,DateStarted,DateEnded,Interval,Comment) " +

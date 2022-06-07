@@ -123,7 +123,8 @@ namespace Klinika.Repositories
                 ("@UserType", 1)
                 );
             
-            MedicalRecordRepository.Create(createdID);
+            // TODO 
+            // MedicalRecordRepository.Create(createdID);
 
             if (emailIDPairs != null)
             {

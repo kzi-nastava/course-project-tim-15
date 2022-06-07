@@ -1,21 +1,27 @@
-﻿using Klinika.Models;
+﻿using Klinika.Interfaces;
+using Klinika.Models;
 using Klinika.Repositories;
 
 namespace Klinika.Services
 {
     public class VacationRequestService
     {
-        public static List<VacationRequest> GetAll(int doctorID)
+        private readonly IVacationRequestRepo vacationRequestRepo;
+        public VacationRequestService()
         {
-            return VacationRequestRepository.GetAll(doctorID);
+            vacationRequestRepo = new VacationRequestRepository();
         }
-        public static void Create(VacationRequest vacationRequest)
+        public List<VacationRequest> GetAll(int doctorID)
         {
-            vacationRequest.id = VacationRequestRepository.Create(vacationRequest);
+            return vacationRequestRepo.GetAll(doctorID);
         }
-        public static bool IsOnVacation(DateTime start, int doctorID)
+        public  void Create(VacationRequest vacationRequest)
         {
-            List<VacationRequest> forSelectedTimeSpan = VacationRequestRepository.GetAll(doctorID).Where(
+            vacationRequest.id = vacationRequestRepo.Create(vacationRequest);
+        }
+        public bool IsOnVacation(DateTime start, int doctorID)
+        {
+            List<VacationRequest> forSelectedTimeSpan = vacationRequestRepo.GetAll(doctorID).Where(
                 x => x.fromDate < start && x.toDate > start && x.status != (char)VacationRequest.Statuses.DENIED).ToList();
             
             if (forSelectedTimeSpan.Count == 0) return false;

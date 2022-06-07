@@ -6,11 +6,13 @@ namespace Klinika.GUI.Doctor
 {
     public partial class VacationRequests : Form
     {
+        private VacationRequestService vacationRequestService;
         internal readonly Main parent;
         private Roles.Doctor doctor { get { return parent.doctor; } }
         public VacationRequests(Main parent)
         {
             InitializeComponent();
+            vacationRequestService = new VacationRequestService();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -24,14 +26,14 @@ namespace Klinika.GUI.Doctor
         }
         private void InitVacationRequests()
         {
-            VacationRequestTable.Fill(VacationRequestService.GetAll(doctor.id));
+            VacationRequestTable.Fill(vacationRequestService.GetAll(doctor.id));
         }
         private void SendRequestButtonClick(object sender, EventArgs e)
         {
             if (!VerifyVacationRequest()) return;
             var vacationRequest = new VacationRequest(doctor.id, FromDatePicker.Value, ToDatePicker.Value,
                 ReasonTextBox.Text, EmergencyCheckBox.Checked);
-            VacationRequestService.Create(vacationRequest);
+            vacationRequestService.Create(vacationRequest);
             VacationRequestTable.Insert(vacationRequest);
         }
         private bool VerifyVacationRequest()
