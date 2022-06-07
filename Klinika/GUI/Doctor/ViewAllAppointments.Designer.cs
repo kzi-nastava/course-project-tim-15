@@ -31,7 +31,7 @@
             this.EditAppointmentButton = new System.Windows.Forms.Button();
             this.DeleteAppointmentButton = new System.Windows.Forms.Button();
             this.AddAppointmentButton = new System.Windows.Forms.Button();
-            this.AllAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView();
+            this.AllAppointmentsTable = new Klinika.Forms.AppointmentsTable();
             ((System.ComponentModel.ISupportInitialize)(this.AllAppointmentsTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -114,6 +114,6 @@
         private Button EditAppointmentButton;
         private Button DeleteAppointmentButton;
         private Button AddAppointmentButton;
-        public Klinika.Forms.AppointmentsDataGridView AllAppointmentsTable;
+        public Klinika.Forms.AppointmentsTable AllAppointmentsTable;
     }
 }

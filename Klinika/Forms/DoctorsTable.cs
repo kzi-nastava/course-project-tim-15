@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    internal class DoctorsDataGridView : DataGridView
+    internal class DoctorsTable : DataGridView
     {
         public void Fill(List<Doctor> doctors)
         {

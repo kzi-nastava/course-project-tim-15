@@ -32,7 +32,7 @@
             this.ApproveDrugButton = new System.Windows.Forms.Button();
             this.DenyDrugDescription = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.UnapprovedDrugsTable = new Klinika.Forms.DrugsDataGridView();
+            this.UnapprovedDrugsTable = new Klinika.Forms.DrugsTable();
             ((System.ComponentModel.ISupportInitialize)(this.UnapprovedDrugsTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -126,6 +126,6 @@
         private Button ApproveDrugButton;
         private TextBox DenyDrugDescription;
         private Label label1;
-        internal Forms.DrugsDataGridView UnapprovedDrugsTable;
+        internal Forms.DrugsTable UnapprovedDrugsTable;
     }
 }

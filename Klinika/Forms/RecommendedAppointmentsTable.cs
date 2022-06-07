@@ -4,7 +4,7 @@ using Klinika.Services;
 
 namespace Klinika.Forms
 {
-    internal class RecommendedAppointmentsDataGridView : DataGridView
+    internal class RecommendedAppointmentsTable : DataGridView
     {
         public void Fill(List<Appointment> appointments = null)
         {

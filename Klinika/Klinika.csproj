@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Forms\RoomEquipmentDataGridView.cs">
+    <Compile Update="Forms\RoomEquipmentTable.cs">
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>

@@ -3,10 +3,10 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class RoomEquipmentDataGridView : DataGridView
+    public class RoomEquipmentTable : DataGridView
     {
         private List<Equipment> equipment;
-        public RoomEquipmentDataGridView() : base()
+        public RoomEquipmentTable() : base()
         {
             equipment = new List<Equipment>();
         }

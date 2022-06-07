@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.EquipmentTable = new Klinika.Forms.RoomEquipmentDataGridView();
+            this.EquipmentTable = new Klinika.Forms.RoomEquipmentTable();
             this.SpentSpinner = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.ConfirmButton = new System.Windows.Forms.Button();
@@ -119,7 +119,7 @@
 
         #endregion
 
-        public Klinika.Forms.RoomEquipmentDataGridView EquipmentTable;
+        public Klinika.Forms.RoomEquipmentTable EquipmentTable;
         private NumericUpDown SpentSpinner;
         private Label label1;
         private Button ConfirmButton;

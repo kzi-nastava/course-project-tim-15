@@ -37,7 +37,7 @@
             this.SendRequestButton = new System.Windows.Forms.Button();
             this.ReasonTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.VacationRequestTable = new Klinika.Forms.VacationRequestsDataGridView();
+            this.VacationRequestTable = new Klinika.Forms.VacationRequestsTable();
             ((System.ComponentModel.ISupportInitialize)(this.VacationRequestTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -181,6 +181,6 @@
         private Button SendRequestButton;
         private TextBox ReasonTextBox;
         private Label label4;
-        internal Forms.VacationRequestsDataGridView VacationRequestTable;
+        internal Forms.VacationRequestsTable VacationRequestTable;
     }
 }

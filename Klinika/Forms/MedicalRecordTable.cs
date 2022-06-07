@@ -4,11 +4,11 @@ using Klinika.Services;
 
 namespace Klinika.Forms
 {
-    internal class MedicalRecordDataGridView : DataGridView
+    internal class MedicalRecordTable : DataGridView
     {
         private List<Appointment> appointments { get { return AppointmentService.GetCompleted(patientID); } }
         private int patientID;
-        public MedicalRecordDataGridView() : base(){}
+        public MedicalRecordTable() : base(){}
         public void Fill(List<Anamnesis> anamneses, int patientID)
         {
             this.patientID = patientID;

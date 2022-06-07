@@ -3,7 +3,7 @@ using Klinika.Models;
 
 namespace Klinika.Forms
 {
-    internal class NotificationsDataGridView : DataGridView
+    internal class NotificationsTable : DataGridView
     {
         public void Fill(List<Notification> notifications)
         {

@@ -3,10 +3,10 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class VacationRequestsDataGridView : DataGridView
+    public class VacationRequestsTable : DataGridView
     {
         private List<VacationRequest> vacationRequests;
-        public VacationRequestsDataGridView() : base()
+        public VacationRequestsTable() : base()
         {
             vacationRequests = new List<VacationRequest>();
         }

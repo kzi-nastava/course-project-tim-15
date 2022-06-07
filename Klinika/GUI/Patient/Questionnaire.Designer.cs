@@ -33,7 +33,7 @@ namespace Klinika.GUI.Patient
             this.GradeLabel = new System.Windows.Forms.Label();
             this.GradeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.SetGradeButton = new System.Windows.Forms.Button();
-            this.QuestionsTable = new Klinika.Forms.QuestionsDataGridView();
+            this.QuestionsTable = new Klinika.Forms.QuestionsTable();
             this.SendButton = new System.Windows.Forms.Button();
             this.CommentTextBox = new System.Windows.Forms.TextBox();
             this.CommentLabel = new System.Windows.Forms.Label();
@@ -166,7 +166,7 @@ namespace Klinika.GUI.Patient
         private Label GradeLabel;
         private NumericUpDown GradeNumericUpDown;
         private Button SetGradeButton;
-        private QuestionsDataGridView QuestionsTable;
+        private QuestionsTable QuestionsTable;
         private Button SendButton;
         internal TextBox CommentTextBox;
         private Label CommentLabel;

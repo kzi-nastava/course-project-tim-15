@@ -31,7 +31,7 @@ namespace Klinika.GUI.Patient
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.NotificationsTable = new Klinika.Forms.NotificationsDataGridView();
+            this.NotificationsTable = new Klinika.Forms.NotificationsTable();
             this.MarkAsReadButton = new System.Windows.Forms.Button();
             this.SetButton = new System.Windows.Forms.Button();
             this.OffsetNumericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -135,7 +135,7 @@ namespace Klinika.GUI.Patient
 
         #endregion
 
-        private NotificationsDataGridView NotificationsTable;
+        private NotificationsTable NotificationsTable;
         private Button MarkAsReadButton;
         private Button SetButton;
         private NumericUpDown OffsetNumericUpDown;

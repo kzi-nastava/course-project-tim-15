@@ -5,17 +5,17 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class AppointmentsDataGridView : DataGridView
+    public class AppointmentsTable : DataGridView
     {
         private List<Appointment> appointments;
         private User.RoleType viewerRole;
         private string searchedRole;
-        public AppointmentsDataGridView() : base()
+        public AppointmentsTable() : base()
         {
             appointments = new List<Appointment>();
             SetViewerRole(User.RoleType.DOCTOR);
         }
-        public AppointmentsDataGridView(User.RoleType viewerRole) : base()
+        public AppointmentsTable(User.RoleType viewerRole) : base()
         {
             appointments = new List<Appointment>();
             SetViewerRole(viewerRole);

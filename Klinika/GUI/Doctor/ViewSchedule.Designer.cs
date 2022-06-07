@@ -31,7 +31,7 @@
             this.PerformButton = new System.Windows.Forms.Button();
             this.ViewMedicalRecordButton = new System.Windows.Forms.Button();
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.ScheduleTable = new Klinika.Forms.AppointmentsDataGridView();
+            this.ScheduleTable = new Klinika.Forms.AppointmentsTable();
             ((System.ComponentModel.ISupportInitialize)(this.ScheduleTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -108,6 +108,6 @@
         private Button PerformButton;
         private Button ViewMedicalRecordButton;
         private DateTimePicker ScheduleDatePicker;
-        public Forms.AppointmentsDataGridView ScheduleTable;
+        public Forms.AppointmentsTable ScheduleTable;
     }
 }

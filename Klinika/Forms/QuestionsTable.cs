@@ -3,7 +3,7 @@ using Klinika.Models;
 
 namespace Klinika.Forms
 {
-    internal class QuestionsDataGridView : DataGridView
+    internal class QuestionsTable : DataGridView
     {
         public void Fill(List<Question> questions)
         {
