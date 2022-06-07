@@ -39,7 +39,7 @@ namespace Klinika.GUI.Patient
             this.DoctorSearchButton = new System.Windows.Forms.Button();
             this.DoctorSurnameTextBox = new System.Windows.Forms.TextBox();
             this.DoctorNameTextBox = new System.Windows.Forms.TextBox();
-            this.DoctorsTable = new Klinika.Forms.DoctorsDataGridView();
+            this.DoctorsTable = new Klinika.Forms.DoctorsTable();
             ((System.ComponentModel.ISupportInitialize)(this.DoctorsTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -124,12 +124,6 @@ namespace Klinika.GUI.Patient
             // 
             // DoctorsTable
             // 
-            this.DoctorsTable.AllowUserToAddRows = false;
-            this.DoctorsTable.AllowUserToDeleteRows = false;
-            this.DoctorsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DoctorsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.DoctorsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.DoctorsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -139,12 +133,7 @@ namespace Klinika.GUI.Patient
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.DoctorsTable.DefaultCellStyle = dataGridViewCellStyle1;
             this.DoctorsTable.Location = new System.Drawing.Point(310, 25);
-            this.DoctorsTable.MultiSelect = false;
             this.DoctorsTable.Name = "DoctorsTable";
-            this.DoctorsTable.ReadOnly = true;
-            this.DoctorsTable.RowHeadersWidth = 51;
-            this.DoctorsTable.RowTemplate.Height = 29;
-            this.DoctorsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DoctorsTable.Size = new System.Drawing.Size(592, 563);
             this.DoctorsTable.TabIndex = 20;
             this.DoctorsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DoctorsTableCellClick);
@@ -187,6 +176,6 @@ namespace Klinika.GUI.Patient
         private Button DoctorSearchButton;
         private TextBox DoctorSurnameTextBox;
         private TextBox DoctorNameTextBox;
-        private DoctorsDataGridView DoctorsTable;
+        private DoctorsTable DoctorsTable;
     }
 }

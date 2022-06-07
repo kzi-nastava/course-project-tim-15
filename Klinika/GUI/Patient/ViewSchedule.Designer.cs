@@ -30,7 +30,7 @@
         {
             this.ModifyButton = new System.Windows.Forms.Button();
             this.DeleteButton = new System.Windows.Forms.Button();
-            this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Roles.User.RoleType.PATIENT);
+            this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsTable(Roles.User.RoleType.PATIENT);
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,18 +58,9 @@
             // 
             // PersonalAppointmentsTable
             // 
-            this.PersonalAppointmentsTable.AllowUserToAddRows = false;
-            this.PersonalAppointmentsTable.AllowUserToDeleteRows = false;
-            this.PersonalAppointmentsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.PersonalAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.PersonalAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PersonalAppointmentsTable.Location = new System.Drawing.Point(12, 11);
             this.PersonalAppointmentsTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PersonalAppointmentsTable.Name = "PersonalAppointmentsTable";
-            this.PersonalAppointmentsTable.ReadOnly = true;
-            this.PersonalAppointmentsTable.RowHeadersWidth = 51;
-            this.PersonalAppointmentsTable.RowTemplate.Height = 29;
-            this.PersonalAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.PersonalAppointmentsTable.Size = new System.Drawing.Size(776, 393);
             this.PersonalAppointmentsTable.TabIndex = 4;
             this.PersonalAppointmentsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.PersonalAppointmentsTableCellClick);
@@ -99,6 +90,6 @@
 
         private Button ModifyButton;
         private Button DeleteButton;
-        internal Forms.AppointmentsDataGridView PersonalAppointmentsTable;
+        internal Forms.AppointmentsTable PersonalAppointmentsTable;
     }
 }

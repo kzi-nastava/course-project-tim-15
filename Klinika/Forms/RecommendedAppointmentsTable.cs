@@ -4,9 +4,9 @@ using Klinika.Services;
 
 namespace Klinika.Forms
 {
-    internal class RecommendedAppointmentsDataGridView : DataGridView
+    internal class RecommendedAppointmentsTable : Base.TableBase<Appointment>
     {
-        public void Fill(List<Appointment> appointments = null)
+        public override void Fill(List<Appointment> appointments = null)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Doctor ID");
@@ -28,7 +28,7 @@ namespace Klinika.Forms
         }
         public int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["Doctor ID"].Value);
+            return Convert.ToInt32(GetCellValue("Doctor ID"));
         }
     }
 }

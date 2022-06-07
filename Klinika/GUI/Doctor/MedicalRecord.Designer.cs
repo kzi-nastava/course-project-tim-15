@@ -151,12 +151,6 @@
             // 
             // AnamnesesTable
             // 
-            this.AnamnesesTable.AllowUserToAddRows = false;
-            this.AnamnesesTable.AllowUserToDeleteRows = false;
-            this.AnamnesesTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.AnamnesesTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.AnamnesesTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.AnamnesesTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -168,10 +162,6 @@
             this.AnamnesesTable.Location = new System.Drawing.Point(9, 29);
             this.AnamnesesTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.AnamnesesTable.Name = "AnamnesesTable";
-            this.AnamnesesTable.ReadOnly = true;
-            this.AnamnesesTable.RowHeadersWidth = 51;
-            this.AnamnesesTable.RowTemplate.Height = 25;
-            this.AnamnesesTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AnamnesesTable.Size = new System.Drawing.Size(512, 495);
             this.AnamnesesTable.TabIndex = 8;
             // 
@@ -201,12 +191,6 @@
             // 
             // DiseasesTable
             // 
-            this.DiseasesTable.AllowUserToAddRows = false;
-            this.DiseasesTable.AllowUserToDeleteRows = false;
-            this.DiseasesTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DiseasesTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.DiseasesTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.DiseasesTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -218,10 +202,6 @@
             this.DiseasesTable.Location = new System.Drawing.Point(9, 29);
             this.DiseasesTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.DiseasesTable.Name = "DiseasesTable";
-            this.DiseasesTable.ReadOnly = true;
-            this.DiseasesTable.RowHeadersWidth = 51;
-            this.DiseasesTable.RowTemplate.Height = 25;
-            this.DiseasesTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DiseasesTable.Size = new System.Drawing.Size(374, 495);
             this.DiseasesTable.TabIndex = 9;
             // 
@@ -239,12 +219,6 @@
             // 
             // AllergensTable
             // 
-            this.AllergensTable.AllowUserToAddRows = false;
-            this.AllergensTable.AllowUserToDeleteRows = false;
-            this.AllergensTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.AllergensTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.AllergensTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.AllergensTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -256,10 +230,6 @@
             this.AllergensTable.Location = new System.Drawing.Point(10, 29);
             this.AllergensTable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.AllergensTable.Name = "AllergensTable";
-            this.AllergensTable.ReadOnly = true;
-            this.AllergensTable.RowHeadersWidth = 51;
-            this.AllergensTable.RowTemplate.Height = 25;
-            this.AllergensTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AllergensTable.Size = new System.Drawing.Size(281, 495);
             this.AllergensTable.TabIndex = 10;
             // 

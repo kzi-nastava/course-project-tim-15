@@ -3,14 +3,14 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class RoomEquipmentDataGridView : DataGridView
+    public class RoomEquipmentTable : Base.TableBase<Equipment>
     {
         private List<Equipment> equipment;
-        public RoomEquipmentDataGridView() : base()
+        public RoomEquipmentTable() : base()
         {
             equipment = new List<Equipment>();
         }
-        public void Fill(List<Equipment> equipments)
+        public override void Fill(List<Equipment> equipments)
         {
             DataTable equipmentData = new DataTable();
             equipmentData.Columns.Add("ID");
@@ -40,7 +40,7 @@ namespace Klinika.Forms
         public List<Equipment> GetAll() { return equipment; }
         public int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
+            return Convert.ToInt32(GetCellValue("ID"));
         }
         public Equipment GetSelected()
         {

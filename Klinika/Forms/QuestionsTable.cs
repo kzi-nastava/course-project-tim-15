@@ -3,9 +3,9 @@ using Klinika.Models;
 
 namespace Klinika.Forms
 {
-    internal class QuestionsDataGridView : DataGridView
+    internal class QuestionsTable : Base.TableBase<Question>
     {
-        public void Fill(List<Question> questions)
+        public override void Fill(List<Question> questions)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("ID");
@@ -32,8 +32,8 @@ namespace Klinika.Forms
             var answers = new List<Answer>();
             foreach (DataGridViewRow row in Rows)
             {
-                int questionID = Convert.ToInt32(row.Cells[0].Value);
-                int grade = Convert.ToInt32(row.Cells[2].Value);
+                int questionID = Convert.ToInt32(GetCellValue("ID"));
+                int grade = Convert.ToInt32(GetCellValue("Grade"));
                 answers.Add(new Answer(questionID, grade));
             }
             return answers;

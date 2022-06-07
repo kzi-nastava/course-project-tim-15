@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class AllergensTable : Base.ReadonlyTableBase<Ingredient>
+    public class AllergensTable : Base.ViewOnlyTableBase<Ingredient>
     {
         public override void Fill(List<Ingredient> items)
         {

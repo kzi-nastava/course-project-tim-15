@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class DiseasesTable : Base.ReadonlyTableBase<Disease>
+    public class DiseasesTable : Base.ViewOnlyTableBase<Disease>
     {
         public override void Fill(List<Disease> items)
         {

@@ -5,17 +5,17 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class AppointmentsDataGridView : DataGridView
+    public class AppointmentsTable : Base.TableBase<Appointment>
     {
         private List<Appointment> appointments;
         private User.RoleType viewerRole;
         private string searchedRole;
-        public AppointmentsDataGridView() : base()
+        public AppointmentsTable() : base()
         {
             appointments = new List<Appointment>();
             SetViewerRole(User.RoleType.DOCTOR);
         }
-        public AppointmentsDataGridView(User.RoleType viewerRole) : base()
+        public AppointmentsTable(User.RoleType viewerRole) : base()
         {
             appointments = new List<Appointment>();
             SetViewerRole(viewerRole);
@@ -25,7 +25,7 @@ namespace Klinika.Forms
             this.viewerRole = viewerRole;
             searchedRole = viewerRole == User.RoleType.DOCTOR ? "Patient" : "Doctor";
         }
-        public void Fill(List<Appointment> appointments)
+        public override void Fill(List<Appointment> appointments)
         {
             DataTable appointmetnsData = new DataTable();
             appointmetnsData.Columns.Add("ID");
@@ -66,7 +66,7 @@ namespace Klinika.Forms
         }
         public int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
+            return Convert.ToInt32(GetCellValue("ID"));
         }
         public Appointment GetSelected()
         {

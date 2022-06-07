@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.TitleLabel = new System.Windows.Forms.Label();
-            this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsDataGridView(Roles.User.RoleType.PATIENT);
+            this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsTable(Roles.User.RoleType.PATIENT);
             this.DateLabel = new System.Windows.Forms.Label();
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
             this.DoctorLabel = new System.Windows.Forms.Label();
@@ -51,18 +51,9 @@
             // 
             // OccupiedAppointmentsTable
             // 
-            this.OccupiedAppointmentsTable.AllowUserToAddRows = false;
-            this.OccupiedAppointmentsTable.AllowUserToDeleteRows = false;
-            this.OccupiedAppointmentsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.OccupiedAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.OccupiedAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.OccupiedAppointmentsTable.Location = new System.Drawing.Point(12, 26);
             this.OccupiedAppointmentsTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.OccupiedAppointmentsTable.Name = "OccupiedAppointmentsTable";
-            this.OccupiedAppointmentsTable.ReadOnly = true;
-            this.OccupiedAppointmentsTable.RowHeadersWidth = 51;
-            this.OccupiedAppointmentsTable.RowTemplate.Height = 29;
-            this.OccupiedAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.OccupiedAppointmentsTable.Size = new System.Drawing.Size(776, 357);
             this.OccupiedAppointmentsTable.TabIndex = 4;
             // 
@@ -166,7 +157,7 @@
         #endregion
 
         private Label TitleLabel;
-        internal Forms.AppointmentsDataGridView OccupiedAppointmentsTable;
+        internal Forms.AppointmentsTable OccupiedAppointmentsTable;
         private Label DateLabel;
         internal DateTimePicker AppointmentDatePicker;
         private Label DoctorLabel;

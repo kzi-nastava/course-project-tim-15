@@ -38,7 +38,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.PrescriptionEndDatePicker = new System.Windows.Forms.DateTimePicker();
             this.PrescriptionStartDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.DrugsTable = new Klinika.Forms.DrugsDataGridView();
+            this.DrugsTable = new Klinika.Forms.DrugsTable();
             this.PrescriptButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.IntervalSpinner)).BeginInit();
@@ -149,18 +149,8 @@
             // 
             // DrugsTable
             // 
-            this.DrugsTable.AllowUserToAddRows = false;
-            this.DrugsTable.AllowUserToDeleteRows = false;
-            this.DrugsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DrugsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.DrugsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.DrugsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DrugsTable.GridColor = System.Drawing.SystemColors.Control;
             this.DrugsTable.Location = new System.Drawing.Point(12, 204);
             this.DrugsTable.Name = "DrugsTable";
-            this.DrugsTable.ReadOnly = true;
-            this.DrugsTable.RowTemplate.Height = 25;
-            this.DrugsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DrugsTable.Size = new System.Drawing.Size(336, 359);
             this.DrugsTable.TabIndex = 1;
             // 
@@ -209,7 +199,7 @@
         private Label label3;
         internal TextBox CommentTextBox;
         private Label label4;
-        internal Klinika.Forms.DrugsDataGridView DrugsTable;
+        internal Klinika.Forms.DrugsTable DrugsTable;
         private Button PrescriptButton;
         private Label label5;
     }

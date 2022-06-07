@@ -4,9 +4,9 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    internal class DoctorsDataGridView : DataGridView
+    internal class DoctorsTable : Base.TableBase<Doctor>
     {
-        public void Fill(List<Doctor> doctors)
+        public override void Fill(List<Doctor> doctors)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Doctor ID");
@@ -32,7 +32,7 @@ namespace Klinika.Forms
         }
         public int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["Doctor ID"].Value);
+            return Convert.ToInt32(GetCellValue("Doctor ID"));
         }
     }
 }
