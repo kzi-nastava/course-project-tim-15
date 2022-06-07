@@ -4,11 +4,11 @@ using Klinika.Services;
 
 namespace Klinika.Forms
 {
-    internal class MedicalRecordDataGridView : DataGridView
+    internal class MedicalRecordTable : Base.TableBase<Anamnesis>
     {
         private List<Appointment> appointments { get { return AppointmentService.GetCompleted(patientID); } }
         private int patientID;
-        public MedicalRecordDataGridView() : base(){}
+        public MedicalRecordTable() : base(){}
         public void Fill(List<Anamnesis> anamneses, int patientID)
         {
             this.patientID = patientID;
@@ -24,6 +24,10 @@ namespace Klinika.Forms
             foreach (Anamnesis anamnesis in anamneses) Insert(anamnesis);
 
             ClearSelection();
+        }
+        public override void Fill(List<Anamnesis> items)
+        {
+            throw new NotImplementedException();
         }
         public void Insert(Anamnesis anamnesis)
         {
@@ -41,7 +45,7 @@ namespace Klinika.Forms
         }
         private int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["Appointment ID"].Value);
+            return Convert.ToInt32(GetCellValue("Appointment ID"));
         }
         public Appointment GetSelected()
         {

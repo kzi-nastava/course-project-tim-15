@@ -31,7 +31,7 @@ namespace Klinika.GUI.Patient
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.MedicalRecordTable = new Klinika.Forms.MedicalRecordDataGridView();
+            this.MedicalRecordTable = new Klinika.Forms.MedicalRecordTable();
             this.GradeDoctorButton = new System.Windows.Forms.Button();
             this.ResetButton = new System.Windows.Forms.Button();
             this.SearchButton = new System.Windows.Forms.Button();
@@ -42,12 +42,6 @@ namespace Klinika.GUI.Patient
             // 
             // MedicalRecordTable
             // 
-            this.MedicalRecordTable.AllowUserToAddRows = false;
-            this.MedicalRecordTable.AllowUserToDeleteRows = false;
-            this.MedicalRecordTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.MedicalRecordTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.MedicalRecordTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.MedicalRecordTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -58,9 +52,6 @@ namespace Klinika.GUI.Patient
             this.MedicalRecordTable.DefaultCellStyle = dataGridViewCellStyle1;
             this.MedicalRecordTable.Location = new System.Drawing.Point(12, 12);
             this.MedicalRecordTable.Name = "MedicalRecordTable";
-            this.MedicalRecordTable.ReadOnly = true;
-            this.MedicalRecordTable.RowHeadersWidth = 51;
-            this.MedicalRecordTable.RowTemplate.Height = 29;
             this.MedicalRecordTable.Size = new System.Drawing.Size(890, 527);
             this.MedicalRecordTable.TabIndex = 1;
             // 
@@ -138,7 +129,7 @@ namespace Klinika.GUI.Patient
 
         #endregion
 
-        private MedicalRecordDataGridView MedicalRecordTable;
+        private MedicalRecordTable MedicalRecordTable;
         private Button GradeDoctorButton;
         private Button ResetButton;
         private Button SearchButton;

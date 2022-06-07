@@ -33,7 +33,7 @@ namespace Klinika.GUI.Patient
             this.GradeLabel = new System.Windows.Forms.Label();
             this.GradeNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.SetGradeButton = new System.Windows.Forms.Button();
-            this.QuestionsTable = new Klinika.Forms.QuestionsDataGridView();
+            this.QuestionsTable = new Klinika.Forms.QuestionsTable();
             this.SendButton = new System.Windows.Forms.Button();
             this.CommentTextBox = new System.Windows.Forms.TextBox();
             this.CommentLabel = new System.Windows.Forms.Label();
@@ -84,12 +84,6 @@ namespace Klinika.GUI.Patient
             // 
             // QuestionsTable
             // 
-            this.QuestionsTable.AllowUserToAddRows = false;
-            this.QuestionsTable.AllowUserToDeleteRows = false;
-            this.QuestionsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.QuestionsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.QuestionsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.QuestionsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -101,10 +95,6 @@ namespace Klinika.GUI.Patient
             this.QuestionsTable.Location = new System.Drawing.Point(3, 5);
             this.QuestionsTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.QuestionsTable.Name = "QuestionsTable";
-            this.QuestionsTable.ReadOnly = true;
-            this.QuestionsTable.RowHeadersWidth = 51;
-            this.QuestionsTable.RowTemplate.Height = 29;
-            this.QuestionsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.QuestionsTable.Size = new System.Drawing.Size(763, 319);
             this.QuestionsTable.TabIndex = 5;
             this.QuestionsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.QuestionsTableRowSelected);
@@ -166,7 +156,7 @@ namespace Klinika.GUI.Patient
         private Label GradeLabel;
         private NumericUpDown GradeNumericUpDown;
         private Button SetGradeButton;
-        private QuestionsDataGridView QuestionsTable;
+        private QuestionsTable QuestionsTable;
         private Button SendButton;
         internal TextBox CommentTextBox;
         private Label CommentLabel;

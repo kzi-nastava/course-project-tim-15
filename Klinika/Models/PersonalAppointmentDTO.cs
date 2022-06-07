@@ -8,8 +8,8 @@ namespace Klinika.Models
         internal Appointment? appointment { get; set; }
         internal bool isDatePicked { get; }
         internal bool isCreate { get; }
-        internal AppointmentsDataGridView? appointmentsTable { get; }
-        public PersonalAppointmentDTO(Form parent, Appointment appointment, bool isCreate, bool isDatePicked, AppointmentsDataGridView appointmentsTable = null)
+        internal AppointmentsTable? appointmentsTable { get; }
+        public PersonalAppointmentDTO(Form parent, Appointment appointment, bool isCreate, bool isDatePicked, AppointmentsTable appointmentsTable = null)
         {
             this.parent = parent;
             this.appointment = appointment;

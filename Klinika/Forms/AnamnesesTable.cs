@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class AnamnesesTable : Base.ReadonlyTableBase<Anamnesis>
+    public class AnamnesesTable : Base.ViewOnlyTableBase<Anamnesis>
     {
         public override void Fill(List<Anamnesis> items)
         {

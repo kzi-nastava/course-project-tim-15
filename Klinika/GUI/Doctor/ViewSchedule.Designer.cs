@@ -31,7 +31,7 @@
             this.PerformButton = new System.Windows.Forms.Button();
             this.ViewMedicalRecordButton = new System.Windows.Forms.Button();
             this.ScheduleDatePicker = new System.Windows.Forms.DateTimePicker();
-            this.ScheduleTable = new Klinika.Forms.AppointmentsDataGridView();
+            this.ScheduleTable = new Klinika.Forms.AppointmentsTable();
             ((System.ComponentModel.ISupportInitialize)(this.ScheduleTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,18 +65,9 @@
             // 
             // ScheduleTable
             // 
-            this.ScheduleTable.AllowUserToAddRows = false;
-            this.ScheduleTable.AllowUserToDeleteRows = false;
-            this.ScheduleTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.ScheduleTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.ScheduleTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ScheduleTable.Location = new System.Drawing.Point(12, 11);
             this.ScheduleTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ScheduleTable.Name = "ScheduleTable";
-            this.ScheduleTable.ReadOnly = true;
-            this.ScheduleTable.RowHeadersWidth = 51;
-            this.ScheduleTable.RowTemplate.Height = 25;
-            this.ScheduleTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ScheduleTable.Size = new System.Drawing.Size(776, 399);
             this.ScheduleTable.TabIndex = 4;
             this.ScheduleTable.SelectionChanged += new System.EventHandler(this.ScheduleTableSelectionChanged);
@@ -108,6 +99,6 @@
         private Button PerformButton;
         private Button ViewMedicalRecordButton;
         private DateTimePicker ScheduleDatePicker;
-        public Forms.AppointmentsDataGridView ScheduleTable;
+        public Forms.AppointmentsTable ScheduleTable;
     }
 }
