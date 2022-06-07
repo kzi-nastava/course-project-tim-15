@@ -5,7 +5,7 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class AppointmentsTable : Base.TableBase
+    public class AppointmentsTable : Base.TableBase<Appointment>
     {
         private List<Appointment> appointments;
         private User.RoleType viewerRole;
@@ -25,7 +25,7 @@ namespace Klinika.Forms
             this.viewerRole = viewerRole;
             searchedRole = viewerRole == User.RoleType.DOCTOR ? "Patient" : "Doctor";
         }
-        public void Fill(List<Appointment> appointments)
+        public override void Fill(List<Appointment> appointments)
         {
             DataTable appointmetnsData = new DataTable();
             appointmetnsData.Columns.Add("ID");

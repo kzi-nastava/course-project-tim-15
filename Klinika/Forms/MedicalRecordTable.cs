@@ -4,7 +4,7 @@ using Klinika.Services;
 
 namespace Klinika.Forms
 {
-    internal class MedicalRecordTable : Base.TableBase
+    internal class MedicalRecordTable : Base.TableBase<Anamnesis>
     {
         private List<Appointment> appointments { get { return AppointmentService.GetCompleted(patientID); } }
         private int patientID;
@@ -24,6 +24,10 @@ namespace Klinika.Forms
             foreach (Anamnesis anamnesis in anamneses) Insert(anamnesis);
 
             ClearSelection();
+        }
+        public override void Fill(List<Anamnesis> items)
+        {
+            throw new NotImplementedException();
         }
         public void Insert(Anamnesis anamnesis)
         {

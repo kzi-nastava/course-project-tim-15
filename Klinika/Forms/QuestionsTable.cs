@@ -3,9 +3,9 @@ using Klinika.Models;
 
 namespace Klinika.Forms
 {
-    internal class QuestionsTable : Base.TableBase
+    internal class QuestionsTable : Base.TableBase<Question>
     {
-        public void Fill(List<Question> questions)
+        public override void Fill(List<Question> questions)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("ID");

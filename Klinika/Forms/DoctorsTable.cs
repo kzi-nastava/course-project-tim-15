@@ -4,9 +4,9 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    internal class DoctorsTable : Base.TableBase
+    internal class DoctorsTable : Base.TableBase<Doctor>
     {
-        public void Fill(List<Doctor> doctors)
+        public override void Fill(List<Doctor> doctors)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Doctor ID");

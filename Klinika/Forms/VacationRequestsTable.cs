@@ -3,14 +3,14 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class VacationRequestsTable : Base.TableBase
+    public class VacationRequestsTable : Base.TableBase<VacationRequest>
     {
         private List<VacationRequest> vacationRequests;
         public VacationRequestsTable() : base()
         {
             vacationRequests = new List<VacationRequest>();
         }
-        public void Fill(List<VacationRequest> vacationRequests)
+        public override void Fill(List<VacationRequest> vacationRequests)
         {
             DataTable vacationRequestsData = new DataTable();
             vacationRequestsData.Columns.Add("ID");

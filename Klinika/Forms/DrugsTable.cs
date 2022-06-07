@@ -3,14 +3,14 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class DrugsTable : Base.TableBase
+    public class DrugsTable : Base.TableBase<Drug>
     {
         private List<Drug> drugs;
         public DrugsTable() : base()
         {
             drugs = new List<Drug>();
         }
-        public void Fill(List<Drug> drugs)
+        public override void Fill(List<Drug> drugs)
         {
             this.drugs = drugs;
 

@@ -4,9 +4,9 @@ using Klinika.Services;
 
 namespace Klinika.Forms
 {
-    internal class RecommendedAppointmentsTable : Base.TableBase
+    internal class RecommendedAppointmentsTable : Base.TableBase<Appointment>
     {
-        public void Fill(List<Appointment> appointments = null)
+        public override void Fill(List<Appointment> appointments = null)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Doctor ID");

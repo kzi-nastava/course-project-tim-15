@@ -3,14 +3,14 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class RoomEquipmentTable : Base.TableBase
+    public class RoomEquipmentTable : Base.TableBase<Equipment>
     {
         private List<Equipment> equipment;
         public RoomEquipmentTable() : base()
         {
             equipment = new List<Equipment>();
         }
-        public void Fill(List<Equipment> equipments)
+        public override void Fill(List<Equipment> equipments)
         {
             DataTable equipmentData = new DataTable();
             equipmentData.Columns.Add("ID");

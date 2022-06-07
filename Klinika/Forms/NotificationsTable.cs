@@ -3,9 +3,9 @@ using Klinika.Models;
 
 namespace Klinika.Forms
 {
-    internal class NotificationsTable : Base.TableBase
+    internal class NotificationsTable : Base.TableBase<Notification>
     {
-        public void Fill(List<Notification> notifications)
+        public override void Fill(List<Notification> notifications)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("ID");
