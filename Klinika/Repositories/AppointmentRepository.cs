@@ -192,7 +192,6 @@ namespace Klinika.Repositories
                 DateTime from = DateTime.Parse(row["DateTime"].ToString());
                 scheduledAppointments.Add(new TimeSlot(from, from.AddMinutes(Convert.ToInt32(row["Duration"]))));
             }
-
             return scheduledAppointments;
         }
     }

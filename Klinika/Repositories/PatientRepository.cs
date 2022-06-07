@@ -9,11 +9,11 @@ namespace Klinika.Repositories
         public static Dictionary<string, int>? emailIDPairs { get; private set; }
         public static Dictionary<int,Patient>? idPatientPairs { get; private set; }
 
-        public static DataTable GetAll()
+        public static List<Patient> GetAll()
         {
             emailIDPairs = new Dictionary<string, int>();
             idPatientPairs = new Dictionary<int,Patient>();
-
+            List<Patient> patients = new List<Patient>();
             string getAllQuery = "SELECT [User].ID, [User].JMBG, [User].Name, [User].Surname, [User].Birthdate, [User].Gender, [User].Email, " +
                                  "[User].Password, [User].IsBlocked as Blocked, [User].WhoBlocked as BlockedBy, [Patient].NotificationOffset " +
                                       "FROM [User] JOIN [Patient] " +
@@ -36,6 +36,7 @@ namespace Klinika.Repositories
                                                 patient["Password"].ToString(), 
                                                 Convert.ToInt32(patient["NotificationOffset"]));
 
+                patients.Add(newPatient);
                 emailIDPairs.Add(email, id);
                 idPatientPairs.Add(id, newPatient);
 
@@ -43,7 +44,7 @@ namespace Klinika.Repositories
                 retrievedPatients.Columns.Remove("Password");
             retrievedPatients.Columns.Remove("NotificationOffset");
 
-            return retrievedPatients;
+            return patients;
 
         }
         public static Patient GetSingle (int id)

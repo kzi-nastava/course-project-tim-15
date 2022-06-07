@@ -1,4 +1,5 @@
 ﻿using Klinika.Data;
+using Klinika.Models;
 using System.Data;
 
 namespace Klinika.Repositories
@@ -20,8 +21,9 @@ namespace Klinika.Repositories
                 ("Date", DateTime.Now));
         }
 
-        public static DataTable GetReferralsPerPatient(int patientId)
+        public static List<Referral> GetReferralsPerPatient(int patientId)
         {
+            List<Referral> referrals = new List<Referral>();
             string getReferralsQuery = "SELECT [Referal].ID, " +
                 "CAST([Referal].DoctorID AS varchar) + '. ' + [User].Name + ' ' + [User].Surname 'Doctor', " +
                 "CAST([Referal].SpecializationID AS varchar) + '. ' + [Specialization].Name 'Specialization', [Referal].Date 'Date issued',[Referal].IsUsed 'Used' " +
@@ -33,7 +35,17 @@ namespace Klinika.Repositories
                 "ORDER BY [Referal].Date DESC";
 
             DataTable retrievedReferrals = DatabaseConnection.GetInstance().CreateTableOfData(getReferralsQuery, ("@patientID", patientId));
-            return retrievedReferrals;
+            foreach(DataRow row in retrievedReferrals.Rows)
+            {
+                referrals.Add(new Referral((int)row["ID"],
+                                            patientId,
+                                            row["Doctor"].ToString(),
+                                            row["Specialization"].ToString(),
+                                            (bool)row["Used"],
+                                            DateTime.Parse(row["Date issued"].ToString())
+                             ));
+            }
+            return referrals;
         }
 
         public static void MarkAsUsed(int referralID)

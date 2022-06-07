@@ -6,9 +6,9 @@ namespace Klinika.GUI.Secretary
 {
     public partial class AddPatient : Form
     {
-        private mainWindow parent;
+        private PatientsManagement parent;
 
-        public AddPatient(mainWindow parent)
+        public AddPatient(PatientsManagement parent)
         {
             this.parent = parent;
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace Klinika.GUI.Secretary
             try
             {
                 if(!PatientService.Add(newPatient)) return;
-                parent.AddRowToPatientTable(newPatient);
+                parent.AddRowToPatientsTable(newPatient);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully added!");
                 Close();
             }
@@ -47,7 +47,7 @@ namespace Klinika.GUI.Secretary
             {
                 MessageBoxUtilities.ShowErrorMessage(error.Message);
             }
-          
         }
+
     }
 }

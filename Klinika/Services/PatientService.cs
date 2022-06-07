@@ -7,15 +7,11 @@ namespace Klinika.Services
 {
     internal class PatientService
     {
-        public static Patient? GetSingle(string email)
-        {
-            return PatientRepository.idPatientPairs[PatientRepository.emailIDPairs[email]];
-        }
         public static User? GetSingle(int id)
         {
             return UserRepository.GetInstance().Users.Where(x => x.id == id).FirstOrDefault();
         }
-        public static DataTable GetAll()
+        public static List<Patient> GetAll()
         {
             return PatientRepository.GetAll();
         }
@@ -31,15 +27,16 @@ namespace Klinika.Services
             PatientRepository.Create(newPatient);
             return true;
         }
-        public static void Modify(Patient patient)
+        public static bool Modify(Patient patient)
         {
             string error_message = ValidationUtilities.ValidatePatient(patient,isModification: true);
             if(error_message != null)
             {
                 MessageBoxUtilities.ShowErrorMessage(error_message);
-                return;
+                return false;
             }
             PatientRepository.Modify(patient);
+            return true;
         }
         public static void Delete(int patientId)
         {

@@ -6,14 +6,13 @@ namespace Klinika.Services
 {
     internal class EquipmentService
     {
-        public static DataTable GetMissingDynamicEquipment()
+        public static List<Equipment> GetMissingDynamicEquipment()
         {
-            DataTable allDynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
-            for (int i = allDynamicEquipment.Rows.Count - 1; i >= 0; i--)
+            List<Equipment> allDynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
+            for (int i = allDynamicEquipment.Count - 1; i >= 0; i--)
             {
-                if ((int)allDynamicEquipment.Rows[i]["Quantity"] > 0) allDynamicEquipment.Rows.RemoveAt(i);
+                if (allDynamicEquipment[i].quantity > 0) allDynamicEquipment.RemoveAt(i);
             }
-            allDynamicEquipment.Columns.Remove("Quantity");
             return allDynamicEquipment;
         }
         public static List<Equipment> GetDynamicEquipment(int roomID)
@@ -39,60 +38,61 @@ namespace Klinika.Services
             EquipmentRepository.TransferRequest(newTransfer);
         }
        
-        private static DataTable PairRoomWithAllDynamicEquipment()
+        private static List<Equipment> PairRoomWithAllDynamicEquipment()
         {
-            DataTable rooms = RoomRepository.GetAllRooms();
-            DataTable dynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
-            DataTable pairs = new DataTable();
-            pairs.Columns.Add("RoomID", typeof(int));
-            pairs.Columns.Add("Number", typeof(int));
-            pairs.Columns.Add("EquipmentID", typeof(int));
-            pairs.Columns.Add("EquipmentName", typeof(string));
-            pairs.Columns.Add("Quantity", typeof(int));
-            foreach (DataRow room in rooms.Rows)
+            List<Room> rooms = RoomRepository.Get(); 
+            List<Equipment> dynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
+            List<Equipment> pairs = new List<Equipment>();
+
+            foreach (Room room in rooms)
             {
-                foreach(DataRow equipment in dynamicEquipment.Rows)
+                foreach(Equipment equipment in dynamicEquipment)
                 {
-                    pairs.Rows.Add((int)room["ID"], (int)room["Number"], (int)equipment["ID"], equipment["Name"].ToString(), 0);
+                    pairs.Add(new Equipment(
+                                            equipment.id,
+                                            equipment.name,
+                                            room.id,
+                                            room.number,
+                                            0
+                                            ));
                 }
             }
             return pairs;
         }
 
-        private static DataTable GetQuantities(DataTable roomEquipmentPairs)
+        private static List<Equipment> GetQuantities(List<Equipment> roomEquipmentPairs)
         {
-            DataTable registeredEquipmentInRooms = EquipmentRepository.GetAll();
-            foreach(DataRow pair in roomEquipmentPairs.Rows)
+            List<Equipment> registeredEquipmentInRooms = EquipmentRepository.GetAllInRooms();
+            foreach(Equipment pair in roomEquipmentPairs)
             {
-                foreach(DataRow registeredEquipment in registeredEquipmentInRooms.Rows)
+                foreach(Equipment registeredEquipment in registeredEquipmentInRooms)
                 {
-                    if (!pair["RoomID"].ToString().Equals(registeredEquipment["RoomID"].ToString()) ||
-                        !pair["EquipmentID"].ToString().Equals(registeredEquipment["EquipmentID"].ToString())) continue;
+                    if (pair.roomID != registeredEquipment.roomID ||
+                        pair.id != registeredEquipment.id) continue;
                     
-                    pair["Quantity"] = (int)registeredEquipment["Quantity"];
+                    pair.quantity = registeredEquipment.quantity;
                     break;
                 }
             }
             return roomEquipmentPairs;
         }
 
-        private static DataTable GetLowStockDynamicEquipmentInRooms(DataTable dynamicEquipmentInRooms)
+        private static List<Equipment> GetLowStockDynamicEquipmentInRooms(List<Equipment> dynamicEquipmentInRooms)
         {
-            for (int i = dynamicEquipmentInRooms.Rows.Count - 1; i >= 0; i--)
+            for (int i = dynamicEquipmentInRooms.Count - 1; i >= 0; i--)
             {
-                if ((int)dynamicEquipmentInRooms.Rows[i]["Quantity"] >= 5) dynamicEquipmentInRooms.Rows.RemoveAt(i);
+                if (dynamicEquipmentInRooms[i].quantity >= 5) dynamicEquipmentInRooms.RemoveAt(i);
             }
 
             return dynamicEquipmentInRooms;
         }
 
-        public static DataTable GetDynamicEquipmentInRooms()
+        public static List<Equipment> GetDynamicEquipmentInRooms()
         {
-            DataTable roomDynamicEquipmentPairs = PairRoomWithAllDynamicEquipment();
+            List<Equipment> roomDynamicEquipmentPairs = PairRoomWithAllDynamicEquipment();
             roomDynamicEquipmentPairs = GetQuantities(roomDynamicEquipmentPairs);
             roomDynamicEquipmentPairs = GetLowStockDynamicEquipmentInRooms(roomDynamicEquipmentPairs);
-            roomDynamicEquipmentPairs.DefaultView.Sort = "Number asc";
-            return roomDynamicEquipmentPairs;
+            return roomDynamicEquipmentPairs.OrderBy(o => o.roomID).ToList();
         }
 
         public static int GetQuantity(int roomId, int equipmentId)
