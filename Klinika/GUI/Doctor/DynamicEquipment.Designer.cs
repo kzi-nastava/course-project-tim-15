@@ -39,17 +39,8 @@
             // 
             // EquipmentTable
             // 
-            this.EquipmentTable.AllowUserToAddRows = false;
-            this.EquipmentTable.AllowUserToDeleteRows = false;
-            this.EquipmentTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.EquipmentTable.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.EquipmentTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.EquipmentTable.Location = new System.Drawing.Point(12, 12);
             this.EquipmentTable.Name = "EquipmentTable";
-            this.EquipmentTable.ReadOnly = true;
-            this.EquipmentTable.RowHeadersWidth = 51;
-            this.EquipmentTable.RowTemplate.Height = 29;
-            this.EquipmentTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.EquipmentTable.Size = new System.Drawing.Size(820, 347);
             this.EquipmentTable.TabIndex = 0;
             this.EquipmentTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EquipmentTableCellClick);

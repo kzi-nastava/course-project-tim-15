@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class DrugsTable : DataGridView
+    public class DrugsTable : Base.TableBase
     {
         private List<Drug> drugs;
         public DrugsTable() : base()
@@ -35,15 +35,11 @@ namespace Klinika.Forms
         }
         public int GetSelectedId()
         {
-            if(SelectedRows.Count == 0) return -1;
-            int selectedId = Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
-            return selectedId;
+            return Convert.ToInt32(GetCellValue("ID"));
         }
         public Drug GetSelectedDrug()
         {
-            int selectedID = GetSelectedId();
-            if(selectedID == -1) return null;
-            return drugs.Where(x => x.id == selectedID).FirstOrDefault();
+            return drugs.Where(x => x.id == GetSelectedId()).FirstOrDefault();
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class RoomEquipmentTable : DataGridView
+    public class RoomEquipmentTable : Base.TableBase
     {
         private List<Equipment> equipment;
         public RoomEquipmentTable() : base()
@@ -40,7 +40,7 @@ namespace Klinika.Forms
         public List<Equipment> GetAll() { return equipment; }
         public int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
+            return Convert.ToInt32(GetCellValue("ID"));
         }
         public Equipment GetSelected()
         {

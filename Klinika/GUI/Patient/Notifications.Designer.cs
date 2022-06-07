@@ -42,12 +42,6 @@ namespace Klinika.GUI.Patient
             // 
             // NotificationsTable
             // 
-            this.NotificationsTable.AllowUserToAddRows = false;
-            this.NotificationsTable.AllowUserToDeleteRows = false;
-            this.NotificationsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.NotificationsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.NotificationsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.NotificationsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -58,10 +52,6 @@ namespace Klinika.GUI.Patient
             this.NotificationsTable.DefaultCellStyle = dataGridViewCellStyle2;
             this.NotificationsTable.Location = new System.Drawing.Point(12, 12);
             this.NotificationsTable.Name = "NotificationsTable";
-            this.NotificationsTable.ReadOnly = true;
-            this.NotificationsTable.RowHeadersWidth = 51;
-            this.NotificationsTable.RowTemplate.Height = 29;
-            this.NotificationsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.NotificationsTable.Size = new System.Drawing.Size(890, 529);
             this.NotificationsTable.TabIndex = 2;
             this.NotificationsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.NotificationsTableCellClick);

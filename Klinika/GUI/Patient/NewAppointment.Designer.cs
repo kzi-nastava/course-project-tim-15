@@ -51,18 +51,9 @@
             // 
             // OccupiedAppointmentsTable
             // 
-            this.OccupiedAppointmentsTable.AllowUserToAddRows = false;
-            this.OccupiedAppointmentsTable.AllowUserToDeleteRows = false;
-            this.OccupiedAppointmentsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.OccupiedAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.OccupiedAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.OccupiedAppointmentsTable.Location = new System.Drawing.Point(12, 26);
             this.OccupiedAppointmentsTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.OccupiedAppointmentsTable.Name = "OccupiedAppointmentsTable";
-            this.OccupiedAppointmentsTable.ReadOnly = true;
-            this.OccupiedAppointmentsTable.RowHeadersWidth = 51;
-            this.OccupiedAppointmentsTable.RowTemplate.Height = 29;
-            this.OccupiedAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.OccupiedAppointmentsTable.Size = new System.Drawing.Size(776, 357);
             this.OccupiedAppointmentsTable.TabIndex = 4;
             // 

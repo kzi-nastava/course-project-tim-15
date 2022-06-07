@@ -149,18 +149,8 @@
             // 
             // DrugsTable
             // 
-            this.DrugsTable.AllowUserToAddRows = false;
-            this.DrugsTable.AllowUserToDeleteRows = false;
-            this.DrugsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.DrugsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.DrugsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.DrugsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DrugsTable.GridColor = System.Drawing.SystemColors.Control;
             this.DrugsTable.Location = new System.Drawing.Point(12, 204);
             this.DrugsTable.Name = "DrugsTable";
-            this.DrugsTable.ReadOnly = true;
-            this.DrugsTable.RowTemplate.Height = 25;
-            this.DrugsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.DrugsTable.Size = new System.Drawing.Size(336, 359);
             this.DrugsTable.TabIndex = 1;
             // 

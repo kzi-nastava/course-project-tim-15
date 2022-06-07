@@ -1,6 +1,6 @@
 ﻿namespace Klinika.Forms.Base
 {
-    public abstract class ReadonlyTableBase<T> : DataGridView
+    public abstract class ReadonlyTableBase<T> : TableBase
     {
         List<T> items;
         public ReadonlyTableBase() : base()

@@ -3,7 +3,7 @@ using Klinika.Models;
 
 namespace Klinika.Forms
 {
-    internal class NotificationsTable : DataGridView
+    internal class NotificationsTable : Base.TableBase
     {
         public void Fill(List<Notification> notifications)
         {
@@ -27,7 +27,7 @@ namespace Klinika.Forms
         }
         public int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
-        }
+            return Convert.ToInt32(GetCellValue("ID"));
+    }
     }
 }

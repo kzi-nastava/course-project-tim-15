@@ -4,7 +4,7 @@ using Klinika.Services;
 
 namespace Klinika.Forms
 {
-    internal class MedicalRecordTable : DataGridView
+    internal class MedicalRecordTable : Base.TableBase
     {
         private List<Appointment> appointments { get { return AppointmentService.GetCompleted(patientID); } }
         private int patientID;
@@ -41,7 +41,7 @@ namespace Klinika.Forms
         }
         private int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["Appointment ID"].Value);
+            return Convert.ToInt32(GetCellValue("Appointment ID"));
         }
         public Appointment GetSelected()
         {

@@ -79,19 +79,8 @@
             // 
             // UnapprovedDrugsTable
             // 
-            this.UnapprovedDrugsTable.AllowUserToAddRows = false;
-            this.UnapprovedDrugsTable.AllowUserToDeleteRows = false;
-            this.UnapprovedDrugsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.UnapprovedDrugsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.UnapprovedDrugsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.UnapprovedDrugsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.UnapprovedDrugsTable.GridColor = System.Drawing.SystemColors.Control;
             this.UnapprovedDrugsTable.Location = new System.Drawing.Point(252, 26);
             this.UnapprovedDrugsTable.Name = "UnapprovedDrugsTable";
-            this.UnapprovedDrugsTable.ReadOnly = true;
-            this.UnapprovedDrugsTable.RowHeadersWidth = 51;
-            this.UnapprovedDrugsTable.RowTemplate.Height = 25;
-            this.UnapprovedDrugsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.UnapprovedDrugsTable.Size = new System.Drawing.Size(536, 412);
             this.UnapprovedDrugsTable.TabIndex = 7;
             this.UnapprovedDrugsTable.SelectionChanged += new System.EventHandler(this.UnapprovedDrugsTableSelectionChanged);

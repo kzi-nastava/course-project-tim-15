@@ -168,17 +168,8 @@ namespace Klinika.GUI.Patient
             // 
             // RecommendedAppointmentTable
             // 
-            this.RecommendedAppointmentTable.AllowUserToAddRows = false;
-            this.RecommendedAppointmentTable.AllowUserToDeleteRows = false;
-            this.RecommendedAppointmentTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.RecommendedAppointmentTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.RecommendedAppointmentTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.RecommendedAppointmentTable.Location = new System.Drawing.Point(12, 215);
             this.RecommendedAppointmentTable.Name = "RecommendedAppointmentTable";
-            this.RecommendedAppointmentTable.ReadOnly = true;
-            this.RecommendedAppointmentTable.RowHeadersWidth = 51;
-            this.RecommendedAppointmentTable.RowTemplate.Height = 29;
-            this.RecommendedAppointmentTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.RecommendedAppointmentTable.Size = new System.Drawing.Size(515, 188);
             this.RecommendedAppointmentTable.TabIndex = 7;
             this.RecommendedAppointmentTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.RecommendedAppointmentTableRowSelected);

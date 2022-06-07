@@ -119,12 +119,6 @@
             // 
             // VacationRequestTable
             // 
-            this.VacationRequestTable.AllowUserToAddRows = false;
-            this.VacationRequestTable.AllowUserToDeleteRows = false;
-            this.VacationRequestTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.VacationRequestTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.VacationRequestTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.VacationRequestTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -136,10 +130,6 @@
             this.VacationRequestTable.GridColor = System.Drawing.SystemColors.Control;
             this.VacationRequestTable.Location = new System.Drawing.Point(249, 11);
             this.VacationRequestTable.Name = "VacationRequestTable";
-            this.VacationRequestTable.ReadOnly = true;
-            this.VacationRequestTable.RowHeadersWidth = 51;
-            this.VacationRequestTable.RowTemplate.Height = 25;
-            this.VacationRequestTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.VacationRequestTable.Size = new System.Drawing.Size(539, 427);
             this.VacationRequestTable.TabIndex = 12;
             // 

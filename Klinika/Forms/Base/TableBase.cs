@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Klinika.Forms.Base
 {
-    public class TableBase : DataGridView
+    public abstract class TableBase : DataGridView
     {
         public TableBase() : base()
         {
-            BackgroundColor = SystemColors.Control;
+            BackgroundColor = Color.White;
             AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             AllowUserToAddRows = false;
@@ -18,6 +18,10 @@ namespace Klinika.Forms.Base
             ReadOnly = true;
             MultiSelect = false;
             SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        }
+        protected object GetCellValue(string columnName)
+        {
+            return SelectedRows[0].Cells[columnName].Value;
         }
     }
 }

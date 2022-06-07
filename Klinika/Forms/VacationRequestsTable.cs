@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class VacationRequestsTable : DataGridView
+    public class VacationRequestsTable : Base.TableBase
     {
         private List<VacationRequest> vacationRequests;
         public VacationRequestsTable() : base()
@@ -50,7 +50,7 @@ namespace Klinika.Forms
         public List<VacationRequest> GetAll() { return vacationRequests; }
         public int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
+            return Convert.ToInt32(GetCellValue("ID"));
         }
         public VacationRequest GetSelected()
         {
