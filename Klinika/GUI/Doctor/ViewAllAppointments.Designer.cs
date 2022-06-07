@@ -72,17 +72,8 @@
             // 
             // AllAppointmentsTable
             // 
-            this.AllAppointmentsTable.AllowUserToAddRows = false;
-            this.AllAppointmentsTable.AllowUserToDeleteRows = false;
-            this.AllAppointmentsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.AllAppointmentsTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.AllAppointmentsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.AllAppointmentsTable.Location = new System.Drawing.Point(12, 12);
             this.AllAppointmentsTable.Name = "AllAppointmentsTable";
-            this.AllAppointmentsTable.ReadOnly = true;
-            this.AllAppointmentsTable.RowHeadersWidth = 51;
-            this.AllAppointmentsTable.RowTemplate.Height = 29;
-            this.AllAppointmentsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.AllAppointmentsTable.Size = new System.Drawing.Size(776, 400);
             this.AllAppointmentsTable.TabIndex = 0;
             this.AllAppointmentsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AllAppointmentsTableCellClick);

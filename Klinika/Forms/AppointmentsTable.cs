@@ -5,7 +5,7 @@ using System.Data;
 
 namespace Klinika.Forms
 {
-    public class AppointmentsTable : DataGridView
+    public class AppointmentsTable : Base.TableBase
     {
         private List<Appointment> appointments;
         private User.RoleType viewerRole;
@@ -66,7 +66,7 @@ namespace Klinika.Forms
         }
         public int GetSelectedID()
         {
-            return Convert.ToInt32(SelectedRows[0].Cells["ID"].Value);
+            return Convert.ToInt32(GetCellValue("ID"));
         }
         public Appointment GetSelected()
         {
