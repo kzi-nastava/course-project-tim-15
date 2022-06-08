@@ -1,4 +1,5 @@
-﻿namespace Klinika.GUI.Secretary
+﻿using Klinika.Forms;
+namespace Klinika.GUI.Secretary
 {
     partial class ChooseReferral
     {
@@ -28,7 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.referralsTable = new System.Windows.Forms.DataGridView();
+            this.referralsTable = new ReferralsTable();
             this.chooseReferalButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.referralsTable)).BeginInit();
             this.SuspendLayout();
@@ -48,7 +49,7 @@
             this.referralsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.referralsTable.Size = new System.Drawing.Size(776, 342);
             this.referralsTable.TabIndex = 1;
-            this.referralsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.referralsTable_CellClick);
+            this.referralsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ReferralsTable_CellClick);
             // 
             // chooseReferalButton
             // 
@@ -59,7 +60,7 @@
             this.chooseReferalButton.TabIndex = 2;
             this.chooseReferalButton.Text = "Choose referral";
             this.chooseReferalButton.UseVisualStyleBackColor = true;
-            this.chooseReferalButton.Click += new System.EventHandler(this.chooseReferalButton_Click);
+            this.chooseReferalButton.Click += new System.EventHandler(this.ChooseReferalButton_Click);
             // 
             // ChooseReferral
             // 
@@ -78,7 +79,7 @@
 
         #endregion
 
-        public DataGridView referralsTable;
+        public ReferralsTable referralsTable;
         private Button chooseReferalButton;
     }
 }

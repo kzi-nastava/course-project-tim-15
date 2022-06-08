@@ -6,42 +6,34 @@ namespace Klinika.Repositories
 {
     internal class PatientRequestRepository : Repository
     {
-        public static Dictionary<int, PatientModificationRequest>? idRequestPairs { get; set; }
+        public static List<PatientRequest> allRequests { get; private set; }
 
-        public static DataTable? GetAll()
+        public PatientRequestRepository()
         {
-            idRequestPairs = new Dictionary<int, PatientModificationRequest>();
-            string getAllQuery = "SELECT [PatientRequest].ID, [User].Name + ' ' + [User].Surname AS Patient, " +
-                                 "[MedicalAction].ID AS ExaminationID, [MedicalAction].DoctorID, " +
-                                 "[MedicalAction].DateTime, " +
-                                 "CASE " +
-                                 "WHEN [PatientRequest].Type = 'D' THEN 'Delete' " +
-                                 "WHEN [PatientRequest].Type = 'M' THEN 'Modify' " +
-                                 "END AS RequestType, " +
-                                 "[PatientRequest].Approved, [PatientRequest].Description " +
-                                 "FROM [PatientRequest] LEFT JOIN [Patient] ON [PatientRequest].PatientID = [Patient].UserID " +
-                                 "LEFT JOIN [User] ON [Patient].UserID = [User].ID " +
-                                 "LEFT JOIN [MedicalAction] ON [PatientRequest].MedicalActionID = [MedicalAction].ID";
+            allRequests = GetAll();
+        }
+        
+        public static List<PatientRequest>? GetAll()
+        {
+            string getAllQuery = "SELECT * FROM [PatientRequest]";
             
             DataTable retrievedRequests = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
+            List<PatientRequest> requests = new List<PatientRequest>();
 
-            if (retrievedRequests.Rows.Count != 0)
+            foreach (DataRow request in retrievedRequests.Rows)
             {
-                foreach (DataRow request in retrievedRequests.Rows)
-                {
-                    if (request["RequestType"].ToString() == "Modify")
-                    {
-                        PatientModificationRequest modification = new PatientModificationRequest(
-                                                                    Convert.ToInt32(request["DoctorID"]),
-                                                                    DateTime.Parse(request["DateTime"].ToString()),
-                                                                    request["Description"].ToString());
-                        idRequestPairs.Add(Convert.ToInt32(request["ID"]), modification);
-                    }
-                }
+                bool? isApproved = null;
+                if (!DBNull.Value.Equals(request["Approved"])) isApproved = (bool)request["Approved"];
+                requests.Add(new PatientRequest((int)request["ID"],
+                                                (int)request["PatientID"],
+                                                (int)request["MedicalActionID"],
+                                                (char)request["Type"],
+                                                request["Description"].ToString(),
+                                                isApproved
+                             ));
             }
-            retrievedRequests.Columns.Remove("DoctorID");
-            retrievedRequests.Columns.Remove("Description");
-            return retrievedRequests;
+
+            return requests;
         }
 
         public static void Approve(int id)
@@ -71,6 +63,7 @@ namespace Klinika.Repositories
                                                                         ("@Description", patientRequest.description)
                 );
         }
+
 
     }
 }

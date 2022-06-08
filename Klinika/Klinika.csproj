@@ -18,7 +18,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Forms\RoomEquipmentTable.cs" />
+    <Compile Update="Forms\LowStockDynamicEquipmentTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Forms\PatientsRequestsTable.cs" />
+    <Compile Update="Forms\MissingDynamicEquipmentTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Forms\ReferralsTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Forms\PatientsTable.cs" />
+    <Compile Update="Forms\RoomEquipmentDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

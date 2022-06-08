@@ -21,9 +21,10 @@ namespace Klinika.Forms.Base
             ReadOnly = true;
             MultiSelect = false;
             SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            RowTemplate.MinimumHeight = 30;
         }
         public abstract void Fill(List<T> items);
-        protected object GetCellValue(string columnName)
+        public object GetCellValue(string columnName)
         {
             return SelectedRows[0].Cells[columnName].Value;
         }
