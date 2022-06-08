@@ -16,7 +16,7 @@ namespace Klinika.Services
         {
             referralRepo.Create(patientID, specializationID, doctorID);
         }
-        public static DataTable GetReferralsPerPatient(int patientId)
+        public static List<Referral> GetReferralsPerPatient(int patientId)
         {
             return ReferalRepository.GetReferralsPerPatient(patientId);
         }

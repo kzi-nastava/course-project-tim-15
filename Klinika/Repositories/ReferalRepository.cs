@@ -36,7 +36,7 @@ namespace Klinika.Repositories
                 "ORDER BY [Referal].Date DESC";
 
             DataTable retrievedReferrals = DatabaseConnection.GetInstance().CreateTableOfData(getReferralsQuery, ("@patientID", patientId));
-            foreach(DataRow row in retrievedReferrals.Rows)
+            foreach (DataRow row in retrievedReferrals.Rows)
             {
                 referrals.Add(new Referral((int)row["ID"],
                                             patientId,
