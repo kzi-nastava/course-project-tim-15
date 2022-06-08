@@ -54,14 +54,13 @@ namespace Klinika.GUI.Secretary
 
         private void DeletePatient()
         {
-            DialogResult deletionConfirmation = MessageBoxUtilities.ShowConfirmationMessage("Are you sure you want to delete the selected patient?");
-            if (deletionConfirmation == DialogResult.No) return;
-            int id = (int)UIUtilities.GetCellValue(patientsTable, "ID");
+            bool deletionConfirmation = UIUtilities.Confirm("Are you sure you want to delete the selected patient?");
+            if (!deletionConfirmation) return;
+            int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
                 PatientService.Delete(id);
-                int selectedRowNumber = patientsTable.CurrentCell.RowIndex;
-                patientsTable.Rows.RemoveAt(selectedRowNumber);
+                patientsTable.DeleteSelectedRow();
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully deleted!");
             }
             catch (DatabaseConnectionException error)
@@ -70,11 +69,11 @@ namespace Klinika.GUI.Secretary
             }
         }
 
-        private void SetPatientTabButtonsStates()
+        private void SetButtonsStates()
         {
             modifyPatientButton.Enabled = true;
             deletePatientButton.Enabled = true;
-            bool isBlocked = (bool)UIUtilities.GetCellValue(patientsTable, "Blocked");
+            bool isBlocked = Convert.ToBoolean(patientsTable.GetCellValue("Blocked"));
             if (isBlocked)
             {
                 unblockButton.Enabled = true;
@@ -91,14 +90,14 @@ namespace Klinika.GUI.Secretary
         {
             bool blockingConfirmation = UIUtilities.Confirm("Are you sure you want to block the selected patient?");
             if (!blockingConfirmation) return;
-            string email = UIUtilities.GetCellValue(patientsTable, "Email").ToString();
+            int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
-                Roles.Patient toBlock = PatientService.GetSingle(email);
+                Roles.Patient toBlock = (Roles.Patient)PatientService.GetSingle(id);
                 PatientService.Block(toBlock, "SEC");
-                ModifyRowOfPatientTable(toBlock);
+                patientsTable.ModifyRow(patientsTable.GetSelectedRow(),toBlock);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully blocked!");
-                SetPatientTabButtonsStates();
+                SetButtonsStates();
             }
             catch (DatabaseConnectionException error)
             {
@@ -108,16 +107,16 @@ namespace Klinika.GUI.Secretary
 
         private void UnblockPatient()
         {
-            DialogResult unblockingConfirmation = MessageBoxUtilities.ShowConfirmationMessage("Are you sure you want to unblock the selected patient?");
-            if (unblockingConfirmation == DialogResult.No) return;
-            string email = UIUtilities.GetCellValue(patientsTable, "Email").ToString();
+            bool unblockingConfirmation = UIUtilities.Confirm("Are you sure you want to unblock the selected patient?");
+            if (!unblockingConfirmation) return;
+            int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
-                Roles.Patient toUnblock = PatientService.GetSingle(email);
+                Roles.Patient toUnblock = (Roles.Patient)PatientService.GetSingle(id);
                 PatientService.Unblock(toUnblock);
-                ModifyRowOfPatientTable(toUnblock);
+                patientsTable.ModifyRow(patientsTable.GetSelectedRow(),toUnblock);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully unblocked!");
-                SetPatientTabButtonsStates();
+                SetButtonsStates();
             }
             catch (DatabaseConnectionException error)
             {
@@ -127,11 +126,29 @@ namespace Klinika.GUI.Secretary
 
         private void ShowModifyPatientForm()
         {
-            string selectedPatientEmail = UIUtilities.GetCellValue(patientsTable, "Email").ToString();
-            Roles.Patient selected = PatientService.GetSingle(selectedPatientEmail);
+            int selectedPatient = Convert.ToInt32(patientsTable.GetCellValue("ID"));
+            Roles.Patient selected = (Roles.Patient)PatientService.GetSingle(selectedPatient);
             new ModifyPatient(this, selected).Show();
         }
 
+        public void AddRowToPatientsTable(Roles.Patient newPatient)
+        {
+            patientsTable.AddRow(newPatient);
+        }
 
+        public void ModifyRowOfPatientsTable(Roles.Patient modified)
+        {
+            patientsTable.ModifyRow(patientsTable.GetSelectedRow(), modified);
+        }
+
+        private void PatientsManagement_Load(object sender, EventArgs e)
+        {
+            patientsTable.Fill(PatientService.GetAll());
+        }
+
+        private void PatientsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            SetButtonsStates();
+        }
     }
 }

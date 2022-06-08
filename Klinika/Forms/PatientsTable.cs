@@ -1,10 +1,11 @@
 ﻿using Klinika.Models;
 using System.Data;
 using Klinika.Roles;
+using Klinika.Forms.Base;
 
 namespace Klinika.Forms
 {
-    public class PatientsTable : Base.ReadonlyTableBase<Patient>
+    public class PatientsTable : TableBase<Patient>
     {
         public override void Fill(List<Patient> patients)
         {
@@ -37,24 +38,33 @@ namespace Klinika.Forms
             ClearSelection();
         }
 
-        public void ModifyRow(Patient patient)
+        public void ModifyRow(DataGridViewRow row, Patient patient)
         {
-            row["JMBG"] = patient.jmbg;
-            row["Name"] = patient.name;
-            row["Surname"] = patient.surname;
-            row["Birthdate"] = patient.birthdate.Date;
-            row["Gender"] = patient.gender;
-            row["Email"] = patient.email;
-            row["Blocked"] = patient.isBlocked;
-            row["BlockedBy"] = patient.whoBlocked;
+            row.Cells["JMBG"].Value = patient.jmbg;
+            row.Cells["Name"].Value = patient.name;
+            row.Cells["Surname"].Value = patient.surname;
+            row.Cells["Birthdate"].Value = patient.birthdate.Date;
+            row.Cells["Gender"].Value = patient.gender;
+            row.Cells["Email"].Value = patient.email;
+            row.Cells["Blocked"].Value = patient.isBlocked;
+            row.Cells["BlockedBy"].Value = patient.whoBlocked;
         }
 
         public void AddRow(Patient newPatient)
         {
-            DataRow newRow = patients.NewRow();
-            ModifyRow(ref newRow, newPatient);
-            patients.Rows.Add(newRow);
-            patients.AcceptChanges();
+            DataGridViewRow newRow = (DataGridViewRow)CurrentRow.Clone();
+            ModifyRow(newRow, newPatient);
+            Rows.Add(newRow);
+        }
+
+        public DataGridViewRow GetSelectedRow()
+        {
+            return CurrentRow;
+        }
+
+        public void DeleteSelectedRow()
+        {
+            Rows.RemoveAt(CurrentRow.Index);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿namespace Klinika.GUI.Secretary
+﻿using Klinika.Forms;
+namespace Klinika.GUI.Secretary
 {
     partial class PatientsRequestsManagement
     {
@@ -31,8 +32,7 @@
             this.denyButton = new System.Windows.Forms.Button();
             this.approveButton = new System.Windows.Forms.Button();
             this.detailsButton = new System.Windows.Forms.Button();
-            this.requestsTable = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).BeginInit();
+            this.requestsTable = new PatientsRequestsTable();
             this.SuspendLayout();
             // 
             // denyButton
@@ -44,6 +44,7 @@
             this.denyButton.TabIndex = 13;
             this.denyButton.Text = "Deny";
             this.denyButton.UseVisualStyleBackColor = true;
+            this.denyButton.Click += new System.EventHandler(this.DenyButton_Click);
             // 
             // approveButton
             // 
@@ -54,6 +55,7 @@
             this.approveButton.TabIndex = 12;
             this.approveButton.Text = "Approve";
             this.approveButton.UseVisualStyleBackColor = true;
+            this.approveButton.Click += new System.EventHandler(this.ApproveButton_Click);
             // 
             // detailsButton
             // 
@@ -64,22 +66,7 @@
             this.detailsButton.TabIndex = 11;
             this.detailsButton.Text = "Details";
             this.detailsButton.UseVisualStyleBackColor = true;
-            // 
-            // requestsTable
-            // 
-            this.requestsTable.AllowUserToAddRows = false;
-            this.requestsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.requestsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.requestsTable.Location = new System.Drawing.Point(12, 12);
-            this.requestsTable.MultiSelect = false;
-            this.requestsTable.Name = "requestsTable";
-            this.requestsTable.ReadOnly = true;
-            this.requestsTable.RowHeadersWidth = 51;
-            this.requestsTable.RowTemplate.Height = 29;
-            this.requestsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.requestsTable.Size = new System.Drawing.Size(946, 401);
-            this.requestsTable.TabIndex = 10;
-            this.requestsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.requestsTable_CellClick);
+            this.detailsButton.Click += new System.EventHandler(this.DetailsButton_Click);
             // 
             // PatientsRequestsManagement
             // 
@@ -89,10 +76,8 @@
             this.Controls.Add(this.denyButton);
             this.Controls.Add(this.approveButton);
             this.Controls.Add(this.detailsButton);
-            this.Controls.Add(this.requestsTable);
             this.Name = "PatientsRequestsManagement";
             this.Text = "Patients Requests Management";
-            ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -102,6 +87,6 @@
         private Button denyButton;
         private Button approveButton;
         private Button detailsButton;
-        private DataGridView requestsTable;
+        private PatientsRequestsTable requestsTable;
     }
 }

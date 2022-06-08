@@ -78,7 +78,7 @@ namespace Klinika.GUI.Patient
             bool needApproval = DateTime.Now.AddDays(2).Date >= dto.appointment.dateTime.Date;
             if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
-            PatientRequestService.Send(!needApproval, dto.appointment, PatientRequest.Types.Modify);
+            PatientRequestService.Send(!needApproval, dto.appointment, PatientRequest.Types.MODIFY);
             if (!needApproval)
             {
                 AppointmentService.Modify(dto.appointment);

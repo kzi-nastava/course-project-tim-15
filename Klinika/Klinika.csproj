@@ -18,19 +18,20 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
-    <Compile Update="Forms\PatientsRequestsTable.cs">
+    <Compile Update="Forms\LowStockDynamicEquipmentTable.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Forms\PatientsTable.cs">
+    <Compile Update="Forms\PatientsRequestsTable.cs" />
+    <Compile Update="Forms\MissingDynamicEquipmentTable.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Forms\ReferralsTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Forms\PatientsTable.cs" />
     <Compile Update="Forms\RoomEquipmentDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
-=======
-    <Compile Update="Forms\RoomEquipmentTable.cs" />
->>>>>>> cbad8e7c076fa837890c7505ba9c004da6cb6984
   </ItemGroup>
 
 </Project>

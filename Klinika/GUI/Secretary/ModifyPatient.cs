@@ -6,10 +6,10 @@ namespace Klinika.GUI.Secretary
 {
     public partial class ModifyPatient : Form
     {
-        private mainWindow parent;
+        private PatientsManagement parent;
         private Roles.Patient selected;
 
-        public ModifyPatient(mainWindow parent,Roles.Patient selected)
+        public ModifyPatient(PatientsManagement parent,Roles.Patient selected)
         {
             this.parent = parent;
             this.selected = selected;
@@ -59,8 +59,8 @@ namespace Klinika.GUI.Secretary
                 selected.notificationOffset);
             try
             {
-                PatientService.Modify(modifiedPatient);
-                parent.ModifyRowOfPatientTable(modifiedPatient);
+                if(!PatientService.Modify(modifiedPatient)) return;
+                parent.ModifyRowOfPatientsTable(modifiedPatient);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully modified!");
                 Close();
             }

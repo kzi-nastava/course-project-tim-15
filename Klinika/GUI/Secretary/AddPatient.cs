@@ -39,7 +39,7 @@ namespace Klinika.GUI.Secretary
             try
             {
                 if(!PatientService.Add(newPatient)) return;
-                parent.AddRowToPatientTable(newPatient);
+                parent.AddRowToPatientsTable(newPatient);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully added!");
                 Close();
             }
@@ -47,7 +47,7 @@ namespace Klinika.GUI.Secretary
             {
                 MessageBoxUtilities.ShowErrorMessage(error.Message);
             }
-          
         }
+
     }
 }

@@ -9,8 +9,9 @@
         public DateTime oldAppointment { get; }
         public DateTime newAppointment { get; }
 
-        public PatientModificationRequest(int oldDoctorID,DateTime oldAppointment,string changesMadeDescription)
+        public PatientModificationRequest(int requestID,int oldDoctorID,DateTime oldAppointment,string changesMadeDescription)
         {
+            this.requestID = requestID;
             this.oldDoctorID = oldDoctorID;
             this.oldAppointment = oldAppointment;
             string[] tokens = changesMadeDescription.Split(';');

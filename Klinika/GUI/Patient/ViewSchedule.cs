@@ -44,7 +44,7 @@ namespace Klinika.GUI.Patient
 
             if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
-            PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.Delete);
+            PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.DELETE);
             if (needApproval) return;
 
             AppointmentService.Delete(selected.id);

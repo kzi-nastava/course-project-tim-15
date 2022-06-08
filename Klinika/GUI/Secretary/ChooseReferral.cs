@@ -7,8 +7,8 @@ namespace Klinika.GUI.Secretary
 {
     public partial class ChooseReferral : Form
     {
-        private mainWindow parent;
-        public ChooseReferral(mainWindow parent)
+        private Referrals parent;
+        public ChooseReferral(Referrals parent)
         {
             this.parent = parent;
             InitializeComponent();
@@ -19,13 +19,13 @@ namespace Klinika.GUI.Secretary
             InitializeTable();
         }
 
-        private void chooseReferalButton_Click(object sender, EventArgs e)
+        private void ChooseReferalButton_Click(object sender, EventArgs e)
         {
             UpdateParentRefferalForm();
             Close();
         }
 
-        private void referralsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void ReferralsTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             SetButtonState();
         }
@@ -35,8 +35,7 @@ namespace Klinika.GUI.Secretary
             int chosenPatientID = UIUtilities.ExtractID(parent.patientSelection.SelectedItem.ToString());
             try
             {
-                UIUtilities.Fill(referralsTable, ReferralService.GetReferralsPerPatient(chosenPatientID));
-                referralsTable.ClearSelection();
+                referralsTable.Fill(ReferralService.GetReferralsPerPatient(chosenPatientID));
             }
             catch(DatabaseConnectionException error)
             {
@@ -46,7 +45,7 @@ namespace Klinika.GUI.Secretary
 
         private void SetButtonState()
         {
-            bool isUsed = Convert.ToBoolean(UIUtilities.GetCellValue(referralsTable, "Used"));
+            bool isUsed = Convert.ToBoolean(referralsTable.GetCellValue("Used"));
             if (!isUsed)
             {
                 chooseReferalButton.Enabled = true;
@@ -59,14 +58,10 @@ namespace Klinika.GUI.Secretary
 
         private void UpdateParentRefferalForm()
         {
-            ChosenReferral referral = new ChosenReferral(
-                                                        UIUtilities.GetCellValue(referralsTable, "Doctor").ToString(),
-                                                        UIUtilities.GetCellValue(referralsTable, "Specialization").ToString(),
-                                                        Convert.ToInt32(UIUtilities.GetCellValue(referralsTable, "ID"))
-            );
-
-            parent.SetRefferalTabFieldValues(referral);
-            parent.SetReferralTabCommandStates();
+            parent.SetFieldValues(new Referral(referralsTable.GetCellValue("Doctor").ToString(),
+                                              referralsTable.GetCellValue("Specialization").ToString()
+                                  ));
+            parent.SetCommandStates();
         }
     }
 }

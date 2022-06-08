@@ -5,8 +5,30 @@ using System.Data.SqlClient;
 
 namespace Klinika.Repositories
 {
-    internal class EquipmentRepository
+    internal class EquipmentRepository : Repository
     {
+        
+        public static List<Equipment> GetAllInRooms()
+        {
+            List<Equipment> equipmentInRooms = new List<Equipment>();
+
+            string getAllQuery = "SELECT [RoomEquipment].RoomID,[Room].Number, [RoomEquipment].EquipmentID, [Equipment].Name as Equipment, " +
+                     "[RoomEquipment].Quantity " +
+                     "FROM [RoomEquipment], [Equipment], [Room] " +
+                     "WHERE [RoomEquipment].EquipmentID = [Equipment].ID AND [RoomEquipment].RoomID = [Room].ID";
+            DataTable retrievedEquipment = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
+            foreach(DataRow equipment in retrievedEquipment.Rows)
+            {
+                equipmentInRooms.Add(new Equipment((int)equipment["EquipmentID"],
+                                                   equipment["Equipment"].ToString(),
+                                                   (int)equipment["RoomID"],
+                                                   (int)equipment["Number"],
+                                                   (int)equipment["Quantity"]
+                                    ));
+            }
+            return equipmentInRooms;
+        }
+        
         public static DataTable GetAll()
         {
             DataTable? retrievedEquipment = null;
@@ -71,6 +93,7 @@ namespace Klinika.Repositories
                         "SET Quantity = @Quantity " +
                         "WHERE EquipmentID = @EquipmentID";
                         readCheck.Close();
+                        DatabaseConnection.GetInstance().database.Close();
                         DatabaseConnection.GetInstance().ExecuteNonQueryCommand(updateQuery, ("@Quantity", transfer.quantity + (int)readCheck["Quantity"]), ("@EquipmentID", transfer.equipment));
                     }
                     else
@@ -79,9 +102,10 @@ namespace Klinika.Repositories
                         "(EquipmentID, Quantity) " +
                         "VALUES (@EquipmentID, @Quantity)";
                         readCheck.Close();
-                        DatabaseConnection.GetInstance().ExecuteNonQueryCommand(updateQuery, ("@Quantity", transfer.quantity), ("@EquipmentID", transfer.equipment));
+                        DatabaseConnection.GetInstance().database.Close();
+                        DatabaseConnection.GetInstance().ExecuteNonQueryCommand(insertQuery, ("@Quantity", transfer.quantity), ("@EquipmentID", transfer.equipment));
                     }
-                    DatabaseConnection.GetInstance().database.Close();
+                    
                     DatabaseConnection.GetInstance().ExecuteNonQueryCommand(transferFromQuery, ("@Quantity", transfer.maxQuantity - transfer.quantity), ("@RoomID", transfer.fromId), ("@EquipmentID", transfer.equipment));
                 }
 
@@ -232,8 +256,8 @@ namespace Klinika.Repositories
             {
                 dynamicEquipmentInStorage.Add(new Equipment((int)equipment["ID"],
                                                             equipment["Name"].ToString(),
-                                                            (int)equipment["Quantity"],
                                                             0,
+                                                            (int)equipment["Quantity"],
                                                             Equipment.EquipmentType.DYNAMIC
                                                             ));
             }

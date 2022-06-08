@@ -89,9 +89,9 @@ namespace Klinika.GUI.Manager
                 if (transfer.transfer.Date == DateTime.Now.Date)
                 {
                     Repositories.EquipmentRepository.Transfer(transfer);
-                    if(parent.GetType() == typeof(Secretary.mainWindow))
+                    if(parent.GetType() == typeof(Secretary.LowStockDynamicEquipmentTransfers))
                     {
-                        ((Secretary.mainWindow)parent).UpdateLowStockDynamicEquipmentTable(transfer);
+                        ((Secretary.LowStockDynamicEquipmentTransfers)parent).UpdateLowStockDynamicEquipmentTable(transfer);
                         MessageBoxUtilities.ShowSuccessMessage("Equipment successfully transferred!");
                     }
                 }

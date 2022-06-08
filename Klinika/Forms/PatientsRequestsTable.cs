@@ -1,60 +1,50 @@
 ﻿using Klinika.Models;
 using System.Data;
 using Klinika.Roles;
+using Klinika.Forms.Base;
 
 namespace Klinika.Forms
 {
-    public class PatientsRequestsTable : Base.ReadonlyTableBase<Patient>
+    public class PatientsRequestsTable : TableBase<PatientRequest>
     {
-        public override void Fill(List<Patient> patients)
+        public override void Fill(List<PatientRequest> requests)
         {
-            DataTable patientsTable = new DataTable();
-            patientsTable.Columns.Add("ID");
-            patientsTable.Columns.Add("JMBG");
-            patientsTable.Columns.Add("Name");
-            patientsTable.Columns.Add("Surname");
-            patientsTable.Columns.Add("Birthdate");
-            patientsTable.Columns.Add("Gender");
-            patientsTable.Columns.Add("Email");
-            patientsTable.Columns.Add("Blocked");
-            patientsTable.Columns.Add("Blocked by");
+            DataTable requestsTable = new DataTable();
+            requestsTable.Columns.Add("ID");
+            requestsTable.Columns.Add("Patient ID");
+            requestsTable.Columns.Add("Appointment ID");
+            requestsTable.Columns.Add("Type");
+            requestsTable.Columns.Add("Approved");
 
-            foreach (Patient patient in patients)
+            foreach (PatientRequest request in requests)
             {
-                DataRow newRow = patientsTable.NewRow();
-                newRow["ID"] = patient.id;
-                newRow["JMBG"] = patient.jmbg;
-                newRow["Name"] = patient.name;
-                newRow["Surname"] = patient.surname;
-                newRow["Birthdate"] = patient.birthdate;
-                newRow["Gender"] = patient.gender;
-                newRow["Email"] = patient.email;
-                newRow["Blocked"] = patient.isBlocked;
-                newRow["Blocked by"] = patient.whoBlocked;
-                patientsTable.Rows.Add(newRow);
+                DataRow newRow = requestsTable.NewRow();
+                newRow["ID"] = request.id;
+                newRow["Patient ID"] = request.patientID;
+                newRow["Appointment ID"] = request.medicalActionID;
+                if (request.type == 'M') newRow["Type"] = "Modify";
+                else newRow["Type"] = "Delete";
+                newRow["Approved"] = request.approved;
+                requestsTable.Rows.Add(newRow);
             }
-            DataSource = patientsTable;
+            DataSource = requestsTable;
             ClearSelection();
         }
 
-        public void ModifyRow(Patient patient)
+        public void ModifyRow(DataGridViewRow row,PatientRequest request)
         {
-            row["JMBG"] = patient.jmbg;
-            row["Name"] = patient.name;
-            row["Surname"] = patient.surname;
-            row["Birthdate"] = patient.birthdate.Date;
-            row["Gender"] = patient.gender;
-            row["Email"] = patient.email;
-            row["Blocked"] = patient.isBlocked;
-            row["BlockedBy"] = patient.whoBlocked;
+            row.Cells["ID"].Value = request.id;
+            row.Cells["Patient ID"].Value = request.patientID;
+            row.Cells["Appointment ID"].Value = request.medicalActionID;
+            if (request.type == 'M') row.Cells["Type"].Value = "Modify";
+            else row.Cells["Type"].Value = "Delete";
+            row.Cells["Approved"].Value = request.approved;
         }
 
-        public void AddRow(Patient newPatient)
+        public DataGridViewRow GetSelectedRow()
         {
-            DataRow newRow = patients.NewRow();
-            ModifyRow(ref newRow, newPatient);
-            patients.Rows.Add(newRow);
-            patients.AcceptChanges();
+            return CurrentRow;
         }
+
     }
 }

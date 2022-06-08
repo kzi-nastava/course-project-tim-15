@@ -35,7 +35,8 @@ namespace Klinika.GUI.Secretary
             this.deletePatientButton = new System.Windows.Forms.Button();
             this.modifyPatientButton = new System.Windows.Forms.Button();
             this.addPatientButton = new System.Windows.Forms.Button();
-            this.patientsTable = new PatientsTable();
+            this.patientsTable = new Klinika.Forms.PatientsTable();
+            ((System.ComponentModel.ISupportInitialize)(this.patientsTable)).BeginInit();
             this.SuspendLayout();
             // 
             // urgentSchedulingButton
@@ -102,11 +103,31 @@ namespace Klinika.GUI.Secretary
             this.addPatientButton.UseVisualStyleBackColor = true;
             this.addPatientButton.Click += new System.EventHandler(this.AddPatientButton_Click);
             // 
+            // patientsTable
+            // 
+            this.patientsTable.AllowUserToAddRows = false;
+            this.patientsTable.AllowUserToDeleteRows = false;
+            this.patientsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.patientsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.patientsTable.BackgroundColor = System.Drawing.Color.White;
+            this.patientsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.patientsTable.Location = new System.Drawing.Point(23, 20);
+            this.patientsTable.MultiSelect = false;
+            this.patientsTable.Name = "patientsTable";
+            this.patientsTable.ReadOnly = true;
+            this.patientsTable.RowHeadersWidth = 51;
+            this.patientsTable.RowTemplate.Height = 30;
+            this.patientsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.patientsTable.Size = new System.Drawing.Size(927, 387);
+            this.patientsTable.TabIndex = 14;
+            this.patientsTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.PatientsTable_CellClick);
+            // 
             // PatientsManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(973, 494);
+            this.Controls.Add(this.patientsTable);
             this.Controls.Add(this.urgentSchedulingButton);
             this.Controls.Add(this.unblockButton);
             this.Controls.Add(this.blockButton);
@@ -115,6 +136,8 @@ namespace Klinika.GUI.Secretary
             this.Controls.Add(this.addPatientButton);
             this.Name = "PatientsManagement";
             this.Text = "Patients Management";
+            this.Load += new System.EventHandler(this.PatientsManagement_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.patientsTable)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -1,11 +1,12 @@
 ﻿using Klinika.Repositories;
 using System.Data;
+using Klinika.Models;
 
 namespace Klinika.Services
 {
     internal class ReferralService
     {
-        public static DataTable GetReferralsPerPatient(int patientId)
+        public static List<Referral> GetReferralsPerPatient(int patientId)
         {
             return ReferalRepository.GetReferralsPerPatient(patientId);
         }
