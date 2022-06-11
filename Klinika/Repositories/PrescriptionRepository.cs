@@ -4,15 +4,16 @@ using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class PrescriptionRepository : IPrescriptionRepo
+    public class PrescriptionRepository : Repository, IPrescriptionRepo
     {
+        public PrescriptionRepository() : base() { }
         public void Create(Prescription prescription)
         {
             string createQuery = "INSERT INTO [Prescription] " +
                 "(PatientID,DrugID,DateStarted,DateEnded,Interval,Comment) " +
                 "VALUES (@PatientID,@DrugID,@DateStarted,@DateEnded,@Interval,@Comment)";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+            database.ExecuteNonQueryCommand(
                 createQuery,
                 ("@PatientID", prescription.patientID),
                 ("@DrugID", prescription.drugID),

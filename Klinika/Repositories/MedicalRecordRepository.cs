@@ -3,10 +3,10 @@ using Klinika.Interfaces;
 using Klinika.Models;
 namespace Klinika.Repositories
 {
-    internal class MedicalRecordRepository : IMedicalRecordRepo
+    internal class MedicalRecordRepository : Repository, IMedicalRecordRepo
     {
         private readonly IAnamnesisRepo anamnesisRepo;
-        public MedicalRecordRepository()
+        public MedicalRecordRepository() : base()
         {
             anamnesisRepo = new AnamnesisRepository();
         }

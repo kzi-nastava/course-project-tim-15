@@ -2,9 +2,9 @@
 
 namespace Klinika.Repositories
 {
-    internal abstract class Repository
+    public abstract class Repository
     {
-        public DatabaseConnection database { get; }
+        protected DatabaseConnection database { get; }
 
         public Repository()
         {

@@ -4,8 +4,9 @@ using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class AnamnesisRepository : IAnamnesisRepo
+    public class AnamnesisRepository : Repository, IAnamnesisRepo
     {
+        public AnamnesisRepository() : base() { }
         public List<Anamnesis> GetAll(int patientID)
         {
             List<Anamnesis> anamneses = new List<Anamnesis>();
@@ -15,7 +16,7 @@ namespace Klinika.Repositories
                 "FROM [Anamnesis] JOIN [MedicalAction] ON [Anamnesis].MedicalActionID = [MedicalAction].ID " +
                 $"WHERE [MedicalAction].PatientID = {patientID}";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAnamnesesQuerry);
+            var resoult = database.ExecuteSelectCommand(getAnamnesesQuerry);
             foreach (object row in resoult)
             {
                 var anamnesis = new Anamnesis
@@ -36,7 +37,7 @@ namespace Klinika.Repositories
                     "(MedicalActionID,Description,Symptoms,Conclusion) " +
                     "VALUES (@MedicalActionID,@Description,@Symptoms,@Conclusion)";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+            database.ExecuteNonQueryCommand(
                 createQuery,
                 ("@MedicalActionID", anamnesis.medicalActionID),
                 ("@Description", anamnesis.description),

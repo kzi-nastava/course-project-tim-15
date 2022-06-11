@@ -4,8 +4,9 @@ using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class VacationRequestRepository : IVacationRequestRepo
+    public class VacationRequestRepository : Repository, IVacationRequestRepo
     {
+        public VacationRequestRepository() : base() { }
         public List<VacationRequest> GetAll(int doctorID)
         {
             string getAllQuerry = "SELECT * " +

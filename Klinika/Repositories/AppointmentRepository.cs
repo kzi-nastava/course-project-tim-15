@@ -3,7 +3,7 @@ using Klinika.Models;
 using System.Data;
 using System.Globalization;
 using static Klinika.Roles.User;
-
+#pragma warning disable CS8605 // Unboxing a possibly null value.
 namespace Klinika.Repositories
 {
     internal class AppointmentRepository : Repository
@@ -15,7 +15,7 @@ namespace Klinika.Repositories
         }
 
         private static AppointmentRepository instance;
-        private AppointmentRepository()
+        private AppointmentRepository() : base()
         {
             appointments = GetAll();
         }
@@ -30,7 +30,7 @@ namespace Klinika.Repositories
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction]";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
+            var resoult = database.ExecuteSelectCommand(getAllQuerry);
             return GenerateList(resoult);
         }
         public static List<Appointment> GetAll(int userID, RoleType role)
@@ -97,6 +97,7 @@ namespace Klinika.Repositories
                 "(DoctorID,PatientID,DateTime,RoomID,Completed,Type,Duration,Urgent,Description,IsDeleted) " +
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@DoctorID,@PatientID,@DateTime,@RoomID,@Completed,@Type,@Duration,@Urgent,@Description,@IsDeleted)";
+
 
             appointment.id = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
                 createQuery,

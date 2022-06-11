@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace Klinika.Data
 {
-    internal class DatabaseConnection
+    public class DatabaseConnection
     {
         public SqlConnection database { get; }
         private static DatabaseConnection? singletonInstance;

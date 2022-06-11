@@ -4,7 +4,7 @@ using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class DrugRepository : IDrugRepo
+    public class DrugRepository : Repository, IDrugRepo
     {
         public List<Drug> drugs { get; }
 
@@ -21,7 +21,7 @@ namespace Klinika.Repositories
                 return instance;
             }
         }
-        public DrugRepository()
+        public DrugRepository() : base()
         {
             drugs = new List<Drug>();
             GetBasicInfo();
@@ -34,7 +34,7 @@ namespace Klinika.Repositories
         private void GetBasicInfo()
         {
             string getDrugsQuery = "SELECT * FROM [Drug]";
-            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDrugsQuery);
+            var result = database.ExecuteSelectCommand(getDrugsQuery);
             foreach (object row in result)
             {
                 var drug = new Drug
@@ -51,7 +51,7 @@ namespace Klinika.Repositories
             foreach (Drug drug in drugs)
             {
                 string getDrugsIngredientsQuery = $"SELECT IngredientID FROM [DrugIngredient] WHERE DrugID = {drug.id}";
-                var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDrugsIngredientsQuery);
+                var result = database.ExecuteSelectCommand(getDrugsIngredientsQuery);
                 foreach (object row in result)
                 {
                     var IngredientID = Convert.ToInt32(((object[])row)[0].ToString());
@@ -82,7 +82,7 @@ namespace Klinika.Repositories
                 "(Name, Approved) " +
                 "VALUES (@Name, 'C')";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+            database.ExecuteNonQueryCommand(
                 createQuery,
                 ("@Name", drug.name));
         }
@@ -106,7 +106,7 @@ namespace Klinika.Repositories
         {
             List<Ingredient> ingredients = new List<Ingredient>();
             string getDrugsIngredientsQuery = $"SELECT IngredientID FROM [DrugIngredient] WHERE DrugID = {id}";
-            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDrugsIngredientsQuery);
+            var result = database.ExecuteSelectCommand(getDrugsIngredientsQuery);
             foreach (object row in result)
             {
                 var IngredientID = Convert.ToInt32(((object[])row)[0].ToString());
@@ -135,7 +135,7 @@ namespace Klinika.Repositories
                 "(DrugID,Description) " +
                 "VALUES (@DrugID,@Description)";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+            database.ExecuteNonQueryCommand(
                 createQuery,
                 ("@DrugID", id),
                 ("@Description", description));
@@ -144,7 +144,7 @@ namespace Klinika.Repositories
         {
             string modifyQuery = "UPDATE [Drug] SET Approved = @Type WHERE ID = @ID";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+            database.ExecuteNonQueryCommand(
                 modifyQuery,
                 ("@Type", type),
                 ("@ID", id));
