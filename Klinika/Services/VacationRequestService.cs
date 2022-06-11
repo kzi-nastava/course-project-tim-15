@@ -9,6 +9,11 @@ namespace Klinika.Services
         {
             return VacationRequestRepository.GetAll(doctorID);
         }
+
+        public static List<VacationRequest> GetAll()
+        {
+            return VacationRequestRepository.GetAll();
+        }
         public static void Create(VacationRequest vacationRequest)
         {
             vacationRequest.id = VacationRequestRepository.Create(vacationRequest);
@@ -20,6 +25,16 @@ namespace Klinika.Services
             
             if (forSelectedTimeSpan.Count == 0) return false;
             return true;
+        }
+
+        public static void Approve(VacationRequest request)
+        {
+            VacationRequestRepository.Approve(request);
+        }
+
+        public static void Deny(VacationRequest request)
+        {
+            VacationRequestRepository.Deny(request);
         }
     }
 }

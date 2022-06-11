@@ -33,6 +33,7 @@
             this.referralsButton = new System.Windows.Forms.Button();
             this.dynamicEquipmentOrderingButton = new System.Windows.Forms.Button();
             this.dynamicEquipmentTransfersButton = new System.Windows.Forms.Button();
+            this.vacationDaysRequestsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // patientsButton
@@ -85,11 +86,22 @@
             this.dynamicEquipmentTransfersButton.UseVisualStyleBackColor = true;
             this.dynamicEquipmentTransfersButton.Click += new System.EventHandler(this.DynamicEquipmentTransfersButton_Click);
             // 
+            // vacationDaysRequestsButton
+            // 
+            this.vacationDaysRequestsButton.Location = new System.Drawing.Point(65, 342);
+            this.vacationDaysRequestsButton.Name = "vacationDaysRequestsButton";
+            this.vacationDaysRequestsButton.Size = new System.Drawing.Size(248, 29);
+            this.vacationDaysRequestsButton.TabIndex = 5;
+            this.vacationDaysRequestsButton.Text = "Vacation days requests";
+            this.vacationDaysRequestsButton.UseVisualStyleBackColor = true;
+            this.vacationDaysRequestsButton.Click += new System.EventHandler(this.vacationDaysRequestsButton_Click);
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(378, 341);
+            this.ClientSize = new System.Drawing.Size(378, 393);
+            this.Controls.Add(this.vacationDaysRequestsButton);
             this.Controls.Add(this.dynamicEquipmentTransfersButton);
             this.Controls.Add(this.dynamicEquipmentOrderingButton);
             this.Controls.Add(this.referralsButton);
@@ -110,5 +122,6 @@
         private Button referralsButton;
         private Button dynamicEquipmentOrderingButton;
         private Button dynamicEquipmentTransfersButton;
+        private Button vacationDaysRequestsButton;
     }
 }
