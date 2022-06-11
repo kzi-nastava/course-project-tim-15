@@ -8,7 +8,10 @@ namespace Klinika.Services
     public class DrugService
     {
         private readonly IDrugRepo drugRepo;
-        public DrugService() => drugRepo = new DrugRepository();
+        public DrugService(IDrugRepo drugRepo)
+        {
+            this.drugRepo = drugRepo;
+        }
         public List<Drug> GetAll() => drugRepo.GetAll();
         public List<Drug> GetApproved() => drugRepo.GetApproved();
         public List<Drug> GetDenied() => drugRepo.GetDenied();

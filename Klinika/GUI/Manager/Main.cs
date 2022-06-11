@@ -1,11 +1,13 @@
 ﻿using Klinika.Services;
 using System.Data;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Manager
 {
     public partial class Main : Form
     {
-        private readonly DrugService drugService;
+        private readonly DrugService? drugService;
         public Models.EquipmentTransfer transfer;
         public DataTable unfiltered;
         public bool[] transferCheck;
@@ -14,7 +16,7 @@ namespace Klinika.GUI.Manager
             transferCheck = new bool[2];
             transferCheck[0] = false;
             transferCheck[1] = false;
-            drugService = new DrugService();
+            drugService = StartUp.serviceProvider.GetService<DrugService>();
             transfer = new Models.EquipmentTransfer();
             unfiltered = new DataTable();
             InitializeComponent();

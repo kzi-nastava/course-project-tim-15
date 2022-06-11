@@ -1,17 +1,19 @@
 ﻿using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class ManageUnapprovedDrugs : Form
     {
-        private readonly DrugService drugService;
+        private readonly DrugService? drugService;
         internal readonly Main parent;
         public ManageUnapprovedDrugs(Main parent)
         {
             InitializeComponent();
             this.parent = parent;
-            drugService = new DrugService();
+            drugService = StartUp.serviceProvider.GetService<DrugService>();
         }
         private void LoadForm(object sender, EventArgs e)
         {

@@ -1,17 +1,19 @@
 ﻿using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Patient
 {
     public partial class MedicalRecord : Form
     {
-        private readonly AnamnesisService anamnesisService;
+        private readonly AnamnesisService? anamnesisService;
         internal Main parent;
         public MedicalRecord(Main parent)
         {
             InitializeComponent();
-            anamnesisService = new AnamnesisService();
+            anamnesisService = StartUp.serviceProvider.GetService<AnamnesisService>();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)

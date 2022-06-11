@@ -1,13 +1,15 @@
 ﻿using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class PrescriptionIssuing : Form
     {
-        private readonly DrugService drugService;
-        private readonly PrescriptionService prescriptionService;
+        private readonly DrugService? drugService;
+        private readonly PrescriptionService? prescriptionService;
         internal readonly MedicalRecord parent;
 
         #region Form
@@ -15,8 +17,8 @@ namespace Klinika.GUI.Doctor
         {
             InitializeComponent();
             this.parent = parent;
-            drugService = new DrugService();
-            prescriptionService = new PrescriptionService();
+            drugService = StartUp.serviceProvider.GetService<DrugService>();
+            prescriptionService = StartUp.serviceProvider.GetService<PrescriptionService>();
         }
         private void LoadForm(object sender, EventArgs e)
         {

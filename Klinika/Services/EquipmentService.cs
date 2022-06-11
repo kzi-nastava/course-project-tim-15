@@ -8,9 +8,9 @@ namespace Klinika.Services
     internal class EquipmentService
     {
         private readonly IRoomEquipmentRepo roomEquipmentRepo;
-        public EquipmentService()
+        public EquipmentService(IRoomEquipmentRepo roomEquipmentRepo)
         {
-            roomEquipmentRepo = new EquipmentRepository();
+            this.roomEquipmentRepo = roomEquipmentRepo;
         }
         public static List<Equipment> GetMissingDynamicEquipment()
         {

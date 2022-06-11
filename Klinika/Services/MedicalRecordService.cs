@@ -7,7 +7,10 @@ namespace Klinika.Services
     public class MedicalRecordService
     {
         private readonly IMedicalRecordRepo medicalRecordRepo;
-        public MedicalRecordService() => medicalRecordRepo = new MedicalRecordRepository();
+        public MedicalRecordService(IMedicalRecordRepo medicalRecordRepo)
+        {
+            this.medicalRecordRepo = medicalRecordRepo;
+        }
         public MedicalRecord Get(int patientID) => medicalRecordRepo.Get(patientID);
     }
 }

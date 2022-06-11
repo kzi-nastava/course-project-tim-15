@@ -2,14 +2,16 @@
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class MedicalRecord : Form
     {
-        private readonly AnamnesisService anamnesisService;
-        private readonly MedicalRecordService medicalRecordService;
-        private readonly ReferralService referralService;
+        private readonly AnamnesisService? anamnesisService;
+        private readonly MedicalRecordService? medicalRecordService;
+        private readonly ReferralService? referralService;
         internal readonly ViewSchedule parent;
         public Appointment appointment;
         public Models.MedicalRecord record;
@@ -23,9 +25,9 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             this.parent = parent;
             this.appointment = appointment;
-            referralService = new ReferralService();
-            anamnesisService = new AnamnesisService();
-            medicalRecordService = new MedicalRecordService();
+            referralService = StartUp.serviceProvider.GetService<ReferralService>();
+            anamnesisService = StartUp.serviceProvider.GetService<AnamnesisService>();
+            medicalRecordService = StartUp.serviceProvider.GetService<MedicalRecordService>();
             if (!isPreview) AnamnesisGroup.Visible = true;
         }
         private void LoadForm(object sender, EventArgs e)

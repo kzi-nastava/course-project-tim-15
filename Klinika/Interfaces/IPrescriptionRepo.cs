@@ -2,7 +2,7 @@
 
 namespace Klinika.Interfaces
 {
-    internal interface IPrescriptionRepo
+    public interface IPrescriptionRepo
     {
         void Create(Prescription prescription);
     }

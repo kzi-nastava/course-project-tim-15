@@ -18,6 +18,12 @@ namespace Klinika.Dependencies
             services.AddTransient<DoctorScheduleService>();
             services.AddTransient<RoomServices>();
             services.AddTransient<DoctorService>();
+            services.AddTransient<EquipmentService>();
+            services.AddTransient<DrugService>();
+            services.AddTransient<AnamnesisService>();
+            services.AddTransient<MedicalRecordService>();
+            services.AddTransient<ReferralService>();
+            services.AddTransient<PrescriptionService>();
 
             return services;
         }
@@ -27,6 +33,12 @@ namespace Klinika.Dependencies
             repos.AddSingleton<IVacationRequestRepo, VacationRequestRepository>();
             repos.AddSingleton<IScheduledAppointmentsRepo, AppointmentRepository>();
             repos.AddSingleton<IRoomRepo, RoomRepository>();
+            repos.AddSingleton<IRoomEquipmentRepo, EquipmentRepository>();
+            repos.AddSingleton<IDrugRepo, DrugRepository>();
+            repos.AddSingleton<IReferralRepo, ReferalRepository>();
+            repos.AddSingleton<IAnamnesisRepo, AnamnesisRepository>();
+            repos.AddSingleton<IMedicalRecordRepo, MedicalRecordRepository>();
+            repos.AddSingleton<IPrescriptionRepo, PrescriptionRepository>();
 
             return repos;
         }

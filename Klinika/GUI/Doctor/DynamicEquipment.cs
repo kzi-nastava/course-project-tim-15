@@ -1,20 +1,22 @@
 ﻿using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class DynamicEquipment : Form
     {
+        private readonly EquipmentService? equipmentService;
         internal readonly ViewSchedule parent;
-        private readonly EquipmentService equipmentService;
         private readonly Appointment appointment;
         public DynamicEquipment(ViewSchedule parent, Appointment appointment)
         {
             InitializeComponent();
             this.parent = parent;
             this.appointment = appointment;
-            equipmentService = new EquipmentService();
+            equipmentService = StartUp.serviceProvider.GetService<EquipmentService>();
         }
         private void LoadForm(object sender, EventArgs e)
         {
