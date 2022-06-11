@@ -1,7 +1,6 @@
-﻿using Klinika.Repositories;
-using Klinika.Interfaces;
-using System.Data;
+﻿using Klinika.Interfaces;
 using Klinika.Models;
+using Klinika.Repositories;
 
 namespace Klinika.Services
 {

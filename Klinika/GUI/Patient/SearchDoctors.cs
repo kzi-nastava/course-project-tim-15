@@ -1,7 +1,7 @@
-﻿using RDoctor = Klinika.Roles.Doctor;
+﻿using Klinika.Models;
 using Klinika.Services;
-using Klinika.Models;
 using Klinika.Utilities;
+using RDoctor = Klinika.Roles.Doctor;
 
 namespace Klinika.GUI.Patient
 {

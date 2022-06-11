@@ -1,12 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Services;
-using Klinika.Interfaces;
+﻿using Klinika.Interfaces;
 using Klinika.Repositories;
+using Klinika.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Dependencies
 {

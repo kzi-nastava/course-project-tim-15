@@ -1,9 +1,8 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 using System.Data;
 using System.Data.SqlClient;
-using Klinika.Interfaces;
-using Klinika.Repositories;
 
 
 namespace Klinika.Repositories

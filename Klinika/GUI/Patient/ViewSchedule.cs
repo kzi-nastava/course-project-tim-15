@@ -1,8 +1,8 @@
-﻿using Klinika.Repositories;
+﻿using Klinika.Models;
+using Klinika.Repositories;
 using Klinika.Roles;
-using Klinika.Utilities;
-using Klinika.Models;
 using Klinika.Services;
+using Klinika.Utilities;
 
 namespace Klinika.GUI.Patient
 {

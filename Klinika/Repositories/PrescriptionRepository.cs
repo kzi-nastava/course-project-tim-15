@@ -1,5 +1,4 @@
-﻿using Klinika.Data;
-using Klinika.Interfaces;
+﻿using Klinika.Interfaces;
 using Klinika.Models;
 
 namespace Klinika.Repositories

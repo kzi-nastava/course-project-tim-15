@@ -1,9 +1,4 @@
 using Klinika.Dependencies;
-using Klinika.Interfaces;
-using Klinika.Repositories;
-using Klinika.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Klinika
 {

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
-using Klinika.Interfaces;
+﻿using Klinika.Interfaces;
 using Klinika.Repositories;
+using System.Data;
 
 namespace Klinika.Services
 {

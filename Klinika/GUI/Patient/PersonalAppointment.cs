@@ -1,10 +1,9 @@
-﻿using Klinika.Models;
-using Klinika.Repositories;
+﻿using Klinika.Dependencies;
+using Klinika.Models;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
 using Microsoft.Extensions.DependencyInjection;
-using Klinika.Dependencies;
 
 namespace Klinika.GUI.Patient
 {

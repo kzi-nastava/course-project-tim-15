@@ -1,5 +1,5 @@
-﻿using Klinika.Repositories;
-using Klinika.Models;
+﻿using Klinika.Models;
+using Klinika.Repositories;
 
 namespace Klinika.Services
 {

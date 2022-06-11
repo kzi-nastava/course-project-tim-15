@@ -1,10 +1,4 @@
-﻿using Klinika.Exceptions;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using System.Data;
-
-namespace Klinika.GUI.Secretary
+﻿namespace Klinika.GUI.Secretary
 {
     public partial class mainWindow : Form
     {

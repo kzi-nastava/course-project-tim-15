@@ -1,6 +1,5 @@
 ﻿using Klinika.Interfaces;
 using Klinika.Models;
-using Klinika.Repositories;
 using System.Data;
 
 namespace Klinika.Services

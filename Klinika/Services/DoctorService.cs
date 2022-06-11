@@ -1,9 +1,9 @@
-﻿using Klinika.Models;
+﻿using Klinika.Dependencies;
+using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
-using System.Data;
 using Microsoft.Extensions.DependencyInjection;
-using Klinika.Dependencies;
+using System.Data;
 
 namespace Klinika.Services
 {

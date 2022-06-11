@@ -1,5 +1,5 @@
-﻿using Klinika.Utilities;
-using Klinika.Services;
+﻿using Klinika.Services;
+using Klinika.Utilities;
 
 namespace Klinika.GUI.Patient
 {

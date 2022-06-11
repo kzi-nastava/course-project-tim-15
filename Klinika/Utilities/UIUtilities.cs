@@ -1,7 +1,6 @@
 ﻿using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
-using System.Data;
 
 namespace Klinika.Utilities
 {

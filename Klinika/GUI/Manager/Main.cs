@@ -1,7 +1,7 @@
-﻿using Klinika.Services;
-using System.Data;
+﻿using Klinika.Dependencies;
+using Klinika.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Klinika.Dependencies;
+using System.Data;
 
 namespace Klinika.GUI.Manager
 {

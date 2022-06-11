@@ -1,6 +1,6 @@
-﻿using Klinika.Services;
+﻿using Klinika.Dependencies;
+using Klinika.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Klinika.Dependencies;
 
 namespace Klinika.GUI.Doctor
 {
