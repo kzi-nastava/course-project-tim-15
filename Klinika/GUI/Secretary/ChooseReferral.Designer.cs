@@ -79,7 +79,7 @@ namespace Klinika.GUI.Secretary
 
         #endregion
 
-        public ReferralsTable referralsTable;
+        private ReferralsTable referralsTable;
         private Button chooseReferalButton;
     }
 }

@@ -14,6 +14,17 @@ namespace Klinika.Repositories
             var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry, ("@DoctorID", doctorID));
             return GenerateList(result);
         }
+
+        public static List<VacationRequest> GetAll()
+        {
+            string getAllQuerry = "SELECT * " +
+                                  "FROM [VacationRequest]";
+
+            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
+            return GenerateList(result);
+        }
+
+
         public static int Create(VacationRequest vacationRequest)
         {
             string createQuery = "INSERT INTO [VacationRequest] " +
@@ -52,6 +63,20 @@ namespace Klinika.Repositories
                 output.Add(vacationRequest);
             }
             return output;
+        }
+
+
+        public static void Deny(VacationRequest request)
+        {
+            string denyQuery = "UPDATE [VacationRequest] SET Status = 'D', DenyReason = @reason " +
+                               "WHERE ID = @id";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(denyQuery, ("@id", request.id), ("@reason", request.denyReason));
+        }
+
+        public static void Approve(VacationRequest request)
+        {
+            string approveQuery = "UPDATE [VacationRequest] SET Status = 'A' WHERE ID = @id";
+            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(approveQuery, ("@id", request.id));
         }
     }
 }

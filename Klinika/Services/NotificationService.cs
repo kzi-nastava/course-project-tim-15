@@ -28,6 +28,14 @@ namespace Klinika.Services
             Drug drug = DrugRepository.Instance.drugs.Where(x => x.id == prescription.drugID).FirstOrDefault();
             return "Drug: " + drug.name + "\nComment: " + prescription.comment;
         }
+
+        public static string GenerateMessage(VacationRequest request)
+        {
+            string message = "Request for vacation days from " + request.fromDate.ToString("yyyy-MM-dd") + " to " +
+                             request.toDate.ToString("yyyy-MM-dd") + " " + ((VacationRequest.Statuses)request.status).ToString().ToLower() + ".";
+            if (request.status == 'D') message += "\nReason: " + request.denyReason;
+            return message;
+        }
         public static void MarkAsRead(int id)
         {
             NotificationRepository.Modify(id);
