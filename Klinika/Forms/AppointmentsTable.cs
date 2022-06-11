@@ -1,28 +1,28 @@
-﻿using Klinika.Interfaces;
-using Klinika.Models;
+﻿using Klinika.Models;
 using Klinika.Roles;
 using Klinika.Services;
 using System.Data;
-using Klinika.Repositories;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.Forms
 {
     public class AppointmentsTable : Base.TableBase<Appointment>
     {
-        private readonly RoomServices roomService;
+        private readonly RoomServices? roomService;
         private List<Appointment> appointments;
         private User.RoleType viewerRole;
         private string searchedRole;
         public AppointmentsTable() : base()
         {
             appointments = new List<Appointment>();
-            roomService = new RoomServices();
+            roomService = StartUp.serviceProvider.GetService<RoomServices>();
             SetViewerRole(User.RoleType.DOCTOR);
         }
         public AppointmentsTable(User.RoleType viewerRole) : base()
         {
             appointments = new List<Appointment>();
-            roomService = new RoomServices();
+            roomService = StartUp.serviceProvider.GetService<RoomServices>();
             SetViewerRole(viewerRole);
         }
         private void SetViewerRole(User.RoleType viewerRole)

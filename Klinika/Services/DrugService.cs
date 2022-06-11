@@ -8,10 +8,7 @@ namespace Klinika.Services
     public class DrugService
     {
         private readonly IDrugRepo drugRepo;
-        public DrugService(IDrugRepo drugRepo)
-        {
-            this.drugRepo = drugRepo;
-        }
+        public DrugService(IDrugRepo drugRepo) => this.drugRepo = drugRepo;
         public List<Drug> GetAll() => drugRepo.GetAll();
         public List<Drug> GetApproved() => drugRepo.GetApproved();
         public List<Drug> GetDenied() => drugRepo.GetDenied();
@@ -22,6 +19,7 @@ namespace Klinika.Services
             drugRepo.ModifyType(id, 'D');
             drugRepo.CreateUnapproved(id, description);
         }
+
         public static List<Ingredient> GetIngredients(int id)
         {
             List<Ingredient> ingredients = Repositories.DrugRepository.Instance.GetIngredientsOfOne(id);

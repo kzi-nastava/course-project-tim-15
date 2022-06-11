@@ -8,10 +8,7 @@ namespace Klinika.Services
     internal class EquipmentService
     {
         private readonly IRoomEquipmentRepo roomEquipmentRepo;
-        public EquipmentService(IRoomEquipmentRepo roomEquipmentRepo)
-        {
-            this.roomEquipmentRepo = roomEquipmentRepo;
-        }
+        public EquipmentService(IRoomEquipmentRepo roomEquipmentRepo) => this.roomEquipmentRepo = roomEquipmentRepo;
         public static List<Equipment> GetMissingDynamicEquipment()
         {
             List<Equipment> allDynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
