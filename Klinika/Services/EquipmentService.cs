@@ -1,11 +1,17 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using System.Data;
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     internal class EquipmentService
     {
+        private readonly IRoomEquipmentRepo roomEquipmentRepo;
+        public EquipmentService()
+        {
+            roomEquipmentRepo = new EquipmentRepository();
+        }
         public static List<Equipment> GetMissingDynamicEquipment()
         {
             List<Equipment> allDynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
@@ -15,17 +21,14 @@ namespace Klinika.Services
             }
             return allDynamicEquipment;
         }
-        public static List<Equipment> GetDynamicEquipment(int roomID)
+        public List<Equipment> GetDynamicEquipment(int roomID)
         {
-            var equipment = EquipmentRepository.GetDynamicEquipmentInRooms();
+            var equipment = roomEquipmentRepo.GetDynamicEquipmentInRooms();
             return equipment.Where(x => x.roomID == roomID).ToList();
         }
-        public static void UpdateRoomsDynamicEquipment(int roomID, List<Equipment> equipments)
+        public void UpdateRoomsDynamicEquipment(int roomID, List<Equipment> equipments)
         {
-            foreach(var equipment in equipments)
-            {
-                EquipmentRepository.ModifyRoomsDynamicEquipmentQuantity(roomID, equipment.id, equipment.GetNewQuantity());
-            }
+            foreach(var equipment in equipments) roomEquipmentRepo.ModifyRoomsDynamicEquipmentQuantity(roomID, equipment.id, equipment.GetNewQuantity());
         }
         public static void MakeEquipmentTransferRequest(int equipmentId,int quantity)
         {
@@ -40,7 +43,8 @@ namespace Klinika.Services
        
         private static List<Equipment> PairRoomWithAllDynamicEquipment()
         {
-            List<Room> rooms = RoomRepository.Get(); 
+            //TODO
+            List<Room> rooms = new List<Room>(); //RoomRepository.Get(); 
             List<Equipment> dynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
             List<Equipment> pairs = new List<Equipment>();
 

@@ -56,10 +56,12 @@ namespace Klinika.Utilities
                 error_message = "Doctor is not selected!" ;
             }
 
-            if (DoctorService.IsOccupied(appointmentStart, doctorID: doctorID))
-            {
-                error_message = "The selected doctor is not available at the selected time!";
-            }
+            //TODO use scheduleService
+
+            //if (DoctorService.IsOccupied(appointmentStart, doctorID: doctorID))
+            //{
+            //    error_message = "The selected doctor is not available at the selected time!";
+            //}
 
             return error_message;
         }

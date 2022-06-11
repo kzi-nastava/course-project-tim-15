@@ -1,12 +1,13 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 using System.Data;
 using System.Globalization;
 using static Klinika.Roles.User;
-#pragma warning disable CS8605 // Unboxing a possibly null value.
+
 namespace Klinika.Repositories
 {
-    internal class AppointmentRepository : Repository
+    internal class AppointmentRepository : Repository, IScheduledAppointmentsRepo
     {
         public List<Appointment> appointments { get; set; }
         public void DeleteFromList(int ID)
@@ -15,7 +16,7 @@ namespace Klinika.Repositories
         }
 
         private static AppointmentRepository instance;
-        private AppointmentRepository() : base()
+        public AppointmentRepository() : base()
         {
             appointments = GetAll();
         }
@@ -44,7 +45,7 @@ namespace Klinika.Repositories
             var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
             return GenerateList(resoult);
         }
-        public static List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
+        public List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
         {
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);

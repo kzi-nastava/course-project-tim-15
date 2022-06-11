@@ -8,11 +8,13 @@ namespace Klinika.GUI.Patient
 {
     public partial class PersonalAppointment : Form
     {
+        private readonly DoctorScheduleService scheduleService;
         private readonly PersonalAppointmentDTO dto;
         #region Form
         public PersonalAppointment(PersonalAppointmentDTO dto)
         {
             InitializeComponent();
+            scheduleService = new DoctorScheduleService();
             this.dto = dto;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -105,7 +107,7 @@ namespace Klinika.GUI.Patient
         private bool ValidateForm()
         {
             if (!IsDateValid(GetSelectedDateTime())) return false;
-            if (!DoctorService.IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID())) return true;
+            if (!scheduleService.IsOccupied(GetSelectedDateTime(), GetSelectedDoctorID())) return true;
             MessageBoxUtilities.ShowErrorMessage("This time is occupied!");
             return false;
         }

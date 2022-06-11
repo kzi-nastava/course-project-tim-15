@@ -7,17 +7,19 @@ namespace Klinika.GUI.Doctor
     public partial class DynamicEquipment : Form
     {
         internal readonly ViewSchedule parent;
+        private readonly EquipmentService equipmentService;
         private readonly Appointment appointment;
         public DynamicEquipment(ViewSchedule parent, Appointment appointment)
         {
             InitializeComponent();
             this.parent = parent;
             this.appointment = appointment;
+            equipmentService = new EquipmentService();
         }
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            EquipmentTable.Fill(EquipmentService.GetDynamicEquipment(appointment.roomID));
+            EquipmentTable.Fill(equipmentService.GetDynamicEquipment(appointment.roomID));
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
         {
@@ -39,9 +41,10 @@ namespace Klinika.GUI.Doctor
         private void FinishButtonClick(object sender, EventArgs e)
         {
             if(!UIUtilities.Confirm("Are you sure you entered correct data and want to save it?")) return;
-            EquipmentService.UpdateRoomsDynamicEquipment(appointment.roomID, EquipmentTable.GetAll());
+            equipmentService.UpdateRoomsDynamicEquipment(appointment.roomID, EquipmentTable.GetAll());
             Close();
         }
+        //TODO @s
         private void CompleteAppointment()
         {
             AppointmentService.Complete(appointment);

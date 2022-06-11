@@ -4,11 +4,13 @@ namespace Klinika.GUI.Doctor
 {
     public partial class ViewSchedule : Form
     {
+        private readonly DoctorScheduleService scheduleService;
         internal readonly Main parent;
         private Roles.Doctor doctor { get { return parent.doctor; } }
         public ViewSchedule(Main parent)
         {
             InitializeComponent();
+            scheduleService = new DoctorScheduleService();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -22,7 +24,7 @@ namespace Klinika.GUI.Doctor
         }
         private void InitScheduleTab()
         {
-            var scheduled = DoctorService.GetAppointments(ScheduleDatePicker.Value, doctor.id, 3);
+            var scheduled = scheduleService.GetAppointments(ScheduleDatePicker.Value, doctor.id, 3);
             ScheduleTable.Fill(scheduled);
             ViewMedicalRecordButton.Enabled = false;
             PerformButton.Enabled = false;

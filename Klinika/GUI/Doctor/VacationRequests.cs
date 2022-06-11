@@ -6,12 +6,14 @@ namespace Klinika.GUI.Doctor
 {
     public partial class VacationRequests : Form
     {
+        private readonly DoctorScheduleService scheduleService;
         private VacationRequestService vacationRequestService;
         internal readonly Main parent;
         private Roles.Doctor doctor { get { return parent.doctor; } }
         public VacationRequests(Main parent)
         {
             InitializeComponent();
+            scheduleService = new DoctorScheduleService();
             vacationRequestService = new VacationRequestService();
             this.parent = parent;
         }
@@ -58,7 +60,7 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowErrorMessage("Reason text box must be filled!");
                 return false;
             }
-            if (DoctorService.IsOccupied(doctor.id, new TimeSlot(FromDatePicker.Value, ToDatePicker.Value)))
+            if (scheduleService.IsOccupied(doctor.id, new TimeSlot(FromDatePicker.Value, ToDatePicker.Value)))
             {
                 MessageBoxUtilities.ShowErrorMessage("Doctor is occupied!");
                 return false;

@@ -7,12 +7,14 @@ namespace Klinika.GUI.Patient
 {
     public partial class AppointmentRecommendation : Form
     {
+        private readonly AppointmentRecommendationService recommendationService;
         private readonly NewAppointment parent;
 
         #region Form
         public AppointmentRecommendation(NewAppointment parent)
         {
             InitializeComponent();
+            recommendationService = new AppointmentRecommendationService();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -57,7 +59,7 @@ namespace Klinika.GUI.Patient
             char priority = DoctorRadioButton.Checked ? 'D' : 'T';
             TimeSlot timeSlot = new TimeSlot(FromTimePicker.Value, ToTimePicker.Value);
 
-            List<Appointment> recommended = AppointmentRecommendationService.Find(doctorID, timeSlot, DeadlineDatePicker.Value, priority);
+            List<Appointment> recommended = recommendationService.Find(doctorID, timeSlot, DeadlineDatePicker.Value, priority);
             RecommendedAppointmentTable.Fill(recommended);
         }
         private void RecommendedAppointmentTableRowSelected(object sender, DataGridViewCellEventArgs e)

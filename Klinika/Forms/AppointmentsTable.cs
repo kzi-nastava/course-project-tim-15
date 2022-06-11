@@ -1,23 +1,28 @@
-﻿using Klinika.Models;
+﻿using Klinika.Interfaces;
+using Klinika.Models;
 using Klinika.Roles;
 using Klinika.Services;
 using System.Data;
+using Klinika.Repositories;
 
 namespace Klinika.Forms
 {
     public class AppointmentsTable : Base.TableBase<Appointment>
     {
+        private readonly RoomServices roomService;
         private List<Appointment> appointments;
         private User.RoleType viewerRole;
         private string searchedRole;
         public AppointmentsTable() : base()
         {
             appointments = new List<Appointment>();
+            roomService = new RoomServices();
             SetViewerRole(User.RoleType.DOCTOR);
         }
         public AppointmentsTable(User.RoleType viewerRole) : base()
         {
             appointments = new List<Appointment>();
+            roomService = new RoomServices();
             SetViewerRole(viewerRole);
         }
         private void SetViewerRole(User.RoleType viewerRole)
@@ -57,7 +62,7 @@ namespace Klinika.Forms
             newRow[$"{searchedRole} Full Name"] = GetFullName(appointment);
             newRow["Date & Time"] = appointment.dateTime;
             newRow["Type"] = appointment.GetFullType();
-            newRow["Room"] = RoomServices.GetSingle(appointment.roomID).ToString();
+            newRow["Room"] = roomService.GetSingle(appointment.roomID).ToString();
             newRow["Duration [min]"] = appointment.duration;
             newRow["Urgent"] = appointment.urgent;
             newRow["Completed"] = appointment.completed;
@@ -84,7 +89,7 @@ namespace Klinika.Forms
                 GetFullName(appointment),
                 appointment.dateTime.ToString(),
                 appointment.GetFullType(),
-                RoomServices.GetSingle(appointment.roomID).ToString(),
+                roomService.GetSingle(appointment.roomID).ToString(),
                 appointment.duration.ToString(),
                 appointment.urgent,
                 appointment.completed);

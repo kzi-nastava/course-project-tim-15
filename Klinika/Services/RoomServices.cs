@@ -1,20 +1,22 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using System.Data;
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     internal class RoomServices
     {
+        private readonly IRoomRepo roomRepo;
+        public RoomServices()
+        {
+            roomRepo = new RoomRepository();
+        }
         public static bool DateValid(Models.Renovation renovation)
         {
             return true;
         }
-        public static bool IsOccupied(DateTime start, int roomID, int duration = 15, int forAppointmentID = -1)
-        {
-            return IsOccupied(roomID, new TimeSlot(start, duration), forAppointmentID);
-        }
-        private static bool IsOccupied(int roomID, TimeSlot slot, int forAppointmentID = -1)
+        public bool IsOccupied(int roomID, TimeSlot slot, int forAppointmentID = -1)
         {
             List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().appointments.Where(
                 x => x.roomID == roomID && slot.DoesOverlap(new TimeSlot(x.dateTime, x.duration)) && !x.isDeleted && x.id != forAppointmentID).ToList();
@@ -22,6 +24,11 @@ namespace Klinika.Services
             if (forSelectedTimeSpan.Count == 0) return false;
             return true;
         }
+        public Room? GetDoctorOffice(int officeID) => GetExaminationRooms().Where(x => x.id == officeID).FirstOrDefault();
+        public Room[] GetOperationRooms() => roomRepo.Get().Where(x => x.type == 1).ToArray();
+        public List<Room> GetExaminationRooms() => roomRepo.Get().Where(x => x.type == 2).ToList();
+        public Room? GetSingle(int id) => roomRepo.Get().Where(x => x.id == id).FirstOrDefault();
+
         public static bool IsRoomRenovating(int id, DateTime from, DateTime to)
         {
             bool renovating = false;
@@ -43,19 +50,6 @@ namespace Klinika.Services
             rooms.Add(new Models.EnhancedComboBoxItem("Storage", "0"));
             rooms = rooms.OrderBy(x => x.text).ToList();
             return rooms;
-        }
-
-        public static Room[] GetOperationRooms()
-        {
-            return RoomRepository.Get().Where(x => x.type == 1).ToArray();
-        }
-        public static List<Room> GetExaminationRooms()
-        {
-            return RoomRepository.Get().Where(x => x.type == 2).ToList();
-        }
-        public static Room? GetSingle(int id)
-        {
-            return RoomRepository.Get().Where(x => x.id == id).FirstOrDefault();
         }
     }
 }

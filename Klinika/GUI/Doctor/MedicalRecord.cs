@@ -38,6 +38,7 @@ namespace Klinika.GUI.Doctor
             AllergensTable.Fill(record.allergens);
             UIUtilities.FillSpecializationComboBox(SpecializationsComboBox);
         }
+        //TODO @s
         private void FillPatientMainData()
         {
             PatientNameLabel.Text = PatientService.GetFullName(record.id);

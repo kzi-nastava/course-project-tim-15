@@ -2,10 +2,13 @@
 using Klinika.Models;
 using System.Data;
 using System.Data.SqlClient;
+using Klinika.Interfaces;
+using Klinika.Repositories;
+
 
 namespace Klinika.Repositories
 {
-    internal class RoomRepository
+    internal class RoomRepository : Repository, IRoomRepo
     { 
         public static Dictionary<int, string>? types { get; set; }
         //returns type ID form Name
@@ -13,12 +16,12 @@ namespace Klinika.Repositories
         {
             return types.FirstOrDefault(x => x.Value == type).Key;
         }
-        public static List<Room> Get()
+        public List<Room> Get()
         {
             string getQuery = "SELECT [Room].ID, [Room].Type, [Room].Number " +
                                       "FROM [Room] " +
                                       "WHERE IsDeleted = 0";
-            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery);
+            var result = database.ExecuteSelectCommand(getQuery);
             var output = new List<Room>();
             foreach (object row in result)
             {

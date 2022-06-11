@@ -23,6 +23,7 @@ namespace Klinika.GUI.Doctor
         }
 
         #region All Appointments
+        //TODO @s
         private void InitAllAppointmentsTab()
         {
             AllAppointmentsTable.Fill(DoctorService.GetAppointments(doctor.id));
@@ -38,6 +39,7 @@ namespace Klinika.GUI.Doctor
         {
             new AppointmentDetails(this, AllAppointmentsTable.GetSelected()).Show();
         }
+        //TODO @s
         private void DeleteAppointmentButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to delete the selected appointment? This action cannot be undone.")) return;

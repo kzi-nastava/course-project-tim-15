@@ -1,13 +1,13 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace Klinika.Repositories
 {
-    internal class EquipmentRepository : Repository
+    internal class EquipmentRepository : Repository, IRoomEquipmentRepo
     {
-        
         public static List<Equipment> GetAllInRooms()
         {
             List<Equipment> equipmentInRooms = new List<Equipment>();
@@ -282,7 +282,7 @@ namespace Klinika.Repositories
             return 0;
         }
 
-        public static List<Equipment> GetDynamicEquipmentInRooms()
+        public List<Equipment> GetDynamicEquipmentInRooms()
         {
             string getQuery = "SELECT [Equipment].ID, [Equipment].Name, [RoomEquipment].RoomID, [RoomEquipment].Quantity FROM [Equipment] " +
                               "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +
@@ -302,7 +302,7 @@ namespace Klinika.Repositories
             }
             return equipment;
         }
-        public static void ModifyRoomsDynamicEquipmentQuantity(int roomID, int equipmentID, int quantity)
+        public void ModifyRoomsDynamicEquipmentQuantity(int roomID, int equipmentID, int quantity)
         {
             string modifyQuery = "UPDATE [RoomEquipment] " +
                 "SET Quantity = @Quantity " +

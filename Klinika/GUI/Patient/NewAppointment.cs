@@ -8,11 +8,13 @@ namespace Klinika.GUI.Patient
 {
     public partial class NewAppointment : Form
     {
+        private readonly DoctorScheduleService scheduleService;
         internal Main parent;
         internal Roles.Patient patient { get { return parent.patient; } }
         public NewAppointment(Main parent)
         {
             InitializeComponent();
+            scheduleService = new DoctorScheduleService();
             this.parent = parent;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
@@ -35,7 +37,7 @@ namespace Klinika.GUI.Patient
             if (!IsDateValid(AppointmentDatePicker.Value)) return;
 
             int doctorID = (DoctorComboBox.SelectedItem as User).id;
-            OccupiedAppointmentsTable.Fill(DoctorService.GetAppointments(AppointmentDatePicker.Value, doctorID));
+            OccupiedAppointmentsTable.Fill(scheduleService.GetAppointments(AppointmentDatePicker.Value, doctorID));
             ScheduleButton.Enabled = true;
         }
         private void ScheduleButtonClick(object sender, EventArgs e)
