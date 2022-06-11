@@ -42,7 +42,7 @@ namespace Klinika.GUI.Doctor
                 new TimeSlot(PrescriptionStartDatePicker.Value, PrescriptionEndDatePicker.Value),
                 Convert.ToInt32(IntervalSpinner.Value),
                 CommentTextBox.Text);
-            prescriptionService.StorePrescription(prescription);
+            prescriptionService.Create(prescription);
 
             MessageBoxUtilities.ShowInformationMessage("Drug prescripted!");
             Close();

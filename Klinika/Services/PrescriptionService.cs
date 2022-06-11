@@ -7,11 +7,8 @@ namespace Klinika.Services
     public class PrescriptionService
     {
         private readonly IPrescriptionRepo prescriptionRepo;
-        public PrescriptionService()
-        {
-            prescriptionRepo = new PrescriptionRepository();
-        }
-        public void StorePrescription(Prescription prescription)
+        public PrescriptionService() => prescriptionRepo = new PrescriptionRepository();
+        public void Create(Prescription prescription)
         {
             prescriptionRepo.Create(prescription);
             NotificationService.MakeNotificationsForPrescription(prescription);

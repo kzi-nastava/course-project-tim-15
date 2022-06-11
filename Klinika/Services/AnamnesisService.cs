@@ -8,18 +8,9 @@ namespace Klinika.Services
     public class AnamnesisService
     {
         private readonly IAnamnesisRepo anamnesisRepo;
-        public AnamnesisService()
-        {
-            anamnesisRepo = new AnamnesisRepository();
-        }
-        public List<Anamnesis> Get(int patientID)
-        {
-            return anamnesisRepo.GetAll(patientID);
-        }
-        public void Create(Anamnesis anamnesis)
-        {
-            anamnesisRepo.Create(anamnesis);
-        }
+        public AnamnesisService() => anamnesisRepo = new AnamnesisRepository();
+        public List<Anamnesis> Get(int patientID) => anamnesisRepo.GetAll(patientID);
+        public void Create(Anamnesis anamnesis) => anamnesisRepo.Create(anamnesis);
         public List<Anamnesis> GetFiltered(int patientID, string searchParam)
         {
             return anamnesisRepo.GetAll(patientID).Where(

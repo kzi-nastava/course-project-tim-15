@@ -8,30 +8,12 @@ namespace Klinika.Services
     public class DrugService
     {
         private readonly IDrugRepo drugRepo;
-        public DrugService()
-        {
-            drugRepo = new DrugRepository();
-        }
-        public List<Drug> GetAll()
-        {
-            return drugRepo.GetAll();
-        }
-        public List<Drug> GetApproved()
-        {
-            return drugRepo.GetApproved();
-        }
-        public List<Drug> GetDenied()
-        {
-            return drugRepo.GetDenied();
-        }
-        public List<Drug> GetUnapproved()
-        {
-            return drugRepo.GetUnapproved();
-        }
-        public void ApproveDrug(int id)
-        {
-            drugRepo.ModifyType(id, 'A');
-        }
+        public DrugService() => drugRepo = new DrugRepository();
+        public List<Drug> GetAll() => drugRepo.GetAll();
+        public List<Drug> GetApproved() => drugRepo.GetApproved();
+        public List<Drug> GetDenied() => drugRepo.GetDenied();
+        public List<Drug> GetUnapproved() => drugRepo.GetUnapproved();
+        public void ApproveDrug(int id) => drugRepo.ModifyType(id, 'A');
         public void DenyDrug(int id, string description)
         {
             drugRepo.ModifyType(id, 'D');

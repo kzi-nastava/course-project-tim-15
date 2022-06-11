@@ -7,13 +7,14 @@ namespace Klinika.Repositories
 {
     internal class ReferalRepository : Repository, IReferralRepo
     {
+        public ReferalRepository() : base() { }
         public void Create(int _patientID, int _specializationID, int _doctorID)
         {
             string createQuerry = "INSERT INTO [Referal] " +
                 "(PatientID, DoctorID, SpecializationID, IsUsed, Date) " +
                 $"VALUES (@PatientID, @DoctorID, @SpecializationID, @IsUsed, @Date)";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+            database.ExecuteNonQueryCommand(
                 createQuerry,
                 ("@PatientID", _patientID),
                 ("@DoctorID", _doctorID == -1 ? Convert.DBNull : _doctorID),

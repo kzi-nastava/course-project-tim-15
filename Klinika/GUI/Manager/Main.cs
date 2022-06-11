@@ -81,7 +81,8 @@ namespace Klinika.GUI.Manager
             table.Columns.Add("Name", typeof(string));
             table.Columns.Add("Type", typeof(string));
 
-            List<Models.Ingredient> ingredients = Services.IngredientService.GetAll();
+            //TODO
+            List<Models.Ingredient> ingredients = new List<Models.Ingredient>();//Services.IngredientService.GetAll(); 
             foreach (Models.Ingredient ingredient in ingredients)
             {
                 DataRow dr = table.NewRow();
@@ -320,7 +321,8 @@ namespace Klinika.GUI.Manager
             {
                 Services.IngredientService.Delete(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()));
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Services.IngredientService.GetAll();
+                //TODO
+                //Services.IngredientService.GetAll();
                 this.Main_Load(null, EventArgs.Empty);
             }
         }

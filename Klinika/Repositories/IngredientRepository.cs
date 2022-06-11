@@ -1,34 +1,30 @@
-﻿using Klinika.Data;
+﻿using Klinika.Interfaces;
 using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class IngredientRepository : Repository
+    public class IngredientRepository : Repository, IIngredientRepo
     {
-        public List<Ingredient> ingredients { get; }
-
-        private static IngredientRepository? instance;
-        public static IngredientRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new IngredientRepository();
-                }
-                return instance;
-            }
-        }
-        public static IngredientRepository Reload()
-        {
-            instance = new IngredientRepository();
-            return instance;
-        }
-        private IngredientRepository() : base()
-        {
-            ingredients = GetAll();
-        }
-        private List<Ingredient> GetAll()
+        //public List<Ingredient> ingredients { get; }
+        //private static IngredientRepository? instance;
+        //public static IngredientRepository Instance
+        //{
+        //    get
+        //    {
+        //        if (instance == null)
+        //        {
+        //            instance = new IngredientRepository();
+        //        }
+        //        return instance;
+        //    }
+        //}
+        //public static IngredientRepository Reload()
+        //{
+        //    instance = new IngredientRepository();
+        //    return instance;
+        //}
+        public IngredientRepository() : base() { }
+        public List<Ingredient> GetAll()
         {
             List<Ingredient> ingredients = new List<Ingredient>();
             string getIngredientsQuery = "SELECT * FROM [Ingredient] WHERE IsDeleted = 0";

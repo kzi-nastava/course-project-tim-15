@@ -25,13 +25,13 @@ namespace Klinika.Repositories
             return instance;
         }
 
-        public static List<Appointment> GetAll()
+        public List<Appointment> GetAll()
         {
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction]";
 
-            var resoult = database.ExecuteSelectCommand(getAllQuerry);
-            return GenerateList(resoult);
+            var result = database.ExecuteSelectCommand(getAllQuerry);
+            return GenerateList(result);
         }
         public static List<Appointment> GetAll(int userID, RoleType role)
         {
@@ -55,8 +55,8 @@ namespace Klinika.Repositories
                                   $"WHERE DateTime BETWEEN '{start}' AND '{end}' AND {roleToString} = {userID} " +
                                   $"AND IsDeleted = 0";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
-            return GenerateList(resoult);
+            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
+            return GenerateList(result);
         }
         public static List<Appointment> GetCompleted(int PatientID)
         {
@@ -64,8 +64,8 @@ namespace Klinika.Repositories
                                         "FROM [MedicalAction] " +
                                         $"WHERE PatientID = {PatientID} AND Completed = 1";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getCompletedQuerry);
-            return GenerateList(resoult);
+            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getCompletedQuerry);
+            return GenerateList(result);
         }
         private static List<Appointment> GenerateList(List<object> input)
         {

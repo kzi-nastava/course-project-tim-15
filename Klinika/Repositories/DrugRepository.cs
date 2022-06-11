@@ -6,31 +6,24 @@ namespace Klinika.Repositories
 {
     public class DrugRepository : Repository, IDrugRepo
     {
+        private readonly IngredientRepository ingredientRepository;
         public List<Drug> drugs { get; }
 
         // TODO remove singleton
-        private static DrugRepository? instance;
-        public static DrugRepository Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new DrugRepository();
-                }
-                return instance;
-            }
-        }
+        public static DrugRepository Instance => instance ??= new DrugRepository();
+        protected static DrugRepository? instance;
+
         public DrugRepository() : base()
         {
+            ingredientRepository = new IngredientRepository();
             drugs = new List<Drug>();
             GetBasicInfo();
             GetIngredients();
         }
-        public List<Drug> GetAll()
-        {
-            return drugs;
-        }
+        public List<Drug> GetAll() => drugs;
+        public List<Drug> GetApproved() => drugs.Where(x => x.approved == "A").ToList();
+        public List<Drug> GetUnapproved() => drugs.Where(x => x.approved == "C").ToList();
+        public List<Drug> GetDenied() => drugs.Where(x => x.approved == "D").ToList();
         private void GetBasicInfo()
         {
             string getDrugsQuery = "SELECT * FROM [Drug]";
@@ -48,6 +41,7 @@ namespace Klinika.Repositories
         }
         private void GetIngredients()
         {
+            var allIngredients = ingredientRepository.GetAll();
             foreach (Drug drug in drugs)
             {
                 string getDrugsIngredientsQuery = $"SELECT IngredientID FROM [DrugIngredient] WHERE DrugID = {drug.id}";
@@ -55,10 +49,32 @@ namespace Klinika.Repositories
                 foreach (object row in result)
                 {
                     var IngredientID = Convert.ToInt32(((object[])row)[0].ToString());
-                    var ingredient =  IngredientRepository.Instance.ingredients.Where(x => x.id == IngredientID).FirstOrDefault();
+                    var ingredient = allIngredients.Where(x => x.id == IngredientID).FirstOrDefault();
                     if (ingredient != null) drug.ingredients.Add(ingredient);
                 }
             }
+        }
+        public void CreateUnapproved(int id, string description)
+        {
+            string createQuery = "INSERT INTO [UnapprovedDrug] " +
+                "(DrugID,Description) " +
+                "VALUES (@DrugID,@Description)";
+
+            database.ExecuteNonQueryCommand(
+                createQuery,
+                ("@DrugID", id),
+                ("@Description", description));
+        }
+        public void ModifyType(int id, char type)
+        {
+            string modifyQuery = "UPDATE [Drug] SET Approved = @Type WHERE ID = @ID";
+
+            database.ExecuteNonQueryCommand(
+                modifyQuery,
+                ("@Type", type),
+                ("@ID", id));
+
+            drugs.Where(x => x.id == id).First().approved = type.ToString();
         }
 
         internal static void Fix(int id)
@@ -104,52 +120,17 @@ namespace Klinika.Repositories
 
         public List<Ingredient> GetIngredientsOfOne(int id)
         {
+            var allIngredients = ingredientRepository.GetAll();
             List<Ingredient> ingredients = new List<Ingredient>();
             string getDrugsIngredientsQuery = $"SELECT IngredientID FROM [DrugIngredient] WHERE DrugID = {id}";
             var result = database.ExecuteSelectCommand(getDrugsIngredientsQuery);
             foreach (object row in result)
             {
                 var IngredientID = Convert.ToInt32(((object[])row)[0].ToString());
-                var ingredient = IngredientRepository.Instance.ingredients.Where(x => x.id == IngredientID).FirstOrDefault();
+                var ingredient = allIngredients.Where(x => x.id == IngredientID).FirstOrDefault();
                 if (ingredient != null) ingredients.Add(ingredient);
             }
             return ingredients;
-        }
-
-        public List<Drug> GetApproved()
-        {
-            return drugs.Where(x => x.approved == "A").ToList();
-        }
-        public List<Drug> GetUnapproved()
-        {
-            return drugs.Where(x => x.approved == "C").ToList();
-        }
-        public List<Drug> GetDenied()
-        {
-            return drugs.Where(x => x.approved == "D").ToList();
-        }
-
-        public void CreateUnapproved(int id, string description)
-        {
-            string createQuery = "INSERT INTO [UnapprovedDrug] " +
-                "(DrugID,Description) " +
-                "VALUES (@DrugID,@Description)";
-
-            database.ExecuteNonQueryCommand(
-                createQuery,
-                ("@DrugID", id),
-                ("@Description", description));
-        }
-        public void ModifyType(int id, char type)
-        {
-            string modifyQuery = "UPDATE [Drug] SET Approved = @Type WHERE ID = @ID";
-
-            database.ExecuteNonQueryCommand(
-                modifyQuery,
-                ("@Type", type),
-                ("@ID", id));
-
-            drugs.Where(x => x.id == id).First().approved = type.ToString();
         }
 
         public static string GetNote(int id)

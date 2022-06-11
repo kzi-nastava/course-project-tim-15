@@ -12,7 +12,6 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             this.parent = parent;
         }
-
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
