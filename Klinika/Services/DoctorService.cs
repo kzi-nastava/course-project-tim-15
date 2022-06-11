@@ -2,6 +2,8 @@
 using Klinika.Repositories;
 using Klinika.Roles;
 using System.Data;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.Services
 {
@@ -9,9 +11,16 @@ namespace Klinika.Services
     {
         private readonly DoctorScheduleService scheduleService;
         private DoctorRepository doctorRepository { get; }
+        //TODO add IDoctorReopo
+        public DoctorService(DoctorScheduleService scheduleService, DoctorRepository doctorRepository)
+        {
+            this.scheduleService = scheduleService;
+            this.doctorRepository = doctorRepository;
+        }
+
         public DoctorService()
         {
-            scheduleService = new DoctorScheduleService();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
             doctorRepository = DoctorRepository.GetInstance();
         }
 

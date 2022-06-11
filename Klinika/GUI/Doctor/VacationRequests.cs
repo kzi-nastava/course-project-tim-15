@@ -1,20 +1,22 @@
 ﻿using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class VacationRequests : Form
     {
-        private readonly DoctorScheduleService scheduleService;
-        private VacationRequestService vacationRequestService;
+        private readonly DoctorScheduleService? scheduleService;
+        private VacationRequestService? vacationRequestService;
         internal readonly Main parent;
         private Roles.Doctor doctor { get { return parent.doctor; } }
         public VacationRequests(Main parent)
         {
             InitializeComponent();
-            scheduleService = new DoctorScheduleService();
-            vacationRequestService = new VacationRequestService();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            vacationRequestService = StartUp.serviceProvider.GetService<VacationRequestService>();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)

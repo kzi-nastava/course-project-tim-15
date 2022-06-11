@@ -1,16 +1,18 @@
 ﻿using Klinika.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class ViewSchedule : Form
     {
-        private readonly DoctorScheduleService scheduleService;
+        private readonly DoctorScheduleService? scheduleService;
         internal readonly Main parent;
         private Roles.Doctor doctor { get { return parent.doctor; } }
         public ViewSchedule(Main parent)
         {
             InitializeComponent();
-            scheduleService = new DoctorScheduleService();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)

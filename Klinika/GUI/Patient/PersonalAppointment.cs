@@ -3,18 +3,20 @@ using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Patient
 {
     public partial class PersonalAppointment : Form
     {
-        private readonly DoctorScheduleService scheduleService;
+        private readonly DoctorScheduleService? scheduleService;
         private readonly PersonalAppointmentDTO dto;
         #region Form
         public PersonalAppointment(PersonalAppointmentDTO dto)
         {
             InitializeComponent();
-            scheduleService = new DoctorScheduleService();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
             this.dto = dto;
         }
         private void LoadForm(object sender, EventArgs e)

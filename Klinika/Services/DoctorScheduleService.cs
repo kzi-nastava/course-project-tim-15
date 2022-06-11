@@ -14,10 +14,10 @@ namespace Klinika.Services
     {
         private readonly IVacationRequestRepo vacationRequestRepo;
         private readonly IScheduledAppointmentsRepo appointmentsRepo;
-        public DoctorScheduleService()
+        public DoctorScheduleService(IVacationRequestRepo vacationRequestRepo, IScheduledAppointmentsRepo appointmentsRepo)
         {
-            vacationRequestRepo = new VacationRequestRepository();
-            appointmentsRepo = new AppointmentRepository();
+            this.vacationRequestRepo = vacationRequestRepo;
+            this.appointmentsRepo = appointmentsRepo;
         }
         public bool IsOccupied(int doctorID, TimeSlot timeSlot, DateTime day)
         {

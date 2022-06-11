@@ -3,18 +3,20 @@ using Klinika.Roles;
 using Klinika.Utilities;
 using System.Data;
 using Klinika.Models;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Patient
 {
     public partial class NewAppointment : Form
     {
-        private readonly DoctorScheduleService scheduleService;
+        private readonly DoctorScheduleService? scheduleService;
         internal Main parent;
         internal Roles.Patient patient { get { return parent.patient; } }
         public NewAppointment(Main parent)
         {
             InitializeComponent();
-            scheduleService = new DoctorScheduleService();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
             this.parent = parent;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)

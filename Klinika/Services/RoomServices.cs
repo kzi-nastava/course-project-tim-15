@@ -8,6 +8,10 @@ namespace Klinika.Services
     internal class RoomServices
     {
         private readonly IRoomRepo roomRepo;
+        public RoomServices(IRoomRepo roomRepo)
+        {
+            this.roomRepo = roomRepo;
+        }
         public RoomServices()
         {
             roomRepo = new RoomRepository();

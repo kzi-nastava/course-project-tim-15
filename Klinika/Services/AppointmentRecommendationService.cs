@@ -1,15 +1,17 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.Services
 {
     public class AppointmentRecommendationService
     {
-        private readonly DoctorScheduleService scheduleService;
+        private readonly DoctorScheduleService? scheduleService;
         public AppointmentRecommendationService()
         {
-            scheduleService = new DoctorScheduleService();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
         }
         public List<Appointment> Find(int doctorID, TimeSlot timeSlot, DateTime deadlineDate, char priority)
         {

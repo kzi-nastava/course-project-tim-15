@@ -1,14 +1,16 @@
-﻿using Klinika.Models;
+﻿using Klinika.Dependencies;
+using Klinika.Models;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class AppointmentDetails : Form
     {
-        private readonly DoctorScheduleService scheduleService;
-        private readonly RoomServices roomServices;
+        private readonly DoctorScheduleService? scheduleService;
+        private readonly RoomServices? roomServices;
         internal readonly ViewAllAppointments parent;
         private Appointment? appointment;
 
@@ -17,8 +19,8 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             this.parent = parent;
             this.appointment = appointment;
-            scheduleService = new DoctorScheduleService();
-            roomServices = new RoomServices();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            roomServices = StartUp.serviceProvider.GetService<RoomServices>();
         }
         private void LoadForm(object sender, EventArgs e)
         {
