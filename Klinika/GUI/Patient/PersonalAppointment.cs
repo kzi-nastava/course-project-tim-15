@@ -10,12 +10,20 @@ namespace Klinika.GUI.Patient
     public partial class PersonalAppointment : Form
     {
         private readonly DoctorScheduleService? scheduleService;
+        private readonly AppointmentService? appointmentService;
+        private readonly DoctorService? doctorService;
+        private readonly PatientRequestService? patientRequestService;
+        private readonly UserService? userService;
         private readonly PersonalAppointmentDTO dto;
         #region Form
         public PersonalAppointment(PersonalAppointmentDTO dto)
         {
             InitializeComponent();
             scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
+            doctorService = StartUp.serviceProvider.GetService<DoctorService>();
+            patientRequestService = StartUp.serviceProvider.GetService<PatientRequestService>();
+            userService = StartUp.serviceProvider.GetService<UserService>();
             this.dto = dto;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -46,10 +54,7 @@ namespace Klinika.GUI.Patient
             DoctorComboBox.Enabled = true;
             SetDoctorComboBoxIndex();
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            dto.EnableParent();
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => dto.EnableParent();
         #endregion
 
         private void ConfirmButtonClick(object sender, EventArgs e)
@@ -64,7 +69,7 @@ namespace Klinika.GUI.Patient
             if (!UIUtilities.Confirm("Are you sure you want to create this Appoinment ?")) return;
 
             dto.appointment.dateTime = GetSelectedDateTime();
-            AppointmentService.Create(dto.appointment);
+            appointmentService.Create(dto.appointment);
 
             if (dto.isDatePicked) dto.InsertNewAppointmentInTable();
 
@@ -76,23 +81,20 @@ namespace Klinika.GUI.Patient
 
             dto.appointment.doctorID = GetSelectedDoctorID();
             dto.appointment.dateTime = GetSelectedDateTime();
-            dto.appointment.roomID = DoctorService.GetById(dto.appointment.doctorID).officeID;
+            dto.appointment.roomID = doctorService.GetById(dto.appointment.doctorID).officeID;
 
             bool needApproval = DateTime.Now.AddDays(2).Date >= dto.appointment.dateTime.Date;
             if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
-            PatientRequestService.Send(!needApproval, dto.appointment, PatientRequest.Types.MODIFY);
+            patientRequestService.Send(!needApproval, dto.appointment, PatientRequest.Types.MODIFY);
             if (!needApproval)
             {
-                AppointmentService.Modify(dto.appointment);
+                appointmentService.Modify(dto.appointment);
                 dto.ModifyAppointmentInTable();
             }
             Close();
         }  
-        private int GetSelectedDoctorID()
-        {
-            return (DoctorComboBox.SelectedItem as User).id;
-        }
+        private int GetSelectedDoctorID() => (DoctorComboBox.SelectedItem as User).id;
         private DateTime GetSelectedDateTime()
         {
             var selectedDate = DatePicker.Value;
@@ -102,7 +104,7 @@ namespace Klinika.GUI.Patient
         }
         private void SetDoctorComboBoxIndex()
         {
-            User selected = DoctorService.GetOne(dto.appointment.doctorID);
+            User selected = userService.GetDoctor(dto.appointment.doctorID);
             DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(selected);
         }
         private bool ValidateForm()

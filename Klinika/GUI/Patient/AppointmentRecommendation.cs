@@ -2,12 +2,15 @@
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Patient
 {
     public partial class AppointmentRecommendation : Form
     {
-        private readonly AppointmentRecommendationService recommendationService;
+        //private readonly AppointmentRecommendationService recommendationService;
+        private readonly AppointmentService? appointmentService;
         private readonly NewAppointment parent;
 
         #region Form
@@ -15,6 +18,7 @@ namespace Klinika.GUI.Patient
         {
             InitializeComponent();
             recommendationService = new AppointmentRecommendationService();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -25,14 +29,8 @@ namespace Klinika.GUI.Patient
             ScheduleButton.Enabled = false;
             DoctorRadioButton.Checked = true;
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
-        private void CancelClick(object sender, EventArgs e)
-        {
-            Close();
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
+        private void CancelClick(object sender, EventArgs e) => Close();
         #endregion
 
         #region Click functions
@@ -62,10 +60,7 @@ namespace Klinika.GUI.Patient
             List<Appointment> recommended = recommendationService.Find(doctorID, timeSlot, DeadlineDatePicker.Value, priority);
             RecommendedAppointmentTable.Fill(recommended);
         }
-        private void RecommendedAppointmentTableRowSelected(object sender, DataGridViewCellEventArgs e)
-        {
-            ScheduleButton.Enabled = true;
-        }
+        private void RecommendedAppointmentTableRowSelected(object sender, DataGridViewCellEventArgs e) => ScheduleButton.Enabled = true;
         private DateTime GetSelectedDateTime()
         {
             return Convert.ToDateTime(RecommendedAppointmentTable.SelectedRows[0].Cells["DateTime"].Value);
@@ -77,7 +72,7 @@ namespace Klinika.GUI.Patient
         private void Create()
         {
             Appointment appointment = new Appointment(RecommendedAppointmentTable.GetSelectedID(), parent.patient.id, GetSelectedDateTime());
-            AppointmentService.Create(appointment);
+            appointmentService.Create(appointment);
         }
     }
 }

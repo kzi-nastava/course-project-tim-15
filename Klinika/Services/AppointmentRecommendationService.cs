@@ -41,7 +41,6 @@ namespace Klinika.Services
 
             return recommended;
         }
-        
         private Appointment FindClosestMatch(int doctorID, TimeSlot timeSlot, DateTime deadlineDate)
         {
             Appointment best = new Appointment();

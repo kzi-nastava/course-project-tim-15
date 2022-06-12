@@ -9,11 +9,15 @@ namespace Klinika.GUI.Patient
     public partial class MedicalRecord : Form
     {
         private readonly AnamnesisService? anamnesisService;
+        private readonly QuestionnaireService? questionnaireService;
+        private readonly AppointmentService? appointmentService;
         internal Main parent;
         public MedicalRecord(Main parent)
         {
             InitializeComponent();
             anamnesisService = StartUp.serviceProvider.GetService<AnamnesisService>();
+            questionnaireService = StartUp.serviceProvider.GetService<QuestionnaireService>();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -32,9 +36,9 @@ namespace Klinika.GUI.Patient
         private void GradeDoctorButtonClick(object sender, EventArgs e)
         {
             Appointment selected = MedicalRecordTable.GetSelected();
-            if (!AppointmentService.IsGraded(selected.id))
+            if (!questionnaireService.IsAppointmentGraded(selected.id))
             {
-                var appointment = AppointmentService.GetById(selected.id);
+                var appointment = appointmentService.GetById(selected.id);
                 new Questionnaire(this, parent.patient.id, Question.Types.DOCTOR, appointment.id, appointment.doctorID).Show();
                 return;
             }

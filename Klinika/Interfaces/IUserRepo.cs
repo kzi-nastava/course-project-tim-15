@@ -1,5 +1,4 @@
-﻿using Klinika.Models;
-using Klinika.Roles;
+﻿using Klinika.Roles;
 
 namespace Klinika.Interfaces
 {

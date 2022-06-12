@@ -9,6 +9,5 @@ namespace Klinika.Interfaces
         public User[] GetSpecializedDoctors(int specializationID);
         public Specialization GetSpecialization(int doctorId);
         public List<Doctor> GetAll();
-
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Interfaces;
 
@@ -44,5 +43,10 @@ namespace Klinika.Services
             appointmentDatePairs = appointmentDatePairs.OrderBy(o => o.appointment.dateTime).ToList();
             return appointmentDatePairs.Take(5).ToList();
         }
+
+        public List<Appointment> GetAll() => scheduledAppointmentsRepo.GetAll();
+        public List<Appointment> GetAll(int userID, User.RoleType role) => scheduledAppointmentsRepo.GetAll(userID, role);
+        public List<Appointment> GetAll(string requestedDate, int userID, User.RoleType role, int days = 1)
+            => scheduledAppointmentsRepo.GetAll(requestedDate, userID, role, days);
     }
 }

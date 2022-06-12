@@ -28,7 +28,7 @@ namespace Klinika.Repositories
             }
             return notifications;
         }
-        public void Send(Notification notification)
+        public void Create(Notification notification)
         {
             string sendQuery = "INSERT INTO [Notification] (UserID,Message,IsNotified,DateTime) " +
                                "VALUES(@userID,@message,@isNotified,@dateTime)";

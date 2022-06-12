@@ -11,22 +11,23 @@ namespace Klinika.Services
     internal class DoctorService
     {
         private readonly DoctorScheduleService scheduleService;
-        private IDoctorRepo doctorRepository { get; }
-        private IScheduledAppointmentsRepo scheduledAppointmentsRepository;
+        private IDoctorRepo doctorRepo { get; }
+        private IScheduledAppointmentsRepo scheduledAppointmentsRepo;
         public DoctorService(IDoctorRepo doctorRepo,IScheduledAppointmentsRepo scheduledAppointmentsRepo)
         {
             scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
-            doctorRepository = doctorRepo;
-            scheduledAppointmentsRepository = scheduledAppointmentsRepo;
+            this.doctorRepo = doctorRepo;
+            this.scheduledAppointmentsRepo = scheduledAppointmentsRepo;
         }
 
+        public List<Doctor> GetAll() => doctorRepo.GetAll();
         public List<Appointment> GetAppointments(int doctorID)
         {
-            return scheduledAppointmentsRepository.GetAll(doctorID, User.RoleType.DOCTOR);
+            return scheduledAppointmentsRepo.GetAll(doctorID, User.RoleType.DOCTOR);
         }
         public Doctor? GetSuitable(int specializationId, DateTime from)
         {
-            foreach (Doctor doctor in doctorRepository.GetAll())
+            foreach (Doctor doctor in doctorRepo.GetAll())
             {
                 if (doctor.specialization.id != specializationId) continue;
                 if (!scheduleService.IsOccupied(from, doctor.id)) return doctor;
@@ -35,7 +36,7 @@ namespace Klinika.Services
         }
         public (Doctor?,TimeSlot?) GetSuitableUnderTwoHours(int specializationId)
         {
-            foreach (Doctor doctor in doctorRepository.GetAll())
+            foreach (Doctor doctor in doctorRepo.GetAll())
             {
                 if (doctor.specialization.id == specializationId)
                 {
@@ -48,36 +49,18 @@ namespace Klinika.Services
 
         public string GetFullName(int doctorID)
         {
-            return UserRepository.GetDoctor(doctorID).ToString();
+            var doctor = doctorRepo.GetAll().Where(x => x.id == doctorID).FirstOrDefault();
+            //return UserRepository.GetDoctor(doctorID).ToString();
+            return doctor.ToString();
         }
-        public User GetOne(int doctorID)
-        {
-            return UserRepository.GetDoctor(doctorID);
-        }
-        public double GetGrade(int id)
-        {
-            return QuestionnaireRepository.GetGrade(id);
-        }
-        public Specialization GetSpecialization (int id)
-        {
-            return DoctorRepository.GetSpecialization(id);
-        }
+        public Specialization GetSpecialization (int id) => doctorRepo.GetSpecialization(id);
         public Doctor GetById(int id)
         {
-            return  doctorRepository.GetAll().Where(x => x.id == id).FirstOrDefault();
+            return  doctorRepo.GetAll().Where(x => x.id == id).FirstOrDefault();
         }
 
-        public List<Doctor> SearchByName(string keyword)
-        {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.name.ToUpper().Contains(keyword.ToUpper())).ToList();
-        }
-        public List<Doctor> SearchBySurname(string keyword)
-        {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.surname.ToUpper().Contains(keyword.ToUpper())).ToList();
-        }
-        public List<Doctor> SearchBySpecialization(int id)
-        {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.specialization.id == id).ToList();
-        }
+        public List<Doctor> SearchByName(string keyword) => GetAll().Where(x => x.name.ToUpper().Contains(keyword.ToUpper())).ToList();
+        public List<Doctor> SearchBySurname(string keyword) => GetAll().Where(x => x.surname.ToUpper().Contains(keyword.ToUpper())).ToList();
+        public List<Doctor> SearchBySpecialization(int id) => GetAll().Where(x => x.specialization.id == id).ToList();
     }
 }

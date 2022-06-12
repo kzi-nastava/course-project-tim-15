@@ -1,18 +1,25 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Patient
 {
     public partial class ViewSchedule : Form
     {
+        private readonly PatientRequestService? patientRequestService;
+        private readonly AppointmentService? appointmentService;
+        private readonly ScheduleService? scheduleService;
         internal Main parent;
         internal Roles.Patient patient { get { return parent.patient; } }
         public ViewSchedule(Main parent)
         {
             InitializeComponent();
+            patientRequestService = StartUp.serviceProvider.GetService<PatientRequestService>();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
+            scheduleService = StartUp.serviceProvider.GetService<ScheduleService>();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -20,13 +27,11 @@ namespace Klinika.GUI.Patient
             parent.Enabled = false;
             Initialize();
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
         private void Initialize()
         {
-            PersonalAppointmentsTable.Fill(AppointmentRepository.GetAll(patient.id, User.RoleType.PATIENT));
+            
+            PersonalAppointmentsTable.Fill(scheduleService.GetAll(patient.id, User.RoleType.PATIENT));
             ModifyButton.Enabled = false;
             DeleteButton.Enabled = false;
         }
@@ -44,10 +49,10 @@ namespace Klinika.GUI.Patient
 
             if (needApproval && !UIUtilities.Confirm("Changes that you have requested have to be check by secretary. Do you want to send request?")) return;
 
-            PatientRequestService.Send(!needApproval, selected, PatientRequest.Types.DELETE);
+            patientRequestService.Send(!needApproval, selected, PatientRequest.Types.DELETE);
             if (needApproval) return;
 
-            AppointmentService.Delete(selected.id);
+            appointmentService.Delete(selected.id);
             PersonalAppointmentsTable.DeleteSelected();
         }
         private void PersonalAppointmentsTableCellClick(object sender, DataGridViewCellEventArgs e)

@@ -1,14 +1,14 @@
-﻿using Klinika.Data;
-using Klinika.Models;
+﻿using Klinika.Models;
+using Klinika.Interfaces;
 
 namespace Klinika.Repositories
 {
-    internal class QuestionRepository
+    public class QuestionRepository : Repository, IQuestionRepo
     {
-        public static List<Question> GetByType(Question.Types type)
+        public List<Question> GetByType(Question.Types type)
         {
             string getQuestionsQuerry = "SELECT ID, Name FROM [Question] WHERE Type = @Type";
-            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuestionsQuerry, ("@Type", (char)type));
+            var result = database.ExecuteSelectCommand(getQuestionsQuerry, ("@Type", (char)type));
             var questions = new List<Question>();
             foreach (object row in result)
             {

@@ -19,16 +19,13 @@ namespace Klinika.GUI.Patient
             scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
             this.parent = parent;
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
             Initialize();
             UIUtilities.FillDoctorComboBox(DoctorComboBox);
         }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
         private void Initialize()
         {
             ScheduleButton.Enabled = false;
@@ -49,10 +46,7 @@ namespace Klinika.GUI.Patient
             var dto = new PersonalAppointmentDTO(this, appointment, true, true, OccupiedAppointmentsTable);
             new PersonalAppointment(dto).Show();
         }
-        private void RecommendButtonClick(object sender, EventArgs e)
-        {
-            new AppointmentRecommendation(this).Show();
-        }
+        private void RecommendButtonClick(object sender, EventArgs e) => new AppointmentRecommendation(this).Show();
         public bool IsDateValid(DateTime dateTime)
         {
             if (dateTime > DateTime.Now) return true;

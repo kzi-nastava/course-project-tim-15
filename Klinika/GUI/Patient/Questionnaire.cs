@@ -2,11 +2,15 @@
 using Klinika.Services;
 using Klinika.Utilities;
 using MQuestionnaire = Klinika.Models.Questionnaire;
+using Microsoft.Extensions.DependencyInjection;
+using Klinika.Dependencies;
 
 namespace Klinika.GUI.Patient
 {
     public partial class Questionnaire : Form
     {
+        private readonly QuestionService? questionService;
+        private readonly QuestionnaireService? questionnaireService;
         private readonly Form parent;
         private readonly Question.Types type;
         private MQuestionnaire questionnaire;
@@ -18,6 +22,8 @@ namespace Klinika.GUI.Patient
         public Questionnaire(Form parent, int patientID, Question.Types type, int appointmentID = -1, int targetID = -1)
         {
             InitializeComponent();
+            questionService = StartUp.serviceProvider.GetService<QuestionService>();
+            questionnaireService = StartUp.serviceProvider.GetService<QuestionnaireService>();
             this.parent = parent;
             this.type = type;
             this.appointmentID = appointmentID;
@@ -27,7 +33,7 @@ namespace Klinika.GUI.Patient
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
-            QuestionsTable.Fill(QuestionService.GetByType(type));
+            QuestionsTable.Fill(questionService.GetByType(type));
             SetGradeButton.Enabled = false;
         }
         private void ClosingForm(object sender, FormClosingEventArgs e)
@@ -45,7 +51,7 @@ namespace Klinika.GUI.Patient
         private void SendButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to send this Questionnaire?")) return;
-            QuestionnaireService.Send(questionnaire, CollectData());
+            questionnaireService.Send(questionnaire, CollectData());
             Close();
         }
         private void SetGradeButtonClick(object sender, EventArgs e)

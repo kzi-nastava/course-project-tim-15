@@ -1,8 +1,9 @@
 ﻿using Klinika.Models;
+using Klinika.Interfaces;
 
 namespace Klinika.Repositories
 {
-    internal class AnswerRepository : Repository
+    internal class AnswerRepository : Repository, IAnswerRepo
     { 
         public void Create(Answer answer)
         {

@@ -1,43 +1,31 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     internal class AppointmentService
-    {   
-        
-        public static List<Appointment> GetCompleted(int patientID)
+    {
+        private readonly IAppointmentRepo appointmentRepo;
+        public AppointmentService(IAppointmentRepo appointmentRepo) => this.appointmentRepo = appointmentRepo;
+        public List<Appointment> GetCompleted(int patientID) => appointmentRepo.GetCompleted(patientID);
+        public void Create(Appointment appointment) => appointmentRepo.Create(appointment);
+        public void Modify(Appointment appointment) => appointmentRepo.Modify(appointment);
+        public void Delete(int id)
         {
-            return AppointmentRepository.GetCompleted(patientID);
+            appointmentRepo.Delete(id);
+            //AppointmentRepository.Delete(id);
+            //AppointmentRepository.GetInstance().DeleteFromList(id); ?????
         }
-        public static void Create(Appointment appointment)
-        {
-            AppointmentRepository.GetInstance().Create(appointment);
-        }
-        public static void Modify(Appointment appointment)
-        {
-            AppointmentRepository.GetInstance().Modify(appointment);
-        }
-        public static void Delete(int id)
-        {
-            AppointmentRepository.Delete(id);
-            AppointmentRepository.GetInstance().DeleteFromList(id);
-        }
-        public static void Complete(Appointment appointment)
+        public void Complete(Appointment appointment)
         {
             appointment.completed = true;
-            AppointmentRepository.GetInstance().Modify(appointment);
+            appointmentRepo.Modify(appointment);
         }
-        public Appointment GetById(int id)
-        {
-            return AppointmentRepository.GetInstance().appointments.Where(x => x.id == id).FirstOrDefault();
-        }
-        public static int GetModifyAppointmentsCount(int patientID)
+        public Appointment GetById(int id) => appointmentRepo.GetAll().Where(x => x.id == id).FirstOrDefault();
+        public int GetModifyAppointmentsCount(int patientID)
         {
             DateTime startDate = DateTime.Now.AddDays(-30);
-
-            var Descriptions = AppointmentRepository.GetDescriptions(patientID);
+            var Descriptions = appointmentRepo.GetDescriptions(patientID);
             int counter = 0;
 
             foreach (string description in Descriptions)
@@ -48,10 +36,6 @@ namespace Klinika.Services
                 if (date > startDate) counter += 1;
             }
             return counter;
-        }
-        public static bool IsGraded(int id)
-        {
-            return QuestionnaireRepository.IsGraded(id);
         }
     }
 }

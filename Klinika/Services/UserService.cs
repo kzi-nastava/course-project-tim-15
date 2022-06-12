@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Klinika.Interfaces;
+﻿using Klinika.Interfaces;
 using Klinika.Roles;
 
 namespace Klinika.Services
@@ -18,5 +13,7 @@ namespace Klinika.Services
         {
             return userRepo.GetByEmail(email);
         }
+
+        public User GetDoctor(int doctorID) => userRepo.GetDoctor(doctorID);
     }
 }
