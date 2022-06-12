@@ -1,6 +1,8 @@
 ﻿using Klinika.Exceptions;
 using Klinika.Services;
 using Klinika.Utilities;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {
@@ -8,11 +10,12 @@ namespace Klinika.GUI.Secretary
     {
         private PatientsManagement parent;
         private Roles.Patient selected;
-
+        private PatientService patientService;
         public ModifyPatient(PatientsManagement parent,Roles.Patient selected)
         {
             this.parent = parent;
             this.selected = selected;
+            patientService = StartUp.serviceProvider.GetService<PatientService>();
             InitializeComponent();
         }
 
@@ -59,7 +62,13 @@ namespace Klinika.GUI.Secretary
                 selected.notificationOffset);
             try
             {
-                if(!PatientService.Modify(modifiedPatient)) return;
+                string error_message = ValidatePatient(modifiedPatient);
+                if(error_message != "") 
+                {
+                    MessageBoxUtilities.ShowErrorMessage(error_message);
+                    return;
+                }
+                patientService.Modify(modifiedPatient);
                 parent.ModifyRowOfPatientsTable(modifiedPatient);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully modified!");
                 Close();
@@ -68,6 +77,49 @@ namespace Klinika.GUI.Secretary
             {
                 MessageBoxUtilities.ShowErrorMessage(error.Message);
             }
+        }
+
+
+        public string? ValidatePatient(Roles.Patient patient)
+        {
+            string error_messsage = null;
+            if (string.IsNullOrEmpty(patient.jmbg))
+            {
+                error_messsage = "JMBG left empty!";
+            }
+
+            else if (patient.jmbg.Length != 13)
+            {
+                error_messsage = "JMBG format is not valid!";
+            }
+
+            else if (string.IsNullOrEmpty(patient.name))
+            {
+                error_messsage = "Name left empty!";
+            }
+
+            else if (string.IsNullOrEmpty(patient.surname))
+            {
+                error_messsage = "Surname left empty!";
+            }
+
+            else if (patient.birthdate > DateTime.Now)
+            {
+                error_messsage = "Invalid birthdate!";
+            }
+
+            else if (string.IsNullOrEmpty(patient.password))
+            {
+                error_messsage = "Password left empty!";
+            }
+
+            else if (patient.password.Length < 4)
+            {
+                error_messsage = "Password is too short!";
+            }
+
+            return error_messsage;
+
         }
 
     }

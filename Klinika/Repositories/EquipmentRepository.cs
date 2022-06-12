@@ -6,9 +6,9 @@ using System.Data.SqlClient;
 
 namespace Klinika.Repositories
 {
-    internal class EquipmentRepository : Repository, IRoomEquipmentRepo
-    {
-        public static List<Equipment> GetAllInRooms()
+    internal class EquipmentRepository : Repository, IRoomEquipmentRepo, ITransferRepo
+    {        
+        public List<Equipment> GetAllInRooms()
         {
             List<Equipment> equipmentInRooms = new List<Equipment>();
 
@@ -16,7 +16,7 @@ namespace Klinika.Repositories
                      "[RoomEquipment].Quantity " +
                      "FROM [RoomEquipment], [Equipment], [Room] " +
                      "WHERE [RoomEquipment].EquipmentID = [Equipment].ID AND [RoomEquipment].RoomID = [Room].ID";
-            DataTable retrievedEquipment = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
+            DataTable retrievedEquipment = database.CreateTableOfData(getAllQuery);
             foreach(DataRow equipment in retrievedEquipment.Rows)
             {
                 equipmentInRooms.Add(new Equipment((int)equipment["EquipmentID"],
@@ -29,7 +29,7 @@ namespace Klinika.Repositories
             return equipmentInRooms;
         }
         
-        public static DataTable GetAll()
+        public DataTable GetAll()
         {
             DataTable? retrievedEquipment = null;
             DataTable? retrivedStorage = null;
@@ -43,20 +43,20 @@ namespace Klinika.Repositories
                                      "[EquipmentType].Name as 'Equipment Type', [Storage].Quantity " +
                                      "FROM [Storage], [EquipmentType], [Equipment] " +
                                      "WHERE [Storage].EquipmentID = [Equipment].ID AND [Equipment].TypeID = [EquipmentType].ID";
-            retrievedEquipment = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
-            retrievedEquipment.Merge(DatabaseConnection.GetInstance().CreateTableOfData(getStorageQuery));
+            retrievedEquipment = database.CreateTableOfData(getAllQuery);
+            retrievedEquipment.Merge(database.CreateTableOfData(getStorageQuery));
             return(retrievedEquipment);
         }
 
-        public static void TransferRequest(Models.EquipmentTransfer transfer)
+        public void TransferRequest(Models.EquipmentTransfer transfer)
         {
             string requestQuery = "INSERT INTO [EquipmentTransferRequest] " +
                 "(FromID, ToID, EquipmentID, Quantity, Date, MaxQuantity, Done) " +
                 "VALUES (@FromID, @ToID, @EquipmentID, @Quantity, @Date, @MaxQuantity, 0)";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(requestQuery, ("@FromID", transfer.fromId), ("@ToID", transfer.toId), ("@EquipmentID", transfer.equipment), ("@Quantity", transfer.quantity), ("@Date", transfer.transfer.ToString("yyyy-MM-dd")), ("@MaxQuantity", transfer.maxQuantity));
+            database.ExecuteNonQueryCommand(requestQuery, ("@FromID", transfer.fromId), ("@ToID", transfer.toId), ("@EquipmentID", transfer.equipment), ("@Quantity", transfer.quantity), ("@Date", transfer.transfer.ToString("yyyy-MM-dd")), ("@MaxQuantity", transfer.maxQuantity));
         }
 
-        public static void Transfer(Models.EquipmentTransfer transfer)
+        public void Transfer(Models.EquipmentTransfer transfer)
         {
             string transferFromQuery = "UPDATE [RoomEquipment] " +
                 "SET Quantity = @Quantity " +
@@ -78,12 +78,12 @@ namespace Klinika.Repositories
                 //If storage is one of the transfer rooms
                 if (transfer.toId == 0)
                 {
-                    DatabaseConnection.GetInstance().database.Open();
+                    database.database.Open();
 
                     checkQuery = "SELECT Quantity FROM [Storage] " +
                         "WHERE EquipmentID = @EquipmentID";
 
-                    SqlCommand toCheck = new SqlCommand(checkQuery, DatabaseConnection.GetInstance().database);
+                    SqlCommand toCheck = new SqlCommand(checkQuery, database.database);
                     toCheck.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
 
                     SqlDataReader readCheck = toCheck.ExecuteReader();
@@ -93,8 +93,8 @@ namespace Klinika.Repositories
                         "SET Quantity = @Quantity " +
                         "WHERE EquipmentID = @EquipmentID";
                         readCheck.Close();
-                        DatabaseConnection.GetInstance().database.Close();
-                        DatabaseConnection.GetInstance().ExecuteNonQueryCommand(updateQuery, ("@Quantity", transfer.quantity + (int)readCheck["Quantity"]), ("@EquipmentID", transfer.equipment));
+                        database.database.Close();
+                        database.ExecuteNonQueryCommand(updateQuery, ("@Quantity", transfer.quantity + (int)readCheck["Quantity"]), ("@EquipmentID", transfer.equipment));
                     }
                     else
                     {
@@ -102,11 +102,11 @@ namespace Klinika.Repositories
                         "(EquipmentID, Quantity) " +
                         "VALUES (@EquipmentID, @Quantity)";
                         readCheck.Close();
-                        DatabaseConnection.GetInstance().database.Close();
-                        DatabaseConnection.GetInstance().ExecuteNonQueryCommand(insertQuery, ("@Quantity", transfer.quantity), ("@EquipmentID", transfer.equipment));
+                        database.database.Close();
+                        database.ExecuteNonQueryCommand(insertQuery, ("@Quantity", transfer.quantity), ("@EquipmentID", transfer.equipment));
                     }
                     
-                    DatabaseConnection.GetInstance().ExecuteNonQueryCommand(transferFromQuery, ("@Quantity", transfer.maxQuantity - transfer.quantity), ("@RoomID", transfer.fromId), ("@EquipmentID", transfer.equipment));
+                    database.ExecuteNonQueryCommand(transferFromQuery, ("@Quantity", transfer.maxQuantity - transfer.quantity), ("@RoomID", transfer.fromId), ("@EquipmentID", transfer.equipment));
                 }
 
                 else if (transfer.fromId == 0)
@@ -115,21 +115,21 @@ namespace Klinika.Repositories
                         "SET Quantity = @Quantity " +
                         "WHERE EquipmentID = @EquipmentID";
 
-                    SqlCommand fromTransfer = new SqlCommand(transferFromQuery, DatabaseConnection.GetInstance().database);
+                    SqlCommand fromTransfer = new SqlCommand(transferFromQuery, database.database);
                     fromTransfer.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
                     fromTransfer.Parameters.AddWithValue("@RoomID", transfer.fromId);
                     fromTransfer.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
 
-                    SqlCommand toCheck = new SqlCommand(checkQuery, DatabaseConnection.GetInstance().database);
+                    SqlCommand toCheck = new SqlCommand(checkQuery, database.database);
                     toCheck.Parameters.AddWithValue("@RoomID", transfer.toId);
                     toCheck.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
 
-                    DatabaseConnection.GetInstance().database.Open();
+                    database.database.Open();
 
                     SqlDataReader readCheck = toCheck.ExecuteReader();
                     if (readCheck.Read())
                     {
-                        SqlCommand update = new SqlCommand(updateQuery, DatabaseConnection.GetInstance().database);
+                        SqlCommand update = new SqlCommand(updateQuery, database.database);
                         update.Parameters.AddWithValue("@Quantity", transfer.quantity + (int)readCheck["Quantity"]);
                         update.Parameters.AddWithValue("@RoomID", transfer.toId);
                         update.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
@@ -139,7 +139,7 @@ namespace Klinika.Repositories
                     else
                     {
                         readCheck.Close();
-                        SqlCommand insert = new SqlCommand(insertQuery, DatabaseConnection.GetInstance().database);
+                        SqlCommand insert = new SqlCommand(insertQuery, database.database);
                         insert.Parameters.AddWithValue("@Quantity", transfer.quantity);
                         insert.Parameters.AddWithValue("@RoomID", transfer.toId);
                         insert.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
@@ -147,27 +147,27 @@ namespace Klinika.Repositories
                     }
 
                     fromTransfer.ExecuteNonQuery();
-                    DatabaseConnection.GetInstance().database.Close();
+                    database.database.Close();
                 }
 
                 else
                 {
-                    SqlCommand fromTransfer = new SqlCommand(transferFromQuery, DatabaseConnection.GetInstance().database);
+                    SqlCommand fromTransfer = new SqlCommand(transferFromQuery, database.database);
                     fromTransfer.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
                     fromTransfer.Parameters.AddWithValue("@RoomID", transfer.fromId);
                     fromTransfer.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
 
-                    SqlCommand toCheck = new SqlCommand(checkQuery, DatabaseConnection.GetInstance().database);
+                    SqlCommand toCheck = new SqlCommand(checkQuery, database.database);
                     toCheck.Parameters.AddWithValue("@Quantity", transfer.maxQuantity - transfer.quantity);
                     toCheck.Parameters.AddWithValue("@RoomID", transfer.toId);
                     toCheck.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
 
-                    DatabaseConnection.GetInstance().database.Open();
+                    database.database.Open();
 
                     SqlDataReader readCheck = toCheck.ExecuteReader();
                     if (readCheck.Read())
                     {
-                        SqlCommand update = new SqlCommand(updateQuery, DatabaseConnection.GetInstance().database);
+                        SqlCommand update = new SqlCommand(updateQuery, database.database);
                         update.Parameters.AddWithValue("@Quantity", transfer.quantity + (int)readCheck["Quantity"]);
                         update.Parameters.AddWithValue("@RoomID", transfer.toId);
                         update.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
@@ -177,7 +177,7 @@ namespace Klinika.Repositories
                     else
                     {
                         readCheck.Close();
-                        SqlCommand insert = new SqlCommand(insertQuery, DatabaseConnection.GetInstance().database);
+                        SqlCommand insert = new SqlCommand(insertQuery, database.database);
                         insert.Parameters.AddWithValue("@Quantity", transfer.quantity);
                         insert.Parameters.AddWithValue("@RoomID", transfer.toId);
                         insert.Parameters.AddWithValue("@EquipmentID", transfer.equipment);
@@ -185,7 +185,7 @@ namespace Klinika.Repositories
                     }
 
                     fromTransfer.ExecuteNonQuery();
-                    DatabaseConnection.GetInstance().database.Close();
+                    database.database.Close();
                 }
             }
             catch (SqlException error)
@@ -194,7 +194,7 @@ namespace Klinika.Repositories
             }
         }
 
-        public static void CheckEquipmentTransfers()
+        public void CheckEquipmentTransfers()
         {
             string getRequestsQuery = "SELECT [EquipmentTransferRequest].ID, [EquipmentTransferRequest].FromID, [EquipmentTransferRequest].ToID, [EquipmentTransferRequest].EquipmentID, [EquipmentTransferRequest].Quantity, [EquipmentTransferRequest].Date, [EquipmentTransferRequest].MaxQuantity, [EquipmentTransferRequest].Done " +
                 "FROM [EquipmentTransferRequest]";
@@ -206,11 +206,10 @@ namespace Klinika.Repositories
             DataTable requests = new DataTable();
             try
             {
-                SqlConnection database = DatabaseConnection.GetInstance().database;
-                database.Open();
-                SqlDataAdapter adapter = new SqlDataAdapter(getRequestsQuery, database);
+                database.database.Open();
+                SqlDataAdapter adapter = new SqlDataAdapter(getRequestsQuery, database.database);
                 adapter.Fill(requests);
-                database.Close();
+                database.database.Close();
 
                 Models.EquipmentTransfer transfer = new Models.EquipmentTransfer();
 
@@ -228,11 +227,11 @@ namespace Klinika.Repositories
                             transfer.toId = (int)row["ToID"];
                             transfer.equipment = (int)row["EquipmentID"];
 
-                            database.Open();
-                            SqlCommand modify = new SqlCommand(doneQuery, DatabaseConnection.GetInstance().database);
+                            database.database.Open();
+                            SqlCommand modify = new SqlCommand(doneQuery, database.database);
                             modify.Parameters.AddWithValue("@ID", (int)row["ID"]);
                             modify.ExecuteNonQuery();
-                            database.Close();
+                            database.database.Close();
                             Transfer(transfer);
                         }
                     }
@@ -244,14 +243,14 @@ namespace Klinika.Repositories
             }
         }
 
-        public static List<Equipment> GetDynamicEquipmentInStorage()
+        public List<Equipment> GetDynamicEquipmentInStorage()
         {
             List<Equipment> dynamicEquipmentInStorage = new List<Equipment>();
             string getQuery = "SELECT [Equipment].ID, [Equipment].Name, ISNULL([Storage].Quantity,0) 'Quantity' FROM [Equipment] " +
                               "LEFT OUTER JOIN [EquipmentType] ON [Equipment].TypeID = [EquipmentType].ID " +
                               "LEFT OUTER JOIN [Storage] ON [Equipment].ID = [Storage].EquipmentID " +
                               "WHERE [EquipmentType].Name = 'dynamic'";
-            DataTable retrieved = DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
+            DataTable retrieved = database.CreateTableOfData(getQuery);
             foreach(DataRow equipment in retrieved.Rows)
             {
                 dynamicEquipmentInStorage.Add(new Equipment((int)equipment["ID"],
@@ -264,20 +263,20 @@ namespace Klinika.Repositories
             return dynamicEquipmentInStorage;
         }
 
-        public static int GetQuantity(int roomId, int equipmentId)
+        public int GetQuantity(int roomId, int equipmentId)
         {
             string getQuery = "SELECT Quantity FROM [RoomEquipment] " +
                               "WHERE RoomID = @roomId AND EquipmentID = @equipId";
-            object quantity = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(getQuery, ("@roomId", roomId), ("@equipId", equipmentId));
+            object quantity = database.ExecuteNonQueryScalarCommand(getQuery, ("@roomId", roomId), ("@equipId", equipmentId));
             if (quantity != null) return (int)quantity;
             return 0;
         }
 
-        public static int GetQuantityFromStorage(int equipmentId)
+        public int GetQuantityFromStorage(int equipmentId)
         {
             string getQuery = "SELECT Quantity FROM [Storage] " +
                               "WHERE EquipmentID = @equipId";
-            object quantity = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(getQuery, ("@equipId", equipmentId));
+            object quantity = database.ExecuteNonQueryScalarCommand(getQuery, ("@equipId", equipmentId));
             if (quantity != null) return (int)quantity;
             return 0;
         }
@@ -289,7 +288,7 @@ namespace Klinika.Repositories
                               "LEFT OUTER JOIN [RoomEquipment] ON [Equipment].ID = [RoomEquipment].EquipmentID " +
                               "WHERE [EquipmentType].Name = 'dynamic'";
 
-            DataTable allDynamicEquipmentInRoom = DatabaseConnection.GetInstance().CreateTableOfData(getQuery);
+            DataTable allDynamicEquipmentInRoom = database.CreateTableOfData(getQuery);
 
             List<Equipment> equipment = new List<Equipment>();
             foreach(DataRow row in allDynamicEquipmentInRoom.Rows)
@@ -302,12 +301,13 @@ namespace Klinika.Repositories
             }
             return equipment;
         }
+
         public void ModifyRoomsDynamicEquipmentQuantity(int roomID, int equipmentID, int quantity)
         {
             string modifyQuery = "UPDATE [RoomEquipment] " +
                 "SET Quantity = @Quantity " +
                 "WHERE RoomID = @RoomID AND EquipmentID = @EquipmentID";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+            database.ExecuteNonQueryCommand(
                 modifyQuery,
                 ("@RoomID", roomID),
                 ("@EquipmentID", equipmentID),

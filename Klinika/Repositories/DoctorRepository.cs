@@ -1,34 +1,28 @@
-﻿using Klinika.Data;
-using Klinika.Models;
+﻿using Klinika.Models;
 using Klinika.Roles;
 using System.Data;
-using System.Data.SqlClient;
+using Klinika.Interfaces;
 
 namespace Klinika.Repositories
 {
-    internal class DoctorRepository : Repository
+    internal class DoctorRepository : Repository, IDoctorRepo
     {
-        private static DoctorRepository? instance;
         public  List<Doctor> doctors { get; }
+        private readonly IUserRepo userRepo;
 
         private DoctorRepository()
         {
             doctors = GetAll();
+            userRepo = new UserRepository();
         }
 
-        public static DoctorRepository GetInstance()
-        {
-            if (instance == null) instance = new DoctorRepository();
-            return instance;
-        }
-
-        public static List<Specialization> GetSpecializations()
+        public List<Specialization> GetSpecializations()
         {
             List<Specialization> specializations = new List<Specialization>();
             
             string getQuery = "SELECT * FROM [Specialization]";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery);
+            var resoult = database.ExecuteSelectCommand(getQuery);
             foreach(object row in resoult)
             {
                 specializations.Add(new Specialization
@@ -41,16 +35,15 @@ namespace Klinika.Repositories
             return specializations;
         }
 
-        private static List<int> GetSpecializedIDs(int specializationID)
+        private List<int> GetSpecializedIDs(int specializationID)
         {
             List<int> doctors = new List<int>();
 
-            SqlConnection database = DatabaseConnection.GetInstance().database;
             string getQuery = "SELECT UserID " +
                 "FROM [DoctorSpecialization] " +
                 "WHERE SpecializationID = @SpecializationID";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuery, ("SpecializationID", specializationID));
+            var resoult = database.ExecuteSelectCommand(getQuery, ("SpecializationID", specializationID));
             foreach(object row in resoult)
             {
                 doctors.Add(Convert.ToInt32(((object[])row)[0].ToString()));
@@ -59,28 +52,28 @@ namespace Klinika.Repositories
             return doctors;
         }
 
-        public static User[] GetSpecializedDoctors(int specializationID)
+        public User[] GetSpecializedDoctors(int specializationID)
         {
             var doctorIDs = GetSpecializedIDs(specializationID).ToArray();
 
             var specializedDoctors = new List<User>();
             foreach (int doctorID in doctorIDs)
             {
-                var doctor = UserRepository.GetInstance().Users.FirstOrDefault(x => x.id == doctorID);
+                var doctor = userRepo.Users.FirstOrDefault(x => x.id == doctorID);
                 specializedDoctors.Add(doctor);
             }
 
             return specializedDoctors.ToArray();
         }
 
-        public static Specialization GetSpecialization (int DoctorID)
+        public Specialization GetSpecialization (int doctorID)
         {
             string getSpecializationQuerry = "SELECT [Specialization].ID, [Specialization].Name " +
                                           "FROM [Specialization] JOIN [DoctorSpecialization] " +
                                           "ON [Specialization].ID = [DoctorSpecialization].SpecializationID " +
-                                          $"WHERE [DoctorSpecialization].UserID = {DoctorID}";
+                                          $"WHERE [DoctorSpecialization].UserID = {doctorID}";
 
-            var selection = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSpecializationQuerry);
+            var selection = database.ExecuteSelectCommand(getSpecializationQuerry);
             Specialization specialization = new Specialization
             {
                 id = Convert.ToInt32(((object[])selection[0])[0]),

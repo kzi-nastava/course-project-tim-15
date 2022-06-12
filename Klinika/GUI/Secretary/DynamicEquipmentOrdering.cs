@@ -1,19 +1,24 @@
 ﻿using Klinika.Exceptions;
 using Klinika.Services;
 using Klinika.Utilities;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {
     public partial class DynamicEquipmentOrdering : Form
     {
+        private readonly EquipmentService equipmentService;
+        
         public DynamicEquipmentOrdering()
         {
+            equipmentService = StartUp.serviceProvider.GetService<EquipmentService>();
             InitializeComponent();
         }
 
         private void DynamicEquipmentOrdering_Load(object sender, EventArgs e)
         {
-            missingDynamicEquipmentTable.Fill(EquipmentService.GetMissingDynamicEquipment());
+            missingDynamicEquipmentTable.Fill(equipmentService.GetMissingDynamicEquipment());
         }
 
         private void OrderButton_Click(object sender, EventArgs e)
@@ -42,7 +47,7 @@ namespace Klinika.GUI.Secretary
         {
             try
             {
-                EquipmentService.MakeEquipmentTransferRequest(Convert.ToInt32(missingDynamicEquipmentTable.GetCellValue("ID")),
+                equipmentService.MakeEquipmentTransferRequest(Convert.ToInt32(missingDynamicEquipmentTable.GetCellValue("ID")),
                                                           (int)quantityPicker.Value);
                 MessageBoxUtilities.ShowSuccessMessage("Selected equipment is ordered and will be stored tomorrow.");
 

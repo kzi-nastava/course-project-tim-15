@@ -9,10 +9,6 @@ namespace Klinika.Repositories
         private readonly IngredientRepository ingredientRepository;
         public List<Drug> drugs { get; }
 
-        // TODO remove singleton
-        public static DrugRepository Instance => instance ??= new DrugRepository();
-        protected static DrugRepository? instance;
-
         public DrugRepository() : base()
         {
             ingredientRepository = new IngredientRepository();
@@ -77,7 +73,7 @@ namespace Klinika.Repositories
             drugs.Where(x => x.id == id).First().approved = type.ToString();
         }
 
-        internal static void Fix(int id)
+        internal void Fix(int id)
         {
             string modifyQuery = "UPDATE [Drug] SET Approved = 'C' WHERE ID = @ID";
 
@@ -103,7 +99,7 @@ namespace Klinika.Repositories
                 ("@Name", drug.name));
         }
 
-        internal static void AddIngredients(int id, List<int> ingredientIds)
+        internal void AddIngredients(int id, List<int> ingredientIds)
         {
             string insertQuery = "INSERT INTO [DrugIngredient] (DrugID, IngredientID) VALUES (@Drug, @Ing)";
             foreach (int ingredientId in ingredientIds)
@@ -112,7 +108,7 @@ namespace Klinika.Repositories
             }
         }
 
-        internal static void RemoveIngredients(int id)
+        internal void RemoveIngredients(int id)
         {
             string deleteQuery = "DELETE FROM [DrugIngredient] WHERE DrugID = @DrugID";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuery, ("@DrugID", id));
@@ -133,7 +129,7 @@ namespace Klinika.Repositories
             return ingredients;
         }
 
-        public static string GetNote(int id)
+        public string GetNote(int id)
         {
             string getUnapprovedDrugQuery = $"SELECT * FROM [UnapprovedDrug] WHERE DrugID = {id} AND IsFixed = 0";
             return ((object[])DatabaseConnection.GetInstance().ExecuteSelectCommand(getUnapprovedDrugQuery)[0])[1].ToString();

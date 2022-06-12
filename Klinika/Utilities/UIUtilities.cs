@@ -1,11 +1,14 @@
 ﻿using Klinika.Repositories;
 using Klinika.Roles;
 using Klinika.Services;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Utilities
 {
     internal class UIUtilities
     {
+        
         public static int ExtractID(string objectWithId)
         {
             return Convert.ToInt32(objectWithId.Split('.')[0]);
@@ -13,9 +16,10 @@ namespace Klinika.Utilities
 
         public static void FillPatientSelectionList(ComboBox patientSelection)
         {
-            foreach (KeyValuePair<int, Patient> pair in PatientRepository.idPatientPairs)
+            PatientService patientService = StartUp.serviceProvider.GetService<PatientService>();
+            foreach (Patient patient in patientService.GetAll())
             {
-                patientSelection.Items.Add(pair.Value.GetIdAndFullName());
+                patientSelection.Items.Add(patient.GetIdAndFullName());
             }
         }
         public static void FillDoctorComboBox(ComboBox comboBox)

@@ -1,23 +1,23 @@
-﻿using Klinika.Data;
+﻿using Klinika.Interfaces;
 using Klinika.Models;
 using System.Data;
 
 namespace Klinika.Repositories
 {
-    internal class PatientRequestRepository : Repository
+    internal class PatientRequestRepository : Repository, IPatientRequestRepo
     {
-        public static List<PatientRequest> allRequests { get; private set; }
+        public List<PatientRequest> allRequests { get; private set; }
 
         public PatientRequestRepository()
         {
             allRequests = GetAll();
         }
         
-        public static List<PatientRequest>? GetAll()
+        public List<PatientRequest>? GetAll()
         {
             string getAllQuery = "SELECT * FROM [PatientRequest]";
             
-            DataTable retrievedRequests = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
+            DataTable retrievedRequests = database.CreateTableOfData(getAllQuery);
             List<PatientRequest> requests = new List<PatientRequest>();
 
             foreach (DataRow request in retrievedRequests.Rows)
@@ -36,26 +36,26 @@ namespace Klinika.Repositories
             return requests;
         }
 
-        public static void Approve(int id)
+        public void Approve(int id)
         {
             string approveQuery = "UPDATE [PatientRequest] SET Approved = 1 WHERE ID = @ID";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(approveQuery, ("@ID", id));
+            database.ExecuteNonQueryCommand(approveQuery, ("@ID", id));
         }
 
-        public static void Deny(int id)
+        public void Deny(int id)
         {
             string denyQuery = "UPDATE [PatientRequest] SET Approved = 0 WHERE ID = @ID";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(denyQuery, ("@ID", id));
+            database.ExecuteNonQueryCommand(denyQuery, ("@ID", id));
         }
 
-        public static void Create(PatientRequest patientRequest)
+        public void Create(PatientRequest patientRequest)
         {
             string createQuerry = "INSERT INTO [PatientRequest] " +
                 "(PatientID, MedicalActionID, Type, Description)" +
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@PatientID, @MedicalActionID, @Type, @Description)";
 
-            patientRequest.id = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+            patientRequest.id = (int)database.ExecuteNonQueryScalarCommand(
                                                                         createQuerry,
                                                                         ("@PatientID", patientRequest.patientID),
                                                                         ("@MedicalActionID", patientRequest.medicalActionID),
@@ -63,7 +63,6 @@ namespace Klinika.Repositories
                                                                         ("@Description", patientRequest.description)
                 );
         }
-
 
     }
 }

@@ -11,7 +11,7 @@ namespace Klinika.Repositories
     { 
         public static Dictionary<int, string>? types { get; set; }
         //returns type ID form Name
-        public static int GetTypeId(string type)
+        public  int GetTypeId(string type)
         {
             return types.FirstOrDefault(x => x.Value == type).Key;
         }
@@ -58,7 +58,7 @@ namespace Klinika.Repositories
             }
         }
 
-        public static DataTable GetAllRooms()
+        public DataTable GetAllRooms()
         {
             string getAllQuery = "SELECT [Room].ID, [Room].Number " +
                                       "FROM [Room] " +
@@ -66,7 +66,7 @@ namespace Klinika.Repositories
             return DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
         }
 
-        public static void Create(int type, int number)
+        public void Create(int type, int number)
         {
             string createQuery = "INSERT INTO [Room] " +
                 "(Type, Number, IsDeleted) " +
@@ -74,7 +74,7 @@ namespace Klinika.Repositories
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createQuery, ("@Type", type), ("@Number", number));
         }
 
-        public static void Delete(int id)
+        public void Delete(int id)
         {
             string deleteRoom = "UPDATE [Room] SET IsDeleted = 1 WHERE ID = @ID";
             try
@@ -93,7 +93,7 @@ namespace Klinika.Repositories
             }
         }
 
-        internal static void Modify(int id, string type, int number)
+        internal void Modify(int id, string type, int number)
         {
             string modifyQuery = "UPDATE [Room] " +
                                  "SET Type = @Type, " +
@@ -102,7 +102,7 @@ namespace Klinika.Repositories
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuery, ("@ID", id), ("@Type", GetTypeId(type)), ("@Number", number));
         }
 
-        internal static void SimpleRenovate(Models.Renovation renovation)
+        internal void SimpleRenovate(Models.Renovation renovation)
         {
             string createQuery = "INSERT INTO [Renovations] " +
                 "(RoomID, StartDate, EndDate, Advanced) " +
@@ -113,7 +113,7 @@ namespace Klinika.Repositories
                 ("@Advanced", renovation.advanced));
         }
 
-        internal static void SplitRenovation(Models.Renovation renovation, int renovationId)
+        internal void SplitRenovation(Models.Renovation renovation, int renovationId)
         {
             string createQuery = "INSERT INTO [RenovationsAdvanced] " +
                 "(ID, Type, FirstID, SecondID, SecondType, SecondNumber) " +
@@ -123,7 +123,7 @@ namespace Klinika.Repositories
                 ("@SecondNumber", renovation.secondNumber));
         }
 
-        internal static int FindRenovation(Models.Renovation renovation)
+        internal int FindRenovation(Models.Renovation renovation)
         {
             string findQuery = "SELECT [Renovations].ID " +
                                       "FROM [Renovations] " +
@@ -133,7 +133,7 @@ namespace Klinika.Repositories
             return id;
         }
 
-        internal static void MergeRenovation(Models.Renovation renovation, int renovationId)
+        internal void MergeRenovation(Models.Renovation renovation, int renovationId)
         {
             string createQuery = "INSERT INTO [RenovationsAdvanced] " +
                 "(ID, Type, FirstID, SecondID, SecondType, SecondNumber) " +
@@ -142,7 +142,7 @@ namespace Klinika.Repositories
                 ("@FirstID", renovation.id), ("@SecondID", renovation.secondId), ("@SecondType", 0), ("@SecondNumber", 0));
         }
 
-        internal static void AdvancedRenovation(Models.Renovation renovation)
+        internal void AdvancedRenovation(Models.Renovation renovation)
         {
             SimpleRenovate(renovation);
             if(renovation.advanced == 1)
@@ -157,7 +157,7 @@ namespace Klinika.Repositories
             }
         }
 
-        public static bool Renovate(Models.Renovation renovation)
+        public bool Renovate(Models.Renovation renovation)
         {
             if (!Services.RoomServices.DateValid(renovation)) return false; 
 
@@ -172,7 +172,7 @@ namespace Klinika.Repositories
             return true;
         }
 
-        public static bool IsRoomRenovating(int id, DateTime from, DateTime to)
+        public bool IsRoomRenovating(int id, DateTime from, DateTime to)
         {
             string findQuery = "SELECT [Renovations].ID " +
                                       "FROM [Renovations] " +
@@ -190,7 +190,7 @@ namespace Klinika.Repositories
             return false;
         }
 
-        internal static void MigrateEquipment(int firstId, int secondId)
+        internal void MigrateEquipment(int firstId, int secondId)
         {
             string modifyQuery = "UPDATE [RoomEquipment] " +
                                  "SET RoomID = @first" +
@@ -199,18 +199,18 @@ namespace Klinika.Repositories
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuery, ("@first", firstId), ("@second", secondId));
         }
 
-        internal static void MergeRooms(int firstId, int secondId)
+        internal void MergeRooms(int firstId, int secondId)
         {
             MigrateEquipment(firstId, secondId);
             Delete(secondId);
         }
 
-        internal static void SplitRooms(int secondNumber, int secondType)
+        internal void SplitRooms(int secondNumber, int secondType)
         {
             Create(secondNumber, secondType);
         }
 
-        internal static void RenovateRoom(int renovationID, int firstID)
+        internal void RenovateRoom(int renovationID, int firstID)
         {
             string findQuery = "SELECT [RenovationsAdvanced].ID, [RenovationsAdvanced].SecondID, [RenovationsAdvanced].SecondType, [RenovationsAdvanced].SecondNumber " +
                                       "FROM [RenovationsAdvanced] " +
@@ -254,7 +254,7 @@ namespace Klinika.Repositories
             }
         }
 
-        public static void CheckRenovations()
+        public void CheckRenovations()
         {
             string findQuery = "SELECT [Renovations].ID, [Renovations].RoomID " +
                                       "FROM [Renovations] " +

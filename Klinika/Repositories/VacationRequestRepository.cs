@@ -13,7 +13,7 @@ namespace Klinika.Repositories
                                   "FROM [VacationRequest] " +
                                   "WHERE DoctorID = @DoctorID";
 
-            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry, ("@DoctorID", doctorID));
+            var result = database.ExecuteSelectCommand(getAllQuerry, ("@DoctorID", doctorID));
             return GenerateList(result);
         }
         public int Create(VacationRequest vacationRequest)
@@ -23,7 +23,7 @@ namespace Klinika.Repositories
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@DoctorID,@FromDate,@ToDate,@Reason,@Status,@Emergency,@DenyReason)";
 
-            var id = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+            var id = (int)database.ExecuteNonQueryScalarCommand(
                 createQuery,
                 ("@DoctorID", vacationRequest.doctorID),
                 ("@FromDate", vacationRequest.fromDate),
@@ -35,7 +35,7 @@ namespace Klinika.Repositories
 
             return id;
         }
-        private static List<VacationRequest> GenerateList(List<object> input)
+        private List<VacationRequest> GenerateList(List<object> input)
         {
             var output = new List<VacationRequest>();
             foreach (object row in input)

@@ -1,19 +1,19 @@
-﻿using Klinika.Data;
-using Klinika.Models;
+﻿using Klinika.Models;
 using Klinika.Roles;
+using Klinika.Interfaces;
 
 namespace Klinika.Repositories
 {
-    internal class NotificationRepository : Repository
+    internal class NotificationRepository : Repository, INotificationRepo
     {
-        public static List<Notification> Get(Patient patient)
+        public List<Notification> Get(Patient patient)
         {
             var notifications = new List<Notification>();
             DateTime time = DateTime.Now.AddMinutes(patient.notificationOffset);
             string getQuerry = "SELECT * " +
                 "FROM [Notification] " +
                 "WHERE [Notification].UserID = @userID AND [Notification].DateTime <= @dateTime AND [Notification].IsNotified = 0";
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuerry,
+            var resoult = database.ExecuteSelectCommand(getQuerry,
                                             ("@userId", patient.id),
                                             ("@dateTime", time));
 
@@ -28,23 +28,23 @@ namespace Klinika.Repositories
             }
             return notifications;
         }
-        public static void Send(Notification notification)
+        public void Send(Notification notification)
         {
             string sendQuery = "INSERT INTO [Notification] (UserID,Message,IsNotified,DateTime) " +
                                "VALUES(@userID,@message,@isNotified,@dateTime)";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(sendQuery,
+            database.ExecuteNonQueryCommand(sendQuery,
                                             ("@userId", notification.userId),
                                             ("@message", notification.message),
                                             ("@isNotified", notification.isNotified),
                                             ("@dateTime", notification.dateTime));
         }
-        public static void Modify (int id)
+        public void Modify (int id)
         {
             string modifyQuery = "UPDATE [Notification] SET " +
                "IsNotified = 1 " +
                "WHERE ID = @Id";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
+            database.ExecuteNonQueryCommand(
                 modifyQuery,
                 ("@Id", id));
         }

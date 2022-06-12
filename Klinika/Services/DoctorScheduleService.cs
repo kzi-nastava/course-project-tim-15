@@ -41,5 +41,15 @@ namespace Klinika.Services
         }
         public List<Appointment> GetAppointments(DateTime date, int doctorID, int days = 1) 
             => appointmentsRepo.GetAll(date.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR, days);
+        public TimeSlot? GetFirstSlotAvailableUnderTwoHours(int doctorID, int duration = 15)
+        {
+            DateTime now = new CleanDateTimeNow().cleanNow;
+            TimeSlot broadSpan = new TimeSlot(now.AddHours(-24), now.AddHours(24));
+            List<TimeSlot> occupied = appointmentsRepo.GetOccupiedTimeSlotsPerDoctor(broadSpan, doctorID);
+            TimeSlot slotToSchedule = new TimeSlot(now, now.AddMinutes(duration));
+            TimeSlot? firstAvailable = slotToSchedule.GetFirstUnoccupied(occupied);
+            if ((firstAvailable.from - now).Minutes > 120) return null;
+            return firstAvailable;
+        }
     }
 }

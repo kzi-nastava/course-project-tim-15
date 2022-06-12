@@ -1,4 +1,3 @@
-using Klinika.Data;
 using Klinika.Interfaces;
 using Klinika.Models;
 using System.Data;
@@ -23,7 +22,7 @@ namespace Klinika.Repositories
                 ("Date", DateTime.Now));
         }
 
-        public static List<Referral> GetReferralsPerPatient(int patientId)
+        public List<Referral> GetReferralsPerPatient(int patientId)
         {
             List<Referral> referrals = new List<Referral>();
             string getReferralsQuery = "SELECT [Referal].ID, " +
@@ -36,7 +35,7 @@ namespace Klinika.Repositories
                 "WHERE [Referal].PatientID = @patientID " +
                 "ORDER BY [Referal].Date DESC";
 
-            DataTable retrievedReferrals = DatabaseConnection.GetInstance().CreateTableOfData(getReferralsQuery, ("@patientID", patientId));
+            DataTable retrievedReferrals = database.CreateTableOfData(getReferralsQuery, ("@patientID", patientId));
             foreach (DataRow row in retrievedReferrals.Rows)
             {
                 referrals.Add(new Referral((int)row["ID"],
@@ -50,13 +49,13 @@ namespace Klinika.Repositories
             return referrals;
         }
 
-        public static void MarkAsUsed(int referralID)
+        public void MarkAsUsed(int referralID)
         {
             string markAsUsedQuerry = "UPDATE [Referal] " +
                                       "SET IsUsed = 1 " +
                                       "WHERE ID = @ID";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(markAsUsedQuerry, ("@ID", referralID));
+            database.ExecuteNonQueryCommand(markAsUsedQuerry, ("@ID", referralID));
         }
     }
 }

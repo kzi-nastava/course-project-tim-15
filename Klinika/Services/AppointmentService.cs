@@ -1,10 +1,12 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     internal class AppointmentService
-    {
+    {   
+        
         public static List<Appointment> GetCompleted(int patientID)
         {
             return AppointmentRepository.GetCompleted(patientID);
@@ -27,7 +29,7 @@ namespace Klinika.Services
             appointment.completed = true;
             AppointmentRepository.GetInstance().Modify(appointment);
         }
-        public static Appointment GetById(int id)
+        public Appointment GetById(int id)
         {
             return AppointmentRepository.GetInstance().appointments.Where(x => x.id == id).FirstOrDefault();
         }

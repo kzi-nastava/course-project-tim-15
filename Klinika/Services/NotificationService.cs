@@ -1,16 +1,21 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     internal class NotificationService
     {
-        public static void Send(Notification notification)
+        private readonly INotificationRepo notificationRepo;
+
+        public NotificationService(INotificationRepo notificationRepo) => this.notificationRepo = notificationRepo;
+        
+        public void Send(Notification notification)
         {
-            NotificationRepository.Send(notification);
+            notificationRepo.Send(notification);
         }
-        public static void MakeNotificationsForPrescription(Prescription prescription)
+        public void MakeNotificationsForPrescription(Prescription prescription)
         {
             DateTime start = new DateTime(prescription.dateStarted.Year, prescription.dateStarted.Month, prescription.dateStarted.Day,
                 prescription.dateStarted.Hour + 1, 0, 0);
@@ -23,14 +28,14 @@ namespace Klinika.Services
                 start = start.AddHours(prescription.interval);
             }
         }
-        private static string GenerateMessage (Prescription prescription)
+        private  string GenerateMessage (Prescription prescription)
         {
             Drug drug = DrugRepository.Instance.drugs.Where(x => x.id == prescription.drugID).FirstOrDefault();
             return "Drug: " + drug.name + "\nComment: " + prescription.comment;
         }
-        public static void MarkAsRead(int id)
+        public void MarkAsRead(int id)
         {
-            NotificationRepository.Modify(id);
+            notificationRepo.Modify(id);
         }
         public static List<Notification> GetAll (Patient patient)
         {

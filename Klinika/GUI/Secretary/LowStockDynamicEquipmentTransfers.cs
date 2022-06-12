@@ -1,13 +1,17 @@
 ﻿using Klinika.Models;
 using Klinika.Services;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {
     public partial class LowStockDynamicEquipmentTransfers : Form
     {
+        private readonly EquipmentService equipmentService;
         public LowStockDynamicEquipmentTransfers()
         {
             InitializeComponent();
+            equipmentService = StartUp.serviceProvider.GetService<EquipmentService>(); 
         }
 
         private void GetFromButton_Click(object sender, EventArgs e)
@@ -19,7 +23,7 @@ namespace Klinika.GUI.Secretary
 
         private void LowStockDynamicEquipmentTransfers_Load(object sender, EventArgs e)
         {
-            lowStockDynamicEquipmentTable.Fill(EquipmentService.GetDynamicEquipmentInRooms());
+            lowStockDynamicEquipmentTable.Fill(equipmentService.GetDynamicEquipmentInRooms());
             lowStockDynamicEquipmentTable.MarkOutOfStock();
         }
 
