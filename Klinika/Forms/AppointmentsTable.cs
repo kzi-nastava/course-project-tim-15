@@ -1,7 +1,8 @@
-﻿using Klinika.Dependencies;
-using Klinika.Models;
-using Klinika.Roles;
-using Klinika.Services;
+﻿using Klinika.Appointments.Models;
+using Klinika.Core.Dependencies;
+using Klinika.Rooms.Services;
+using Klinika.Users.Models;
+using Klinika.Users.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 

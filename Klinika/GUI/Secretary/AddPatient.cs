@@ -1,8 +1,10 @@
-﻿using Klinika.Exceptions;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
+﻿using Klinika.Core.Database;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Users.Services;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.RegularExpressions;
+
 namespace Klinika.GUI.Secretary
 {
     public partial class AddPatient : Form
@@ -17,19 +19,13 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void AddPatient_Load(object sender, EventArgs e)
-        {
-            genderSelection.SelectedIndex = 0;
-        }
+        private void AddPatient_Load(object sender, EventArgs e) => genderSelection.SelectedIndex = 0;
 
-        private void addButton_Click(object sender, EventArgs e)
-        {
-            Add();
-        }
+        private void addButton_Click(object sender, EventArgs e) => Add();
 
         private void Add()
         {
-            Roles.Patient newPatient = new Roles.Patient(
+            Users.Models.Patient newPatient = new Users.Models.Patient(
                 -1,
                 jmbgField.Text.Trim(),
                 nameField.Text.Trim(),
@@ -58,7 +54,7 @@ namespace Klinika.GUI.Secretary
             }
         }
 
-        public string? ValidatePatient(Roles.Patient patient)
+        public string? ValidatePatient(Users.Models.Patient patient)
         {
             string error_messsage = null;
             if (string.IsNullOrEmpty(patient.jmbg))
@@ -96,7 +92,7 @@ namespace Klinika.GUI.Secretary
                 error_messsage = "Email already in use!";
             }
 
-            else if (!ValidationUtilities.IsValidEmail(patient.email))
+            else if (!IsValidEmail(patient.email))
             {
                 error_messsage = "Incorrect email format!";
             }
@@ -114,6 +110,13 @@ namespace Klinika.GUI.Secretary
             return error_messsage;
 
         }
-
+        private bool IsValidEmail(string email)
+        {
+            string pattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|" +
+                             @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)" +
+                             @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
+            var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            return regex.IsMatch(email);
+        }
     }
 }

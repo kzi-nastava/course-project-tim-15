@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Exceptions;
-using Klinika.Dependencies;
+﻿using Klinika.Core.Database;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Notifications;
+using Klinika.Requests.Models;
+using Klinika.Requests.Services;
 using Microsoft.Extensions.DependencyInjection;
-
 
 namespace Klinika.GUI.Secretary
 {
@@ -28,15 +19,9 @@ namespace Klinika.GUI.Secretary
             vacationService = StartUp.serviceProvider.GetService<VacationRequestService>();
         }
 
-        private void VacationDaysRequests_Load(object sender, EventArgs e)
-        {
-            vacationRequestsTable.Fill(vacationService.GetAll());
-        }
+        private void VacationDaysRequests_Load(object sender, EventArgs e) => vacationRequestsTable.Fill(vacationService.GetAll());
 
-        private void VacationRequestsTable_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SetButtonStates();
-        }
+        private void VacationRequestsTable_CellClick(object sender, DataGridViewCellEventArgs e) => SetButtonStates();
 
         private void SetButtonStates()
         { 
@@ -52,16 +37,9 @@ namespace Klinika.GUI.Secretary
             denyButton.Enabled = true;
         }
 
-        private void ApproveButton_Click(object sender, EventArgs e)
-        {
-            Approve();
-        }
+        private void ApproveButton_Click(object sender, EventArgs e) => Approve();
 
-        private void DenyButton_Click(object sender, EventArgs e)
-        {
-            Deny();
-        }
-
+        private void DenyButton_Click(object sender, EventArgs e) => Deny();
 
         private void Approve()
         {
@@ -71,7 +49,7 @@ namespace Klinika.GUI.Secretary
             selected.status = 'A';
             try
             {
-                VacationRequestService.Approve(selected);
+                vacationService.Approve(selected);
                 NotifyDoctor(selected);                
                 vacationRequestsTable.ModifySelected(selected);
                 MessageBoxUtilities.ShowSuccessMessage("Request successfully approved!");
@@ -83,7 +61,6 @@ namespace Klinika.GUI.Secretary
             }
         }
 
-
         private void Deny()
         {
             bool denyConfirmation = UIUtilities.Confirm("Are you sure you want to deny the selected request?");
@@ -93,7 +70,7 @@ namespace Klinika.GUI.Secretary
             new VacationRequestDenialReason(selected).ShowDialog();
             try
             {
-                VacationRequestService.Deny(selected);
+                vacationService.Deny(selected);
                 NotifyDoctor(selected);
                 vacationRequestsTable.ModifySelected(selected);
                 MessageBoxUtilities.ShowSuccessMessage("Request successfully denied!");
@@ -110,8 +87,5 @@ namespace Klinika.GUI.Secretary
             Notification notification = new Notification(selected.doctorID, NotificationService.GenerateMessage(selected));
             notificationService.Send(notification);
         }
-
-
-
     }
 }

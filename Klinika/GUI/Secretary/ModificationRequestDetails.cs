@@ -1,6 +1,6 @@
-﻿using Klinika.Models;
-using Klinika.Services;
-using Klinika.Dependencies;
+﻿using Klinika.Core.Dependencies;
+using Klinika.Requests.Models;
+using Klinika.Users.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
@@ -17,10 +17,7 @@ namespace Klinika.GUI.Secretary
             doctorService = StartUp.serviceProvider.GetService<DoctorService>();
         }
 
-        private void ModificationRequestDetails_Load(object sender, EventArgs e)
-        {
-            FillFields();
-        }
+        private void ModificationRequestDetails_Load(object sender, EventArgs e) => FillFields();
 
         private void FillFields()
         {

@@ -1,7 +1,7 @@
-﻿using Klinika.Exceptions;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
+﻿using Klinika.Core.Database;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Users.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
@@ -9,9 +9,9 @@ namespace Klinika.GUI.Secretary
     public partial class ModifyPatient : Form
     {
         private PatientsManagement parent;
-        private Roles.Patient selected;
+        private Users.Models.Patient selected;
         private PatientService patientService;
-        public ModifyPatient(PatientsManagement parent,Roles.Patient selected)
+        public ModifyPatient(PatientsManagement parent,Users.Models.Patient selected)
         {
             this.parent = parent;
             this.selected = selected;
@@ -19,15 +19,9 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void modifyButton_Click(object sender, EventArgs e)
-        {
-            Modify();            
-        }
+        private void ModifyButton_Click(object sender, EventArgs e) => Modify();
 
-        private void ModifyPatient_Load(object sender, EventArgs e)
-        {
-            SetFormFieldValues();
-        }
+        private void ModifyPatient_Load(object sender, EventArgs e) => SetFormFieldValues();
 
         private void SetFormFieldValues()
         {
@@ -50,7 +44,7 @@ namespace Klinika.GUI.Secretary
 
         private void Modify()
         {
-            Roles.Patient modifiedPatient = new Roles.Patient(
+            Users.Models.Patient modifiedPatient = new Users.Models.Patient(
                 selected.id,
                 jmbgField.Text.Trim(),
                 nameField.Text.Trim(),
@@ -79,8 +73,7 @@ namespace Klinika.GUI.Secretary
             }
         }
 
-
-        public string? ValidatePatient(Roles.Patient patient)
+        public string? ValidatePatient(Users.Models.Patient patient)
         {
             string error_messsage = null;
             if (string.IsNullOrEmpty(patient.jmbg))
@@ -121,6 +114,5 @@ namespace Klinika.GUI.Secretary
             return error_messsage;
 
         }
-
     }
 }

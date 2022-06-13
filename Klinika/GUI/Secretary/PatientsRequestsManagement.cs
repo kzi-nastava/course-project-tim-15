@@ -1,8 +1,10 @@
-﻿using Klinika.Exceptions;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
+﻿using Klinika.Appointments.Models;
+using Klinika.Appointments.Services;
+using Klinika.Core.Database;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Requests.Models;
+using Klinika.Requests.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
@@ -18,25 +20,14 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void RequestsTable_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SetButtonStates();
-        }
+        private void RequestsTable_CellClick(object sender, DataGridViewCellEventArgs e) => SetButtonStates();
 
-        private void DetailsButton_Click(object sender, EventArgs e)
-        {
-            new ModificationRequestDetails(patientRequestService.GetModificationRequest((int)requestsTable.GetCellValue("ID"))).Show();
-        }
+        private void DetailsButton_Click(object sender, EventArgs e) =>
+        new ModificationRequestDetails(patientRequestService.GetModificationRequest((int)requestsTable.GetCellValue("ID"))).Show();
 
-        private void ApproveButton_Click(object sender, EventArgs e)
-        {
-            ApprovePatientRequest();
-        }
+        private void ApproveButton_Click(object sender, EventArgs e) => ApprovePatientRequest();
 
-        private void DenyButton_Click(object sender, EventArgs e)
-        {
-            DenyPatientRequest();
-        }
+        private void DenyButton_Click(object sender, EventArgs e) =>  DenyPatientRequest();
 
         private void SetButtonStates()
         {
@@ -83,11 +74,11 @@ namespace Klinika.GUI.Secretary
                     Appointment modified = appointmentService.GetById(appointmentId);
                     modified.doctorID = modificationSelected.newDoctorID;
                     modified.dateTime = modificationSelected.newAppointment;
-                    //AppointmentService.Modify(modified);
+                    appointmentService.Modify(modified);
                 }
                 else
                 {
-                    //AppointmentService.Delete(appointmentId);
+                    appointmentService.Delete(appointmentId);
                 }
 
                 selected.approved = true;
@@ -127,10 +118,8 @@ namespace Klinika.GUI.Secretary
             detailsButton.Enabled = false;
         }
 
-        private void ModifyRowOfPatientRequestsTable(PatientRequest request)
-        {
-            requestsTable.ModifyRow(requestsTable.GetSelectedRow(), request);
-        }
+        private void ModifyRowOfPatientRequestsTable(PatientRequest request) => requestsTable.ModifyRow(requestsTable.GetSelectedRow(), request);
 
+        private void PatientsRequestsManagement_Load(object sender, EventArgs e) => requestsTable.Fill(patientRequestService.GetAll());
     }
 }

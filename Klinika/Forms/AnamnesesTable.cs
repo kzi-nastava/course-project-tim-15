@@ -1,4 +1,4 @@
-﻿using Klinika.Models;
+﻿using Klinika.MedicalRecords.Models;
 using System.Data;
 
 namespace Klinika.Forms

@@ -1,8 +1,11 @@
-﻿using Klinika.Exceptions;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
+﻿using Klinika.Appointments.Models;
+using Klinika.Appointments.Services;
+using Klinika.Core.Database;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Referrals;
+using Klinika.Schedule.Services;
+using Klinika.Users.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
@@ -14,6 +17,7 @@ namespace Klinika.GUI.Secretary
         private readonly ReferralService referralService;
         private readonly DoctorService doctorService;
         private readonly DoctorScheduleService doctorScheduleService;
+        private readonly AppointmentService appointmentService;
 
         public Referrals()
         {
@@ -21,22 +25,14 @@ namespace Klinika.GUI.Secretary
             referralService = StartUp.serviceProvider.GetService<ReferralService>();
             doctorService = StartUp.serviceProvider.GetService<DoctorService>();
             doctorScheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
         }
 
-        private void PatientSelection_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            new ChooseReferral(this).ShowDialog();
-        }
+        private void PatientSelection_SelectedIndexChanged(object sender, EventArgs e) => new ChooseReferral(this).ShowDialog();
 
-        private void ScheduleButton_Click(object sender, EventArgs e)
-        {
-            ScheduleAppointmentThroughReferral();
-        }
+        private void ScheduleButton_Click(object sender, EventArgs e) => ScheduleAppointmentThroughReferral();
 
-        private void FindAvailableDoctorButton_Click(object sender, EventArgs e)
-        {
-            FindSuitableDoctor();
-        }
+        private void FindAvailableDoctorButton_Click(object sender, EventArgs e) => FindSuitableDoctor();
 
         public void SetFieldValues(Referral referral)
         {
@@ -96,7 +92,7 @@ namespace Klinika.GUI.Secretary
                                             UIUtilities.ExtractID(doctorField.Text),
                                             UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
                                             appointmentStart, 1, false, 'E', 15, false, "", false);
-            //AppointmentService.Create(newAppointment);
+            appointmentService.Create(newAppointment);
             return true;
         }
 
@@ -104,7 +100,7 @@ namespace Klinika.GUI.Secretary
         {
             try
             {
-                Roles.Doctor suitableDoctor = doctorService.GetSuitable(UIUtilities.ExtractID(specializationField.Text), appointmentPicker.Value);
+                Users.Models.Doctor suitableDoctor = doctorService.GetSuitable(UIUtilities.ExtractID(specializationField.Text), appointmentPicker.Value);
                 if (suitableDoctor != null)
                 {
                     doctorField.Text = suitableDoctor.GetIdAndFullName();
@@ -116,10 +112,7 @@ namespace Klinika.GUI.Secretary
             }
         }
 
-        private void Referrals_Load(object sender, EventArgs e)
-        {
-            UIUtilities.FillPatientSelectionList(patientSelection);
-        }
+        private void Referrals_Load(object sender, EventArgs e) => UIUtilities.FillPatientSelectionList(patientSelection);
 
         public string? ValidateAppointment(int doctorID, DateTime appointmentStart)
         {

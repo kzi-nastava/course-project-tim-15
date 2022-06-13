@@ -1,8 +1,11 @@
-﻿using Klinika.Dependencies;
-using Klinika.Models;
-using Klinika.Roles;
-using Klinika.Services;
-using Klinika.Utilities;
+﻿using Klinika.Appointments.Models;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.MedicalRecords.Models;
+using Klinika.MedicalRecords.Services;
+using Klinika.Referrals;
+using Klinika.Users.Models;
+using Klinika.Users.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
@@ -15,7 +18,7 @@ namespace Klinika.GUI.Doctor
         private readonly PatientService? patientService;
         internal readonly ViewSchedule parent;
         public Appointment appointment;
-        public Models.MedicalRecord record;
+        public MedicalRecords.Models.MedicalRecord record;
         private bool hasEmptyFields
         {
             get { return DescriptionTextBox.Text.Trim() == "" || SymptomsTextBox.Text.Trim() == "" || ConclusionTextBox.Text.Trim() == ""; }

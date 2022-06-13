@@ -1,7 +1,7 @@
-﻿using Klinika.Exceptions;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
+﻿using Klinika.Core.Database;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Users.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
@@ -16,35 +16,17 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void DeletePatientButton_Click(object sender, EventArgs e)
-        {
-            DeletePatient();
-        }
+        private void DeletePatientButton_Click(object sender, EventArgs e) => DeletePatient();
 
-        private void AddPatientButton_Click(object sender, EventArgs e)
-        {
-            new AddPatient(this).Show();
-        }
+        private void AddPatientButton_Click(object sender, EventArgs e) => new AddPatient(this).Show();
 
-        private void ModifyPatientButton_Click(object sender, EventArgs e)
-        {
-            ShowModifyPatientForm();
-        }
+        private void ModifyPatientButton_Click(object sender, EventArgs e) => ShowModifyPatientForm();
 
-        private void BlockButton_Click(object sender, EventArgs e)
-        {
-            BlockPatient();
-        }
+        private void BlockButton_Click(object sender, EventArgs e) => BlockPatient();
 
-        private void UnblockButton_Click(object sender, EventArgs e)
-        {
-            UnblockPatient();
-        }
+        private void UnblockButton_Click(object sender, EventArgs e) => UnblockPatient();
 
-        private void UrgentSchedulingButton_Click(object sender, EventArgs e)
-        {
-            new UrgentScheduling().Show();
-        }
+        private void UrgentSchedulingButton_Click(object sender, EventArgs e) => new UrgentScheduling().Show();
 
         private void DeletePatient()
         {
@@ -87,7 +69,7 @@ namespace Klinika.GUI.Secretary
             int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
-                Roles.Patient toBlock = (Roles.Patient)patientService.GetSingle(id);
+                Users.Models.Patient toBlock = (Users.Models.Patient)patientService.GetSingle(id);
                 patientService.Block(toBlock, "SEC");
                 patientsTable.ModifyRow(patientsTable.GetSelectedRow(),toBlock);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully blocked!");
@@ -106,7 +88,7 @@ namespace Klinika.GUI.Secretary
             int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
-                Roles.Patient toUnblock = (Roles.Patient)patientService.GetSingle(id);
+                Users.Models.Patient toUnblock = (Users.Models.Patient)patientService.GetSingle(id);
                 patientService.Unblock(toUnblock);
                 patientsTable.ModifyRow(patientsTable.GetSelectedRow(),toUnblock);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully unblocked!");
@@ -121,28 +103,16 @@ namespace Klinika.GUI.Secretary
         private void ShowModifyPatientForm()
         {
             int selectedPatient = Convert.ToInt32(patientsTable.GetCellValue("ID"));
-            Roles.Patient selected = (Roles.Patient)patientService.GetSingle(selectedPatient);
+            Users.Models.Patient selected = (Users.Models.Patient)patientService.GetSingle(selectedPatient);
             new ModifyPatient(this, selected).Show();
         }
 
-        public void AddRowToPatientsTable(Roles.Patient newPatient)
-        {
-            patientsTable.AddRow(newPatient);
-        }
+        public void AddRowToPatientsTable(Users.Models.Patient newPatient) => patientsTable.AddRow(newPatient);
 
-        public void ModifyRowOfPatientsTable(Roles.Patient modified)
-        {
-            patientsTable.ModifyRow(patientsTable.GetSelectedRow(), modified);
-        }
+        public void ModifyRowOfPatientsTable(Users.Models.Patient modified) => patientsTable.ModifyRow(patientsTable.GetSelectedRow(), modified);
 
-        private void PatientsManagement_Load(object sender, EventArgs e)
-        {
-            patientsTable.Fill(patientService.GetAll());
-        }
+        private void PatientsManagement_Load(object sender, EventArgs e) => patientsTable.Fill(patientService.GetAll());
 
-        private void PatientsTable_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SetButtonsStates();
-        }
+        private void PatientsTable_CellClick(object sender, DataGridViewCellEventArgs e) => SetButtonsStates();
     }
 }

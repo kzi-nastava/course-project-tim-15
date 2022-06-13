@@ -1,8 +1,7 @@
-﻿using Klinika.Exceptions;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
+﻿using Klinika.Core.Database;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Referrals;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
@@ -18,10 +17,7 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void ChooseReferal_Load(object sender, EventArgs e)
-        {
-            InitializeTable();
-        }
+        private void ChooseReferal_Load(object sender, EventArgs e) => InitializeTable();
 
         private void ChooseReferalButton_Click(object sender, EventArgs e)
         {
@@ -29,10 +25,7 @@ namespace Klinika.GUI.Secretary
             Close();
         }
 
-        private void ReferralsTable_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SetButtonState();
-        }
+        private void ReferralsTable_CellClick(object sender, DataGridViewCellEventArgs e) => SetButtonState();
 
         private void InitializeTable()
         {

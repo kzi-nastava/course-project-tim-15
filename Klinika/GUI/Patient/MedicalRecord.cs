@@ -1,7 +1,11 @@
-﻿using Klinika.Dependencies;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
+﻿using Klinika.Appointments.Models;
+using Klinika.Appointments.Services;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.MedicalRecords.Models;
+using Klinika.MedicalRecords.Services;
+using Klinika.Questionnaries.Models;
+using Klinika.Questionnaries.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Patient

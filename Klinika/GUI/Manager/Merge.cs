@@ -1,9 +1,12 @@
-﻿namespace Klinika.GUI.Manager
+﻿using Klinika.Core;
+using Klinika.Rooms.Services;
+
+namespace Klinika.GUI.Manager
 {
     public partial class Merge : Form
     {
-        Models.Renovation renovation;
-        public Merge(Models.Renovation r)
+        Rooms.Models.Renovation renovation;
+        public Merge(Rooms.Models.Renovation r)
         {
             InitializeComponent();
             renovation = r;
@@ -11,8 +14,8 @@
 
         private void Merge_Load(object sender, EventArgs e)
         {
-            List<Models.EnhancedComboBoxItem> rooms = Services.RoomServices.GetRooms();
-            foreach (Models.EnhancedComboBoxItem room in rooms)
+            List<EnhancedComboBoxItem> rooms = RoomServices.GetRooms();
+            foreach (EnhancedComboBoxItem room in rooms)
             {
                 if (int.Parse(room.value.ToString()) != renovation.id)
                     roomComboBox.Items.Add(room);
@@ -22,8 +25,8 @@
 
         private void pickButton_Click(object sender, EventArgs e)
         {
-            renovation.secondId = int.Parse(((Models.EnhancedComboBoxItem)roomComboBox.Items[roomComboBox.SelectedIndex]).value.ToString());
-            if (!Services.RoomServices.IsRoomRenovating(renovation.secondId, renovation.from, renovation.to))
+            renovation.secondId = int.Parse(((EnhancedComboBoxItem)roomComboBox.Items[roomComboBox.SelectedIndex]).value.ToString());
+            if (!RoomServices.IsRoomRenovating(renovation.secondId, renovation.from, renovation.to))
             {
                 //if (Repositories.RoomRepository.Renovate(renovation))
                 //{

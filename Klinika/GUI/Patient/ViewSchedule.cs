@@ -1,8 +1,10 @@
-﻿using Klinika.Models;
-using Klinika.Roles;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
+﻿using Klinika.Appointments.Models;
+using Klinika.Appointments.Services;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Requests.Models;
+using Klinika.Requests.Services;
+using Klinika.Schedule.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Patient
@@ -13,7 +15,7 @@ namespace Klinika.GUI.Patient
         private readonly AppointmentService? appointmentService;
         private readonly ScheduleService? scheduleService;
         internal Main parent;
-        internal Roles.Patient patient { get { return parent.patient; } }
+        internal Users.Models.Patient patient { get { return parent.patient; } }
         public ViewSchedule(Main parent)
         {
             InitializeComponent();

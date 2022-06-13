@@ -1,4 +1,4 @@
-using Klinika.Dependencies;
+using Klinika.Core.Dependencies;
 
 namespace Klinika
 {

@@ -1,5 +1,5 @@
 ﻿using Klinika.Forms.Base;
-using Klinika.Models;
+using Klinika.Requests.Models;
 using System.Data;
 
 namespace Klinika.Forms

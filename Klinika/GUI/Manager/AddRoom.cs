@@ -1,4 +1,6 @@
-﻿namespace Klinika.GUI.Manager
+﻿using Klinika.Rooms.Repositories;
+
+namespace Klinika.GUI.Manager
 {
     public partial class AddRoom : Form
     {
@@ -11,9 +13,9 @@
 
         private void AddRoom_Load(object sender, EventArgs e)
         {
-            for(int i = 1; i < Repositories.RoomRepository.types.Count + 1; i++)
+            for(int i = 1; i < RoomRepository.types.Count + 1; i++)
             {
-                typeComboBox.Items.Add(Repositories.RoomRepository.types[i]);
+                typeComboBox.Items.Add(RoomRepository.types[i]);
             }
             typeComboBox.SelectedIndex = 0;
         }

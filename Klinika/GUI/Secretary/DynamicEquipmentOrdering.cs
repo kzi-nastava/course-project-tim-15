@@ -1,7 +1,7 @@
-﻿using Klinika.Exceptions;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
+﻿using Klinika.Core.Database;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Rooms.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
@@ -16,17 +16,14 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void DynamicEquipmentOrdering_Load(object sender, EventArgs e)
-        {
-            missingDynamicEquipmentTable.Fill(equipmentService.GetMissingDynamicEquipment());
-        }
+        private void DynamicEquipmentOrdering_Load(object sender, EventArgs e) =>
+        missingDynamicEquipmentTable.Fill(equipmentService.GetMissingDynamicEquipment());
 
         private void OrderButton_Click(object sender, EventArgs e)
         {
             OrderMissingDynamicEquipment();
             SetCommandStates(disable: true);
         }
-
 
         private void SetCommandStates(bool disable = false)
         {
@@ -58,9 +55,6 @@ namespace Klinika.GUI.Secretary
             }
         }
 
-        private void MissingDynamicEquipmentTable_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SetCommandStates();
-        }
+        private void MissingDynamicEquipmentTable_CellClick(object sender, DataGridViewCellEventArgs e) => SetCommandStates(); 
     }
 }

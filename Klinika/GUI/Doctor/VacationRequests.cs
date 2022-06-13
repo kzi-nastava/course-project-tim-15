@@ -1,7 +1,9 @@
-﻿using Klinika.Dependencies;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
+﻿using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Requests.Models;
+using Klinika.Requests.Services;
+using Klinika.Schedule.Models;
+using Klinika.Schedule.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
@@ -11,7 +13,7 @@ namespace Klinika.GUI.Doctor
         private readonly DoctorScheduleService? scheduleService;
         private VacationRequestService? vacationService;
         internal readonly Main parent;
-        private Roles.Doctor doctor { get { return parent.doctor; } }
+        private Users.Models.Doctor doctor { get { return parent.doctor; } }
         public VacationRequests(Main parent)
         {
             InitializeComponent();

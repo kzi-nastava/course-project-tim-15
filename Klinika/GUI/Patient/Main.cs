@@ -1,6 +1,6 @@
-﻿using Klinika.Models;
-using Klinika.Services;
-using Klinika.Dependencies;
+﻿using Klinika.Core.Dependencies;
+using Klinika.Questionnaries.Models;
+using Klinika.Users.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Patient
@@ -8,7 +8,7 @@ namespace Klinika.GUI.Patient
     public partial class Main : Form
     {
         private readonly PatientService? patientService;
-        internal Roles.Patient patient;
+        internal Users.Models.Patient patient;
         public Main(int patientID)
         {
             InitializeComponent();
