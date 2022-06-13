@@ -1,15 +1,23 @@
-﻿using Klinika.Models;
-using Klinika.Repositories;
+﻿using Klinika.Interfaces;
+using Klinika.Models;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Services
 {
     public class PrescriptionService
     {
-        public PrescriptionService() { }
-        public static void StorePrescription(Prescription prescription)
+        private readonly NotificationService? notificationService;
+        private readonly IPrescriptionRepo prescriptionRepo;
+        public PrescriptionService(IPrescriptionRepo prescriptionRepo)
         {
-            PrescriptionRepository.Create(prescription);
-            NotificationService.MakeNotificationsForPrescription(prescription);
+            notificationService = StartUp.serviceProvider.GetService<NotificationService>();
+            this.prescriptionRepo = prescriptionRepo;
+        }
+        public void Create(Prescription prescription)
+        {
+            prescriptionRepo.Create(prescription);
+            notificationService.MakeNotificationsForPrescription(prescription);
         }
     }
 }

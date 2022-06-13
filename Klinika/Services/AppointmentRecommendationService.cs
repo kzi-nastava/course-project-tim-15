@@ -1,12 +1,23 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
+using Klinika.Interfaces;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Services
 {
     public class AppointmentRecommendationService
     {
-        public static List<Appointment> Find(int doctorID, TimeSlot timeSlot, DateTime deadlineDate, char priority)
+        private readonly DoctorScheduleService? scheduleService;
+        private readonly IBaseDoctorRepo doctorRepo;
+        private readonly IBaseAppointmentRepo appointmentRepo;
+        public AppointmentRecommendationService(IBaseDoctorRepo doctorRepo, IBaseAppointmentRepo appointmentRepo)
+        {
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            this.doctorRepo = doctorRepo;
+            this.appointmentRepo = appointmentRepo;
+        }
+        public List<Appointment> Find(int doctorID, TimeSlot timeSlot, DateTime deadlineDate, char priority)
         {
             Appointment bestMatch = FindClosestMatch(doctorID, timeSlot, deadlineDate);
 
@@ -16,7 +27,7 @@ namespace Klinika.Services
             }
 
             List<Appointment> available = new List<Appointment>();
-            foreach (User doctor in UserRepository.GetDoctors())
+            foreach (User doctor in doctorRepo.GetAll())
             {
                 if (doctor.id == bestMatch.doctorID) continue;
                 Appointment personalBest = FindClosestMatch(doctor.id, timeSlot, deadlineDate);
@@ -34,8 +45,7 @@ namespace Klinika.Services
 
             return recommended;
         }
-        
-        private static Appointment FindClosestMatch(int doctorID, TimeSlot timeSlot, DateTime deadlineDate)
+        private Appointment FindClosestMatch(int doctorID, TimeSlot timeSlot, DateTime deadlineDate)
         {
             Appointment best = new Appointment();
 
@@ -44,7 +54,7 @@ namespace Klinika.Services
             for (int i = 0; i < numberOfDays + 1; i++)
             {
                 DateTime day = DateTime.Now.AddDays(i + 1);
-                if (!DoctorService.IsOccupied(doctorID, timeSlot, day))
+                if (!scheduleService.IsOccupied(doctorID, timeSlot, day))
                 {
                     best.doctorID = doctorID;
                     best.dateTime = new DateTime(day.Year, DateTime.Now.Month, day.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
@@ -62,7 +72,7 @@ namespace Klinika.Services
             }
             return best;
         }
-        private static Appointment FindBestMatch(TimeSlot timeSlot, List<Appointment> doctorAppointments)
+        private Appointment FindBestMatch(TimeSlot timeSlot, List<Appointment> doctorAppointments)
         {
             Appointment bestMatch = new Appointment();
 
@@ -72,7 +82,7 @@ namespace Klinika.Services
                 {
                     DateTime current = appointment.dateTime.AddMinutes(i);
                     if (appointment.IsBetween(timeSlot, i)
-                        && !DoctorService.IsOccupied(current, appointment.doctorID))
+                        && !scheduleService.IsOccupied(current, appointment.doctorID))
                     {
                         bestMatch.doctorID = appointment.doctorID;
                         bestMatch.dateTime = current;
@@ -80,7 +90,7 @@ namespace Klinika.Services
                     }
 
                     if (IsMoreAccurate(timeSlot.from, timeSlot.to, bestMatch.dateTime)
-                        && !DoctorService.IsOccupied(current, appointment.doctorID))
+                        && !scheduleService.IsOccupied(current, appointment.doctorID))
                     {
                         bestMatch.doctorID = appointment.doctorID;
                         bestMatch.dateTime = current;
@@ -89,15 +99,16 @@ namespace Klinika.Services
             }
             return bestMatch;
         }
-        private static List<Appointment> GetAppointmentsForDay(int doctorID, DateTime day)
+        private List<Appointment> GetAppointmentsForDay(int doctorID, DateTime day)
         {
             DateTime start = new DateTime(day.Year, day.Month, day.Day, 0, 0, 0);
             DateTime end = new DateTime(day.AddDays(1).Year, day.AddDays(1).Month, day.AddDays(1).Day, 0, 0, 0);
 
-            return AppointmentRepository.GetInstance().appointments.Where(
-                x => x.doctorID == doctorID && x.dateTime >= start && x.dateTime < end && !x.isDeleted).ToList();
+            
+            return appointmentRepo.GetAll().Where(x => x.doctorID == doctorID && x.dateTime >= start 
+                                                      && x.dateTime < end && !x.isDeleted).ToList();
         }
-        private static bool IsMoreAccurate(DateTime referentDate, DateTime first, DateTime second)
+        private bool IsMoreAccurate(DateTime referentDate, DateTime first, DateTime second)
         {
             first = first.AddDays(referentDate.Day - first.Day);
             var firstAccuracy = referentDate.Subtract(first);
@@ -109,7 +120,7 @@ namespace Klinika.Services
 
             return secondMinutes > firstMinutes;
         }
-        private static Appointment FindClosestAvailable(List<Appointment> available, TimeSlot timeSlot)
+        private Appointment FindClosestAvailable(List<Appointment> available, TimeSlot timeSlot)
         {
             Appointment best = available[0];
             for (int i = 1; i < available.Count; i++)

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Klinika.Exceptions;
 using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
-using Klinika.Exceptions;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {
@@ -18,12 +11,17 @@ namespace Klinika.GUI.Secretary
     {
 
         private Referral chosenReferral;
+        private readonly ReferralService referralService;
+        private readonly DoctorService doctorService;
+        private readonly DoctorScheduleService doctorScheduleService;
 
         public Referrals()
         {
             InitializeComponent();
+            referralService = StartUp.serviceProvider.GetService<ReferralService>();
+            doctorService = StartUp.serviceProvider.GetService<DoctorService>();
+            doctorScheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
         }
-
 
         private void PatientSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -74,7 +72,7 @@ namespace Klinika.GUI.Secretary
             try
             {
                 if (!CreateAppointment(doctorId, chosenTime)) return;
-                ReferralService.MarkAsUsed(chosenReferral.id);
+                referralService.MarkAsUsed(chosenReferral.id);
                 MessageBoxUtilities.ShowSuccessMessage("Appointment successfully scheduled!");
             }
             catch (DatabaseConnectionException error)
@@ -86,7 +84,7 @@ namespace Klinika.GUI.Secretary
         private bool CreateAppointment(int doctorId, DateTime appointmentStart)
         {
 
-            string error_message = ValidationUtilities.ValidateAppointment(doctorId, appointmentStart);
+            string error_message = ValidateAppointment(doctorId, appointmentStart);
             if (error_message != null)
             {
                 MessageBoxUtilities.ShowErrorMessage(error_message);
@@ -98,7 +96,7 @@ namespace Klinika.GUI.Secretary
                                             UIUtilities.ExtractID(doctorField.Text),
                                             UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
                                             appointmentStart, 1, false, 'E', 15, false, "", false);
-            AppointmentService.Create(newAppointment);
+            //AppointmentService.Create(newAppointment);
             return true;
         }
 
@@ -106,7 +104,7 @@ namespace Klinika.GUI.Secretary
         {
             try
             {
-                Roles.Doctor suitableDoctor = DoctorService.GetSuitable(UIUtilities.ExtractID(specializationField.Text), appointmentPicker.Value);
+                Roles.Doctor suitableDoctor = doctorService.GetSuitable(UIUtilities.ExtractID(specializationField.Text), appointmentPicker.Value);
                 if (suitableDoctor != null)
                 {
                     doctorField.Text = suitableDoctor.GetIdAndFullName();
@@ -121,6 +119,27 @@ namespace Klinika.GUI.Secretary
         private void Referrals_Load(object sender, EventArgs e)
         {
             UIUtilities.FillPatientSelectionList(patientSelection);
+        }
+
+        public string? ValidateAppointment(int doctorID, DateTime appointmentStart)
+        {
+            string error_message = null;
+            if (appointmentStart <= DateTime.Now)
+            {
+                error_message = "Selected appointment time is incorrect!";
+            }
+
+            if (doctorID == -1)
+            {
+                error_message = "Doctor is not selected!";
+            }
+
+            if (doctorScheduleService.IsOccupied(appointmentStart, doctorID: doctorID))
+            {
+                error_message = "The selected doctor is not available at the selected time!";
+            }
+
+            return error_message;
         }
     }
 }

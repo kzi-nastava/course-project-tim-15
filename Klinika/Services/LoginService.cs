@@ -1,24 +1,24 @@
-﻿using Klinika.Repositories;
-using Klinika.Roles;
+﻿using Klinika.Roles;
 using Klinika.Utilities;
+using Klinika.Interfaces;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Services
 {
     internal class LoginService
     {
-        public LoginService()
+        private readonly IUserRepo userRepo;
+        private readonly AntiTrollService? antiTrollService;
+        public LoginService(IUserRepo userRepo)
         {
-            UserRepository.GetInstance();
+            this.userRepo = userRepo;
+            antiTrollService = StartUp.serviceProvider.GetService<AntiTrollService>();
         }
 
-        public static string Login(string email, string password)
+        public void Login(string email, string password)
         {
-            string error_message = ValidationUtilities.ValidateLoginCredentials(email, password);
-            if (error_message != null)
-            {
-                return error_message;
-            }
-            User loggingUser = UserRepository.GetInstance().users[email];
+            User loggingUser = userRepo.GetByEmail(email);
 
             switch (loggingUser.role)
             {
@@ -32,7 +32,7 @@ namespace Klinika.Services
                     new GUI.Manager.Main().Show();
                     break;
                 default:
-                    if (PatientService.IsBlocked(loggingUser))
+                    if (antiTrollService.IsPatientBlocked(loggingUser))
                     {
                         MessageBoxUtilities.ShowErrorMessage("Your account is blocked because of trolling.");
                         break;
@@ -43,7 +43,6 @@ namespace Klinika.Services
                         break;
                     }
             }
-            return null;
         }
     }
 }

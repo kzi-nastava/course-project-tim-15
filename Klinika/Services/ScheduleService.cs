@@ -1,31 +1,29 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     internal class ScheduleService
     {
-        public static TimeSlot? GetFirstSlotAvailableUnderTwoHours(int doctorID, int duration = 15)
+        private readonly IScheduledAppointmentsRepo appointmentsRepo;
+        private readonly IDoctorRepo doctorRepo;
+
+        public ScheduleService(IScheduledAppointmentsRepo scheduledAppointmentsRepo, IDoctorRepo doctorRepo)
         {
-            DateTime now = new CleanDateTimeNow().cleanNow;
-            TimeSlot broadSpan = new TimeSlot(now.AddHours(-24), now.AddHours(24));
-            List<TimeSlot> occupied = AppointmentRepository.GetInstance().GetOccupiedTimeSlotsPerDoctor(broadSpan, doctorID);
-            TimeSlot slotToSchedule = new TimeSlot(now, now.AddMinutes(duration));
-            TimeSlot? firstAvailable = slotToSchedule.GetFirstUnoccupied(occupied);
-            if ((firstAvailable.from - now).Minutes > 120) return null;
-            return firstAvailable;
+            this.appointmentsRepo = scheduledAppointmentsRepo;
+            this.doctorRepo = doctorRepo;
         }
 
-        public static List<Rescheduling> GetMostMovableAppointments(int specializationId)
+        public List<Rescheduling> GetMostMovableAppointments(int specializationId)
         {
             List<Rescheduling> reschedulings = new List<Rescheduling>();
 
-            foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
+            foreach (Doctor doctor in doctorRepo.GetAll())
             {
                 if (doctor.specialization.id != specializationId) continue;
 
-                List<Appointment> scheduled = AppointmentRepository.GetAll(doctor.id, User.RoleType.DOCTOR);
+                List<Appointment> scheduled = appointmentsRepo.GetAll(doctor.id, User.RoleType.DOCTOR);
                 List<TimeSlot> scheduledSlots = new List<TimeSlot>();
                 foreach (Appointment appointment in scheduled)
                 {
@@ -39,11 +37,12 @@ namespace Klinika.Services
             }
             return SelectTop5(reschedulings);
         }
-
-        public static List<Rescheduling> SelectTop5(List<Rescheduling> appointmentDatePairs)
+        public List<Rescheduling> SelectTop5(List<Rescheduling> appointmentDatePairs)
         {
             appointmentDatePairs = appointmentDatePairs.OrderBy(o => o.appointment.dateTime).ToList();
             return appointmentDatePairs.Take(5).ToList();
         }
+        //public List<Appointment> GetAll() => appointmentsRepo.GetAll();
+        public List<Appointment> GetAll(Patient patient) => appointmentsRepo.GetAll(patient.id, User.RoleType.PATIENT);
     }
 }

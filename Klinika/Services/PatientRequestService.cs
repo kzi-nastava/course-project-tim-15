@@ -1,26 +1,38 @@
 ﻿using Klinika.Models;
 using Klinika.Repositories;
 using System.Data;
+using Klinika.Interfaces;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Services
 {
     internal class PatientRequestService
     {
-        public static void Send(bool isApproved, Appointment appointment, PatientRequest.Types type)
+        private readonly IPatientRequestRepo patientRequestRepo;
+        private readonly AppointmentService appointmentService;
+
+        public PatientRequestService(IPatientRequestRepo patientRequestRepo)
+        {
+            this.patientRequestRepo = patientRequestRepo;
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
+        }
+
+        public void Send(bool isApproved, Appointment appointment, PatientRequest.Types type)
         {
             PatientRequest patientRequest = new PatientRequest(appointment.patientID, appointment.id,
                         type, GenerateDescription(appointment), isApproved);
-            PatientRequestRepository.Create(patientRequest);
+            patientRequestRepo.Create(patientRequest);
         }
 
-        public static List<PatientModificationRequest> GetAllModificationRequests()
+        public List<PatientModificationRequest> GetAllModificationRequests()
         {
             List<PatientModificationRequest> modificationRequests = new List<PatientModificationRequest>();
-            foreach (PatientRequest request in PatientRequestRepository.allRequests)
+            foreach (PatientRequest request in patientRequestRepo.GetAll())
             {
                 if (request.type == 'M')
                 {
-                    Appointment toModify = AppointmentService.GetById(request.medicalActionID);
+                    Appointment toModify = appointmentService.GetById(request.medicalActionID);
                     modificationRequests.Add(new PatientModificationRequest(request.id,
                                                                             toModify.doctorID,
                                                                             toModify.dateTime,
@@ -31,32 +43,32 @@ namespace Klinika.Services
             return modificationRequests;
         }
 
-        public static PatientModificationRequest GetModificationRequest(int requestId)
+        public PatientModificationRequest GetModificationRequest(int requestId)
         {
             return GetAllModificationRequests().Where(x => x.requestID == requestId).First();
         }
 
-        public static PatientRequest GetRequest(int requestId)
+        public PatientRequest GetRequest(int requestId)
         {
-            return PatientRequestRepository.allRequests.Where(x => x.id == requestId).First();
+            return patientRequestRepo.GetAll().Where(x => x.id == requestId).First();
         }
 
-        public static List<PatientRequest> GetAll()
+        public List<PatientRequest> GetAll()
         {
-            return PatientRequestRepository.GetAll();
+            return patientRequestRepo.GetAll();
         }
 
-        public static void Approve(int requestId)
+        public void Approve(int requestId)
         {
-            PatientRequestRepository.Approve(requestId);
+            patientRequestRepo.Approve(requestId);
         }
 
-        public static void Deny(int requestId)
+        public void Deny(int requestId)
         {
-            PatientRequestRepository.Deny(requestId);
+            patientRequestRepo.Deny(requestId);
         }
 
-        private static string GenerateDescription(Appointment appointment)
+        private string GenerateDescription(Appointment appointment)
         {
             return "DateTime=" + appointment.dateTime.ToString("yyyy-MM-dd HH:mm:ss.000")
                 + ";DoctorID=" + appointment.doctorID.ToString();

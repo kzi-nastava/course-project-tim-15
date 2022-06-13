@@ -1,14 +1,22 @@
-﻿using System.Data;
-using Klinika.Models;
+﻿using Klinika.Models;
 using Klinika.Services;
+using System.Data;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Forms
 {
     internal class MedicalRecordTable : Base.TableBase<Anamnesis>
     {
-        private List<Appointment> appointments { get { return AppointmentService.GetCompleted(patientID); } }
+        private readonly AppointmentService? appointmentService;
+        private readonly DoctorService? doctorService;
+        private List<Appointment> appointments { get { return appointmentService.GetCompleted(patientID); } }
         private int patientID;
-        public MedicalRecordTable() : base(){}
+        public MedicalRecordTable() : base()
+        {
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
+            doctorService = StartUp.serviceProvider.GetService<DoctorService>();
+        }
         public void Fill(List<Anamnesis> anamneses, int patientID)
         {
             this.patientID = patientID;
@@ -35,8 +43,8 @@ namespace Klinika.Forms
             DataRow newRow = dt.NewRow();
             Appointment appointment = appointments.Where(x => x.id == anamnesis.medicalActionID).FirstOrDefault();
             newRow["Appointment ID"] = anamnesis.medicalActionID;
-            newRow["Doctor"] = DoctorService.GetFullName(appointment.doctorID);
-            newRow["Doctor Specialization"] = DoctorService.GetSpecialization(appointment.doctorID);
+            newRow["Doctor"] = doctorService.GetFullName(appointment.doctorID);
+            newRow["Doctor Specialization"] = doctorService.GetSpecialization(appointment.doctorID);
             newRow["DateTime"] = appointment.dateTime;
             newRow["Description"] = anamnesis.description;
             newRow["Symptoms"] = anamnesis.symptoms;

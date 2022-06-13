@@ -1,16 +1,22 @@
-﻿using Klinika.Models;
+﻿using Klinika.Dependencies;
+using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class VacationRequests : Form
     {
+        private readonly DoctorScheduleService? scheduleService;
+        private VacationRequestService? vacationService;
         internal readonly Main parent;
         private Roles.Doctor doctor { get { return parent.doctor; } }
         public VacationRequests(Main parent)
         {
             InitializeComponent();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            vacationService = StartUp.serviceProvider.GetService<VacationRequestService>();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -18,20 +24,14 @@ namespace Klinika.GUI.Doctor
             parent.Enabled = false;
             InitVacationRequests();
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
-        private void InitVacationRequests()
-        {
-            VacationRequestTable.Fill(VacationRequestService.GetAll(doctor.id));
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
+        private void InitVacationRequests() => VacationRequestTable.Fill(vacationService.GetAll(doctor.id));
         private void SendRequestButtonClick(object sender, EventArgs e)
         {
             if (!VerifyVacationRequest()) return;
             var vacationRequest = new VacationRequest(doctor.id, FromDatePicker.Value, ToDatePicker.Value,
                 ReasonTextBox.Text, EmergencyCheckBox.Checked);
-            VacationRequestService.Create(vacationRequest);
+            vacationService.Create(vacationRequest);
             VacationRequestTable.Insert(vacationRequest);
         }
         private bool VerifyVacationRequest()
@@ -56,7 +56,7 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowErrorMessage("Reason text box must be filled!");
                 return false;
             }
-            if (DoctorService.IsOccupied(doctor.id, new TimeSlot(FromDatePicker.Value, ToDatePicker.Value)))
+            if (scheduleService.IsOccupied(doctor.id, new TimeSlot(FromDatePicker.Value, ToDatePicker.Value)))
             {
                 MessageBoxUtilities.ShowErrorMessage("Doctor is occupied!");
                 return false;

@@ -1,105 +1,58 @@
-﻿using Klinika.Models;
+﻿using Klinika.Dependencies;
+using Klinika.Models;
 using Klinika.Repositories;
 using Klinika.Roles;
+using Klinika.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 
 namespace Klinika.Services
 {
     internal class DoctorService
     {
-        private DoctorRepository doctorRepository { get; }
-        public DoctorService()
+        private readonly DoctorScheduleService? scheduleService;
+        private IDoctorRepo doctorRepo;
+        private IScheduledAppointmentsRepo scheduledAppointmentsRepo;
+        public DoctorService(IDoctorRepo doctorRepo, IScheduledAppointmentsRepo scheduledAppointmentsRepo)
         {
-            doctorRepository = DoctorRepository.GetInstance();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            this.doctorRepo = doctorRepo;
+            this.scheduledAppointmentsRepo = scheduledAppointmentsRepo;
         }
 
-        public static List<Appointment> GetAppointments(int doctorID)
+        public Doctor GetById(int id) => doctorRepo.GetAll().Where(x => x.id == id).FirstOrDefault();
+        public List<Doctor> GetAll() => doctorRepo.GetAll();
+        public List<Appointment> GetAppointments(int doctorID)
         {
-            return AppointmentRepository.GetAll(doctorID, User.RoleType.DOCTOR);
+            return scheduledAppointmentsRepo.GetAll(doctorID, User.RoleType.DOCTOR);
         }
-        public static List<Appointment> GetAppointments(DateTime date, int doctorID, int days = 1)
+        public Doctor? GetSuitable(int specializationId, DateTime from)
         {
-            return AppointmentRepository.GetAll(date.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR, days);
-        }
-
-        public static Doctor? GetSuitable(int specializationId, DateTime from)
-        {
-            foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
+            foreach (Doctor doctor in doctorRepo.GetAll())
             {
                 if (doctor.specialization.id != specializationId) continue;
-                if (!IsOccupied(from, doctor.id)) return doctor;
+                if (!scheduleService.IsOccupied(from, doctor.id)) return doctor;
             }
             return null;
         }
-        public static (Doctor?,TimeSlot?) GetSuitableUnderTwoHours(int specializationId)
+        public (Doctor?, TimeSlot?) GetSuitableUnderTwoHours(int specializationId)
         {
-            foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
+            foreach (Doctor doctor in doctorRepo.GetAll())
             {
                 if (doctor.specialization.id == specializationId)
                 {
-                    TimeSlot? firstAvailable = ScheduleService.GetFirstSlotAvailableUnderTwoHours(doctor.id);
+                    TimeSlot? firstAvailable = scheduleService.GetFirstSlotAvailableUnderTwoHours(doctor.id);
                     if (firstAvailable != null) return (doctor,firstAvailable);
                 }
             }
             return (null,null);
         }
 
-        public static string GetFullName(int doctorID)
-        {
-            return UserRepository.GetDoctor(doctorID).ToString();
-        }
-        public static User GetOne(int doctorID)
-        {
-            return UserRepository.GetDoctor(doctorID);
-        }
-        public static Room? GetOffice(int officeID)
-        {
-            return RoomServices.GetExaminationRooms().Where(x => x.id == officeID).FirstOrDefault();
-        }
-        public static double GetGrade(int id)
-        {
-            return QuestionnaireRepository.GetGrade(id);
-        }
-        public static Specialization GetSpecialization (int id)
-        {
-            return DoctorRepository.GetSpecialization(id);
-        }
-        public static Doctor GetById(int id)
-        {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.id == id).FirstOrDefault();
-        }
+        public string GetFullName(int doctorID) => doctorRepo.GetAll().Where(x => x.id == doctorID).FirstOrDefault().ToString();
+        public Specialization GetSpecialization (int id) => doctorRepo.GetSpecialization(id);
 
-        public static List<Doctor> SearchByName(string keyword)
-        {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.name.ToUpper().Contains(keyword.ToUpper())).ToList();
-        }
-        public static List<Doctor> SearchBySurname(string keyword)
-        {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.surname.ToUpper().Contains(keyword.ToUpper())).ToList();
-        }
-        public static List<Doctor> SearchBySpecialization(int id)
-        {
-            return DoctorRepository.GetInstance().doctors.Where(x => x.specialization.id == id).ToList();
-        }
-
-        public static bool IsOccupied(int doctorID, TimeSlot timeSlot, DateTime day)
-        {
-            DateTime start = new DateTime(day.Year, day.Month, day.Day, timeSlot.from.Hour, timeSlot.from.Minute, timeSlot.from.Second);
-            DateTime end = new DateTime(day.Year, day.Month, day.Day, timeSlot.to.Hour, timeSlot.to.Minute, timeSlot.to.Second);
-            return IsOccupied(doctorID, new TimeSlot(start, end));
-        }
-        public static bool IsOccupied(DateTime start, int doctorID, int duration = 15, int forAppointmentID = -1)
-        {
-            return IsOccupied(doctorID, new TimeSlot(start, duration), forAppointmentID);
-        }
-        public static bool IsOccupied(int doctorID, TimeSlot slot, int forAppointmentID = -1)
-        {
-            List<Appointment> forSelectedTimeSpan = AppointmentRepository.GetInstance().appointments.Where(
-                x => x.doctorID == doctorID && slot.DoesOverlap(new TimeSlot(x.dateTime, x.duration)) && !x.isDeleted && x.id != forAppointmentID).ToList();
-            bool onVacation = VacationRequestService.IsOnVacation(slot.from, doctorID);
-            if (forSelectedTimeSpan.Count == 0) return false || onVacation;
-            return true;
-        }
-
+        public List<Doctor> SearchByName(string keyword) => GetAll().Where(x => x.name.ToUpper().Contains(keyword.ToUpper())).ToList();
+        public List<Doctor> SearchBySurname(string keyword) => GetAll().Where(x => x.surname.ToUpper().Contains(keyword.ToUpper())).ToList();
+        public List<Doctor> SearchBySpecialization(int id) => GetAll().Where(x => x.specialization.id == id).ToList();
     }
 }

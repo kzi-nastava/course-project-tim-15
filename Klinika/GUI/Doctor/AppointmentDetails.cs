@@ -1,12 +1,18 @@
-﻿using Klinika.Models;
+﻿using Klinika.Dependencies;
+using Klinika.Models;
 using Klinika.Roles;
 using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class AppointmentDetails : Form
     {
+        private readonly DoctorScheduleService? scheduleService;
+        private readonly AppointmentService? appointmentService;
+        private readonly RoomServices? roomServices;
+        private readonly UserService? userService;
         internal readonly ViewAllAppointments parent;
         private Appointment? appointment;
 
@@ -15,6 +21,10 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             this.parent = parent;
             this.appointment = appointment;
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
+            roomServices = StartUp.serviceProvider.GetService<RoomServices>();
+            userService = StartUp.serviceProvider.GetService<UserService>();
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -29,16 +39,13 @@ namespace Klinika.GUI.Doctor
 
             FillFormWithAppointmentData();
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
 
         private void FillFormWithAppointmentData()
         {
             DatePicker.Value = appointment.dateTime;
             TimePicker.Value = appointment.dateTime;
-            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(PatientService.GetSingle(appointment.patientID));
+            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(userService.GetSingle(appointment.patientID));
 
             SetType((Appointment.Types)appointment.type, appointment.duration);
 
@@ -58,13 +65,13 @@ namespace Klinika.GUI.Doctor
         private int SetExaminationRoom()
         {
             RoomComboBox.Items.Clear();
-            RoomComboBox.Items.Add(DoctorService.GetOffice(parent.doctor.officeID));
+            RoomComboBox.Items.Add(roomServices.GetDoctorOffice(parent.doctor.officeID));
             return 0;
         }
         private int SetOperationRoom()
         {
             RoomComboBox.Items.Clear();
-            RoomComboBox.Items.AddRange(RoomServices.GetOperationRooms());
+            RoomComboBox.Items.AddRange(roomServices.GetOperationRooms());
             if (appointment == null || appointment.roomID == 1) return 0;
             var rooms = RoomComboBox.Items.Cast<Room>().Select(x => x).ToList();
             var room = rooms.Where(x => x.id == appointment.roomID).FirstOrDefault();
@@ -96,14 +103,14 @@ namespace Klinika.GUI.Doctor
                 MessageBoxUtilities.ShowErrorMessage("Patient is not valid!");
                 return false;
             }
-            if (DoctorService.IsOccupied(GetSelectedDateTime(), parent.doctor.id, 
-                Convert.ToInt32(DurationTextBox.Text), appointment == null ? -1 : appointment.id))
+            if (scheduleService.IsOccupied(parent.doctor.id, new TimeSlot(GetSelectedDateTime(),
+                Convert.ToInt32(DurationTextBox.Text)), appointment == null ? -1 : appointment.id))
             {
                 MessageBoxUtilities.ShowErrorMessage("Already occupied!");
                 return false;
             }
-            if (RoomServices.IsOccupied(GetSelectedDateTime(), (RoomComboBox.SelectedItem as Room).id,
-                Convert.ToInt32(DurationTextBox.Text), appointment == null ? -1 : appointment.id))
+            if (roomServices.IsOccupied((RoomComboBox.SelectedItem as Room).id,new TimeSlot(GetSelectedDateTime(), 
+                Convert.ToInt32(DurationTextBox.Text)), appointment == null ? -1 : appointment.id))
             {
                 MessageBoxUtilities.ShowErrorMessage("Room is occupied!");
                 return false;
@@ -126,18 +133,19 @@ namespace Klinika.GUI.Doctor
             appointment.urgent = IsUrgentCheckBox.Checked;
             appointment.description = "";
         }
+        //TODO @s
         private void Modify()
         {
             appointment.dateTime = GetSelectedDateTime();
             TransferDataFromUI(appointment);
-            AppointmentService.Modify(appointment);
+            appointmentService.Modify(appointment);
             parent.AllAppointmentsTable.ModifySelected(appointment);
         }
         private void Create()
         {
             var appointment = new Appointment(GetSelectedDateTime());
             TransferDataFromUI(appointment);
-            AppointmentService.Create(appointment);
+            appointmentService.Create(appointment);
             parent.AllAppointmentsTable.Insert(appointment);
         }
     }

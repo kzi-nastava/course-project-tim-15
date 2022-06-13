@@ -1,21 +1,22 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 
 namespace Klinika.Repositories
 {
-    public class VacationRequestRepository
+    public class VacationRequestRepository : Repository, IVacationRequestRepo
     {
-        public static List<VacationRequest> GetAll(int doctorID)
+        public VacationRequestRepository() : base() { }
+        public List<VacationRequest> GetAll(int doctorID)
         {
             string getAllQuerry = "SELECT * " +
                                   "FROM [VacationRequest] " +
                                   "WHERE DoctorID = @DoctorID";
 
-            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry, ("@DoctorID", doctorID));
+            var result = database.ExecuteSelectCommand(getAllQuerry, ("@DoctorID", doctorID));
             return GenerateList(result);
         }
-
-        public static List<VacationRequest> GetAll()
+        public List<VacationRequest> GetAll()
         {
             string getAllQuerry = "SELECT * " +
                                   "FROM [VacationRequest]";
@@ -23,16 +24,14 @@ namespace Klinika.Repositories
             var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
             return GenerateList(result);
         }
-
-
-        public static int Create(VacationRequest vacationRequest)
+        public int Create(VacationRequest vacationRequest)
         {
             string createQuery = "INSERT INTO [VacationRequest] " +
                 "(DoctorID,FromDate,ToDate,Reason,Status,Emergency,DenyReason) " +
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@DoctorID,@FromDate,@ToDate,@Reason,@Status,@Emergency,@DenyReason)";
 
-            var id = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+            var id = (int)database.ExecuteNonQueryScalarCommand(
                 createQuery,
                 ("@DoctorID", vacationRequest.doctorID),
                 ("@FromDate", vacationRequest.fromDate),
@@ -44,7 +43,7 @@ namespace Klinika.Repositories
 
             return id;
         }
-        private static List<VacationRequest> GenerateList(List<object> input)
+        private List<VacationRequest> GenerateList(List<object> input)
         {
             var output = new List<VacationRequest>();
             foreach (object row in input)
@@ -64,15 +63,12 @@ namespace Klinika.Repositories
             }
             return output;
         }
-
-
         public static void Deny(VacationRequest request)
         {
             string denyQuery = "UPDATE [VacationRequest] SET Status = 'D', DenyReason = @reason " +
                                "WHERE ID = @id";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(denyQuery, ("@id", request.id), ("@reason", request.denyReason));
         }
-
         public static void Approve(VacationRequest request)
         {
             string approveQuery = "UPDATE [VacationRequest] SET Status = 'A' WHERE ID = @id";

@@ -1,4 +1,5 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 using System.Data;
 using System.Globalization;
@@ -6,7 +7,7 @@ using static Klinika.Roles.User;
 
 namespace Klinika.Repositories
 {
-    internal class AppointmentRepository : Repository
+    internal class AppointmentRepository : Repository, IScheduledAppointmentsRepo, IAppointmentRepo, IBaseAppointmentRepo, IAntiTrollRepo
     {
         public List<Appointment> appointments { get; set; }
         public void DeleteFromList(int ID)
@@ -14,26 +15,20 @@ namespace Klinika.Repositories
             appointments.Where(x => x.id == ID).FirstOrDefault().isDeleted = true;
         }
 
-        private static AppointmentRepository instance;
-        private AppointmentRepository()
+        public AppointmentRepository() : base()
         {
             appointments = GetAll();
         }
-        public static AppointmentRepository GetInstance()
-        {
-            if (instance == null) instance = new AppointmentRepository();
-            return instance;
-        }
 
-        public static List<Appointment> GetAll()
+        public List<Appointment> GetAll()
         {
             string getAllQuerry = "SELECT * " +
                                   "FROM [MedicalAction]";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
-            return GenerateList(resoult);
+            var result = database.ExecuteSelectCommand(getAllQuerry);
+            return GenerateList(result);
         }
-        public static List<Appointment> GetAll(int userID, RoleType role)
+        public List<Appointment> GetAll(int userID, RoleType role)
         {
             string roleToString = role == RoleType.DOCTOR ? "DoctorID" : "PatientID";
             string getAllQuerry = "SELECT * " +
@@ -41,10 +36,10 @@ namespace Klinika.Repositories
                                   $"WHERE DateTime > '{DateTime.Now}' AND {roleToString} = {userID} " +
                                   $"AND IsDeleted = 0";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
+            var resoult = database.ExecuteSelectCommand(getAllQuerry);
             return GenerateList(resoult);
         }
-        public static List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
+        public List<Appointment> GetAll(string requestedDate, int userID, RoleType role, int days = 1)
         {
             DateTime start = DateTime.ParseExact($"{requestedDate} 00:00", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
             DateTime end = start.AddDays(days);
@@ -55,19 +50,19 @@ namespace Klinika.Repositories
                                   $"WHERE DateTime BETWEEN '{start}' AND '{end}' AND {roleToString} = {userID} " +
                                   $"AND IsDeleted = 0";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllQuerry);
-            return GenerateList(resoult);
+            var result = database.ExecuteSelectCommand(getAllQuerry);
+            return GenerateList(result);
         }
-        public static List<Appointment> GetCompleted(int PatientID)
+        public List<Appointment> GetCompleted(int PatientID)
         {
             string getCompletedQuerry = "SELECT * " +
                                         "FROM [MedicalAction] " +
                                         $"WHERE PatientID = {PatientID} AND Completed = 1";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getCompletedQuerry);
-            return GenerateList(resoult);
+            var result = database.ExecuteSelectCommand(getCompletedQuerry);
+            return GenerateList(result);
         }
-        private static List<Appointment> GenerateList(List<object> input)
+        private List<Appointment> GenerateList(List<object> input)
         {
             var output = new List<Appointment>();
             foreach (object row in input)
@@ -98,7 +93,8 @@ namespace Klinika.Repositories
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@DoctorID,@PatientID,@DateTime,@RoomID,@Completed,@Type,@Duration,@Urgent,@Description,@IsDeleted)";
 
-            appointment.id = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+
+            appointment.id = (int)database.ExecuteNonQueryScalarCommand(
                 createQuery,
                 ("@DoctorID", appointment.doctorID),
                 ("@PatientID", appointment.patientID),
@@ -145,13 +141,13 @@ namespace Klinika.Repositories
             appointments.Remove(appointments.Where(x => x.id == appointment.id).FirstOrDefault());
             appointments.Add(appointment);
         }
-        public static void Delete(int ID)
+        public void Delete(int ID)
         {
             string deleteQuerry = "UPDATE [MedicalAction] SET IsDeleted = 1 WHERE ID = @ID";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuerry, ("@ID", ID));
+            database.ExecuteNonQueryCommand(deleteQuerry, ("@ID", ID));
         }
 
-        public static int GetScheduledAppointmentsCount (int ID)
+        public int GetScheduledAppointmentsCount (int ID)
         {
             DateTime startDate = DateTime.Now.AddDays(-30);
 
@@ -159,10 +155,10 @@ namespace Klinika.Repositories
                 "FROM [MedicalAction] " +
                 $"WHERE PatientID = {ID} AND DateTime > '{startDate.ToString("yyyy-MM-dd HH:mm:ss.000")}'";
 
-            var selection = DatabaseConnection.GetInstance().ExecuteSelectCommand(getQuerry);
+            var selection = database.ExecuteSelectCommand(getQuerry);
             return Convert.ToInt32(((object[])selection[0])[0]);
         }
-        public static List<string> GetDescriptions(int patientID)
+        public List<string> GetDescriptions(int patientID)
         {
             var descriptions = new List<string>();
 
@@ -170,7 +166,7 @@ namespace Klinika.Repositories
                                  "FROM [PatientRequest] " +
                                  $"WHERE PatientID = {patientID}";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDescriptionsQuerry);
+            var resoult = database.ExecuteSelectCommand(getDescriptionsQuerry);
             foreach (object row in resoult)
             {
                 descriptions.Add(DatabaseConnection.CheckNull<string>(((object[])row)[0]));

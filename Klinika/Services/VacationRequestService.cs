@@ -1,40 +1,23 @@
-﻿using Klinika.Models;
-using Klinika.Repositories;
+﻿using Klinika.Interfaces;
+using Klinika.Models;
 
 namespace Klinika.Services
 {
     public class VacationRequestService
     {
-        public static List<VacationRequest> GetAll(int doctorID)
-        {
-            return VacationRequestRepository.GetAll(doctorID);
-        }
-
-        public static List<VacationRequest> GetAll()
-        {
-            return VacationRequestRepository.GetAll();
-        }
-        public static void Create(VacationRequest vacationRequest)
-        {
-            vacationRequest.id = VacationRequestRepository.Create(vacationRequest);
-        }
-        public static bool IsOnVacation(DateTime start, int doctorID)
-        {
-            List<VacationRequest> forSelectedTimeSpan = VacationRequestRepository.GetAll(doctorID).Where(
-                x => x.fromDate < start && x.toDate > start && x.status != (char)VacationRequest.Statuses.DENIED).ToList();
-            
-            if (forSelectedTimeSpan.Count == 0) return false;
-            return true;
-        }
-
+        private readonly IVacationRequestRepo vacationRequestRepo;
+        public VacationRequestService(IVacationRequestRepo vacationRequestRepo) => this.vacationRequestRepo = vacationRequestRepo;
+        public List<VacationRequest> GetAll(int doctorID) => vacationRequestRepo.GetAll(doctorID);
+        public List<VacationRequest> GetAll() => vacationRequestRepo.GetAll();
+        public void Create(VacationRequest vacationRequest) => vacationRequest.id = vacationRequestRepo.Create(vacationRequest);
         public static void Approve(VacationRequest request)
         {
-            VacationRequestRepository.Approve(request);
+            //vacationRequestRepo.Approve(request);
         }
 
         public static void Deny(VacationRequest request)
         {
-            VacationRequestRepository.Deny(request);
+            //vacationRequestRepo.Deny(request);
         }
     }
 }

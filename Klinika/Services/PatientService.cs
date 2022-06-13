@@ -1,76 +1,40 @@
-﻿using Klinika.Repositories;
-using Klinika.Roles;
-using Klinika.Utilities;
+﻿using Klinika.Roles;
 using System.Data;
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     internal class PatientService
     {
-        public static User? GetSingle(int id)
+        private readonly IPatientRepo patientRepo;
+        private readonly IUserRepo userRepo;
+        public PatientService(IPatientRepo patientRepo, IUserRepo userRepo)
         {
-            return UserRepository.GetInstance().Users.Where(x => x.id == id).FirstOrDefault();
+            this.patientRepo = patientRepo;
+            this.userRepo = userRepo;
         }
-        public static List<Patient> GetAll()
+        public Patient GetSingle(int id) => patientRepo.GetSingle(id);
+        public int? GetIdByEmail(string email) => patientRepo.GetIdByEmail(email);
+        public List<Patient> GetAll() => patientRepo.GetAll();
+        public void Add(Patient newPatient) => patientRepo.Create(newPatient);
+        public void Modify(Patient patient) => patientRepo.Modify(patient);
+        public void Delete(int patientId) => patientRepo.Delete(patientId);
+        public string GetFullName(int ID)
         {
-            return PatientRepository.GetAll();
-        }
-
-        public static bool Add(Patient newPatient)
-        {
-            string error_message = ValidationUtilities.ValidatePatient(newPatient);
-            if(error_message != null)
-            {
-                MessageBoxUtilities.ShowErrorMessage(error_message);
-                return false;
-            }
-            PatientRepository.Create(newPatient);
-            return true;
-        }
-        public static bool Modify(Patient patient)
-        {
-            string error_message = ValidationUtilities.ValidatePatient(patient,isModification: true);
-            if(error_message != null)
-            {
-                MessageBoxUtilities.ShowErrorMessage(error_message);
-                return false;
-            }
-            PatientRepository.Modify(patient);
-            return true;
-        }
-        public static void Delete(int patientId)
-        {
-            PatientRepository.Delete(patientId);
-        }
-
-        public static string GetFullName(int ID)
-        {
-            var patient = UserRepository.GetInstance().Users.Where(x => x.id == ID).FirstOrDefault();
+            var patient = patientRepo.GetAll().Where(x => x.id == ID).FirstOrDefault();
             return $"{patient.name} {patient.surname}";
         }
-        public static Patient GetById(int id)
-        {
-            return PatientRepository.GetSingle(id);
-        }
-
-        public static bool IsBlocked(User patient)
-        {
-            bool isBlocked = AppointmentRepository.GetScheduledAppointmentsCount(patient.id) > 8 
-                || AppointmentService.GetModifyAppointmentsCount(patient.id) > 5;
-            if (!isBlocked) return false;
-            Block(patient, "SYS");
-            return true;
-        }
-        public static void Block(User patient, string whoBlocked)
+        public void Block(User patient, string whoBlocked)
         {
             patient.isBlocked = true;
-            PatientRepository.Block(patient.id, whoBlocked);
+            userRepo.Block(patient.id, whoBlocked);
         }
-        public static void Unblock(Patient patient)
+        public void Unblock(Patient patient)
         {
             patient.whoBlocked = "";
             patient.isBlocked = false;
-            PatientRepository.Unblock(patient.id);
+            userRepo.Unblock(patient.id);
         }
+
     }
 }

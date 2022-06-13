@@ -1,9 +1,13 @@
-﻿using System.Data;
+﻿using Klinika.Dependencies;
+using Klinika.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System.Data;
 
 namespace Klinika.GUI.Manager
 {
     public partial class Main : Form
     {
+        private readonly DrugService? drugService;
         public Models.EquipmentTransfer transfer;
         public DataTable unfiltered;
         public bool[] transferCheck;
@@ -12,6 +16,7 @@ namespace Klinika.GUI.Manager
             transferCheck = new bool[2];
             transferCheck[0] = false;
             transferCheck[1] = false;
+            drugService = StartUp.serviceProvider.GetService<DrugService>();
             transfer = new Models.EquipmentTransfer();
             unfiltered = new DataTable();
             InitializeComponent();
@@ -55,7 +60,7 @@ namespace Klinika.GUI.Manager
             table.Columns.Add("Name", typeof(string));
             table.Columns.Add("Approved", typeof(string));
 
-            List<Models.Drug> drugs = Services.DrugService.GetDenied();
+            List<Models.Drug> drugs = drugService.GetDenied();
             foreach (Models.Drug drug in drugs)
             {
                 DataRow dr = table.NewRow();
@@ -78,7 +83,8 @@ namespace Klinika.GUI.Manager
             table.Columns.Add("Name", typeof(string));
             table.Columns.Add("Type", typeof(string));
 
-            List<Models.Ingredient> ingredients = Services.IngredientService.GetAll();
+            //TODO
+            List<Models.Ingredient> ingredients = new List<Models.Ingredient>();//Services.IngredientService.GetAll(); 
             foreach (Models.Ingredient ingredient in ingredients)
             {
                 DataRow dr = table.NewRow();
@@ -105,7 +111,7 @@ namespace Klinika.GUI.Manager
             roomsTable.DataSource = rooms;
             roomsTable.Columns["ID"].Visible = false;
 
-            unfiltered = Repositories.EquipmentRepository.GetAll();
+            //unfiltered = Repositories.EquipmentRepository.GetAll();
             equipmentTable.DataSource = unfiltered;
             equipmentTable.Columns["EquipmentID"].Visible = false;
             equipmentTable.Columns["RoomID"].Visible = false;
@@ -120,7 +126,7 @@ namespace Klinika.GUI.Manager
             DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected room? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (deletionConfirmation == DialogResult.Yes)
             {
-                Repositories.RoomRepository.Delete((int)roomsTable.SelectedRows[0].Cells["ID"].Value);
+                //Repositories.RoomRepository.Delete((int)roomsTable.SelectedRows[0].Cells["ID"].Value);
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Main_Load(null, EventArgs.Empty);
             }
@@ -135,7 +141,7 @@ namespace Klinika.GUI.Manager
         {
             int[] selectedRoom = new int[3];
             selectedRoom[0] = (int)roomsTable.SelectedRows[0].Cells["ID"].Value;
-            selectedRoom[1] = Repositories.RoomRepository.GetTypeId(roomsTable.SelectedRows[0].Cells["Type"].Value.ToString());
+            //selectedRoom[1] = Repositories.RoomRepository.GetTypeId(roomsTable.SelectedRows[0].Cells["Type"].Value.ToString());
             selectedRoom[2] = (int)roomsTable.SelectedRows[0].Cells["Number"].Value;
             new ModifyRoom(this, selectedRoom).Show();
         }
@@ -317,7 +323,8 @@ namespace Klinika.GUI.Manager
             {
                 Services.IngredientService.Delete(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()));
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Services.IngredientService.GetAll();
+                //TODO
+                //Services.IngredientService.GetAll();
                 this.Main_Load(null, EventArgs.Empty);
             }
         }

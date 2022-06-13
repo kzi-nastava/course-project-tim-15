@@ -1,15 +1,22 @@
-﻿using Klinika.Data;
-using Klinika.Roles;
+﻿using Klinika.Roles;
 using System.Data;
+using Klinika.Interfaces;
 
 namespace Klinika.Repositories
 {
-    internal class PatientRepository : Repository
+    internal class PatientRepository : Repository, IPatientRepo
     {
-        public static Dictionary<string, int>? emailIDPairs { get; private set; }
-        public static Dictionary<int,Patient>? idPatientPairs { get; private set; }
+        public Dictionary<string, int>? emailIDPairs { get; private set; }
+        public Dictionary<int,Patient>? idPatientPairs { get; private set; }
 
-        public static List<Patient> GetAll()
+        private readonly IMedicalRecordRepo medicalRecordRepo;
+
+        public PatientRepository() : base()
+        {
+            medicalRecordRepo = new MedicalRecordRepository();
+        }
+
+        public List<Patient> GetAll()
         {
             emailIDPairs = new Dictionary<string, int>();
             idPatientPairs = new Dictionary<int,Patient>();
@@ -20,7 +27,7 @@ namespace Klinika.Repositories
                                       "ON [User].ID = [Patient].UserID " +
                                       "WHERE UserType = 1 AND IsDeleted = 0";
 
-            DataTable retrievedPatients = DatabaseConnection.GetInstance().CreateTableOfData(getAllQuery);
+            DataTable retrievedPatients = database.CreateTableOfData(getAllQuery);
             foreach (DataRow patient in retrievedPatients.Rows)
             {
                 int id = Convert.ToInt32(patient["ID"]);
@@ -41,20 +48,20 @@ namespace Klinika.Repositories
                 idPatientPairs.Add(id, newPatient);
 
             }
-                retrievedPatients.Columns.Remove("Password");
+            retrievedPatients.Columns.Remove("Password");
             retrievedPatients.Columns.Remove("NotificationOffset");
 
             return patients;
 
         }
-        public static Patient GetSingle (int id)
+        public Patient GetSingle (int id)
         {
             string getSingleQuerry = "SELECT [User].ID, [User].JMBG, [User].Name, [User].Surname, [User].Birthdate, [User].Gender, " +
                 "[User].Email, [User].Password, [Patient].NotificationOffset " +
                 "FROM [User] JOIN [Patient] " +
                 "ON [User].ID = [Patient].UserID " + 
                 $"WHERE [User].ID = {id}";
-            var result = DatabaseConnection.GetInstance().ExecuteSelectCommand(getSingleQuerry);
+            var result = database.ExecuteSelectCommand(getSingleQuerry);
             Patient patient = new Patient(
                 Convert.ToInt32(((object[])result[0])[0]),
                 ((object[])result[0])[1].ToString(),
@@ -68,7 +75,7 @@ namespace Klinika.Repositories
             return patient;
         }
         
-        internal static void Modify(Patient patient)
+        public void Modify(Patient patient)
         {
             string modifyQuery = "UPDATE [User] " +
                                  "SET JMBG = @JMBG, " +
@@ -79,7 +86,7 @@ namespace Klinika.Repositories
                                  "Password = @Password " +
                                  "WHERE ID = @ID";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuery,
+            database.ExecuteNonQueryCommand(modifyQuery,
             ("@ID", patient.id),
             ("@JMBG", patient.jmbg),
             ("@Name", patient.name),
@@ -90,29 +97,28 @@ namespace Klinika.Repositories
             );
 
             string modifyQuerry = "UPDATE [Patient] SET NotificationOffset = @notificationOffset WHERE UserID = @Id";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(modifyQuerry, ("@notificationOffset", patient.notificationOffset), ("@Id", patient.id));
+            database.ExecuteNonQueryCommand(modifyQuerry, ("@notificationOffset", patient.notificationOffset), ("@Id", patient.id));
         }
 
         //Logical deletion
-        public static void Delete(int id)
+        public void Delete(int id)
         {
             string deleteQuery = "UPDATE [User] SET IsDeleted = 1 WHERE ID = @ID";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(deleteQuery, ("@ID", id));
+            database.ExecuteNonQueryCommand(deleteQuery, ("@ID", id));
             if (emailIDPairs != null)
             {
-                
                 emailIDPairs.Remove(idPatientPairs[id].email);
             }
         }
 
-        public static void Create(Patient newPatient)
+        public void Create(Patient newPatient)
         {
             string createQuery = "INSERT INTO [User] " +
                 "(JMBG,Name,Surname,Birthdate,Gender,Email,Password,UserType) " +
                 "OUTPUT INSERTED.ID " +
                 "VALUES (@JMBG,@Name,@Surname,@Birthdate,@Gender,@Email,@Password,@UserType)";
 
-            int createdID = (int)DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(
+            int createdID = (int)database.ExecuteNonQueryScalarCommand(
                 createQuery,
                 ("@JMBG", newPatient.jmbg),
                 ("@Name", newPatient.name),
@@ -124,29 +130,19 @@ namespace Klinika.Repositories
                 ("@UserType", 1)
                 );
             
-            MedicalRecordRepository.Create(createdID);
+            medicalRecordRepo.Create(createdID);
 
             if (emailIDPairs != null)
             {
                 emailIDPairs.Add(newPatient.email, createdID);
             }
         }
-        public static void Block(int id, string whoBlocked)
-        {
-            string blockQuery = "UPDATE [User] SET " +
-                "IsBlocked = 1, " +
-                "WhoBlocked = @WhoBlocked " +
-                "WHERE ID = @ID";
 
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(
-                blockQuery, ("@WhoBlocked", whoBlocked), ("@ID", id));
-        }
-        public static void Unblock(int id)
+        public int? GetIdByEmail(string email)
         {
-            string unblockQuery = "UPDATE [User] SET IsBlocked = 0, WhoBlocked = NULL " +
-                                "WHERE ID = @ID";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(unblockQuery, ("@ID", id));
+            return emailIDPairs[email];
         }
+
     }
 
 }

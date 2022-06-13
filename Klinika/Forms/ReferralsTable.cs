@@ -1,7 +1,6 @@
-﻿using Klinika.Models;
-using System.Data;
-using Klinika.Forms.Base;
+﻿using Klinika.Forms.Base;
 using Klinika.Models;
+using System.Data;
 
 namespace Klinika.Forms
 {

@@ -1,3 +1,5 @@
+using Klinika.Dependencies;
+
 namespace Klinika
 {
     internal static class Program
@@ -11,7 +13,9 @@ namespace Klinika
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+            StartUp.Init();
             Application.Run(new LoginPage());
         }
+
     }
 }

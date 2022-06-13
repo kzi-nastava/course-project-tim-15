@@ -11,20 +11,26 @@ using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
 using Klinika.Exceptions;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace Klinika.GUI.Secretary
 {
     public partial class VacationDaysRequests : Form
     {
+        private readonly NotificationService? notificationService;
+        private VacationRequestService? vacationService;
         public VacationDaysRequests()
         {
             InitializeComponent();
+            notificationService = StartUp.serviceProvider.GetService<NotificationService>();
+            vacationService = StartUp.serviceProvider.GetService<VacationRequestService>();
         }
 
         private void VacationDaysRequests_Load(object sender, EventArgs e)
         {
-            vacationRequestsTable.Fill(VacationRequestService.GetAll());
+            vacationRequestsTable.Fill(vacationService.GetAll());
         }
 
         private void VacationRequestsTable_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -102,10 +108,10 @@ namespace Klinika.GUI.Secretary
         private void NotifyDoctor(VacationRequest selected)
         {
             Notification notification = new Notification(selected.doctorID, NotificationService.GenerateMessage(selected));
-            NotificationService.Send(notification);
+            notificationService.Send(notification);
         }
 
-        
+
 
     }
 }

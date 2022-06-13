@@ -1,14 +1,18 @@
-﻿using Klinika.Services;
+﻿using Klinika.Dependencies;
+using Klinika.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class ViewSchedule : Form
     {
+        private readonly DoctorScheduleService? scheduleService;
         internal readonly Main parent;
         private Roles.Doctor doctor { get { return parent.doctor; } }
         public ViewSchedule(Main parent)
         {
             InitializeComponent();
+            scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -16,21 +20,15 @@ namespace Klinika.GUI.Doctor
             parent.Enabled = false;
             InitScheduleTab();
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
         private void InitScheduleTab()
         {
-            var scheduled = DoctorService.GetAppointments(ScheduleDatePicker.Value, doctor.id, 3);
+            var scheduled = scheduleService.GetAppointments(ScheduleDatePicker.Value, doctor.id, 3);
             ScheduleTable.Fill(scheduled);
             ViewMedicalRecordButton.Enabled = false;
             PerformButton.Enabled = false;
         }
-        private void ScheduleDatePickerValueChanged(object sender, EventArgs e)
-        {
-            InitScheduleTab();
-        }
+        private void ScheduleDatePickerValueChanged(object sender, EventArgs e) => InitScheduleTab();
         private void ScheduleTableSelectionChanged(object sender, EventArgs e)
         {
             ViewMedicalRecordButton.Enabled = true;

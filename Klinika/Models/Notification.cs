@@ -1,6 +1,6 @@
 ﻿namespace Klinika.Models
 {
-    internal class Notification
+    public class Notification
     {
         public int id { get; set; }
         public int userId { get; set; }

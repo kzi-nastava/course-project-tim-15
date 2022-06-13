@@ -1,23 +1,18 @@
-﻿using Klinika.Models;
-using Klinika.Repositories;
+﻿using Klinika.Interfaces;
+using Klinika.Models;
 using System.Data;
 
 namespace Klinika.Services
 {
     public class AnamnesisService
     {
-        public AnamnesisService() { }
-        public static List<Anamnesis> Get(int patientID)
+        private readonly IAnamnesisRepo anamnesisRepo;
+        public AnamnesisService(IAnamnesisRepo anamnesisRepo) => this.anamnesisRepo = anamnesisRepo;
+        public List<Anamnesis> Get(int patientID) => anamnesisRepo.GetAll(patientID);
+        public void Create(Anamnesis anamnesis) => anamnesisRepo.Create(anamnesis);
+        public List<Anamnesis> GetFiltered(int patientID, string searchParam)
         {
-            return AnamnesisRepository.Get(patientID);
-        }
-        public static void Create(Anamnesis anamnesis)
-        {
-            AnamnesisRepository.Create(anamnesis);
-        }
-        public static List<Anamnesis> GetFiltered(int patientID, string searchParam)
-        {
-            return AnamnesisRepository.Get(patientID).Where(
+            return anamnesisRepo.GetAll(patientID).Where(
                 x => x.description.ToUpper().Contains(searchParam.ToUpper())
                 || x.symptoms.ToUpper().Contains(searchParam.ToUpper())
                 || x.conclusion.ToUpper().Contains(searchParam.ToUpper())).ToList();

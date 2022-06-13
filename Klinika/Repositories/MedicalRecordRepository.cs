@@ -1,18 +1,26 @@
 ﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 namespace Klinika.Repositories
 {
-    internal class MedicalRecordRepository
+    internal class MedicalRecordRepository : Repository, IMedicalRecordRepo
     {
-        public static MedicalRecord Get(int patientID)
+        private readonly IngredientRepository ingredientRepository;
+        private readonly IAnamnesisRepo anamnesisRepo;
+        public MedicalRecordRepository() : base()
+        {
+            ingredientRepository = new IngredientRepository();
+            anamnesisRepo = new AnamnesisRepository();
+        }
+        public MedicalRecord Get(int patientID)
         {
             MedicalRecord record = new MedicalRecord();
             string getRecordQuerry = "SELECT * " +
                 "FROM [Patient] " +
                 $"WHERE UserID = {patientID}";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getRecordQuerry);
-            foreach(object row in resoult)
+            var result = database.ExecuteSelectCommand(getRecordQuerry);
+            foreach(object row in result)
             {
                 record.id = patientID;
                 record.height = DatabaseConnection.CheckNull<decimal>(((object[])row)[1]);
@@ -20,13 +28,18 @@ namespace Klinika.Repositories
                 record.bloodType = DatabaseConnection.CheckNull<string>(((object[])row)[3]);
             }
 
-            record.anamneses = AnamnesisRepository.Get(patientID);
+            record.anamneses = anamnesisRepo.GetAll(patientID);
             record.diseases = GetDiseases(patientID);
             record.allergens = GetAllergens(patientID);
 
             return record;
         }
-        private static List<Disease> GetDiseases(int patientID)
+        public void Create(int patientID)
+        {
+            string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";
+            database.ExecuteNonQueryCommand(createMedicalRecordQuery, ("@ID", patientID));
+        }
+        private List<Disease> GetDiseases(int patientID)
         {
             List<Disease> diseases = new List<Disease>();
 
@@ -35,8 +48,8 @@ namespace Klinika.Repositories
                 "FROM [Disease] JOIN [PatientDisease] ON [Disease].ID = [PatientDisease].Diseaseid " +
                 $"WHERE [PatientDisease].PatientID = {patientID}";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getDiseasesQuerry);
-            foreach (object row in resoult)
+            var result = database.ExecuteSelectCommand(getDiseasesQuerry);
+            foreach (object row in result)
             {
                 var disease = new Disease
                 {
@@ -50,14 +63,15 @@ namespace Klinika.Repositories
             }
             return diseases;
         }
-        private static List<Ingredient> GetAllergens(int patientID)
+        private List<Ingredient> GetAllergens(int patientID)
         {
+            var allIngredients = ingredientRepository.GetAll();
             List<Ingredient> allergens = new List<Ingredient>();
             var ingredientsIDs = GetAllergensIds(patientID);
 
             foreach(int id in ingredientsIDs)
             {
-                var ingredient = IngredientRepository.Instance.ingredients.Where(x => x.id == id).FirstOrDefault();
+                var ingredient = allIngredients.Where(x => x.id == id).FirstOrDefault();
                 if (ingredient != null)
                 {
                     allergens.Add(ingredient);
@@ -66,7 +80,7 @@ namespace Klinika.Repositories
 
             return allergens;
         }
-        private static List<int> GetAllergensIds(int patientID)
+        private List<int> GetAllergensIds(int patientID)
         {
             List<int> ids = new List<int>();
 
@@ -75,7 +89,7 @@ namespace Klinika.Repositories
                 "FROM [PatientAllergen] " +
                 $"WHERE [PatientAllergen].PatientID = {patientID}";
 
-            var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getAllergensQuerry);
+            var resoult = database.ExecuteSelectCommand(getAllergensQuerry);
             foreach(object row in resoult)
             {
                 var IngredientID = Convert.ToInt32(((object[])row)[0].ToString());
@@ -83,12 +97,6 @@ namespace Klinika.Repositories
             }
 
             return ids;
-        }
-        
-        public static void Create(int patientID)
-        {
-            string createMedicalRecordQuery = "INSERT INTO [Patient] (UserID) VALUES (@ID)";
-            DatabaseConnection.GetInstance().ExecuteNonQueryCommand(createMedicalRecordQuery, ("@ID", patientID));
         }
     }
 }

@@ -1,13 +1,12 @@
-﻿using Klinika.Models;
-using Klinika.Repositories;
+﻿using Klinika.Interfaces;
+using Klinika.Models;
 
 namespace Klinika.Services
 {
     public class MedicalRecordService
     {
-        public static MedicalRecord Get(int patientID)
-        {
-            return MedicalRecordRepository.Get(patientID);
-        }
+        private readonly IMedicalRecordRepo medicalRecordRepo;
+        public MedicalRecordService(IMedicalRecordRepo medicalRecordRepo) => this.medicalRecordRepo = medicalRecordRepo;
+        public MedicalRecord Get(int patientID) => medicalRecordRepo.Get(patientID);
     }
 }

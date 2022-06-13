@@ -1,15 +1,19 @@
-﻿using Klinika.Services;
+﻿using Klinika.Dependencies;
+using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class ManageUnapprovedDrugs : Form
     {
+        private readonly DrugService? drugService;
         internal readonly Main parent;
         public ManageUnapprovedDrugs(Main parent)
         {
             InitializeComponent();
             this.parent = parent;
+            drugService = StartUp.serviceProvider.GetService<DrugService>();
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -22,7 +26,7 @@ namespace Klinika.GUI.Doctor
         }
         private void InitUnapprovedDrugs()
         {
-            UnapprovedDrugsTable.Fill(DrugService.GetUnapproved());
+            UnapprovedDrugsTable.Fill(drugService.GetUnapproved());
             ApproveDrugButton.Enabled = false;
             DenyDrugButton.Enabled = false;
             DenyDrugDescription.Text = "";
@@ -39,13 +43,13 @@ namespace Klinika.GUI.Doctor
         private void ApproveDrugButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to approve this drug?")) return;
-            DrugService.ApproveDrug(UnapprovedDrugsTable.GetSelectedId());
+            drugService.ApproveDrug(UnapprovedDrugsTable.GetSelectedId());
             InitUnapprovedDrugs();
         }
         private void DenyDrugButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to deny this drug?")) return;
-            DrugService.DenyDrug(UnapprovedDrugsTable.GetSelectedId(), DenyDrugDescription.Text);
+            drugService.DenyDrug(UnapprovedDrugsTable.GetSelectedId(), DenyDrugDescription.Text);
             InitUnapprovedDrugs();
         }
     }

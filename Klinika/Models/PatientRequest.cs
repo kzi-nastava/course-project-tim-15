@@ -1,6 +1,4 @@
-﻿using Klinika.Roles;
-
-namespace Klinika.Models;
+﻿namespace Klinika.Models;
 
 public class PatientRequest
 {

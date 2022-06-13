@@ -1,24 +1,16 @@
 ﻿
-using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Roles;
 using System.Data;
 
 namespace Klinika.Repositories
 {
-    internal class UserRepository
+    internal class UserRepository : Repository, IUserRepo
     {
         public Dictionary<string, User> users { get; }
         public List<User> Users { get; }
 
-        private static UserRepository? instance;
-
-        public static UserRepository GetInstance()
-        {
-            if (instance == null) instance = new UserRepository();
-            return instance;
-        }
-
-        private UserRepository()
+        public UserRepository()
         {
             users = new Dictionary<string, User>();
             Users = new List<User>();
@@ -28,7 +20,7 @@ namespace Klinika.Repositories
                 "JOIN [UserType] ON [User].UserType = [UserType].ID " +
                 "WHERE [User].IsDeleted = 0";
 
-            DataTable allUsers = DatabaseConnection.GetInstance().CreateTableOfData(getCredentialsQuery);
+            DataTable allUsers = database.CreateTableOfData(getCredentialsQuery);
             foreach (DataRow row in allUsers.Rows)
             {
                 User user = new User(Convert.ToInt32(row["ID"]),
@@ -44,19 +36,42 @@ namespace Klinika.Repositories
 
         }
 
-        public static User[] GetPatients()
+        public User[] GetPatients()
         {
-            return GetInstance().Users.Where(x => x.role.ToUpper() == User.RoleType.PATIENT.ToString()).ToArray();
+            return Users.Where(x => x.role.ToUpper() == User.RoleType.PATIENT.ToString()).ToArray();
         }
 
-        public static List<User> GetDoctors()
+        public List<User> GetDoctors()
         {
-             return GetInstance().Users.Where(x => x.role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToList();
+             return Users.Where(x => x.role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToList();
         }
 
-        public static User? GetDoctor(int ID)
+        public User? GetSingle(int ID)
         {
-            return GetInstance().Users.Where(x => x.id == ID).FirstOrDefault();
+            return Users.Where(x => x.id == ID).FirstOrDefault();
+        }
+
+        public void Block(int id, string whoBlocked)
+        {
+            string blockQuery = "UPDATE [User] SET " +
+                "IsBlocked = 1, " +
+                "WhoBlocked = @WhoBlocked " +
+                "WHERE ID = @ID";
+
+            database.ExecuteNonQueryCommand(
+                blockQuery, ("@WhoBlocked", whoBlocked), ("@ID", id));
+        }
+
+        public void Unblock(int id)
+        {
+            string unblockQuery = "UPDATE [User] SET IsBlocked = 0, WhoBlocked = NULL " +
+                                "WHERE ID = @ID";
+            database.ExecuteNonQueryCommand(unblockQuery, ("@ID", id));
+        }
+
+        public User GetByEmail(string email)
+        {
+            return users[email];
         }
     }
 }

@@ -1,13 +1,12 @@
-﻿using Klinika.Repositories;
-using Klinika.Models;
+﻿using Klinika.Models;
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     internal class AnswerService
     {
-        public static void Create(Answer answer)
-        {
-            AnswerRepository.Create(answer);
-        }
+        private readonly IAnswerRepo answerRepo;
+        public AnswerService(IAnswerRepo answerRepo) => this.answerRepo = answerRepo;
+        public void Create(Answer answer) => answerRepo.Create(answer);
     }
 }

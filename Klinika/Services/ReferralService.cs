@@ -1,22 +1,15 @@
-﻿using Klinika.Repositories;
-using System.Data;
+﻿using Klinika.Interfaces;
 using Klinika.Models;
+using Klinika.Repositories;
 
 namespace Klinika.Services
 {
     internal class ReferralService
     {
-        public static List<Referral> GetReferralsPerPatient(int patientId)
-        {
-            return ReferalRepository.GetReferralsPerPatient(patientId);
-        }
-        public static void Create(int patientID, int specializationID, int doctorID)
-        {
-            ReferalRepository.Create(patientID, specializationID, doctorID);
-        }
-        public static void MarkAsUsed(int referralId)
-        {
-            ReferalRepository.MarkAsUsed(referralId);
-        }
+        private readonly IReferralRepo referralRepo;
+        public ReferralService(IReferralRepo referralRepo) => this.referralRepo = referralRepo;
+        public void Create(int patientID, int specializationID, int doctorID) => referralRepo.Create(patientID, specializationID, doctorID);
+        public List<Referral> GetReferralsPerPatient(int patientId) => referralRepo.GetReferralsPerPatient(patientId);
+        public void MarkAsUsed(int referralId) => referralRepo.MarkAsUsed(referralId);
     }
 }

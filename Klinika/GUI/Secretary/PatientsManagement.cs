@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Klinika.Exceptions;
-using Klinika.Utilities;
-using Klinika.Models;
-using Klinika.Roles;
+﻿using Klinika.Exceptions;
 using Klinika.Services;
+using Klinika.Utilities;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {
     public partial class PatientsManagement : Form
     {
+        private readonly PatientService patientService;
+        
         public PatientsManagement()
         {
+            patientService = StartUp.serviceProvider.GetService<PatientService>();
             InitializeComponent();
         }
 
@@ -59,7 +53,7 @@ namespace Klinika.GUI.Secretary
             int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
-                PatientService.Delete(id);
+                patientService.Delete(id);
                 patientsTable.DeleteSelectedRow();
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully deleted!");
             }
@@ -93,8 +87,8 @@ namespace Klinika.GUI.Secretary
             int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
-                Roles.Patient toBlock = (Roles.Patient)PatientService.GetSingle(id);
-                PatientService.Block(toBlock, "SEC");
+                Roles.Patient toBlock = (Roles.Patient)patientService.GetSingle(id);
+                patientService.Block(toBlock, "SEC");
                 patientsTable.ModifyRow(patientsTable.GetSelectedRow(),toBlock);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully blocked!");
                 SetButtonsStates();
@@ -112,8 +106,8 @@ namespace Klinika.GUI.Secretary
             int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
-                Roles.Patient toUnblock = (Roles.Patient)PatientService.GetSingle(id);
-                PatientService.Unblock(toUnblock);
+                Roles.Patient toUnblock = (Roles.Patient)patientService.GetSingle(id);
+                patientService.Unblock(toUnblock);
                 patientsTable.ModifyRow(patientsTable.GetSelectedRow(),toUnblock);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully unblocked!");
                 SetButtonsStates();
@@ -127,7 +121,7 @@ namespace Klinika.GUI.Secretary
         private void ShowModifyPatientForm()
         {
             int selectedPatient = Convert.ToInt32(patientsTable.GetCellValue("ID"));
-            Roles.Patient selected = (Roles.Patient)PatientService.GetSingle(selectedPatient);
+            Roles.Patient selected = (Roles.Patient)patientService.GetSingle(selectedPatient);
             new ModifyPatient(this, selected).Show();
         }
 
@@ -143,7 +137,7 @@ namespace Klinika.GUI.Secretary
 
         private void PatientsManagement_Load(object sender, EventArgs e)
         {
-            patientsTable.Fill(PatientService.GetAll());
+            patientsTable.Fill(patientService.GetAll());
         }
 
         private void PatientsTable_CellClick(object sender, DataGridViewCellEventArgs e)

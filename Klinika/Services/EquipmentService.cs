@@ -1,4 +1,5 @@
-﻿using Klinika.Models;
+﻿using Klinika.Interfaces;
+using Klinika.Models;
 using Klinika.Repositories;
 using System.Data;
 
@@ -6,28 +7,33 @@ namespace Klinika.Services
 {
     internal class EquipmentService
     {
-        public static List<Equipment> GetMissingDynamicEquipment()
+        private readonly IRoomEquipmentRepo roomEquipmentRepo;
+        private readonly ITransferRepo transferRepo;
+        public EquipmentService(IRoomEquipmentRepo roomEquipmentRepo, ITransferRepo transferRepo)
         {
-            List<Equipment> allDynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
+            this.roomEquipmentRepo = roomEquipmentRepo;
+            this.transferRepo = transferRepo;
+        }
+
+        public List<Equipment> GetMissingDynamicEquipment()
+        {
+            List<Equipment> allDynamicEquipment = roomEquipmentRepo.GetDynamicEquipmentInStorage();
             for (int i = allDynamicEquipment.Count - 1; i >= 0; i--)
             {
                 if (allDynamicEquipment[i].quantity > 0) allDynamicEquipment.RemoveAt(i);
             }
             return allDynamicEquipment;
         }
-        public static List<Equipment> GetDynamicEquipment(int roomID)
+        public List<Equipment> GetDynamicEquipment(int roomID)
         {
-            var equipment = EquipmentRepository.GetDynamicEquipmentInRooms();
+            var equipment = roomEquipmentRepo.GetDynamicEquipmentInRooms();
             return equipment.Where(x => x.roomID == roomID).ToList();
         }
-        public static void UpdateRoomsDynamicEquipment(int roomID, List<Equipment> equipments)
+        public void UpdateRoomsDynamicEquipment(int roomID, List<Equipment> equipments)
         {
-            foreach(var equipment in equipments)
-            {
-                EquipmentRepository.ModifyRoomsDynamicEquipmentQuantity(roomID, equipment.id, equipment.GetNewQuantity());
-            }
+            foreach(var equipment in equipments) roomEquipmentRepo.ModifyRoomsDynamicEquipmentQuantity(roomID, equipment.id, equipment.GetNewQuantity());
         }
-        public static void MakeEquipmentTransferRequest(int equipmentId,int quantity)
+        public void MakeEquipmentTransferRequest(int equipmentId,int quantity)
         {
             EquipmentTransfer newTransfer = new EquipmentTransfer(-1,
                                                                   quantity,
@@ -35,13 +41,13 @@ namespace Klinika.Services
                                                                   quantity,
                                                                   equipmentId,
                                                                   DateTime.Now.AddDays(1));
-            EquipmentRepository.TransferRequest(newTransfer);
+            transferRepo.TransferRequest(newTransfer);
         }
        
-        private static List<Equipment> PairRoomWithAllDynamicEquipment()
+        private List<Equipment> PairRoomWithAllDynamicEquipment()
         {
-            List<Room> rooms = RoomRepository.Get(); 
-            List<Equipment> dynamicEquipment = EquipmentRepository.GetDynamicEquipmentInStorage();
+            List<Room> rooms = new List<Room>(); 
+            List<Equipment> dynamicEquipment = roomEquipmentRepo.GetDynamicEquipmentInStorage();
             List<Equipment> pairs = new List<Equipment>();
 
             foreach (Room room in rooms)
@@ -60,9 +66,9 @@ namespace Klinika.Services
             return pairs;
         }
 
-        private static List<Equipment> GetQuantities(List<Equipment> roomEquipmentPairs)
+        private List<Equipment> GetQuantities(List<Equipment> roomEquipmentPairs)
         {
-            List<Equipment> registeredEquipmentInRooms = EquipmentRepository.GetAllInRooms();
+            List<Equipment> registeredEquipmentInRooms = roomEquipmentRepo.GetAllInRooms();
             foreach(Equipment pair in roomEquipmentPairs)
             {
                 foreach(Equipment registeredEquipment in registeredEquipmentInRooms)
@@ -77,7 +83,7 @@ namespace Klinika.Services
             return roomEquipmentPairs;
         }
 
-        private static List<Equipment> GetLowStockDynamicEquipmentInRooms(List<Equipment> dynamicEquipmentInRooms)
+        private List<Equipment> GetLowStockDynamicEquipmentInRooms(List<Equipment> dynamicEquipmentInRooms)
         {
             for (int i = dynamicEquipmentInRooms.Count - 1; i >= 0; i--)
             {
@@ -87,7 +93,7 @@ namespace Klinika.Services
             return dynamicEquipmentInRooms;
         }
 
-        public static List<Equipment> GetDynamicEquipmentInRooms()
+        public List<Equipment> GetDynamicEquipmentInRooms()
         {
             List<Equipment> roomDynamicEquipmentPairs = PairRoomWithAllDynamicEquipment();
             roomDynamicEquipmentPairs = GetQuantities(roomDynamicEquipmentPairs);
@@ -95,10 +101,10 @@ namespace Klinika.Services
             return roomDynamicEquipmentPairs.OrderBy(o => o.roomID).ToList();
         }
 
-        public static int GetQuantity(int roomId, int equipmentId)
+        public int GetQuantity(int roomId, int equipmentId)
         {
-            if(roomId != 0) return EquipmentRepository.GetQuantity(roomId, equipmentId);
-            return EquipmentRepository.GetQuantityFromStorage(equipmentId);
+            if(roomId != 0) return roomEquipmentRepo.GetQuantity(roomId, equipmentId);
+            return roomEquipmentRepo.GetQuantityFromStorage(equipmentId);
         }
 
     }

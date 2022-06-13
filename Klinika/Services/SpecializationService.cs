@@ -1,17 +1,24 @@
 ﻿using Klinika.Models;
-using Klinika.Repositories;
 using Klinika.Roles;
-
+using Klinika.Interfaces;
 
 namespace Klinika.Services
 {
     internal class SpecializationService
-    {        
-        public static List<Specialization> GetAllAvailableSpecializations()
+    {
+        private readonly IDoctorRepo doctorRepo;
+        private readonly IUserRepo userRepo;
+
+        public SpecializationService(IDoctorRepo doctorRepo, IUserRepo userRepo)
+        {
+            this.doctorRepo = doctorRepo;
+            this.userRepo = userRepo;
+        }
+        public List<Specialization> GetAllAvailableSpecializations()
         {
             List<int> availableSpecializationsIds = new List<int>();
             List<Specialization> available = new List<Specialization>();
-            foreach (Doctor doctor in DoctorRepository.GetInstance().doctors)
+            foreach (Doctor doctor in doctorRepo.GetAll())
             {
                 if (!availableSpecializationsIds.Contains(doctor.specialization.id))
                 {
@@ -21,9 +28,22 @@ namespace Klinika.Services
             }
             return available;
         }
-        public static List<Specialization> GetAll()
+        public User[] GetSpecializedDoctors(int specializationID)
         {
-            return DoctorRepository.GetSpecializations();
+            var doctorIDs = doctorRepo.GetSpecializedIDs(specializationID).ToArray();
+
+            var specializedDoctors = new List<User>();
+            foreach (int doctorID in doctorIDs)
+            {
+                var doctor = userRepo.GetSingle(doctorID);
+                specializedDoctors.Add(doctor);
+            }
+
+            return specializedDoctors.ToArray();
+        }
+        public List<Specialization> GetAll()
+        {
+            return doctorRepo.GetSpecializations();
         }
     }
 }

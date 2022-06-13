@@ -1,11 +1,15 @@
 ﻿using Klinika.Roles;
 using Klinika.Services;
 using System.Data;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Forms
 {
     internal class DoctorsTable : Base.TableBase<Doctor>
     {
+        private readonly QuestionnaireService? questionnaireService;
+        public DoctorsTable() : base() => questionnaireService = StartUp.serviceProvider.GetService<QuestionnaireService>();
         public override void Fill(List<Doctor> doctors)
         {
             DataTable dataTable = new DataTable();
@@ -27,12 +31,9 @@ namespace Klinika.Forms
             newRow["Name"] = doctor.name;
             newRow["Surname"] = doctor.surname;
             newRow["Specialization"] = doctor.specialization;
-            newRow["Grade"] = string.Format("{0:0.00}", DoctorService.GetGrade(doctor.id));
+            newRow["Grade"] = string.Format("{0:0.00}", questionnaireService.GetDoctorGrade(doctor.id));
             dt.Rows.Add(newRow);
         }
-        public int GetSelectedID()
-        {
-            return Convert.ToInt32(GetCellValue("Doctor ID"));
-        }
+        public int GetSelectedID() => Convert.ToInt32(GetCellValue("Doctor ID"));
     }
 }

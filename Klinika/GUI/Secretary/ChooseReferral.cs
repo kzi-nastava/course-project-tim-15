@@ -2,15 +2,19 @@
 using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {
     public partial class ChooseReferral : Form
     {
         private Referrals parent;
+        private readonly ReferralService referralService;
         public ChooseReferral(Referrals parent)
         {
             this.parent = parent;
+            referralService = StartUp.serviceProvider.GetService<ReferralService>();
             InitializeComponent();
         }
 
@@ -35,7 +39,7 @@ namespace Klinika.GUI.Secretary
             int chosenPatientID = UIUtilities.ExtractID(parent.patientSelection.SelectedItem.ToString());
             try
             {
-                referralsTable.Fill(ReferralService.GetReferralsPerPatient(chosenPatientID));
+                referralsTable.Fill(referralService.GetReferralsPerPatient(chosenPatientID));
             }
             catch(DatabaseConnectionException error)
             {

@@ -1,6 +1,8 @@
-﻿using Klinika.Models;
+﻿using Klinika.Dependencies;
+using Klinika.Models;
 using Klinika.Roles;
 using Klinika.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 
 namespace Klinika.Forms
@@ -57,7 +59,7 @@ namespace Klinika.Forms
             newRow[$"{searchedRole} Full Name"] = GetFullName(appointment);
             newRow["Date & Time"] = appointment.dateTime;
             newRow["Type"] = appointment.GetFullType();
-            newRow["Room"] = RoomServices.GetSingle(appointment.roomID).ToString();
+            newRow["Room"] = StartUp.serviceProvider.GetService<RoomServices>().GetSingle(appointment.roomID).ToString();
             newRow["Duration [min]"] = appointment.duration;
             newRow["Urgent"] = appointment.urgent;
             newRow["Completed"] = appointment.completed;
@@ -84,7 +86,7 @@ namespace Klinika.Forms
                 GetFullName(appointment),
                 appointment.dateTime.ToString(),
                 appointment.GetFullType(),
-                RoomServices.GetSingle(appointment.roomID).ToString(),
+                StartUp.serviceProvider.GetService<RoomServices>().GetSingle(appointment.roomID).ToString(),
                 appointment.duration.ToString(),
                 appointment.urgent,
                 appointment.completed);
@@ -96,9 +98,9 @@ namespace Klinika.Forms
         {
             if (viewerRole == User.RoleType.DOCTOR)
             {
-                return PatientService.GetFullName(appointment.patientID);
+                return StartUp.serviceProvider.GetService<PatientService>().GetFullName(appointment.patientID);
             }
-            return DoctorService.GetFullName(appointment.doctorID);
+            return StartUp.serviceProvider.GetService<DoctorService>().GetFullName(appointment.doctorID);
         }
     }
 }

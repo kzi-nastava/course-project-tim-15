@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Klinika.Exceptions;
+﻿using Klinika.Exceptions;
+using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
-using Klinika.Models;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {
     public partial class PatientsRequestsManagement : Form
     {
+        private readonly PatientRequestService patientRequestService;
+        private readonly AppointmentService appointmentService;
         public PatientsRequestsManagement()
         {
+            patientRequestService = StartUp.serviceProvider.GetService<PatientRequestService>();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
             InitializeComponent();
         }
 
@@ -28,7 +25,7 @@ namespace Klinika.GUI.Secretary
 
         private void DetailsButton_Click(object sender, EventArgs e)
         {
-            new ModificationRequestDetails(PatientRequestService.GetModificationRequest((int)requestsTable.GetCellValue("ID"))).Show();
+            new ModificationRequestDetails(patientRequestService.GetModificationRequest((int)requestsTable.GetCellValue("ID"))).Show();
         }
 
         private void ApproveButton_Click(object sender, EventArgs e)
@@ -73,24 +70,24 @@ namespace Klinika.GUI.Secretary
             if (!approveConfirmation) return;
 
             int requestId = (int)requestsTable.GetCellValue("ID");
-            PatientRequest selected = PatientRequestService.GetRequest(requestId);
+            PatientRequest selected = patientRequestService.GetRequest(requestId);
             try
             {
-                PatientRequestService.Approve(requestId);
+                patientRequestService.Approve(requestId);
                 string requestType = requestsTable.GetCellValue("Type").ToString();
                 int appointmentId = (int)requestsTable.GetCellValue("Appointment ID");
                 
                 if (requestType.Equals("Modify"))
                 {
-                    PatientModificationRequest modificationSelected = PatientRequestService.GetModificationRequest(requestId);
-                    Appointment modified = AppointmentService.GetById(appointmentId);
+                    PatientModificationRequest modificationSelected = patientRequestService.GetModificationRequest(requestId);
+                    Appointment modified = appointmentService.GetById(appointmentId);
                     modified.doctorID = modificationSelected.newDoctorID;
                     modified.dateTime = modificationSelected.newAppointment;
-                    AppointmentService.Modify(modified);
+                    //AppointmentService.Modify(modified);
                 }
                 else
                 {
-                    AppointmentService.Delete(appointmentId);
+                    //AppointmentService.Delete(appointmentId);
                 }
 
                 selected.approved = true;
@@ -109,10 +106,10 @@ namespace Klinika.GUI.Secretary
             bool denyConfirmation = UIUtilities.Confirm("Are you sure you want to deny the selected request?");
             if (!denyConfirmation) return;
             int requestId = (int)requestsTable.GetCellValue("ID");
-            PatientRequest selected = PatientRequestService.GetRequest(requestId);
+            PatientRequest selected = patientRequestService.GetRequest(requestId);
             try
             {
-                PatientRequestService.Deny(requestId);
+                patientRequestService.Deny(requestId);
                 ModifyRowOfPatientRequestsTable(selected);
                 MessageBoxUtilities.ShowSuccessMessage("Request successfully denied!");
                 DisableAllButtons();
@@ -134,7 +131,6 @@ namespace Klinika.GUI.Secretary
         {
             requestsTable.ModifyRow(requestsTable.GetSelectedRow(), request);
         }
-
 
     }
 }

@@ -25,7 +25,7 @@
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            Repositories.RoomRepository.Modify(int.Parse(idTextBox.Text), typeComboBox.Text, int.Parse(numberTextBox.Text));
+            //Repositories.RoomRepository.Modify(int.Parse(idTextBox.Text), typeComboBox.Text, int.Parse(numberTextBox.Text));
             MessageBox.Show("Room successfully modified!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             main.Main_Load(null, EventArgs.Empty);
             this.Close();

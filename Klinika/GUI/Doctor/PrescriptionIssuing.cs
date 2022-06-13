@@ -1,11 +1,15 @@
-﻿using Klinika.Models;
+﻿using Klinika.Dependencies;
+using Klinika.Models;
 using Klinika.Services;
 using Klinika.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
 {
     public partial class PrescriptionIssuing : Form
     {
+        private readonly DrugService? drugService;
+        private readonly PrescriptionService? prescriptionService;
         internal readonly MedicalRecord parent;
 
         #region Form
@@ -13,18 +17,17 @@ namespace Klinika.GUI.Doctor
         {
             InitializeComponent();
             this.parent = parent;
+            drugService = StartUp.serviceProvider.GetService<DrugService>();
+            prescriptionService = StartUp.serviceProvider.GetService<PrescriptionService>();
         }
         private void LoadForm(object sender, EventArgs e)
         {
             parent.Enabled = false;
             PrescriptionStartDatePicker.MinDate = DateTime.Now;
             PrescriptionEndDatePicker.MinDate = DateTime.Now;
-            DrugsTable.Fill(DrugService.GetApproved());
+            DrugsTable.Fill(drugService.GetApproved());
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
         #endregion
 
         #region Prescript
@@ -38,7 +41,7 @@ namespace Klinika.GUI.Doctor
                 new TimeSlot(PrescriptionStartDatePicker.Value, PrescriptionEndDatePicker.Value),
                 Convert.ToInt32(IntervalSpinner.Value),
                 CommentTextBox.Text);
-            PrescriptionService.StorePrescription(prescription);
+            prescriptionService.Create(prescription);
 
             MessageBoxUtilities.ShowInformationMessage("Drug prescripted!");
             Close();
