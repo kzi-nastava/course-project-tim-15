@@ -88,7 +88,7 @@ namespace Klinika.GUI.Manager
                 transfer.transfer = dateTimePicker.Value.Date;
                 if (transfer.transfer.Date == DateTime.Now.Date)
                 {
-                    Repositories.EquipmentRepository.Transfer(transfer);
+                    //Repositories.EquipmentRepository.Transfer(transfer);
                     if(parent.GetType() == typeof(Secretary.LowStockDynamicEquipmentTransfers))
                     {
                         ((Secretary.LowStockDynamicEquipmentTransfers)parent).UpdateLowStockDynamicEquipmentTable(transfer);
@@ -97,7 +97,7 @@ namespace Klinika.GUI.Manager
                 }
                 else
                 {
-                    Repositories.EquipmentRepository.TransferRequest(main.transfer);
+                    //Repositories.EquipmentRepository.TransferRequest(main.transfer);
                 }
 
                 //U dont need it
@@ -112,7 +112,7 @@ namespace Klinika.GUI.Manager
             if (isTransferFrom)
             {
                 transfer.fromId = selectedRoomId;
-                transfer.maxQuantity = EquipmentService.GetQuantity(selectedRoomId, transfer.equipment);
+                //transfer.maxQuantity = EquipmentService.GetQuantity(selectedRoomId, transfer.equipment);
                 maxQuantityLabel.Text = "Maximum quantity: " + transfer.maxQuantity.ToString();
                 return;
             }

@@ -96,7 +96,7 @@ namespace Klinika.GUI.Secretary
                                             UIUtilities.ExtractID(doctorField.Text),
                                             UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
                                             appointmentStart, 1, false, 'E', 15, false, "", false);
-            AppointmentService.Create(newAppointment);
+            //AppointmentService.Create(newAppointment);
             return true;
         }
 

@@ -4,6 +4,6 @@ namespace Klinika.Interfaces
 {
     public interface IBaseDoctorRepo
     {
-        List<Doctor> GetAll();
+        public List<Doctor> GetAll();
     }
 }

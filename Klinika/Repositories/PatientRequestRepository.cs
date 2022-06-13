@@ -1,4 +1,5 @@
-﻿using Klinika.Interfaces;
+﻿using Klinika.Data;
+using Klinika.Interfaces;
 using Klinika.Models;
 using System.Data;
 
@@ -6,7 +7,7 @@ namespace Klinika.Repositories
 {
     internal class PatientRequestRepository : Repository, IPatientRequestRepo
     {
-        public List<PatientRequest> allRequests { get; private set; }
+        public List<PatientRequest>? allRequests { get; private set; }
 
         public PatientRequestRepository()
         {
@@ -27,7 +28,7 @@ namespace Klinika.Repositories
                 requests.Add(new PatientRequest((int)request["ID"],
                                                 (int)request["PatientID"],
                                                 (int)request["MedicalActionID"],
-                                                (char)request["Type"],
+                                                Convert.ToChar(request["Type"]),
                                                 request["Description"].ToString(),
                                                 isApproved
                              ));

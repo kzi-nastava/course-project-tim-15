@@ -20,8 +20,8 @@
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            int typeId = Repositories.RoomRepository.GetTypeId(typeComboBox.Text);
-            Repositories.RoomRepository.Create(typeId, int.Parse(numberTextBox.Text));
+            //int typeId = Repositories.RoomRepository.GetTypeId(typeComboBox.Text);
+            //Repositories.RoomRepository.Create(typeId, int.Parse(numberTextBox.Text));
             MessageBox.Show("Room successfully added!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             main.Main_Load(null, EventArgs.Empty);
             Close();

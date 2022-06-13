@@ -16,6 +16,7 @@ namespace Klinika
         {
             InitializeComponent();
             loginService = StartUp.serviceProvider.GetService<LoginService>();
+            userService = StartUp.serviceProvider.GetService<UserService>();
         }
 
         private void LoginButton_Click(object sender, EventArgs e)

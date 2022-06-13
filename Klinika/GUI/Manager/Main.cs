@@ -111,7 +111,7 @@ namespace Klinika.GUI.Manager
             roomsTable.DataSource = rooms;
             roomsTable.Columns["ID"].Visible = false;
 
-            unfiltered = Repositories.EquipmentRepository.GetAll();
+            //unfiltered = Repositories.EquipmentRepository.GetAll();
             equipmentTable.DataSource = unfiltered;
             equipmentTable.Columns["EquipmentID"].Visible = false;
             equipmentTable.Columns["RoomID"].Visible = false;
@@ -126,7 +126,7 @@ namespace Klinika.GUI.Manager
             DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected room? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (deletionConfirmation == DialogResult.Yes)
             {
-                Repositories.RoomRepository.Delete((int)roomsTable.SelectedRows[0].Cells["ID"].Value);
+                //Repositories.RoomRepository.Delete((int)roomsTable.SelectedRows[0].Cells["ID"].Value);
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Main_Load(null, EventArgs.Empty);
             }
@@ -141,7 +141,7 @@ namespace Klinika.GUI.Manager
         {
             int[] selectedRoom = new int[3];
             selectedRoom[0] = (int)roomsTable.SelectedRows[0].Cells["ID"].Value;
-            selectedRoom[1] = Repositories.RoomRepository.GetTypeId(roomsTable.SelectedRows[0].Cells["Type"].Value.ToString());
+            //selectedRoom[1] = Repositories.RoomRepository.GetTypeId(roomsTable.SelectedRows[0].Cells["Type"].Value.ToString());
             selectedRoom[2] = (int)roomsTable.SelectedRows[0].Cells["Number"].Value;
             new ModifyRoom(this, selectedRoom).Show();
         }

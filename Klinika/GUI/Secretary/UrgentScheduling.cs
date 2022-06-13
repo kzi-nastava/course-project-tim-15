@@ -78,16 +78,16 @@ namespace Klinika.GUI.Secretary
 
             appointmentSelection.Text = firstAvailable.from.ToString();
 
-            AppointmentService.Create(new Appointment(-1, suitable.id,
-                                        UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
-                                        firstAvailable.from,
-                                        1,
-                                        false,
-                                        'E',
-                                        15,
-                                        true,
-                                        "",
-                                        false));
+            //AppointmentService.Create(new Appointment(-1, suitable.id,
+            //                            UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
+            //                            firstAvailable.from,
+            //                            1,
+            //                            false,
+            //                            'E',
+            //                            15,
+            //                            true,
+            //                            "",
+            //                            false));
             MessageBoxUtilities.ShowSuccessMessage("Urgent appointment successfully scheduled!");
             appointmentSelection.Enabled = false;
             scheduleButton.Enabled = false;
@@ -120,11 +120,11 @@ namespace Klinika.GUI.Secretary
             Appointment toReschedule = selected.appointment;
             DateTime previousAppointment = toReschedule.dateTime;
             toReschedule.dateTime = selected.to;
-            AppointmentService.Modify(toReschedule);
+            //AppointmentService.Modify(toReschedule);
             Appointment urgent = new Appointment(-1, toReschedule.doctorID, UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
                                                  previousAppointment,
                                                  1, false, 'E', 15, true,"", false);
-            AppointmentService.Create(urgent);
+            //AppointmentService.Create(urgent);
             NotifyAll(toReschedule,previousAppointment);
             Roles.Doctor doctor = doctorService.GetById(toReschedule.doctorID);
             doctorField.Text = doctor.GetIdAndFullName();

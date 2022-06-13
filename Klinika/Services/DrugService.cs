@@ -21,12 +21,13 @@ namespace Klinika.Services
 
         public static List<Ingredient> GetIngredients(int id)
         {
-            List<Ingredient> ingredients = Repositories.DrugRepository.Instance.GetIngredientsOfOne(id);
-            return ingredients;
+            //List<Ingredient> ingredients = Repositories.DrugRepository.Instance.GetIngredientsOfOne(id);
+            return null;
         }
         public static string GetNote(int id)
         {
-            return Repositories.DrugRepository.GetNote(id);
+            //return Repositories.DrugRepository.GetNote(id);
+            return "";
         }
         public static void AddDrug(Models.Drug drug, DataTable table)
         {
@@ -37,14 +38,14 @@ namespace Klinika.Services
             }
             else
             {
-                Repositories.DrugRepository.RemoveIngredients(drug.id);
-                Repositories.DrugRepository.Fix(drug.id);
+                //Repositories.DrugRepository.RemoveIngredients(drug.id);
+                //Repositories.DrugRepository.Fix(drug.id);
                 List<int> ingredientIds = new List<int>();
                 foreach (DataRow dataRow in table.Rows)
                 {
                     ingredientIds.Add(int.Parse(dataRow["id"].ToString()));
                 }
-                Repositories.DrugRepository.AddIngredients(drug.id, ingredientIds);
+                //Repositories.DrugRepository.AddIngredients(drug.id, ingredientIds);
             }
         }
     }

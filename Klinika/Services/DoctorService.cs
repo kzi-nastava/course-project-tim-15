@@ -10,10 +10,10 @@ namespace Klinika.Services
 {
     internal class DoctorService
     {
-        private readonly DoctorScheduleService scheduleService;
-        private IDoctorRepo doctorRepo { get; }
+        private readonly DoctorScheduleService? scheduleService;
+        private IDoctorRepo doctorRepo;
         private IScheduledAppointmentsRepo scheduledAppointmentsRepo;
-        public DoctorService(IDoctorRepo doctorRepo,IScheduledAppointmentsRepo scheduledAppointmentsRepo)
+        public DoctorService(IDoctorRepo doctorRepo, IScheduledAppointmentsRepo scheduledAppointmentsRepo)
         {
             scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
             this.doctorRepo = doctorRepo;

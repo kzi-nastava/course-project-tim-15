@@ -1,4 +1,6 @@
-﻿using Klinika.Services;
+﻿using Klinika.Dependencies;
+using Klinika.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Models
 {
@@ -38,7 +40,7 @@ namespace Klinika.Models
             this.patientID = patientID;
             this.doctorID = doctorID;
             dateTime = DateTime.Now;
-            roomID = DoctorService.GetById(doctorID).officeID;
+            roomID = StartUp.serviceProvider.GetService<DoctorService>().GetById(doctorID).officeID;
             completed = false;
             type = 'E';
             duration = 15;
@@ -52,7 +54,7 @@ namespace Klinika.Models
             this.doctorID = doctorID;
             this.patientID = patientID;
             this.dateTime = dateTime;
-            roomID = DoctorService.GetById(doctorID).officeID;
+            roomID = StartUp.serviceProvider.GetService<DoctorService>().GetById(doctorID).officeID;
             completed = false;
             type = 'E';
             duration = 15;

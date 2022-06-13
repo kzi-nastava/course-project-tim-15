@@ -12,16 +12,16 @@
         private void splitButton_Click(object sender, EventArgs e)
         {
             renovation.secondNumber = int.Parse(numberTextBox.Text);
-            renovation.secondType = Repositories.RoomRepository.GetTypeId(typeComboBox.Text);
-            if (Repositories.RoomRepository.Renovate(renovation))
-            {
-                MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Invalid input.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            //renovation.secondType = Repositories.RoomRepository.GetTypeId(typeComboBox.Text);
+            //if (Repositories.RoomRepository.Renovate(renovation))
+            //{
+            //    MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    this.Close();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Invalid input.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //}
         }
 
         private void Split_Load(object sender, EventArgs e)

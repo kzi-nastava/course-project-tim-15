@@ -83,11 +83,11 @@ namespace Klinika.GUI.Secretary
                     Appointment modified = appointmentService.GetById(appointmentId);
                     modified.doctorID = modificationSelected.newDoctorID;
                     modified.dateTime = modificationSelected.newAppointment;
-                    AppointmentService.Modify(modified);
+                    //AppointmentService.Modify(modified);
                 }
                 else
                 {
-                    AppointmentService.Delete(appointmentId);
+                    //AppointmentService.Delete(appointmentId);
                 }
 
                 selected.approved = true;

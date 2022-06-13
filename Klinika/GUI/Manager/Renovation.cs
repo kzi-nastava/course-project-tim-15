@@ -41,12 +41,12 @@
                     if (noneRadio.Checked)
                     {
                         renovation.advanced = 0;
-                        if (Repositories.RoomRepository.Renovate(renovation))
-                        {
-                            MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            main.Main_Load(null, EventArgs.Empty);
-                            this.Close();
-                        }
+                        //if (Repositories.RoomRepository.Renovate(renovation))
+                        //{
+                        //    MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //    main.Main_Load(null, EventArgs.Empty);
+                        //    this.Close();
+                        //}
                     }
                     else if (mergeRadio.Checked)
                     {

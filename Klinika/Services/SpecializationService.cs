@@ -7,8 +7,13 @@ namespace Klinika.Services
     internal class SpecializationService
     {
         private readonly IDoctorRepo doctorRepo;
+        private readonly IUserRepo userRepo;
 
-        public SpecializationService(IDoctorRepo doctorRepo) => this.doctorRepo = doctorRepo;
+        public SpecializationService(IDoctorRepo doctorRepo, IUserRepo userRepo)
+        {
+            this.doctorRepo = doctorRepo;
+            this.userRepo = userRepo;
+        }
         public List<Specialization> GetAllAvailableSpecializations()
         {
             List<int> availableSpecializationsIds = new List<int>();
@@ -22,6 +27,19 @@ namespace Klinika.Services
                 }
             }
             return available;
+        }
+        public User[] GetSpecializedDoctors(int specializationID)
+        {
+            var doctorIDs = doctorRepo.GetSpecializedIDs(specializationID).ToArray();
+
+            var specializedDoctors = new List<User>();
+            foreach (int doctorID in doctorIDs)
+            {
+                var doctor = userRepo.GetSingle(doctorID);
+                specializedDoctors.Add(doctor);
+            }
+
+            return specializedDoctors.ToArray();
         }
         public List<Specialization> GetAll()
         {

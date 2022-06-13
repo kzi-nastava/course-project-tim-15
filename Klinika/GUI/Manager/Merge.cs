@@ -25,15 +25,15 @@
             renovation.secondId = int.Parse(((Models.EnhancedComboBoxItem)roomComboBox.Items[roomComboBox.SelectedIndex]).value.ToString());
             if (!Services.RoomServices.IsRoomRenovating(renovation.secondId, renovation.from, renovation.to))
             {
-                if (Repositories.RoomRepository.Renovate(renovation))
-                {
-                    MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Invalid input.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                //if (Repositories.RoomRepository.Renovate(renovation))
+                //{
+                //    MessageBox.Show("Room successfully set for renovation!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //    this.Close();
+                //}
+                //else
+                //{
+                //    MessageBox.Show("Invalid input.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //}
             }
             else
             {

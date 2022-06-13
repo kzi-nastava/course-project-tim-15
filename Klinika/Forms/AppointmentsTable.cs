@@ -9,24 +9,17 @@ namespace Klinika.Forms
 {
     public class AppointmentsTable : Base.TableBase<Appointment>
     {
-        private readonly RoomServices? roomService;
-        private readonly PatientService? patientService;
-        private readonly DoctorService? doctorService;
         private List<Appointment> appointments;
         private User.RoleType viewerRole;
         private string searchedRole;
         public AppointmentsTable() : base()
         {
             appointments = new List<Appointment>();
-            roomService = StartUp.serviceProvider.GetService<RoomServices>();
-            patientService = StartUp.serviceProvider.GetService<PatientService>();
-            doctorService = StartUp.serviceProvider.GetService<DoctorService>();
             SetViewerRole(User.RoleType.DOCTOR);
         }
         public AppointmentsTable(User.RoleType viewerRole) : base()
         {
             appointments = new List<Appointment>();
-            roomService = StartUp.serviceProvider.GetService<RoomServices>();
             SetViewerRole(viewerRole);
         }
         private void SetViewerRole(User.RoleType viewerRole)
@@ -66,7 +59,7 @@ namespace Klinika.Forms
             newRow[$"{searchedRole} Full Name"] = GetFullName(appointment);
             newRow["Date & Time"] = appointment.dateTime;
             newRow["Type"] = appointment.GetFullType();
-            newRow["Room"] = roomService.GetSingle(appointment.roomID).ToString();
+            newRow["Room"] = StartUp.serviceProvider.GetService<RoomServices>().GetSingle(appointment.roomID).ToString();
             newRow["Duration [min]"] = appointment.duration;
             newRow["Urgent"] = appointment.urgent;
             newRow["Completed"] = appointment.completed;
@@ -93,7 +86,7 @@ namespace Klinika.Forms
                 GetFullName(appointment),
                 appointment.dateTime.ToString(),
                 appointment.GetFullType(),
-                roomService.GetSingle(appointment.roomID).ToString(),
+                StartUp.serviceProvider.GetService<RoomServices>().GetSingle(appointment.roomID).ToString(),
                 appointment.duration.ToString(),
                 appointment.urgent,
                 appointment.completed);
@@ -105,9 +98,9 @@ namespace Klinika.Forms
         {
             if (viewerRole == User.RoleType.DOCTOR)
             {
-                return patientService.GetFullName(appointment.patientID);
+                return StartUp.serviceProvider.GetService<PatientService>().GetFullName(appointment.patientID);
             }
-            return doctorService.GetFullName(appointment.doctorID);
+            return StartUp.serviceProvider.GetService<DoctorService>().GetFullName(appointment.doctorID);
         }
     }
 }

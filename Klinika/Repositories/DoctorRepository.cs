@@ -9,8 +9,7 @@ namespace Klinika.Repositories
     {
         public  List<Doctor> doctors { get; }
         private readonly IUserRepo userRepo;
-
-        private DoctorRepository()
+        public DoctorRepository() : base()
         {
             doctors = GetAll();
             userRepo = new UserRepository();
@@ -35,7 +34,7 @@ namespace Klinika.Repositories
             return specializations;
         }
 
-        private List<int> GetSpecializedIDs(int specializationID)
+        public List<int> GetSpecializedIDs(int specializationID)
         {
             List<int> doctors = new List<int>();
 
@@ -50,20 +49,6 @@ namespace Klinika.Repositories
             }
 
             return doctors;
-        }
-
-        public User[] GetSpecializedDoctors(int specializationID)
-        {
-            var doctorIDs = GetSpecializedIDs(specializationID).ToArray();
-
-            var specializedDoctors = new List<User>();
-            foreach (int doctorID in doctorIDs)
-            {
-                var doctor = userRepo.Users.FirstOrDefault(x => x.id == doctorID);
-                specializedDoctors.Add(doctor);
-            }
-
-            return specializedDoctors.ToArray();
         }
 
         public Specialization GetSpecialization (int doctorID)

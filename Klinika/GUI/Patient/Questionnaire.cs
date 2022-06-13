@@ -49,7 +49,8 @@ namespace Klinika.GUI.Patient
         private void SendButtonClick(object sender, EventArgs e)
         {
             if (!UIUtilities.Confirm("Are you sure you want to send this Questionnaire?")) return;
-            questionnaireService.Send(questionnaire, CollectData());
+            var answers = CollectData();
+            questionnaireService.Send(questionnaire, answers);
             Close();
         }
         private void SetGradeButtonClick(object sender, EventArgs e)
