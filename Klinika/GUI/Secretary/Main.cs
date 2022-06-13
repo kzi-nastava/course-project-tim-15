@@ -36,6 +36,11 @@
         {
             new LowStockDynamicEquipmentTransfers().Show();
         }
+
+        private void vacationDaysRequestsButton_Click(object sender, EventArgs e)
+        {
+            new VacationDaysRequests().Show();
+        }
     }
 
 }

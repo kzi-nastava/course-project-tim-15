@@ -1,19 +1,24 @@
 ﻿using Klinika.Models;
 using System.Data;
+using Klinika.Services;
 
 namespace Klinika.Forms
 {
     public class VacationRequestsTable : Base.TableBase<VacationRequest>
     {
         private List<VacationRequest> vacationRequests;
-        public VacationRequestsTable() : base()
+        private bool showDoctor = false;
+        public VacationRequestsTable(bool showDoctor = false) : base()
         {
             vacationRequests = new List<VacationRequest>();
+            this.showDoctor = showDoctor;
         }
+
         public override void Fill(List<VacationRequest> vacationRequests)
         {
             DataTable vacationRequestsData = new DataTable();
             vacationRequestsData.Columns.Add("ID");
+            if (showDoctor) vacationRequestsData.Columns.Add("Doctor");
             vacationRequestsData.Columns.Add("From");
             vacationRequestsData.Columns.Add("To");
             vacationRequestsData.Columns.Add("Reason");
@@ -27,6 +32,7 @@ namespace Klinika.Forms
             Columns["To"].Width = 80;
             Columns["Status"].Width = 70;
             Columns["Urgent"].Width = 65;
+            if (showDoctor) Columns["Doctor"].Width = 130;
 
             this.vacationRequests = new List<VacationRequest>();
             foreach (VacationRequest vacationRequest in vacationRequests) Insert(vacationRequest);
@@ -38,6 +44,7 @@ namespace Klinika.Forms
             DataTable? dt = DataSource as DataTable;
             DataRow newRow = dt.NewRow();
             newRow["ID"] = vacationRequest.id;
+            if (showDoctor) newRow["Doctor"] = DoctorService.GetFullName(vacationRequest.doctorID);
             newRow["From"] = vacationRequest.fromDate.ToString("MM.dd.yyyy");
             newRow["To"] = vacationRequest.toDate.ToString("MM.dd.yyyy");
             newRow["Reason"] = vacationRequest.reason;
@@ -64,14 +71,14 @@ namespace Klinika.Forms
         }
         public void ModifySelected(VacationRequest vacationRequest)
         {
-            SelectedRows[0].SetValues(
-                vacationRequest.id.ToString(),
-                vacationRequest.fromDate.ToString("MM.dd.yyyy"),
-                vacationRequest.toDate.ToString("MM.dd.yyyy"),
-                vacationRequest.reason,
-                vacationRequest.status.ToString(),
-                vacationRequest.emergency,
-                vacationRequest.denyReason);
+            SelectedRows[0].Cells["ID"].Value = vacationRequest.id.ToString();
+            if(showDoctor) SelectedRows[0].Cells["Doctor"].Value = DoctorService.GetFullName(vacationRequest.doctorID);
+            SelectedRows[0].Cells["From"].Value = vacationRequest.fromDate.ToString("MM.dd.yyyy");
+            SelectedRows[0].Cells["To"].Value = vacationRequest.toDate.ToString("MM.dd.yyyy");
+            SelectedRows[0].Cells["Reason"].Value = vacationRequest.reason;
+            SelectedRows[0].Cells["Status"].Value = ((VacationRequest.Statuses)vacationRequest.status).ToString();
+            SelectedRows[0].Cells["Urgent"].Value = vacationRequest.emergency;
+            SelectedRows[0].Cells["Deny reason"].Value = vacationRequest.denyReason;
 
             vacationRequests.Remove(vacationRequests.Where(x => x.id == vacationRequest.id).FirstOrDefault());
             vacationRequests.Add(vacationRequest);

@@ -24,5 +24,12 @@ namespace Klinika.Services
                 start = start.AddHours(prescription.interval);
             }
         }
+        public static string GenerateMessage(VacationRequest request)
+        {
+            string message = "Request for vacation days from " + request.fromDate.ToString("yyyy-MM-dd") + " to " +
+                             request.toDate.ToString("yyyy-MM-dd") + " " + ((VacationRequest.Statuses)request.status).ToString().ToLower() + ".";
+            if (request.status == 'D') message += "\nReason: " + request.denyReason;
+            return message;
+        }
     }
 }
