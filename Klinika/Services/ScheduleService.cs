@@ -42,7 +42,7 @@ namespace Klinika.Services
             appointmentDatePairs = appointmentDatePairs.OrderBy(o => o.appointment.dateTime).ToList();
             return appointmentDatePairs.Take(5).ToList();
         }
-        //public List<Appointment> GetAll() => appointmentsRepo.GetAll();
+        public List<Appointment> GetAll() => appointmentsRepo.GetAll();
         public List<Appointment> GetAll(Patient patient) => appointmentsRepo.GetAll(patient.id, User.RoleType.PATIENT);
     }
 }

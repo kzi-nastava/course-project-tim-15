@@ -19,15 +19,9 @@ namespace Klinika
             userService = StartUp.serviceProvider.GetService<UserService>();
         }
 
-        private void LoginButton_Click(object sender, EventArgs e)
-        {
-            TryLogin();
-        }
+        private void LoginButton_Click(object sender, EventArgs e) => TryLogin();
 
-        private void LoginPage_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Application.Exit();
-        }
+        private void LoginPage_FormClosing(object sender, FormClosingEventArgs e) => Application.Exit();
 
         private void LoginPage_Load(object sender, EventArgs e)
         {
@@ -90,6 +84,5 @@ namespace Klinika
             return error_message;
 
         }
-
     }
 }

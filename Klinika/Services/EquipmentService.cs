@@ -9,10 +9,12 @@ namespace Klinika.Services
     {
         private readonly IRoomEquipmentRepo roomEquipmentRepo;
         private readonly ITransferRepo transferRepo;
-        public EquipmentService(IRoomEquipmentRepo roomEquipmentRepo, ITransferRepo transferRepo)
+        private readonly IRoomRepo roomRepo;
+        public EquipmentService(IRoomEquipmentRepo roomEquipmentRepo, ITransferRepo transferRepo, IRoomRepo roomRepo)
         {
             this.roomEquipmentRepo = roomEquipmentRepo;
             this.transferRepo = transferRepo;
+            this.roomRepo = roomRepo;
         }
 
         public List<Equipment> GetMissingDynamicEquipment()
@@ -46,7 +48,7 @@ namespace Klinika.Services
        
         private List<Equipment> PairRoomWithAllDynamicEquipment()
         {
-            List<Room> rooms = new List<Room>(); 
+            List<Room> rooms = roomRepo.Get(); 
             List<Equipment> dynamicEquipment = roomEquipmentRepo.GetDynamicEquipmentInStorage();
             List<Equipment> pairs = new List<Equipment>();
 

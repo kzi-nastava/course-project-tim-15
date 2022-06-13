@@ -18,10 +18,7 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void ChooseReferal_Load(object sender, EventArgs e)
-        {
-            InitializeTable();
-        }
+        private void ChooseReferal_Load(object sender, EventArgs e) => InitializeTable();
 
         private void ChooseReferalButton_Click(object sender, EventArgs e)
         {
@@ -29,10 +26,7 @@ namespace Klinika.GUI.Secretary
             Close();
         }
 
-        private void ReferralsTable_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SetButtonState();
-        }
+        private void ReferralsTable_CellClick(object sender, DataGridViewCellEventArgs e) => SetButtonState();
 
         private void InitializeTable()
         {

@@ -21,10 +21,7 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void ConfirmButton_Click(object sender, EventArgs e)
-        {
-            Confirm();
-        }
+        private void ConfirmButton_Click(object sender, EventArgs e) => Confirm();
 
         private void Confirm()
         {

@@ -19,15 +19,9 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void modifyButton_Click(object sender, EventArgs e)
-        {
-            Modify();            
-        }
+        private void modifyButton_Click(object sender, EventArgs e) => Modify();
 
-        private void ModifyPatient_Load(object sender, EventArgs e)
-        {
-            SetFormFieldValues();
-        }
+        private void ModifyPatient_Load(object sender, EventArgs e) => SetFormFieldValues();
 
         private void SetFormFieldValues()
         {
@@ -79,7 +73,6 @@ namespace Klinika.GUI.Secretary
             }
         }
 
-
         public string? ValidatePatient(Roles.Patient patient)
         {
             string error_messsage = null;
@@ -121,6 +114,5 @@ namespace Klinika.GUI.Secretary
             return error_messsage;
 
         }
-
     }
 }

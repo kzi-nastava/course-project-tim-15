@@ -63,13 +63,13 @@ namespace Klinika.Repositories
             }
             return output;
         }
-        public static void Deny(VacationRequest request)
+        public void Deny(VacationRequest request)
         {
             string denyQuery = "UPDATE [VacationRequest] SET Status = 'D', DenyReason = @reason " +
                                "WHERE ID = @id";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(denyQuery, ("@id", request.id), ("@reason", request.denyReason));
         }
-        public static void Approve(VacationRequest request)
+        public void Approve(VacationRequest request)
         {
             string approveQuery = "UPDATE [VacationRequest] SET Status = 'A' WHERE ID = @id";
             DatabaseConnection.GetInstance().ExecuteNonQueryCommand(approveQuery, ("@id", request.id));

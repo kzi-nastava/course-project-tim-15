@@ -13,6 +13,7 @@ namespace Klinika.GUI.Secretary
         private readonly DoctorService doctorService;
         private readonly ScheduleService scheduleService;
         private readonly SpecializationService specializationService;
+        private readonly AppointmentService appointmentService;
         private readonly NotificationService notificationService;
         public UrgentScheduling()
         {
@@ -20,18 +21,13 @@ namespace Klinika.GUI.Secretary
             scheduleService = StartUp.serviceProvider.GetService<ScheduleService>();
             specializationService = StartUp.serviceProvider.GetService<SpecializationService>();
             notificationService = StartUp.serviceProvider.GetService<NotificationService>();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
             InitializeComponent();
         }
 
-        private void scheduleButton_Click(object sender, EventArgs e)
-        {
-            TryScheduling();
-        }
+        private void ScheduleButton_Click(object sender, EventArgs e) => TryScheduling();
 
-        private void UrgentScheduling_Load(object sender, EventArgs e)
-        {
-            FillInitialSelectionFields();
-        }
+        private void UrgentScheduling_Load(object sender, EventArgs e) => FillInitialSelectionFields();
 
         private void FillInitialSelectionFields()
         {
@@ -78,16 +74,16 @@ namespace Klinika.GUI.Secretary
 
             appointmentSelection.Text = firstAvailable.from.ToString();
 
-            //AppointmentService.Create(new Appointment(-1, suitable.id,
-            //                            UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
-            //                            firstAvailable.from,
-            //                            1,
-            //                            false,
-            //                            'E',
-            //                            15,
-            //                            true,
-            //                            "",
-            //                            false));
+            appointmentService.Create(new Appointment(-1, suitable.id,
+                                        UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
+                                        firstAvailable.from,
+                                        1,
+                                        false,
+                                        'E',
+                                        15,
+                                        true,
+                                        "",
+                                        false));
             MessageBoxUtilities.ShowSuccessMessage("Urgent appointment successfully scheduled!");
             appointmentSelection.Enabled = false;
             scheduleButton.Enabled = false;
@@ -120,11 +116,11 @@ namespace Klinika.GUI.Secretary
             Appointment toReschedule = selected.appointment;
             DateTime previousAppointment = toReschedule.dateTime;
             toReschedule.dateTime = selected.to;
-            //AppointmentService.Modify(toReschedule);
+            appointmentService.Modify(toReschedule);
             Appointment urgent = new Appointment(-1, toReschedule.doctorID, UIUtilities.ExtractID(patientSelection.SelectedItem.ToString()),
                                                  previousAppointment,
                                                  1, false, 'E', 15, true,"", false);
-            //AppointmentService.Create(urgent);
+            appointmentService.Create(urgent);
             NotifyAll(toReschedule,previousAppointment);
             Roles.Doctor doctor = doctorService.GetById(toReschedule.doctorID);
             doctorField.Text = doctor.GetIdAndFullName();
@@ -142,6 +138,5 @@ namespace Klinika.GUI.Secretary
             message = "New urgent appointment on " + previousAppointment.ToString("yyyy-MM-dd HH:mm") + ".";
             notificationService.Send(new Notification(selected.doctorID, message));
         }
-
     }
 }

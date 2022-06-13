@@ -17,10 +17,7 @@ namespace Klinika.GUI.Secretary
             doctorService = StartUp.serviceProvider.GetService<DoctorService>();
         }
 
-        private void ModificationRequestDetails_Load(object sender, EventArgs e)
-        {
-            FillFields();
-        }
+        private void ModificationRequestDetails_Load(object sender, EventArgs e) => FillFields();
 
         private void FillFields()
         {

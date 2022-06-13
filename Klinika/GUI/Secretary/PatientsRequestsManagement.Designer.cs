@@ -32,7 +32,8 @@ namespace Klinika.GUI.Secretary
             this.denyButton = new System.Windows.Forms.Button();
             this.approveButton = new System.Windows.Forms.Button();
             this.detailsButton = new System.Windows.Forms.Button();
-            this.requestsTable = new PatientsRequestsTable();
+            this.requestsTable = new Klinika.Forms.PatientsRequestsTable();
+            ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).BeginInit();
             this.SuspendLayout();
             // 
             // denyButton
@@ -68,16 +69,37 @@ namespace Klinika.GUI.Secretary
             this.detailsButton.UseVisualStyleBackColor = true;
             this.detailsButton.Click += new System.EventHandler(this.DetailsButton_Click);
             // 
+            // patientsRequestsTable
+            // 
+            this.requestsTable.AllowUserToAddRows = false;
+            this.requestsTable.AllowUserToDeleteRows = false;
+            this.requestsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.requestsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.requestsTable.BackgroundColor = System.Drawing.Color.White;
+            this.requestsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.requestsTable.Location = new System.Drawing.Point(17, 16);
+            this.requestsTable.MultiSelect = false;
+            this.requestsTable.Name = "patientsRequestsTable";
+            this.requestsTable.ReadOnly = true;
+            this.requestsTable.RowHeadersWidth = 51;
+            this.requestsTable.RowTemplate.Height = 30;
+            this.requestsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.requestsTable.Size = new System.Drawing.Size(936, 391);
+            this.requestsTable.TabIndex = 14;
+            // 
             // PatientsRequestsManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(970, 480);
+            this.Controls.Add(this.requestsTable);
             this.Controls.Add(this.denyButton);
             this.Controls.Add(this.approveButton);
             this.Controls.Add(this.detailsButton);
             this.Name = "PatientsRequestsManagement";
             this.Text = "Patients Requests Management";
+            this.Load += new System.EventHandler(this.PatientsRequestsManagement_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.requestsTable)).EndInit();
             this.ResumeLayout(false);
 
         }

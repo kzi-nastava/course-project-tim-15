@@ -85,7 +85,7 @@
             this.scheduleButton.TabIndex = 4;
             this.scheduleButton.Text = "Schedule";
             this.scheduleButton.UseVisualStyleBackColor = true;
-            this.scheduleButton.Click += new System.EventHandler(this.scheduleButton_Click);
+            this.scheduleButton.Click += new System.EventHandler(this.ScheduleButton_Click);
             // 
             // label3
             // 

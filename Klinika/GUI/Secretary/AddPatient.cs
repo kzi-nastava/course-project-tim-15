@@ -17,15 +17,9 @@ namespace Klinika.GUI.Secretary
             InitializeComponent();
         }
 
-        private void AddPatient_Load(object sender, EventArgs e)
-        {
-            genderSelection.SelectedIndex = 0;
-        }
+        private void AddPatient_Load(object sender, EventArgs e) => genderSelection.SelectedIndex = 0;
 
-        private void addButton_Click(object sender, EventArgs e)
-        {
-            Add();
-        }
+        private void addButton_Click(object sender, EventArgs e) => Add();
 
         private void Add()
         {
@@ -114,6 +108,5 @@ namespace Klinika.GUI.Secretary
             return error_messsage;
 
         }
-
     }
 }

@@ -27,10 +27,7 @@ namespace Klinika.GUI.Secretary
             lowStockDynamicEquipmentTable.MarkOutOfStock();
         }
 
-        private void LowStockDynamicEquipmentTable_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            getFromButton.Enabled = true;
-        }
+        private void LowStockDynamicEquipmentTable_CellClick(object sender, DataGridViewCellEventArgs e) => getFromButton.Enabled = true;
 
         public void UpdateLowStockDynamicEquipmentTable(EquipmentTransfer transfer)
         {
@@ -49,6 +46,5 @@ namespace Klinika.GUI.Secretary
                 }
             }
         }
-
     }
 }
