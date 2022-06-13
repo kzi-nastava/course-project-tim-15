@@ -1,4 +1,6 @@
-﻿namespace Klinika.GUI.Patient
+﻿using Klinika.Users.Models;
+
+namespace Klinika.GUI.Patient
 {
     partial class ViewSchedule
     {
@@ -30,7 +32,7 @@
         {
             this.ModifyButton = new System.Windows.Forms.Button();
             this.DeleteButton = new System.Windows.Forms.Button();
-            this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsTable(Roles.User.RoleType.PATIENT);
+            this.PersonalAppointmentsTable = new Klinika.Forms.AppointmentsTable(User.RoleType.PATIENT);
             ((System.ComponentModel.ISupportInitialize)(this.PersonalAppointmentsTable)).BeginInit();
             this.SuspendLayout();
             // 

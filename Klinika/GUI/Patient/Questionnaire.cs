@@ -1,9 +1,9 @@
-﻿using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using MQuestionnaire = Klinika.Models.Questionnaire;
+﻿using MQuestionnaire = Klinika.Questionnaries.Models.Questionnaire;
 using Microsoft.Extensions.DependencyInjection;
-using Klinika.Dependencies;
+using Klinika.Questionnaries.Services;
+using Klinika.Questionnaries.Models;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
 
 namespace Klinika.GUI.Patient
 {

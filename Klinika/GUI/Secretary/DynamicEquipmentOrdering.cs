@@ -1,8 +1,8 @@
-﻿using Klinika.Exceptions;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Klinika.Rooms.Services;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Database;
+using Klinika.Core.Utilities;
 
 namespace Klinika.GUI.Secretary
 {

@@ -1,9 +1,15 @@
-﻿using Klinika.Exceptions;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Klinika.Users.Services;
+using Klinika.Notifications;
+using Klinika.Appointments.Models;
+using Klinika.Appointments.Services;
+using Klinika.Users.Models;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Database;
+using Klinika.Core;
+using Klinika.Core.Utilities;
+using Klinika.Schedule.Models;
+using Klinika.Schedule.Services;
 
 namespace Klinika.GUI.Secretary
 {
@@ -48,7 +54,7 @@ namespace Klinika.GUI.Secretary
                 else
                 {
                     int specializationId = UIUtilities.ExtractID(specializationSelection.SelectedItem.ToString());
-                    (Roles.Doctor suitable, TimeSlot firstAvailable) = doctorService.GetSuitableUnderTwoHours(specializationId);
+                    (Users.Models.Doctor suitable, TimeSlot firstAvailable) = doctorService.GetSuitableUnderTwoHours(specializationId);
                     if (suitable == null)
                     {
                         MessageBoxUtilities.ShowInformationMessage("Unable to find available doctor under two hours. " +
@@ -68,7 +74,7 @@ namespace Klinika.GUI.Secretary
             }
         }
 
-        private void ScheduleForSuitableDoctor(Roles.Doctor suitable,TimeSlot firstAvailable)
+        private void ScheduleForSuitableDoctor(Users.Models.Doctor suitable,TimeSlot firstAvailable)
         {
             doctorField.Text = suitable.id + ". " + suitable.name + " " + suitable.surname;
 
@@ -122,7 +128,7 @@ namespace Klinika.GUI.Secretary
                                                  1, false, 'E', 15, true,"", false);
             appointmentService.Create(urgent);
             NotifyAll(toReschedule,previousAppointment);
-            Roles.Doctor doctor = doctorService.GetById(toReschedule.doctorID);
+            Users.Models.Doctor doctor = doctorService.GetById(toReschedule.doctorID);
             doctorField.Text = doctor.GetIdAndFullName();
             appointmentSelection.Text = previousAppointment.ToString("yyyy-MM-dd HH:mm");
             MessageBoxUtilities.ShowSuccessMessage("Urgent appointment successfully scheduled!");

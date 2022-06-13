@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Exceptions;
-using Klinika.Dependencies;
 using Microsoft.Extensions.DependencyInjection;
-
+using Klinika.Notifications;
+using Klinika.Requests.Services;
+using Klinika.Requests.Models;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Database;
+using Klinika.Core.Utilities;
 
 namespace Klinika.GUI.Secretary
 {

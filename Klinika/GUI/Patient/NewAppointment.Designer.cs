@@ -1,4 +1,6 @@
-﻿namespace Klinika.GUI.Patient
+﻿using Klinika.Users.Models;
+
+namespace Klinika.GUI.Patient
 {
     partial class NewAppointment
     {
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             this.TitleLabel = new System.Windows.Forms.Label();
-            this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsTable(Roles.User.RoleType.PATIENT);
+            this.OccupiedAppointmentsTable = new Klinika.Forms.AppointmentsTable(User.RoleType.PATIENT);
             this.DateLabel = new System.Windows.Forms.Label();
             this.AppointmentDatePicker = new System.Windows.Forms.DateTimePicker();
             this.DoctorLabel = new System.Windows.Forms.Label();

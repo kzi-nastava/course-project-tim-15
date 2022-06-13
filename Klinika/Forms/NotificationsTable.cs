@@ -1,4 +1,4 @@
-﻿using Klinika.Models;
+﻿using Klinika.Notifications;
 using System.Data;
 
 namespace Klinika.Forms

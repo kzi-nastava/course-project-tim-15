@@ -1,7 +1,8 @@
-﻿using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Klinika.Users.Services;
+using Klinika.Notifications;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
 
 namespace Klinika.GUI.Patient
 {

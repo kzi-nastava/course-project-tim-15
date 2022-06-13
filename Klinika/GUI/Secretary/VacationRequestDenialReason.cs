@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Klinika.Utilities;
-using Klinika.Models;
+using Klinika.Requests.Models;
+using Klinika.Core.Utilities;
 
 namespace Klinika.GUI.Secretary
 {

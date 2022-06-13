@@ -1,9 +1,11 @@
-﻿using Klinika.Exceptions;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Klinika.Appointments.Models;
+using Klinika.Appointments.Services;
+using Klinika.Requests.Services;
+using Klinika.Requests.Models;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Database;
+using Klinika.Core.Utilities;
 
 namespace Klinika.GUI.Secretary
 {

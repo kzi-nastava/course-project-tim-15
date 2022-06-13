@@ -1,14 +1,17 @@
-﻿using System.Data;
+﻿using Klinika.Core;
+using Klinika.Drugs.Models;
+using Klinika.Drugs.Services;
+using System.Data;
 
 namespace Klinika.GUI.Manager
 {
     public partial class ChangeDrug : Form
     {
         DataTable table;
-        List<Models.EnhancedComboBoxItem> ingredients;
-        Models.Drug drug;
+        List<EnhancedComboBoxItem> ingredients;
+        Drug drug;
         Main main;
-        public ChangeDrug(Models.Drug d, Main m)
+        public ChangeDrug(Drug d, Main m)
         {
             table = new DataTable();
             main = m;
@@ -18,8 +21,8 @@ namespace Klinika.GUI.Manager
 
         private void ChangeDrug_Load(object sender, EventArgs e)
         {
-            ingredients = Services.IngredientService.GetIngredientList();
-            foreach(Models.EnhancedComboBoxItem ingredient in ingredients)
+            ingredients = IngredientService.GetIngredientList();
+            foreach(EnhancedComboBoxItem ingredient in ingredients)
             {
                 ingredientsBox.Items.Add(ingredient);
             }
@@ -32,8 +35,8 @@ namespace Klinika.GUI.Manager
             if (drug.id != -1)
             {
                 addDrugButton.Text = "Modify";
-                List<Models.Ingredient> ingredients = Services.DrugService.GetIngredients(drug.id);
-                foreach(Models.Ingredient ingredient in ingredients)
+                List<Ingredient> ingredients = DrugService.GetIngredients(drug.id);
+                foreach(Ingredient ingredient in ingredients)
                 {
                     DataRow dr = table.NewRow();
 
@@ -47,7 +50,7 @@ namespace Klinika.GUI.Manager
             if (drug.approved == "D")
             {
                 richTextBox1.Visible = true;
-                richTextBox1.Text = Services.DrugService.GetNote(drug.id);
+                richTextBox1.Text = DrugService.GetNote(drug.id);
             }
             ingredientsTable.DataSource = table;
             ingredientsTable.Columns[0].Visible = false;
@@ -55,8 +58,8 @@ namespace Klinika.GUI.Manager
 
         private void addIngredientButton_Click(object sender, EventArgs e)
         {
-            Models.Ingredient ingredient = (Models.Ingredient)(((Models.EnhancedComboBoxItem)ingredientsBox.Items[ingredientsBox.SelectedIndex]).value);
-            if (Services.IngredientService.CheckTable(table, ingredient.id))
+            Ingredient ingredient = (Ingredient)(((EnhancedComboBoxItem)ingredientsBox.Items[ingredientsBox.SelectedIndex]).value);
+            if (IngredientService.CheckTable(table, ingredient.id))
             {
                 DataRow dr = table.NewRow();
                 dr[0] = ingredient.id;
@@ -90,7 +93,7 @@ namespace Klinika.GUI.Manager
             {
                 drug.name = nameBox.Text;
             }
-            Services.DrugService.AddDrug(drug, table); 
+            DrugService.AddDrug(drug, table); 
             MessageBox.Show("Drug sent for approval!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }

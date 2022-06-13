@@ -1,0 +1,14 @@
+﻿using Klinika.Rooms.Models;
+
+namespace Klinika.Rooms.Interfaces
+{
+    public interface IRoomEquipmentRepo
+    {
+        List<Equipment> GetDynamicEquipmentInRooms();
+        void ModifyRoomsDynamicEquipmentQuantity(int roomID, int equipmentID, int quantity);
+        public List<Equipment> GetDynamicEquipmentInStorage();
+        public int GetQuantity(int roomId, int equipmentId);
+        public int GetQuantityFromStorage(int equipmentId);
+        public List<Equipment> GetAllInRooms();
+    }
+}

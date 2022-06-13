@@ -1,5 +1,8 @@
-﻿using Klinika.Dependencies;
-using Klinika.Services;
+﻿using Klinika.Core.Dependencies;
+using Klinika.Drugs.Models;
+using Klinika.Drugs.Services;
+using Klinika.Rooms.Models;
+using Klinika.Rooms.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 
@@ -8,7 +11,7 @@ namespace Klinika.GUI.Manager
     public partial class Main : Form
     {
         private readonly DrugService? drugService;
-        public Models.EquipmentTransfer transfer;
+        public EquipmentTransfer transfer;
         public DataTable unfiltered;
         public bool[] transferCheck;
         public Main()
@@ -17,7 +20,7 @@ namespace Klinika.GUI.Manager
             transferCheck[0] = false;
             transferCheck[1] = false;
             drugService = StartUp.serviceProvider.GetService<DrugService>();
-            transfer = new Models.EquipmentTransfer();
+            transfer = new EquipmentTransfer();
             unfiltered = new DataTable();
             InitializeComponent();
         }
@@ -60,8 +63,8 @@ namespace Klinika.GUI.Manager
             table.Columns.Add("Name", typeof(string));
             table.Columns.Add("Approved", typeof(string));
 
-            List<Models.Drug> drugs = drugService.GetDenied();
-            foreach (Models.Drug drug in drugs)
+            List<Drug> drugs = drugService.GetDenied();
+            foreach (Drug drug in drugs)
             {
                 DataRow dr = table.NewRow();
 
@@ -84,8 +87,8 @@ namespace Klinika.GUI.Manager
             table.Columns.Add("Type", typeof(string));
 
             //TODO
-            List<Models.Ingredient> ingredients = new List<Models.Ingredient>();//Services.IngredientService.GetAll(); 
-            foreach (Models.Ingredient ingredient in ingredients)
+            List<Ingredient> ingredients = new List<Ingredient>();//Services.IngredientService.GetAll(); 
+            foreach (Ingredient ingredient in ingredients)
             {
                 DataRow dr = table.NewRow();
 
@@ -102,7 +105,7 @@ namespace Klinika.GUI.Manager
 
         private void FillTables()
         {
-            DataTable rooms = Repositories.RoomRepository.GetAll();
+            DataTable rooms = RoomRepository.GetAll();
             DataRow storage = rooms.NewRow();
             storage["ID"] = 0;
             storage["Type"] = "Storage";
@@ -321,7 +324,7 @@ namespace Klinika.GUI.Manager
             DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected ingredient? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (deletionConfirmation == DialogResult.Yes)
             {
-                Services.IngredientService.Delete(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()));
+                IngredientService.Delete(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()));
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //TODO
                 //Services.IngredientService.GetAll();
@@ -331,14 +334,14 @@ namespace Klinika.GUI.Manager
 
         private void addDrugButton_Click(object sender, EventArgs e)
         {
-            Models.Drug drug = new Models.Drug();
+            Drug drug = new Drug();
             drug.id = -1;
             new ChangeDrug(drug, this).Show();
         }
 
         private void modifyDrugButton_Click(object sender, EventArgs e)
         {
-            Models.Drug drug = new Models.Drug();
+            Drug drug = new Drug();
             drug.id = int.Parse(drugsTable.SelectedRows[0].Cells["id"].Value.ToString());
             drug.name = drugsTable.SelectedRows[0].Cells["Name"].Value.ToString();
             drug.approved = drugsTable.SelectedRows[0].Cells["Approved"].Value.ToString();

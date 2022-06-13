@@ -1,8 +1,10 @@
-﻿using Klinika.Models;
-using Klinika.Services;
-using System.Data;
-using Klinika.Dependencies;
+﻿using System.Data;
 using Microsoft.Extensions.DependencyInjection;
+using Klinika.Users.Services;
+using Klinika.MedicalRecords.Models;
+using Klinika.Appointments.Models;
+using Klinika.Appointments.Services;
+using Klinika.Core.Dependencies;
 
 namespace Klinika.Forms
 {

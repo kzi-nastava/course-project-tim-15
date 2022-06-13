@@ -1,13 +1,15 @@
-﻿namespace Klinika.GUI.Manager
+﻿using Klinika.Rooms.Services;
+
+namespace Klinika.GUI.Manager
 {
     public partial class Renovation : Form
     {
         public Main main;
-        Models.Renovation renovation;
+        Rooms.Models.Renovation renovation;
         public Renovation(int id, Main m)
         {
             InitializeComponent();
-            renovation = new Models.Renovation();
+            renovation = new Rooms.Models.Renovation();
             renovation.id = id;
             main = m;
         }
@@ -36,7 +38,7 @@
             {
                 renovation.from = fromDateTimePicker.Value.Date;
                 renovation.to = toDateTimePicker.Value.Date;
-                if(!Services.RoomServices.IsRoomRenovating(renovation.id, renovation.from, renovation.to))
+                if(!RoomServices.IsRoomRenovating(renovation.id, renovation.from, renovation.to))
                 {
                     if (noneRadio.Checked)
                     {

@@ -1,7 +1,8 @@
-﻿using Klinika.Dependencies;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
+﻿using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Drugs.Models;
+using Klinika.Drugs.Services;
+using Klinika.Schedule.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor

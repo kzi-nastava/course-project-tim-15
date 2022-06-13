@@ -1,9 +1,12 @@
-﻿using Klinika.Exceptions;
-using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Klinika.Users.Services;
+using Klinika.Appointments.Models;
+using Klinika.Appointments.Services;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Database;
+using Klinika.Core.Utilities;
+using Klinika.Schedule.Services;
+using Klinika.Referrals;
 
 namespace Klinika.GUI.Secretary
 {
@@ -97,7 +100,7 @@ namespace Klinika.GUI.Secretary
         {
             try
             {
-                Roles.Doctor suitableDoctor = doctorService.GetSuitable(UIUtilities.ExtractID(specializationField.Text), appointmentPicker.Value);
+                Users.Models.Doctor suitableDoctor = doctorService.GetSuitable(UIUtilities.ExtractID(specializationField.Text), appointmentPicker.Value);
                 if (suitableDoctor != null)
                 {
                     doctorField.Text = suitableDoctor.GetIdAndFullName();

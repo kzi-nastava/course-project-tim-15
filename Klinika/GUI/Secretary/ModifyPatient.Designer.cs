@@ -57,7 +57,7 @@
             this.modifyButton.TabIndex = 5;
             this.modifyButton.Text = "Modify";
             this.modifyButton.UseVisualStyleBackColor = true;
-            this.modifyButton.Click += new System.EventHandler(this.modifyButton_Click);
+            this.modifyButton.Click += new System.EventHandler(this.ModifyButton_Click);
             // 
             // groupBox2
             // 

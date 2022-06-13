@@ -1,4 +1,7 @@
-﻿namespace Klinika.GUI.Manager
+﻿using Klinika.Drugs.Models;
+using Klinika.Drugs.Services;
+
+namespace Klinika.GUI.Manager
 {
     public partial class ChangeIngredient : Form
     {
@@ -13,11 +16,11 @@
 
         private void button_Click(object sender, EventArgs e)
         {
-            Models.Ingredient ingredient = new Models.Ingredient();
+            Ingredient ingredient = new Ingredient();
             ingredient.id = id;
             ingredient.name = nameBox.Text;
             ingredient.type = typeBox.Text;
-            Services.IngredientService.Modify(ingredient);
+            IngredientService.Modify(ingredient);
 
             main.Main_Load(null, EventArgs.Empty);
             if (id != -1)

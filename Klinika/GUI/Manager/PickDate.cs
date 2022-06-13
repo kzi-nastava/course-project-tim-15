@@ -1,12 +1,14 @@
-﻿using Klinika.Services;
-using Klinika.Utilities;
+﻿using Klinika.Core;
+using Klinika.Core.Utilities;
+using Klinika.Rooms.Models;
+using Klinika.Rooms.Services;
 
 namespace Klinika.GUI.Manager
 {
     public partial class PickDate : Form
     {
         GUI.Manager.Main main;
-        Models.EquipmentTransfer transfer;
+        EquipmentTransfer transfer;
         bool isTransferFrom = false;
         Form parent;
         public PickDate(GUI.Manager.Main m)
@@ -16,7 +18,7 @@ namespace Klinika.GUI.Manager
         }
 
 
-        public PickDate(Models.EquipmentTransfer transfer,bool isTransferFrom,Form parent)
+        public PickDate(EquipmentTransfer transfer,bool isTransferFrom,Form parent)
         {
             
             this.transfer = transfer;
@@ -44,8 +46,8 @@ namespace Klinika.GUI.Manager
         private void PickDate_Load(object sender, EventArgs e)
         {
             dateTimePicker.MinDate = DateTime.Now;
-            List<Models.EnhancedComboBoxItem> rooms = Services.RoomServices.GetRooms();
-            foreach (Models.EnhancedComboBoxItem room in rooms)
+            List<EnhancedComboBoxItem> rooms = RoomServices.GetRooms();
+            foreach (EnhancedComboBoxItem room in rooms)
             {
                 if((isTransferFrom && (int.Parse(room.value.ToString())) != transfer.toId) || (!isTransferFrom && int.Parse(room.value.ToString()) != transfer.fromId))
                     roomComboBox.Items.Add(room);
@@ -108,7 +110,7 @@ namespace Klinika.GUI.Manager
 
         private void roomComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int selectedRoomId = int.Parse(((Models.EnhancedComboBoxItem)roomComboBox.Items[roomComboBox.SelectedIndex]).value.ToString());
+            int selectedRoomId = int.Parse(((EnhancedComboBoxItem)roomComboBox.Items[roomComboBox.SelectedIndex]).value.ToString());
             if (isTransferFrom)
             {
                 transfer.fromId = selectedRoomId;

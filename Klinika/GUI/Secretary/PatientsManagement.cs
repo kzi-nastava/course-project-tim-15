@@ -1,8 +1,8 @@
-﻿using Klinika.Exceptions;
-using Klinika.Services;
-using Klinika.Utilities;
-using Klinika.Dependencies;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Klinika.Users.Services;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Database;
+using Klinika.Core.Utilities;
 
 namespace Klinika.GUI.Secretary
 {
@@ -69,7 +69,7 @@ namespace Klinika.GUI.Secretary
             int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
-                Roles.Patient toBlock = (Roles.Patient)patientService.GetSingle(id);
+                Users.Models.Patient toBlock = (Users.Models.Patient)patientService.GetSingle(id);
                 patientService.Block(toBlock, "SEC");
                 patientsTable.ModifyRow(patientsTable.GetSelectedRow(),toBlock);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully blocked!");
@@ -88,7 +88,7 @@ namespace Klinika.GUI.Secretary
             int id = Convert.ToInt32(patientsTable.GetCellValue("ID"));
             try
             {
-                Roles.Patient toUnblock = (Roles.Patient)patientService.GetSingle(id);
+                Users.Models.Patient toUnblock = (Users.Models.Patient)patientService.GetSingle(id);
                 patientService.Unblock(toUnblock);
                 patientsTable.ModifyRow(patientsTable.GetSelectedRow(),toUnblock);
                 MessageBoxUtilities.ShowSuccessMessage("Patient successfully unblocked!");
@@ -103,13 +103,13 @@ namespace Klinika.GUI.Secretary
         private void ShowModifyPatientForm()
         {
             int selectedPatient = Convert.ToInt32(patientsTable.GetCellValue("ID"));
-            Roles.Patient selected = (Roles.Patient)patientService.GetSingle(selectedPatient);
+            Users.Models.Patient selected = (Users.Models.Patient)patientService.GetSingle(selectedPatient);
             new ModifyPatient(this, selected).Show();
         }
 
-        public void AddRowToPatientsTable(Roles.Patient newPatient) => patientsTable.AddRow(newPatient);
+        public void AddRowToPatientsTable(Users.Models.Patient newPatient) => patientsTable.AddRow(newPatient);
 
-        public void ModifyRowOfPatientsTable(Roles.Patient modified) => patientsTable.ModifyRow(patientsTable.GetSelectedRow(), modified);
+        public void ModifyRowOfPatientsTable(Users.Models.Patient modified) => patientsTable.ModifyRow(patientsTable.GetSelectedRow(), modified);
 
         private void PatientsManagement_Load(object sender, EventArgs e) => patientsTable.Fill(patientService.GetAll());
 

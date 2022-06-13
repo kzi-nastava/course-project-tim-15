@@ -1,9 +1,10 @@
-﻿using Klinika.Models;
-using Klinika.Services;
-using Klinika.Utilities;
-using RDoctor = Klinika.Roles.Doctor;
-using Klinika.Dependencies;
+﻿using RDoctor = Klinika.Users.Models.Doctor;
 using Microsoft.Extensions.DependencyInjection;
+using Klinika.Users.Services;
+using Klinika.Users.Models;
+using Klinika.Core.Dependencies;
+using Klinika.Core.Utilities;
+using Klinika.Appointments.Models;
 
 namespace Klinika.GUI.Patient
 {
@@ -12,7 +13,7 @@ namespace Klinika.GUI.Patient
         private readonly DoctorService? doctorService;
         internal readonly Main parent;
         RDoctor.Filters selectedDoctorFilter = RDoctor.Filters.BY_NAME;
-        internal Roles.Patient patient { get { return parent.patient; } }
+        internal Users.Models.Patient patient { get { return parent.patient; } }
         public SearchDoctors(Main parent)
         {
             InitializeComponent();
