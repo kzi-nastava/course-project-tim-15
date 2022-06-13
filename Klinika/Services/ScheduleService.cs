@@ -6,12 +6,12 @@ namespace Klinika.Services
 {
     internal class ScheduleService
     {
-        private readonly IScheduledAppointmentsRepo scheduledAppointmentsRepo;
+        private readonly IScheduledAppointmentsRepo appointmentsRepo;
         private readonly IDoctorRepo doctorRepo;
 
         public ScheduleService(IScheduledAppointmentsRepo scheduledAppointmentsRepo, IDoctorRepo doctorRepo)
         {
-            this.scheduledAppointmentsRepo = scheduledAppointmentsRepo;
+            this.appointmentsRepo = scheduledAppointmentsRepo;
             this.doctorRepo = doctorRepo;
         }
 
@@ -23,7 +23,7 @@ namespace Klinika.Services
             {
                 if (doctor.specialization.id != specializationId) continue;
 
-                List<Appointment> scheduled = scheduledAppointmentsRepo.GetAll(doctor.id, User.RoleType.DOCTOR);
+                List<Appointment> scheduled = appointmentsRepo.GetAll(doctor.id, User.RoleType.DOCTOR);
                 List<TimeSlot> scheduledSlots = new List<TimeSlot>();
                 foreach (Appointment appointment in scheduled)
                 {
@@ -37,16 +37,12 @@ namespace Klinika.Services
             }
             return SelectTop5(reschedulings);
         }
-
         public List<Rescheduling> SelectTop5(List<Rescheduling> appointmentDatePairs)
         {
             appointmentDatePairs = appointmentDatePairs.OrderBy(o => o.appointment.dateTime).ToList();
             return appointmentDatePairs.Take(5).ToList();
         }
-
-        public List<Appointment> GetAll() => scheduledAppointmentsRepo.GetAll();
-        public List<Appointment> GetAll(int userID, User.RoleType role) => scheduledAppointmentsRepo.GetAll(userID, role);
-        public List<Appointment> GetAll(string requestedDate, int userID, User.RoleType role, int days = 1)
-            => scheduledAppointmentsRepo.GetAll(requestedDate, userID, role, days);
+        //public List<Appointment> GetAll() => appointmentsRepo.GetAll();
+        public List<Appointment> GetAll(Patient patient) => appointmentsRepo.GetAll(patient.id, User.RoleType.PATIENT);
     }
 }

@@ -12,6 +12,7 @@ namespace Klinika.GUI.Doctor
         private readonly AnamnesisService? anamnesisService;
         private readonly MedicalRecordService? medicalRecordService;
         private readonly ReferralService? referralService;
+        private readonly PatientService? patientService;
         internal readonly ViewSchedule parent;
         public Appointment appointment;
         public Models.MedicalRecord record;
@@ -25,6 +26,7 @@ namespace Klinika.GUI.Doctor
             InitializeComponent();
             this.parent = parent;
             this.appointment = appointment;
+            patientService = StartUp.serviceProvider.GetService<PatientService>();
             referralService = StartUp.serviceProvider.GetService<ReferralService>();
             anamnesisService = StartUp.serviceProvider.GetService<AnamnesisService>();
             medicalRecordService = StartUp.serviceProvider.GetService<MedicalRecordService>();
@@ -40,18 +42,14 @@ namespace Klinika.GUI.Doctor
             AllergensTable.Fill(record.allergens);
             UIUtilities.FillSpecializationComboBox(SpecializationsComboBox);
         }
-        //TODO @s
         private void FillPatientMainData()
         {
-            PatientNameLabel.Text = PatientService.GetFullName(record.id);
+            PatientNameLabel.Text = patientService.GetFullName(record.id);
             BloodTypeLabel.Text = record.bloodType;
             HeightLabel.Text = $"{record.height}cm";
             WeightLabel.Text = $"{record.weight}kg";
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
         #endregion
         private void FinishButtonClick(object sender, EventArgs e)
         {
@@ -59,10 +57,7 @@ namespace Klinika.GUI.Doctor
             new DynamicEquipment(parent, appointment).Show();
             Close();
         }
-        private void ReferCheckBoxCheckedChanged(object sender, EventArgs e)
-        {
-            ToggleReferal(ReferCheckBox.Checked);
-        }
+        private void ReferCheckBoxCheckedChanged(object sender, EventArgs e) => ToggleReferal(ReferCheckBox.Checked);
         private void SpecializationsComboBoxSelectedValueChanged(object sender, EventArgs e)
         {
             if(SpecializationsComboBox.SelectedIndex == -1) return;
@@ -76,19 +71,13 @@ namespace Klinika.GUI.Doctor
             SpecializationsComboBox.SelectedIndex = -1;
             DoctorsComboBox.SelectedIndex = -1;
         }
-        private void AnamnesisTextChanged(object sender, EventArgs e)
-        {
-            TogglePrescriptionIssuing(hasEmptyFields);
-        }
+        private void AnamnesisTextChanged(object sender, EventArgs e) => TogglePrescriptionIssuing(hasEmptyFields);
         private void TogglePrescriptionIssuing(bool state)
         {
             PerscriptionButton.Enabled = !state;
             PerscriptionHint.Visible = state;
         }
-        private void PerscriptionButtonClick(object sender, EventArgs e)
-        {
-            new PrescriptionIssuing(this).Show();
-        }
+        private void PerscriptionButtonClick(object sender, EventArgs e) => new PrescriptionIssuing(this).Show();
         private bool ValidateAnamnesis(bool skipValidation)
         {
             if (skipValidation || !hasEmptyFields) return true;

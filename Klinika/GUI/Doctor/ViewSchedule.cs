@@ -20,10 +20,7 @@ namespace Klinika.GUI.Doctor
             parent.Enabled = false;
             InitScheduleTab();
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
         private void InitScheduleTab()
         {
             var scheduled = scheduleService.GetAppointments(ScheduleDatePicker.Value, doctor.id, 3);
@@ -31,10 +28,7 @@ namespace Klinika.GUI.Doctor
             ViewMedicalRecordButton.Enabled = false;
             PerformButton.Enabled = false;
         }
-        private void ScheduleDatePickerValueChanged(object sender, EventArgs e)
-        {
-            InitScheduleTab();
-        }
+        private void ScheduleDatePickerValueChanged(object sender, EventArgs e) => InitScheduleTab();
         private void ScheduleTableSelectionChanged(object sender, EventArgs e)
         {
             ViewMedicalRecordButton.Enabled = true;

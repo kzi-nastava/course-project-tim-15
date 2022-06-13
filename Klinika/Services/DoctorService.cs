@@ -20,6 +20,7 @@ namespace Klinika.Services
             this.scheduledAppointmentsRepo = scheduledAppointmentsRepo;
         }
 
+        public Doctor GetById(int id) => doctorRepo.GetAll().Where(x => x.id == id).FirstOrDefault();
         public List<Doctor> GetAll() => doctorRepo.GetAll();
         public List<Appointment> GetAppointments(int doctorID)
         {
@@ -34,7 +35,7 @@ namespace Klinika.Services
             }
             return null;
         }
-        public (Doctor?,TimeSlot?) GetSuitableUnderTwoHours(int specializationId)
+        public (Doctor?, TimeSlot?) GetSuitableUnderTwoHours(int specializationId)
         {
             foreach (Doctor doctor in doctorRepo.GetAll())
             {
@@ -47,14 +48,9 @@ namespace Klinika.Services
             return (null,null);
         }
 
-        public string GetFullName(int doctorID)
-        {
-            var doctor = doctorRepo.GetAll().Where(x => x.id == doctorID).FirstOrDefault();
-            //return UserRepository.GetDoctor(doctorID).ToString();
-            return doctor.ToString();
-        }
+        public string GetFullName(int doctorID) => doctorRepo.GetAll().Where(x => x.id == doctorID).FirstOrDefault().ToString();
         public Specialization GetSpecialization (int id) => doctorRepo.GetSpecialization(id);
-        public Doctor GetById(int id) => doctorRepo.GetAll().Where(x => x.id == id).FirstOrDefault();
+
         public List<Doctor> SearchByName(string keyword) => GetAll().Where(x => x.name.ToUpper().Contains(keyword.ToUpper())).ToList();
         public List<Doctor> SearchBySurname(string keyword) => GetAll().Where(x => x.surname.ToUpper().Contains(keyword.ToUpper())).ToList();
         public List<Doctor> SearchBySpecialization(int id) => GetAll().Where(x => x.specialization.id == id).ToList();

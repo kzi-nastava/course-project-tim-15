@@ -10,12 +10,7 @@ namespace Klinika.Services
         public List<Appointment> GetCompleted(int patientID) => appointmentRepo.GetCompleted(patientID);
         public void Create(Appointment appointment) => appointmentRepo.Create(appointment);
         public void Modify(Appointment appointment) => appointmentRepo.Modify(appointment);
-        public void Delete(int id)
-        {
-            appointmentRepo.Delete(id);
-            //AppointmentRepository.Delete(id);
-            //AppointmentRepository.GetInstance().DeleteFromList(id); ?????
-        }
+        public void Delete(int id) => appointmentRepo.Delete(id);
         public void Complete(Appointment appointment)
         {
             appointment.completed = true;

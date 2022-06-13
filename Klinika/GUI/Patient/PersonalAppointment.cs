@@ -104,7 +104,7 @@ namespace Klinika.GUI.Patient
         }
         private void SetDoctorComboBoxIndex()
         {
-            User selected = userService.GetDoctor(dto.appointment.doctorID);
+            User selected = userService.GetSingle(dto.appointment.doctorID);
             DoctorComboBox.SelectedIndex = DoctorComboBox.Items.IndexOf(selected);
         }
         private bool ValidateForm()

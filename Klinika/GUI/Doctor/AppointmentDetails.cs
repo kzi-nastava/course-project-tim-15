@@ -10,7 +10,9 @@ namespace Klinika.GUI.Doctor
     public partial class AppointmentDetails : Form
     {
         private readonly DoctorScheduleService? scheduleService;
+        private readonly AppointmentService? appointmentService;
         private readonly RoomServices? roomServices;
+        private readonly UserService? userService;
         internal readonly ViewAllAppointments parent;
         private Appointment? appointment;
 
@@ -20,7 +22,9 @@ namespace Klinika.GUI.Doctor
             this.parent = parent;
             this.appointment = appointment;
             scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
             roomServices = StartUp.serviceProvider.GetService<RoomServices>();
+            userService = StartUp.serviceProvider.GetService<UserService>();
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -35,16 +39,13 @@ namespace Klinika.GUI.Doctor
 
             FillFormWithAppointmentData();
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
 
         private void FillFormWithAppointmentData()
         {
             DatePicker.Value = appointment.dateTime;
             TimePicker.Value = appointment.dateTime;
-            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(PatientService.GetSingle(appointment.patientID));
+            PatientComboBox.SelectedIndex = PatientComboBox.Items.IndexOf(userService.GetSingle(appointment.patientID));
 
             SetType((Appointment.Types)appointment.type, appointment.duration);
 
@@ -137,14 +138,14 @@ namespace Klinika.GUI.Doctor
         {
             appointment.dateTime = GetSelectedDateTime();
             TransferDataFromUI(appointment);
-            AppointmentService.Modify(appointment);
+            appointmentService.Modify(appointment);
             parent.AllAppointmentsTable.ModifySelected(appointment);
         }
         private void Create()
         {
             var appointment = new Appointment(GetSelectedDateTime());
             TransferDataFromUI(appointment);
-            AppointmentService.Create(appointment);
+            appointmentService.Create(appointment);
             parent.AllAppointmentsTable.Insert(appointment);
         }
     }

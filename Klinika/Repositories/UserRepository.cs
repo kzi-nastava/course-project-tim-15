@@ -46,7 +46,7 @@ namespace Klinika.Repositories
              return Users.Where(x => x.role.ToUpper() == User.RoleType.DOCTOR.ToString()).ToList();
         }
 
-        public User? GetDoctor(int ID)
+        public User? GetSingle(int ID)
         {
             return Users.Where(x => x.id == ID).FirstOrDefault();
         }

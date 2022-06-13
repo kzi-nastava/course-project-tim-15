@@ -31,7 +31,7 @@ namespace Klinika.GUI.Patient
         private void Initialize()
         {
             
-            PersonalAppointmentsTable.Fill(scheduleService.GetAll(patient.id, User.RoleType.PATIENT));
+            PersonalAppointmentsTable.Fill(scheduleService.GetAll(patient);
             ModifyButton.Enabled = false;
             DeleteButton.Enabled = false;
         }

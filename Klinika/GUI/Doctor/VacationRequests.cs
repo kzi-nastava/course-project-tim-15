@@ -9,14 +9,14 @@ namespace Klinika.GUI.Doctor
     public partial class VacationRequests : Form
     {
         private readonly DoctorScheduleService? scheduleService;
-        private VacationRequestService? vacationRequestService;
+        private VacationRequestService? vacationService;
         internal readonly Main parent;
         private Roles.Doctor doctor { get { return parent.doctor; } }
         public VacationRequests(Main parent)
         {
             InitializeComponent();
             scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
-            vacationRequestService = StartUp.serviceProvider.GetService<VacationRequestService>();
+            vacationService = StartUp.serviceProvider.GetService<VacationRequestService>();
             this.parent = parent;
         }
         private void LoadForm(object sender, EventArgs e)
@@ -24,20 +24,14 @@ namespace Klinika.GUI.Doctor
             parent.Enabled = false;
             InitVacationRequests();
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
-        private void InitVacationRequests()
-        {
-            VacationRequestTable.Fill(vacationRequestService.GetAll(doctor.id));
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
+        private void InitVacationRequests() => VacationRequestTable.Fill(vacationService.GetAll(doctor.id));
         private void SendRequestButtonClick(object sender, EventArgs e)
         {
             if (!VerifyVacationRequest()) return;
             var vacationRequest = new VacationRequest(doctor.id, FromDatePicker.Value, ToDatePicker.Value,
                 ReasonTextBox.Text, EmergencyCheckBox.Checked);
-            vacationRequestService.Create(vacationRequest);
+            vacationService.Create(vacationRequest);
             VacationRequestTable.Insert(vacationRequest);
         }
         private bool VerifyVacationRequest()

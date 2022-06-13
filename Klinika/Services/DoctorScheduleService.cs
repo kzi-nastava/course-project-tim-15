@@ -41,6 +41,7 @@ namespace Klinika.Services
         }
         public List<Appointment> GetAppointments(DateTime date, int doctorID, int days = 1) 
             => appointmentsRepo.GetAll(date.ToString("yyyy-MM-dd"), doctorID, User.RoleType.DOCTOR, days);
+        public List<Appointment> GetAll(Doctor doctor) => appointmentsRepo.GetAll(doctor.id, User.RoleType.DOCTOR);
         public TimeSlot? GetFirstSlotAvailableUnderTwoHours(int doctorID, int duration = 15)
         {
             DateTime now = new CleanDateTimeNow().cleanNow;

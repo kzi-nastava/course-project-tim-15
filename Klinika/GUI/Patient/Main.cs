@@ -13,7 +13,7 @@ namespace Klinika.GUI.Patient
         {
             InitializeComponent();
             patientService = StartUp.serviceProvider.GetService<PatientService>();
-            patient = patientService.GetById(patientID);
+            patient = patientService.GetSingle(patientID);
         }
         private void ClosingForm(object sender, FormClosingEventArgs e) => Application.Exit();
         private void ViewScheduleButtonClick(object sender, EventArgs e) => new ViewSchedule(this).Show();

@@ -9,6 +9,7 @@ namespace Klinika.GUI.Doctor
     public partial class DynamicEquipment : Form
     {
         private readonly EquipmentService? equipmentService;
+        private readonly AppointmentService? appointmentService;
         internal readonly ViewSchedule parent;
         private readonly Appointment appointment;
         public DynamicEquipment(ViewSchedule parent, Appointment appointment)
@@ -17,6 +18,7 @@ namespace Klinika.GUI.Doctor
             this.parent = parent;
             this.appointment = appointment;
             equipmentService = StartUp.serviceProvider.GetService<EquipmentService>();
+            appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
         }
         private void LoadForm(object sender, EventArgs e)
         {
@@ -46,10 +48,9 @@ namespace Klinika.GUI.Doctor
             equipmentService.UpdateRoomsDynamicEquipment(appointment.roomID, EquipmentTable.GetAll());
             Close();
         }
-        //TODO @s
         private void CompleteAppointment()
         {
-            AppointmentService.Complete(appointment);
+            appointmentService.Complete(appointment);
             parent.ScheduleTable.ModifySelected(appointment);
         }
 

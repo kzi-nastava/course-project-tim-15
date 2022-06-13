@@ -3,11 +3,10 @@ using Klinika.Roles;
 
 namespace Klinika.Interfaces
 {
-    public interface IDoctorRepo
+    public interface IDoctorRepo : IBaseDoctorRepo
     {
         public List<Specialization> GetSpecializations();
         public User[] GetSpecializedDoctors(int specializationID);
         public Specialization GetSpecialization(int doctorId);
-        public List<Doctor> GetAll();
     }
 }

@@ -27,10 +27,7 @@ namespace Klinika.GUI.Doctor
             PrescriptionEndDatePicker.MinDate = DateTime.Now;
             DrugsTable.Fill(drugService.GetApproved());
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
         #endregion
 
         #region Prescript
