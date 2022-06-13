@@ -1,6 +1,4 @@
-﻿using Klinika.Models;
-using Klinika.Roles;
-
+﻿using Klinika.Roles;
 
 namespace Klinika.Interfaces
 {
@@ -12,6 +10,5 @@ namespace Klinika.Interfaces
         public void Delete(int id);
         public void Create(Patient newPatient);
         public int? GetIdByEmail(string email);
-
     }
 }

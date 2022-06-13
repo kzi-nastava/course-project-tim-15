@@ -36,11 +36,9 @@ namespace Klinika.GUI.Patient
             QuestionsTable.Fill(questionService.GetByType(type));
             SetGradeButton.Enabled = false;
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
         #endregion
+
         private List<Answer> CollectData()
         {
             var answers = QuestionsTable.GetAll();
@@ -59,9 +57,6 @@ namespace Klinika.GUI.Patient
             int grade = Convert.ToInt32(GradeNumericUpDown.Value);
             QuestionsTable.SetGrade(grade);
         }
-        private void QuestionsTableRowSelected(object sender, DataGridViewCellEventArgs e)
-        {
-            SetGradeButton.Enabled = true;
-        }
+        private void QuestionsTableRowSelected(object sender, DataGridViewCellEventArgs e) => SetGradeButton.Enabled = true;
     }
 }

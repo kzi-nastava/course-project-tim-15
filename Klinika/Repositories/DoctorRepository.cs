@@ -5,7 +5,7 @@ using Klinika.Interfaces;
 
 namespace Klinika.Repositories
 {
-    internal class DoctorRepository : Repository, IDoctorRepo
+    internal class DoctorRepository : Repository, IDoctorRepo, IBaseDoctorRepo
     {
         public  List<Doctor> doctors { get; }
         private readonly IUserRepo userRepo;

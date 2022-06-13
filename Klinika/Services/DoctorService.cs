@@ -54,11 +54,7 @@ namespace Klinika.Services
             return doctor.ToString();
         }
         public Specialization GetSpecialization (int id) => doctorRepo.GetSpecialization(id);
-        public Doctor GetById(int id)
-        {
-            return  doctorRepo.GetAll().Where(x => x.id == id).FirstOrDefault();
-        }
-
+        public Doctor GetById(int id) => doctorRepo.GetAll().Where(x => x.id == id).FirstOrDefault();
         public List<Doctor> SearchByName(string keyword) => GetAll().Where(x => x.name.ToUpper().Contains(keyword.ToUpper())).ToList();
         public List<Doctor> SearchBySurname(string keyword) => GetAll().Where(x => x.surname.ToUpper().Contains(keyword.ToUpper())).ToList();
         public List<Doctor> SearchBySpecialization(int id) => GetAll().Where(x => x.specialization.id == id).ToList();

@@ -1,6 +1,4 @@
-﻿using Klinika.Repositories;
-using Klinika.Roles;
-using Klinika.Utilities;
+﻿using Klinika.Roles;
 using System.Data;
 using Klinika.Interfaces;
 
@@ -41,22 +39,10 @@ namespace Klinika.Services
 
         public string GetFullName(int ID)
         {
-            var patient = UserRepository.GetInstance().Users.Where(x => x.id == ID).FirstOrDefault();
+            var patient = patientRepo.GetAll().Where(x => x.id == ID).FirstOrDefault();
             return $"{patient.name} {patient.surname}";
         }
-        public Patient GetById(int id)
-        {
-            return PatientRepository.GetSingle(id);
-        }
-
-        public bool IsBlocked(User patient)
-        {
-            bool isBlocked = AppointmentRepository.GetScheduledAppointmentsCount(patient.id) > 8 
-                || AppointmentService.GetModifyAppointmentsCount(patient.id) > 5;
-            if (!isBlocked) return false;
-            Block(patient, "SYS");
-            return true;
-        }
+        public Patient GetById(int id) => patientRepo.GetSingle(id);
         public void Block(User patient, string whoBlocked)
         {
             patient.isBlocked = true;

@@ -22,20 +22,5 @@ namespace Klinika.Services
             appointmentRepo.Modify(appointment);
         }
         public Appointment GetById(int id) => appointmentRepo.GetAll().Where(x => x.id == id).FirstOrDefault();
-        public int GetModifyAppointmentsCount(int patientID)
-        {
-            DateTime startDate = DateTime.Now.AddDays(-30);
-            var Descriptions = appointmentRepo.GetDescriptions(patientID);
-            int counter = 0;
-
-            foreach (string description in Descriptions)
-            {
-                DateTime date = DateTime.ParseExact(description.Substring(9, 10), "yyyy-MM-dd", 
-                    System.Globalization.CultureInfo.InvariantCulture);
-
-                if (date > startDate) counter += 1;
-            }
-            return counter;
-        }
     }
 }

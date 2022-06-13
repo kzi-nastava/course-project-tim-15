@@ -9,7 +9,7 @@ namespace Klinika.GUI.Patient
 {
     public partial class AppointmentRecommendation : Form
     {
-        //private readonly AppointmentRecommendationService recommendationService;
+        private readonly AppointmentRecommendationService? recommendationService;
         private readonly AppointmentService? appointmentService;
         private readonly NewAppointment parent;
 
@@ -17,7 +17,7 @@ namespace Klinika.GUI.Patient
         public AppointmentRecommendation(NewAppointment parent)
         {
             InitializeComponent();
-            recommendationService = new AppointmentRecommendationService();
+            recommendationService = StartUp.serviceProvider.GetService<AppointmentRecommendationService>();
             appointmentService = StartUp.serviceProvider.GetService<AppointmentService>();
             this.parent = parent;
         }
@@ -33,7 +33,6 @@ namespace Klinika.GUI.Patient
         private void CancelClick(object sender, EventArgs e) => Close();
         #endregion
 
-        #region Click functions
         private void RecommendButtonClick(object sender, EventArgs e)
         {
             if (!IsDateValid())
@@ -49,7 +48,6 @@ namespace Klinika.GUI.Patient
             Create();
             Close();
         }
-        #endregion
 
         private void ShowRecommended()
         {

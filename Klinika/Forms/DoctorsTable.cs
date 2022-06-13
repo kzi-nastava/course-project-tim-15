@@ -9,7 +9,7 @@ namespace Klinika.Forms
     internal class DoctorsTable : Base.TableBase<Doctor>
     {
         private readonly QuestionnaireService? questionnaireService;
-        public DoctorsTable() => questionnaireService = StartUp.serviceProvider.GetService<QuestionnaireService>();
+        public DoctorsTable() : base() => questionnaireService = StartUp.serviceProvider.GetService<QuestionnaireService>();
         public override void Fill(List<Doctor> doctors)
         {
             DataTable dataTable = new DataTable();

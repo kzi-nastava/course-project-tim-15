@@ -10,7 +10,5 @@ namespace Klinika.Interfaces
         void Create(Appointment appointment);
         void Modify(Appointment appointment);
         void Delete(int ID);
-
-        List<string> GetDescriptions(int patientID);
     }
 }

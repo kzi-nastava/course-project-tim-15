@@ -7,7 +7,7 @@ using static Klinika.Roles.User;
 
 namespace Klinika.Repositories
 {
-    internal class AppointmentRepository : Repository, IScheduledAppointmentsRepo, IAppointmentRepo
+    internal class AppointmentRepository : Repository, IScheduledAppointmentsRepo, IAppointmentRepo, IBaseAppointmentRepo, IAntiTrollRepo
     {
         public List<Appointment> appointments { get; set; }
         public void DeleteFromList(int ID)

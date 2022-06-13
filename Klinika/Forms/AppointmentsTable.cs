@@ -10,6 +10,8 @@ namespace Klinika.Forms
     public class AppointmentsTable : Base.TableBase<Appointment>
     {
         private readonly RoomServices? roomService;
+        private readonly PatientService? patientService;
+        private readonly DoctorService? doctorService;
         private List<Appointment> appointments;
         private User.RoleType viewerRole;
         private string searchedRole;
@@ -17,6 +19,8 @@ namespace Klinika.Forms
         {
             appointments = new List<Appointment>();
             roomService = StartUp.serviceProvider.GetService<RoomServices>();
+            patientService = StartUp.serviceProvider.GetService<PatientService>();
+            doctorService = StartUp.serviceProvider.GetService<DoctorService>();
             SetViewerRole(User.RoleType.DOCTOR);
         }
         public AppointmentsTable(User.RoleType viewerRole) : base()
@@ -101,9 +105,9 @@ namespace Klinika.Forms
         {
             if (viewerRole == User.RoleType.DOCTOR)
             {
-                return PatientService.GetFullName(appointment.patientID);
+                return patientService.GetFullName(appointment.patientID);
             }
-            return DoctorService.GetFullName(appointment.doctorID);
+            return doctorService.GetFullName(appointment.doctorID);
         }
     }
 }

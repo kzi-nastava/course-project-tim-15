@@ -25,10 +25,7 @@ namespace Klinika.GUI.Patient
             parent.Enabled = false;
             Initialize();
         }
-        private void ClosingForm(object sender, FormClosingEventArgs e)
-        {
-            parent.Enabled = true;
-        }
+        private void ClosingForm(object sender, FormClosingEventArgs e) => parent.Enabled = true;
         private void Initialize()
         {
             MedicalRecordTable.Fill(anamnesisService.Get(parent.patient.id), parent.patient.id);

@@ -1,7 +1,7 @@
-﻿using Klinika.Dependencies;
-using Klinika.Models;
-using Klinika.Repositories;
+﻿using Klinika.Models;
 using Klinika.Roles;
+using Klinika.Interfaces;
+using Klinika.Dependencies;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Services
@@ -9,9 +9,13 @@ namespace Klinika.Services
     public class AppointmentRecommendationService
     {
         private readonly DoctorScheduleService? scheduleService;
-        public AppointmentRecommendationService()
+        private readonly IBaseDoctorRepo doctorRepo;
+        private readonly IBaseAppointmentRepo appointmentRepo;
+        public AppointmentRecommendationService(IBaseDoctorRepo doctorRepo, IBaseAppointmentRepo appointmentRepo)
         {
             scheduleService = StartUp.serviceProvider.GetService<DoctorScheduleService>();
+            this.doctorRepo = doctorRepo;
+            this.appointmentRepo = appointmentRepo;
         }
         public List<Appointment> Find(int doctorID, TimeSlot timeSlot, DateTime deadlineDate, char priority)
         {
@@ -23,7 +27,7 @@ namespace Klinika.Services
             }
 
             List<Appointment> available = new List<Appointment>();
-            foreach (User doctor in UserRepository.GetDoctors())
+            foreach (User doctor in doctorRepo.GetAll())
             {
                 if (doctor.id == bestMatch.doctorID) continue;
                 Appointment personalBest = FindClosestMatch(doctor.id, timeSlot, deadlineDate);
@@ -100,8 +104,9 @@ namespace Klinika.Services
             DateTime start = new DateTime(day.Year, day.Month, day.Day, 0, 0, 0);
             DateTime end = new DateTime(day.AddDays(1).Year, day.AddDays(1).Month, day.AddDays(1).Day, 0, 0, 0);
 
-            return AppointmentRepository.GetInstance().appointments.Where(
-                x => x.doctorID == doctorID && x.dateTime >= start && x.dateTime < end && !x.isDeleted).ToList();
+            
+            return appointmentRepo.GetAll().Where(x => x.doctorID == doctorID && x.dateTime >= start 
+                                                      && x.dateTime < end && !x.isDeleted).ToList();
         }
         private bool IsMoreAccurate(DateTime referentDate, DateTime first, DateTime second)
         {

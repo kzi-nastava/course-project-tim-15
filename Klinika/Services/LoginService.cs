@@ -9,11 +9,11 @@ namespace Klinika.Services
     internal class LoginService
     {
         private readonly IUserRepo userRepo;
-        private readonly PatientService patientService;
+        private readonly AntiTrollService? antiTrollService;
         public LoginService(IUserRepo userRepo)
         {
             this.userRepo = userRepo;
-            patientService = StartUp.serviceProvider.GetService<PatientService>();
+            antiTrollService = StartUp.serviceProvider.GetService<AntiTrollService>();
         }
 
         public void Login(string email, string password)
@@ -32,7 +32,7 @@ namespace Klinika.Services
                     new GUI.Manager.Main().Show();
                     break;
                 default:
-                    if (patientService.IsBlocked(loggingUser))
+                    if (antiTrollService.IsPatientBlocked(loggingUser))
                     {
                         MessageBoxUtilities.ShowErrorMessage("Your account is blocked because of trolling.");
                         break;
