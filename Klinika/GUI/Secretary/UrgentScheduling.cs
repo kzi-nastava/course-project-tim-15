@@ -1,15 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Klinika.Users.Services;
-using Klinika.Notifications;
-using Klinika.Appointments.Models;
+﻿using Klinika.Appointments.Models;
 using Klinika.Appointments.Services;
-using Klinika.Users.Models;
-using Klinika.Core.Dependencies;
-using Klinika.Core.Database;
 using Klinika.Core;
+using Klinika.Core.Database;
+using Klinika.Core.Dependencies;
 using Klinika.Core.Utilities;
+using Klinika.Notifications;
 using Klinika.Schedule.Models;
 using Klinika.Schedule.Services;
+using Klinika.Users.Models;
+using Klinika.Users.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {

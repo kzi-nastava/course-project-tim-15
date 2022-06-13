@@ -1,7 +1,7 @@
-﻿using Klinika.Users.Models;
-using Klinika.Users.Interfaces;
-using Klinika.Appointments.Models;
+﻿using Klinika.Appointments.Models;
 using Klinika.Schedule.Models;
+using Klinika.Users.Interfaces;
+using Klinika.Users.Models;
 
 namespace Klinika.Schedule.Services
 {

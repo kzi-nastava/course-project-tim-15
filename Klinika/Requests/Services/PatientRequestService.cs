@@ -1,10 +1,10 @@
-﻿using System.Data;
-using Microsoft.Extensions.DependencyInjection;
-using Klinika.Appointments.Models;
+﻿using Klinika.Appointments.Models;
 using Klinika.Appointments.Services;
-using Klinika.Requests.Models;
-using Klinika.Requests.Interfaces;
 using Klinika.Core.Dependencies;
+using Klinika.Requests.Interfaces;
+using Klinika.Requests.Models;
+using Microsoft.Extensions.DependencyInjection;
+using System.Data;
 
 namespace Klinika.Requests.Services
 {

@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.Extensions.DependencyInjection;
-using Klinika.Notifications;
-using Klinika.Requests.Services;
-using Klinika.Requests.Models;
+﻿using Klinika.Core.Database;
 using Klinika.Core.Dependencies;
-using Klinika.Core.Database;
 using Klinika.Core.Utilities;
+using Klinika.Notifications;
+using Klinika.Requests.Models;
+using Klinika.Requests.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {

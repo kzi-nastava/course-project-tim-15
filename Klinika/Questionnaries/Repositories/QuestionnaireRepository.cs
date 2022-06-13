@@ -1,7 +1,7 @@
-﻿using Klinika.Questionnaries.Interfaces;
-using Klinika.Questionnaries.Models;
+﻿using Klinika.Core;
 using Klinika.Core.Database;
-using Klinika.Core;
+using Klinika.Questionnaries.Interfaces;
+using Klinika.Questionnaries.Models;
 
 namespace Klinika.Questionnaries.Repositories
 {

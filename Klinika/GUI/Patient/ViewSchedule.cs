@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Klinika.Appointments.Models;
+﻿using Klinika.Appointments.Models;
 using Klinika.Appointments.Services;
-using Klinika.Requests.Services;
-using Klinika.Requests.Models;
 using Klinika.Core.Dependencies;
 using Klinika.Core.Utilities;
+using Klinika.Requests.Models;
+using Klinika.Requests.Services;
 using Klinika.Schedule.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Patient
 {

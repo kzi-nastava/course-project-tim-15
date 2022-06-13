@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Klinika.Notifications;
-using Klinika.Drugs.Models;
+﻿using Klinika.Core.Dependencies;
 using Klinika.Drugs.Interfaces;
-using Klinika.Core.Dependencies;
+using Klinika.Drugs.Models;
+using Klinika.Notifications;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Drugs.Services
 {

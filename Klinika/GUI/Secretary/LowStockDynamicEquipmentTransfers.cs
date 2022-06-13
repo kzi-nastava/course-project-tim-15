@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Klinika.Rooms.Services;
+﻿using Klinika.Core.Dependencies;
 using Klinika.Rooms.Models;
-using Klinika.Core.Dependencies;
+using Klinika.Rooms.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Secretary
 {

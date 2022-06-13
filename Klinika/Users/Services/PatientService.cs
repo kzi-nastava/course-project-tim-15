@@ -1,6 +1,6 @@
-﻿using System.Data;
-using Klinika.Users.Interfaces;
+﻿using Klinika.Users.Interfaces;
 using Klinika.Users.Models;
+using System.Data;
 
 namespace Klinika.Users.Services
 {

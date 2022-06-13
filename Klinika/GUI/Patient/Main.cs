@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Klinika.Users.Services;
+﻿using Klinika.Core.Dependencies;
 using Klinika.Questionnaries.Models;
-using Klinika.Core.Dependencies;
+using Klinika.Users.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Patient
 {

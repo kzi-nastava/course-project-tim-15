@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Klinika.Appointments.Services;
+﻿using Klinika.Appointments.Services;
 using Klinika.Core.Dependencies;
 using Klinika.Core.Utilities;
 using Klinika.Schedule.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.GUI.Doctor
 {

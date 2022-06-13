@@ -1,5 +1,5 @@
-﻿using Klinika.Appointments.Models;
-using Klinika.Appointments.Interfaces;
+﻿using Klinika.Appointments.Interfaces;
+using Klinika.Appointments.Models;
 
 namespace Klinika.Appointments.Services
 {

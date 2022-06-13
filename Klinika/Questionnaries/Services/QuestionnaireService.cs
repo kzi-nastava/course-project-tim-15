@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Klinika.Core.Dependencies;
 using Klinika.Questionnaries.Interfaces;
 using Klinika.Questionnaries.Models;
-using Klinika.Core.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Questionnaries.Services
 {

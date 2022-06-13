@@ -1,9 +1,9 @@
-﻿using System.Data;
-using Klinika.Core;
+﻿using Klinika.Core;
 using Klinika.MedicalRecords.Interfaces;
 using Klinika.MedicalRecords.Repositories;
 using Klinika.Users.Interfaces;
 using Klinika.Users.Models;
+using System.Data;
 
 namespace Klinika.Users.Repositories
 {

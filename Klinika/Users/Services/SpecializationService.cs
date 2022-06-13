@@ -1,5 +1,5 @@
-﻿using Klinika.Users.Models;
-using Klinika.Users.Interfaces;
+﻿using Klinika.Users.Interfaces;
+using Klinika.Users.Models;
 
 namespace Klinika.Users.Services
 {

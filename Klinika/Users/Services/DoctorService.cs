@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Data;
-using Klinika.Users.Models;
-using Klinika.Users.Interfaces;
-using Klinika.Appointments.Models;
+﻿using Klinika.Appointments.Models;
 using Klinika.Core.Dependencies;
+using Klinika.Schedule;
 using Klinika.Schedule.Models;
 using Klinika.Schedule.Services;
-using Klinika.Schedule;
+using Klinika.Users.Interfaces;
+using Klinika.Users.Models;
+using Microsoft.Extensions.DependencyInjection;
+using System.Data;
 
 namespace Klinika.Users.Services
 {

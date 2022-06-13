@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Klinika.Users.Models;
-using Klinika.Users.Interfaces;
-using Klinika.Core.Dependencies;
+﻿using Klinika.Core.Dependencies;
 using Klinika.Core.Utilities;
+using Klinika.Users.Interfaces;
+using Klinika.Users.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Login.Services
 {

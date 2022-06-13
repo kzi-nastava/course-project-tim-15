@@ -1,10 +1,10 @@
-﻿using RDoctor = Klinika.Users.Models.Doctor;
-using Microsoft.Extensions.DependencyInjection;
-using Klinika.Users.Services;
-using Klinika.Users.Models;
+﻿using Klinika.Appointments.Models;
 using Klinika.Core.Dependencies;
 using Klinika.Core.Utilities;
-using Klinika.Appointments.Models;
+using Klinika.Users.Models;
+using Klinika.Users.Services;
+using Microsoft.Extensions.DependencyInjection;
+using RDoctor = Klinika.Users.Models.Doctor;
 
 namespace Klinika.GUI.Patient
 {

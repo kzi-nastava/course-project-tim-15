@@ -1,5 +1,5 @@
-﻿using Klinika.Users.Models;
-using Klinika.Core;
+﻿using Klinika.Core;
+using Klinika.Users.Models;
 
 namespace Klinika.Notifications
 {
