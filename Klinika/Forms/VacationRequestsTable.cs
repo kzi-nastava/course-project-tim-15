@@ -1,6 +1,8 @@
 ﻿using Klinika.Models;
 using System.Data;
 using Klinika.Services;
+using Klinika.Dependencies;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Klinika.Forms
 {
@@ -44,7 +46,7 @@ namespace Klinika.Forms
             DataTable? dt = DataSource as DataTable;
             DataRow newRow = dt.NewRow();
             newRow["ID"] = vacationRequest.id;
-            if (showDoctor) newRow["Doctor"] = DoctorService.GetFullName(vacationRequest.doctorID);
+            if (showDoctor) newRow["Doctor"] = StartUp.serviceProvider.GetService<DoctorService>().GetFullName(vacationRequest.doctorID);
             newRow["From"] = vacationRequest.fromDate.ToString("MM.dd.yyyy");
             newRow["To"] = vacationRequest.toDate.ToString("MM.dd.yyyy");
             newRow["Reason"] = vacationRequest.reason;
@@ -72,7 +74,7 @@ namespace Klinika.Forms
         public void ModifySelected(VacationRequest vacationRequest)
         {
             SelectedRows[0].Cells["ID"].Value = vacationRequest.id.ToString();
-            if(showDoctor) SelectedRows[0].Cells["Doctor"].Value = DoctorService.GetFullName(vacationRequest.doctorID);
+            if(showDoctor) SelectedRows[0].Cells["Doctor"].Value = StartUp.serviceProvider.GetService<DoctorService>().GetFullName(vacationRequest.doctorID);
             SelectedRows[0].Cells["From"].Value = vacationRequest.fromDate.ToString("MM.dd.yyyy");
             SelectedRows[0].Cells["To"].Value = vacationRequest.toDate.ToString("MM.dd.yyyy");
             SelectedRows[0].Cells["Reason"].Value = vacationRequest.reason;

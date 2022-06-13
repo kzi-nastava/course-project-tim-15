@@ -8,6 +8,7 @@ namespace Klinika.Services
         private readonly IVacationRequestRepo vacationRequestRepo;
         public VacationRequestService(IVacationRequestRepo vacationRequestRepo) => this.vacationRequestRepo = vacationRequestRepo;
         public List<VacationRequest> GetAll(int doctorID) => vacationRequestRepo.GetAll(doctorID);
+        public List<VacationRequest> GetAll() => vacationRequestRepo.GetAll();
         public void Create(VacationRequest vacationRequest) => vacationRequest.id = vacationRequestRepo.Create(vacationRequest);
         public static void Approve(VacationRequest request)
         {
