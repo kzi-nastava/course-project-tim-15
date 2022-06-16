@@ -5,6 +5,7 @@ using Klinika.Rooms.Models;
 using Klinika.Questionnaries.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Klinika.Rooms.Services;
+using Klinika.Users.Models;
 using System.Data;
 
 namespace Klinika.GUI.Manager
@@ -236,6 +237,29 @@ namespace Klinika.GUI.Manager
         {
             Drug drug = drugsTable1.GetSelectedDrug();
             new ChangeDrug(drug, this).Show();
+        }
+
+        private void questionsButton_Click(object sender, EventArgs e)
+        {
+            new Questions(questionnaireTable.GetSelectedId(), questionnaireTable.GetSelectedTarget()).Show();
+        }
+
+        private void bestButton_Click(object sender, EventArgs e)
+        {
+            List<Users.Models.Doctor> doctors = questionnaireService.GetBest();
+            MessageBox.Show("Best Doctors:\n" +
+                doctors[0].name + " " + doctors[0].surname + "\n" +
+                doctors[1].name + " " + doctors[1].surname + "\n" +
+                doctors[2].name + " " + doctors[2].surname + "\n");
+        }
+
+        private void worstButton_Click(object sender, EventArgs e)
+        {
+            List<Users.Models.Doctor> doctors = questionnaireService.GetWorse();
+            MessageBox.Show("Worst Doctors:\n" +
+                doctors[0].name + " " + doctors[0].surname + "\n" +
+                doctors[1].name + " " + doctors[1].surname + "\n" +
+                doctors[2].name + " " + doctors[2].surname + "\n");
         }
     }
 }

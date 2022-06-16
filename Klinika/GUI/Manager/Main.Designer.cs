@@ -56,12 +56,12 @@
             this.modifyIngredientsButton = new System.Windows.Forms.Button();
             this.addIngredientsButton = new System.Windows.Forms.Button();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.worstButton = new System.Windows.Forms.Button();
+            this.bestButton = new System.Windows.Forms.Button();
+            this.questionsButton = new System.Windows.Forms.Button();
             this.questionnaireTable = new Klinika.Forms.QuestionnaireTable();
             this.roomsTable = new Klinika.Forms.RoomTable();
             this.equipmentTable = new Klinika.Forms.RoomEquipmentTable();
-            this.detailsButton = new System.Windows.Forms.Button();
-            this.bestButton = new System.Windows.Forms.Button();
-            this.worstButton = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomTable)).BeginInit();
@@ -398,7 +398,7 @@
             // 
             this.tabPage5.Controls.Add(this.worstButton);
             this.tabPage5.Controls.Add(this.bestButton);
-            this.tabPage5.Controls.Add(this.detailsButton);
+            this.tabPage5.Controls.Add(this.questionsButton);
             this.tabPage5.Controls.Add(this.questionnaireTable);
             this.tabPage5.Location = new System.Drawing.Point(4, 29);
             this.tabPage5.Name = "tabPage5";
@@ -406,6 +406,36 @@
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Questionnaire";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // worstButton
+            // 
+            this.worstButton.Location = new System.Drawing.Point(279, 345);
+            this.worstButton.Name = "worstButton";
+            this.worstButton.Size = new System.Drawing.Size(94, 29);
+            this.worstButton.TabIndex = 3;
+            this.worstButton.Text = "Worst";
+            this.worstButton.UseVisualStyleBackColor = true;
+            this.worstButton.Click += new System.EventHandler(this.worstButton_Click);
+            // 
+            // bestButton
+            // 
+            this.bestButton.Location = new System.Drawing.Point(146, 345);
+            this.bestButton.Name = "bestButton";
+            this.bestButton.Size = new System.Drawing.Size(94, 29);
+            this.bestButton.TabIndex = 2;
+            this.bestButton.Text = "Best Doctors";
+            this.bestButton.UseVisualStyleBackColor = true;
+            this.bestButton.Click += new System.EventHandler(this.bestButton_Click);
+            // 
+            // questionsButton
+            // 
+            this.questionsButton.Location = new System.Drawing.Point(17, 345);
+            this.questionsButton.Name = "questionsButton";
+            this.questionsButton.Size = new System.Drawing.Size(94, 29);
+            this.questionsButton.TabIndex = 1;
+            this.questionsButton.Text = "Questions";
+            this.questionsButton.UseVisualStyleBackColor = true;
+            this.questionsButton.Click += new System.EventHandler(this.questionsButton_Click);
             // 
             // questionnaireTable
             // 
@@ -460,33 +490,6 @@
             this.equipmentTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.equipmentTable.Size = new System.Drawing.Size(240, 150);
             this.equipmentTable.TabIndex = 0;
-            // 
-            // detailsButton
-            // 
-            this.detailsButton.Location = new System.Drawing.Point(17, 345);
-            this.detailsButton.Name = "detailsButton";
-            this.detailsButton.Size = new System.Drawing.Size(94, 29);
-            this.detailsButton.TabIndex = 1;
-            this.detailsButton.Text = "Details";
-            this.detailsButton.UseVisualStyleBackColor = true;
-            // 
-            // bestButton
-            // 
-            this.bestButton.Location = new System.Drawing.Point(146, 345);
-            this.bestButton.Name = "bestButton";
-            this.bestButton.Size = new System.Drawing.Size(94, 29);
-            this.bestButton.TabIndex = 2;
-            this.bestButton.Text = "Best Doctors";
-            this.bestButton.UseVisualStyleBackColor = true;
-            // 
-            // worstButton
-            // 
-            this.worstButton.Location = new System.Drawing.Point(279, 345);
-            this.worstButton.Name = "worstButton";
-            this.worstButton.Size = new System.Drawing.Size(94, 29);
-            this.worstButton.TabIndex = 3;
-            this.worstButton.Text = "Worst";
-            this.worstButton.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
@@ -551,6 +554,6 @@
         private Forms.QuestionnaireTable questionnaireTable;
         private Button worstButton;
         private Button bestButton;
-        private Button detailsButton;
+        private Button questionsButton;
     }
 }

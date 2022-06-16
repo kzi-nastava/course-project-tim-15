@@ -8,5 +8,6 @@ namespace Klinika.Questionnaries.Services
         private readonly IQuestionRepo questionRepo;
         public QuestionService(IQuestionRepo questionRepo) => this.questionRepo = questionRepo;
         public List<Question> GetByType(Question.Types type) => questionRepo.GetByType(type);
+        public List<Details> GetById(int qID, int targetID) => questionRepo.GetById(qID, targetID);
     }
 }

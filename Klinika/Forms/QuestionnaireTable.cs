@@ -37,7 +37,11 @@ namespace Klinika.Forms
         }
         public int GetSelectedId()
         {
-            return Convert.ToInt32(GetCellValue("ID"));
+            return Convert.ToInt32(GetCellValue("QuestionnaireID"));
+        }
+        public int GetSelectedTarget()
+        {
+            return Convert.ToInt32(GetCellValue("TargetID"));
         }
         public Grades GetSelectedQuestionnaire()
         {
