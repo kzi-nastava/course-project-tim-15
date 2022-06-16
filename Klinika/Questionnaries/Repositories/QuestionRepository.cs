@@ -1,6 +1,7 @@
 ﻿using Klinika.Core;
 using Klinika.Questionnaries.Interfaces;
 using Klinika.Questionnaries.Models;
+using Klinika.Core.Database;
 
 namespace Klinika.Questionnaries.Repositories
 {
@@ -20,6 +21,32 @@ namespace Klinika.Questionnaries.Repositories
                 questions.Add(question);
             }
             return questions;
+        }
+
+        public List<Details> GetById(int qID, int targetID)
+        {
+            List<Details> details = new List<Details>();
+            string getGradeQuerry = "SELECT [Question].ID, [Question].Name, COUNT(Grade) " +
+                "FROM [Questionnaire], [Answer], [Question] " +
+                "WHERE [Questionnaire].TargetID = @targetID AND " +
+                "[Answer].QuestionID = [Question].ID AND [Answer].QuestionnaireID = [Questionnaire].ID " +
+                "" +
+                "GROUP BY [Questionnaire].TargetID, [Question].ID";
+
+            /*var resoult = DatabaseConnection.GetInstance().ExecuteSelectCommand(getGradeQuerry, ("@targetID", targetID));
+            foreach (object row in resoult)
+            {
+                Grades grade = new Grades
+                {
+                    questionnaireID = Convert.ToInt32(((object[])row)[0].ToString()),
+                    avgGrade = Convert.ToDouble(((object[])row)[1].ToString()),
+                    targetID = doctorID,
+                    targetName = doctorName,
+                    type = 'D'
+                };
+                grades.Add(grade);
+            }*/
+            return details;
         }
     }
 }

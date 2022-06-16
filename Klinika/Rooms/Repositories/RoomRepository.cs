@@ -12,7 +12,6 @@ namespace Klinika.Rooms.Repositories
     internal class RoomRepository : Repository, IRoomRepo
     {
         public static Dictionary<int, string>? types { get; set; }
-        //returns type ID form Name
         public int GetTypeId(string type)
         {
             return types.FirstOrDefault(x => x.Value == type).Key;
@@ -159,39 +158,6 @@ namespace Klinika.Rooms.Repositories
             }
         }
 
-        public bool Renovate(Renovation renovation)
-        {
-            if (!RoomServices.DateValid(renovation)) return false;
-
-            if (renovation.advanced == 0)
-            {
-                SimpleRenovate(renovation);
-            }
-            else
-            {
-                AdvancedRenovation(renovation);
-            }
-            return true;
-        }
-
-        public bool IsRoomRenovating(int id, DateTime from, DateTime to)
-        {
-            string findQuery = "SELECT [Renovations].ID " +
-                                      "FROM [Renovations] " +
-                                      "WHERE RoomID = @RoomID AND " +
-                                      "((StartDate > @StartDate AND StartDate < @EndDate) OR " +
-                                      "(StartDate > @StartDate AND EndDate < @EndDate) OR " +
-                                      "(EndDate > @StartDate AND EndDate < @EndDate) OR " +
-                                      "(StartDate < @StartDate AND EndDate > @EndDate))";
-            object check = DatabaseConnection.GetInstance().ExecuteNonQueryScalarCommand(findQuery, ("@RoomID", id.ToString()),
-                ("@StartDate", from.ToString("yyyy-MM-dd")), ("@EndDate", to.ToString("yyyy-MM-dd")));
-            if (check != null)
-            {
-                return true;
-            }
-            return false;
-        }
-
         internal void MigrateEquipment(int firstId, int secondId)
         {
             string modifyQuery = "UPDATE [RoomEquipment] " +
@@ -203,6 +169,7 @@ namespace Klinika.Rooms.Repositories
 
         internal void MergeRooms(int firstId, int secondId)
         {
+            RenovateRoom(firstId, secondId);
             MigrateEquipment(firstId, secondId);
             Delete(secondId);
         }
@@ -223,6 +190,7 @@ namespace Klinika.Rooms.Repositories
             {
                 if (advancedRenovation.Rows[0]["Type"].ToString() == "0")
                 {
+                    CheckRenovations();
                     MergeRooms(firstID, int.Parse(advancedRenovation.Rows[0]["SecondID"].ToString()));
                 }
                 if (advancedRenovation.Rows[0]["Type"].ToString() == "1")
@@ -230,29 +198,6 @@ namespace Klinika.Rooms.Repositories
                     SplitRooms(int.Parse(advancedRenovation.Rows[0]["SecondNumber"].ToString()),
                         int.Parse(advancedRenovation.Rows[0]["SecondType"].ToString()));
                 }
-            }
-            try
-            {
-                DatabaseConnection.GetInstance().database.Open();
-                SqlCommand find = new SqlCommand(findQuery, DatabaseConnection.GetInstance().database);
-                find.Parameters.AddWithValue("@ID", renovationID.ToString());
-                SqlDataReader reader = find.ExecuteReader();
-                if (reader.Read())
-                {
-                    if (reader["Type"].ToString() == "0")
-                    {
-                        MergeRooms(firstID, int.Parse(reader["SecondID"].ToString()));
-                    }
-                    if (reader["Type"].ToString() == "1")
-                    {
-                        SplitRooms(int.Parse(reader["SecondNumber"].ToString()), int.Parse(reader["SecondType"].ToString()));
-                    }
-                }
-                DatabaseConnection.GetInstance().database.Close();
-            }
-            catch (SqlException error)
-            {
-                MessageBox.Show(error.Message);
             }
         }
 
@@ -262,11 +207,6 @@ namespace Klinika.Rooms.Repositories
                                       "FROM [Renovations] " +
                                       "WHERE EndDate = @Today AND Advanced != 0";
             DataTable renovations = DatabaseConnection.GetInstance().CreateTableOfData(findQuery, ("@Today", DateTime.Now.Date.ToString("yyyy-MM-dd")));
-
-            foreach (DataRow row in renovations.Rows)
-            {
-                //RenovateRoom(int.Parse(row["ID"].ToString()), int.Parse(row["RoomID"].ToString()));
-            }
         }
     }
 }

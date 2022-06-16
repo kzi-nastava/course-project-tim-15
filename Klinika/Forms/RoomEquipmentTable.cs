@@ -19,7 +19,6 @@ namespace Klinika.Forms
             equipmentData.Columns.Add("Spent");
 
             DataSource = equipmentData;
-            Columns["ID"].Width = 45;
 
             equipment = new List<Equipment>();
             foreach (Equipment equipment in equipments) Insert(equipment);

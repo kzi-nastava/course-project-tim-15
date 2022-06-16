@@ -37,11 +37,14 @@ namespace Klinika.Rooms.Services
         public static bool IsRoomRenovating(int id, DateTime from, DateTime to)
         {
             bool renovating = false;
-            //if(Repositories.RoomRepository.IsRoomRenovating(id, from, to))
-            //{
-            //    renovating = true;
-            //}
             return renovating;
+        }
+
+        public static List<Room> GetAll()
+        {
+            List<Room> rooms = new List<Room>();
+
+            return rooms;
         }
         public static List<EnhancedComboBoxItem> GetRooms()
         {

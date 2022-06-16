@@ -57,6 +57,7 @@ namespace Klinika.Core.Dependencies
             services.AddTransient<AppointmentService>();
             services.AddTransient<AppointmentRecommendationService>();
             services.AddTransient<AntiTrollService>();
+            services.AddTransient<IngredientService>();
 
             return services;
         }
@@ -86,6 +87,7 @@ namespace Klinika.Core.Dependencies
             repos.AddSingleton<IBaseDoctorRepo, DoctorRepository>();
             repos.AddSingleton<IAppointmentRepo, AppointmentRepository>();
             repos.AddSingleton<IAntiTrollRepo, AppointmentRepository>();
+            repos.AddSingleton<IIngredientRepo, IngredientRepository>();
 
             return repos;
         }

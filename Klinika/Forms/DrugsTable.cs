@@ -29,8 +29,8 @@ namespace Klinika.Forms
             }
 
             DataSource = drugsData;
-            Columns[0].Width = 30;
-            Columns[1].Width = 90;
+            //Columns[0].Width = 30;
+            //Columns[1].Width = 90;
             ClearSelection();
         }
         public int GetSelectedId()

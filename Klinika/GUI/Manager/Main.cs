@@ -2,8 +2,10 @@
 using Klinika.Drugs.Models;
 using Klinika.Drugs.Services;
 using Klinika.Rooms.Models;
-using Klinika.Rooms.Repositories;
+using Klinika.Questionnaries.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Klinika.Rooms.Services;
+using Klinika.Users.Models;
 using System.Data;
 
 namespace Klinika.GUI.Manager
@@ -11,6 +13,10 @@ namespace Klinika.GUI.Manager
     public partial class Main : Form
     {
         private readonly DrugService? drugService;
+        private readonly IngredientService? ingredientService;
+        private readonly RoomServices? roomService;
+        private readonly EquipmentService? equipmentService;
+        private readonly QuestionnaireService? questionnaireService;
         public EquipmentTransfer transfer;
         public DataTable unfiltered;
         public bool[] transferCheck;
@@ -19,7 +25,11 @@ namespace Klinika.GUI.Manager
             transferCheck = new bool[2];
             transferCheck[0] = false;
             transferCheck[1] = false;
+            questionnaireService = StartUp.serviceProvider.GetService<QuestionnaireService>();
             drugService = StartUp.serviceProvider.GetService<DrugService>();
+            ingredientService = StartUp.serviceProvider.GetService<IngredientService>();
+            roomService = StartUp.serviceProvider.GetService<RoomServices>();
+            equipmentService = StartUp.serviceProvider.GetService<EquipmentService>();
             transfer = new EquipmentTransfer();
             unfiltered = new DataTable();
             InitializeComponent();
@@ -31,7 +41,11 @@ namespace Klinika.GUI.Manager
             roomComboBox.Items.Clear();
             quantityComboBox.Items.Clear();
 
-            FillTables();
+            questionnaireTable.Fill(questionnaireService.GetAll());
+            drugsTable1.Fill(drugService.GetAll());
+            ingredientsTable.Fill(ingredientService.GetAll());
+            roomTable.Fill(roomService.GetExaminationRooms());
+            equipTable.Fill(equipmentService.GetDynamicEquipmentInRooms());
             FillComboBox();
         }
 
@@ -55,81 +69,11 @@ namespace Klinika.GUI.Manager
             equipmentComboBox.SelectedIndex = 0;
             quantityComboBox.SelectedIndex = 0;
         }
-
-        private void FillDrugs()
-        {
-            DataTable table = new DataTable();
-            table.Columns.Add("id", typeof(string));
-            table.Columns.Add("Name", typeof(string));
-            table.Columns.Add("Approved", typeof(string));
-
-            List<Drug> drugs = drugService.GetDenied();
-            foreach (Drug drug in drugs)
-            {
-                DataRow dr = table.NewRow();
-
-                dr[0] = drug.id;
-                dr[1] = drug.name;
-                dr[2] = drug.approved;
-
-                table.Rows.Add(dr);
-            }
-
-            drugsTable.DataSource = table;
-            drugsTable.Columns[0].Visible = false;
-        }
-
-        private void FillIngedients()
-        {
-            DataTable table = new DataTable();
-            table.Columns.Add("id", typeof(string));
-            table.Columns.Add("Name", typeof(string));
-            table.Columns.Add("Type", typeof(string));
-
-            //TODO
-            List<Ingredient> ingredients = new List<Ingredient>();//Services.IngredientService.GetAll(); 
-            foreach (Ingredient ingredient in ingredients)
-            {
-                DataRow dr = table.NewRow();
-
-                dr[0] = ingredient.id;
-                dr[1] = ingredient.name;
-                dr[2] = ingredient.type;
-
-                table.Rows.Add(dr);
-            }
-
-            ingredientsTable.DataSource = table;
-            ingredientsTable.Columns[0].Visible = false;
-        }
-
-        private void FillTables()
-        {
-            DataTable rooms = RoomRepository.GetAll();
-            DataRow storage = rooms.NewRow();
-            storage["ID"] = 0;
-            storage["Type"] = "Storage";
-            storage["Number"] = 0;
-            rooms.Rows.Add(storage);
-            roomsTable.DataSource = rooms;
-            roomsTable.Columns["ID"].Visible = false;
-
-            //unfiltered = Repositories.EquipmentRepository.GetAll();
-            equipmentTable.DataSource = unfiltered;
-            equipmentTable.Columns["EquipmentID"].Visible = false;
-            equipmentTable.Columns["RoomID"].Visible = false;
-            equipmentTable.ClearSelection();
-
-            FillDrugs();
-            FillIngedients();
-        }
-
         private void deleteButton_Click(object sender, EventArgs e)
         {
             DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected room? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (deletionConfirmation == DialogResult.Yes)
             {
-                //Repositories.RoomRepository.Delete((int)roomsTable.SelectedRows[0].Cells["ID"].Value);
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Main_Load(null, EventArgs.Empty);
             }
@@ -143,15 +87,14 @@ namespace Klinika.GUI.Manager
         private void modifyButton_Click(object sender, EventArgs e)
         {
             int[] selectedRoom = new int[3];
-            selectedRoom[0] = (int)roomsTable.SelectedRows[0].Cells["ID"].Value;
-            //selectedRoom[1] = Repositories.RoomRepository.GetTypeId(roomsTable.SelectedRows[0].Cells["Type"].Value.ToString());
-            selectedRoom[2] = (int)roomsTable.SelectedRows[0].Cells["Number"].Value;
+            selectedRoom[0] = (int)roomTable.SelectedRows[0].Cells["ID"].Value;
+            selectedRoom[2] = (int)roomTable.SelectedRows[0].Cells["Number"].Value;
             new ModifyRoom(this, selectedRoom).Show();
         }
 
-        private void roomsTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void roomTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if((int)roomsTable.SelectedRows[0].Cells["ID"].Value != 0)
+            if((int)roomTable.SelectedRows[0].Cells["ID"].Value != 0)
             {
                 deleteButton.Enabled = true;
                 modifyButton.Enabled = true;
@@ -178,51 +121,10 @@ namespace Klinika.GUI.Manager
                     && row.Field<int>("Quantity").ToString().Contains(quantityTextBox.Text)
                     ).CopyToDataTable();
 
-                if (roomComboBox.SelectedIndex != -1)
-                {
-                    if (roomComboBox.Items[roomComboBox.SelectedIndex].ToString() != "")
-                    {
-                        filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<string>("Room Type").ToString() == roomComboBox.Items[roomComboBox.SelectedIndex].ToString()).CopyToDataTable();
-                    }
-                }
-
-                if (equipmentComboBox.SelectedIndex != -1)
-                {
-                    if (equipmentComboBox.Items[equipmentComboBox.SelectedIndex].ToString() != "")
-                    {
-                        filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<string>("Equipment Type").ToString() == equipmentComboBox.Items[equipmentComboBox.SelectedIndex].ToString()).CopyToDataTable();
-                    }
-                }
-
-                if (quantityComboBox.SelectedIndex != -1)
-                {
-                    if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() != "")
-                    {
-                        if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "no available")
-                        {
-                            filtered = filtered.AsEnumerable()
-                                .Where(row => row.Field<int>("Quantity") == 0).CopyToDataTable();
-                        }
-                        else if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "0-10")
-                        {
-                            filtered = filtered.AsEnumerable()
-                                .Where(row => row.Field<int>("Quantity") > 0 && row.Field<int>("Quantity") < 10).CopyToDataTable();
-                        }
-                        else if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "10+")
-                        {
-                            filtered = filtered.AsEnumerable()
-                                .Where(row => row.Field<int>("Quantity") >= 10).CopyToDataTable();
-                        }
-                    }
-                }
-
                 equipmentTable.DataSource = filtered;
             }
             catch (System.InvalidOperationException ex)
             {
-                MessageBox.Show("This filter leaves the table empthy!");
             }
         }
 
@@ -306,7 +208,7 @@ namespace Klinika.GUI.Manager
 
         private void renovateButton_Click(object sender, EventArgs e)
         {
-            new Renovation((int)roomsTable.SelectedRows[0].Cells["ID"].Value, this).Show();
+            new Renovation((int)roomTable.SelectedRows[0].Cells["ID"].Value, this).Show();
         }
 
         private void addIngredientsButton_Click(object sender, EventArgs e)
@@ -314,20 +216,12 @@ namespace Klinika.GUI.Manager
             new ChangeIngredient(-1, this).Show();
         }
 
-        private void modifyIngredientsButton_Click(object sender, EventArgs e)
-        {
-            new ChangeIngredient(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()), this).Show();
-        }
-
         private void deleteIngredientsButton_Click(object sender, EventArgs e)
         {
             DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected ingredient? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (deletionConfirmation == DialogResult.Yes)
             {
-                IngredientService.Delete(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()));
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //TODO
-                //Services.IngredientService.GetAll();
                 this.Main_Load(null, EventArgs.Empty);
             }
         }
@@ -341,11 +235,31 @@ namespace Klinika.GUI.Manager
 
         private void modifyDrugButton_Click(object sender, EventArgs e)
         {
-            Drug drug = new Drug();
-            drug.id = int.Parse(drugsTable.SelectedRows[0].Cells["id"].Value.ToString());
-            drug.name = drugsTable.SelectedRows[0].Cells["Name"].Value.ToString();
-            drug.approved = drugsTable.SelectedRows[0].Cells["Approved"].Value.ToString();
+            Drug drug = drugsTable1.GetSelectedDrug();
             new ChangeDrug(drug, this).Show();
+        }
+
+        private void questionsButton_Click(object sender, EventArgs e)
+        {
+            new Questions(questionnaireTable.GetSelectedId(), questionnaireTable.GetSelectedTarget()).Show();
+        }
+
+        private void bestButton_Click(object sender, EventArgs e)
+        {
+            List<Users.Models.Doctor> doctors = questionnaireService.GetBest();
+            MessageBox.Show("Best Doctors:\n" +
+                doctors[0].name + " " + doctors[0].surname + "\n" +
+                doctors[1].name + " " + doctors[1].surname + "\n" +
+                doctors[2].name + " " + doctors[2].surname + "\n");
+        }
+
+        private void worstButton_Click(object sender, EventArgs e)
+        {
+            List<Users.Models.Doctor> doctors = questionnaireService.GetWorse();
+            MessageBox.Show("Worst Doctors:\n" +
+                doctors[0].name + " " + doctors[0].surname + "\n" +
+                doctors[1].name + " " + doctors[1].surname + "\n" +
+                doctors[2].name + " " + doctors[2].surname + "\n");
         }
     }
 }

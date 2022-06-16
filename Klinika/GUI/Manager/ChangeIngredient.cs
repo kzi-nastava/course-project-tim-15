@@ -20,7 +20,6 @@ namespace Klinika.GUI.Manager
             ingredient.id = id;
             ingredient.name = nameBox.Text;
             ingredient.type = typeBox.Text;
-            IngredientService.Modify(ingredient);
 
             main.Main_Load(null, EventArgs.Empty);
             if (id != -1)
