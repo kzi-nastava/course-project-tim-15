@@ -6,24 +6,6 @@ namespace Klinika.Drugs.Repositories
 {
     public class IngredientRepository : Repository, IIngredientRepo
     {
-        //public List<Ingredient> ingredients { get; }
-        //private static IngredientRepository? instance;
-        //public static IngredientRepository Instance
-        //{
-        //    get
-        //    {
-        //        if (instance == null)
-        //        {
-        //            instance = new IngredientRepository();
-        //        }
-        //        return instance;
-        //    }
-        //}
-        //public static IngredientRepository Reload()
-        //{
-        //    instance = new IngredientRepository();
-        //    return instance;
-        //}
         public IngredientRepository() : base() { }
         public List<Ingredient> GetAll()
         {

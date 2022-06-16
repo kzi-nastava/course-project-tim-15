@@ -21,7 +21,6 @@ namespace Klinika.GUI.Manager
 
         private void ChangeDrug_Load(object sender, EventArgs e)
         {
-            ingredients = IngredientService.GetIngredientList();
             foreach(EnhancedComboBoxItem ingredient in ingredients)
             {
                 ingredientsBox.Items.Add(ingredient);
@@ -35,22 +34,10 @@ namespace Klinika.GUI.Manager
             if (drug.id != -1)
             {
                 addDrugButton.Text = "Modify";
-                List<Ingredient> ingredients = DrugService.GetIngredients(drug.id);
-                foreach(Ingredient ingredient in ingredients)
-                {
-                    DataRow dr = table.NewRow();
-
-                    dr[0] = ingredient.id;
-                    dr[1] = ingredient.name;
-                    dr[2] = ingredient.type;
-
-                    table.Rows.Add(dr);
-                }
             }
             if (drug.approved == "D")
             {
                 richTextBox1.Visible = true;
-                richTextBox1.Text = DrugService.GetNote(drug.id);
             }
             ingredientsTable.DataSource = table;
             ingredientsTable.Columns[0].Visible = false;
@@ -83,7 +70,6 @@ namespace Klinika.GUI.Manager
                     break;
                 }
             }
-            //table.AcceptChanges();
             ingredientsTable.DataSource = table;
         }
 
@@ -93,7 +79,6 @@ namespace Klinika.GUI.Manager
             {
                 drug.name = nameBox.Text;
             }
-            DrugService.AddDrug(drug, table); 
             MessageBox.Show("Drug sent for approval!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }

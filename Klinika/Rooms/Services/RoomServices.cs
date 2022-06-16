@@ -43,6 +43,13 @@ namespace Klinika.Rooms.Services
             //}
             return renovating;
         }
+
+        public static List<Room> GetAll()
+        {
+            List<Room> rooms = new List<Room>();
+
+            return rooms;
+        }
         public static List<EnhancedComboBoxItem> GetRooms()
         {
             List<EnhancedComboBoxItem> rooms = new List<EnhancedComboBoxItem>();

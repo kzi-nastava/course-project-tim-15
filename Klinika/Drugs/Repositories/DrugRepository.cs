@@ -51,6 +51,10 @@ namespace Klinika.Drugs.Repositories
                 }
             }
         }
+        private List<Ingredient> GetAllIngredients()
+        {
+            return ingredientRepository.GetAll();
+        }
         public void CreateUnapproved(int id, string description)
         {
             string createQuery = "INSERT INTO [UnapprovedDrug] " +
