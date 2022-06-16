@@ -37,7 +37,7 @@ namespace Klinika.Forms
         {
             return Convert.ToInt32(GetCellValue("ID"));
         }
-        public Room GetSelectedIngredient()
+        public Room GetSelectedRoom()
         {
             return rooms.Where(x => x.id == GetSelectedId()).FirstOrDefault();
         }

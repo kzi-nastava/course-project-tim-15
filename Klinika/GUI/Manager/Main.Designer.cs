@@ -36,6 +36,7 @@
             this.modifyButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.equipTable = new Klinika.Forms.RoomEquipmentTable();
             this.dateButton = new System.Windows.Forms.Button();
             this.equipmentComboBox = new System.Windows.Forms.ComboBox();
             this.roomComboBox = new System.Windows.Forms.ComboBox();
@@ -54,20 +55,26 @@
             this.deleteIngredientsButton = new System.Windows.Forms.Button();
             this.modifyIngredientsButton = new System.Windows.Forms.Button();
             this.addIngredientsButton = new System.Windows.Forms.Button();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.questionnaireTable = new Klinika.Forms.QuestionnaireTable();
             this.roomsTable = new Klinika.Forms.RoomTable();
             this.equipmentTable = new Klinika.Forms.RoomEquipmentTable();
-            this.equipTable = new Forms.RoomEquipmentTable();
+            this.detailsButton = new System.Windows.Forms.Button();
+            this.bestButton = new System.Windows.Forms.Button();
+            this.worstButton = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.roomTable)).BeginInit();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.equipTable)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.drugsTable1)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ingredientsTable)).BeginInit();
+            this.tabPage5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.questionnaireTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.equipmentTable)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.equipTable)).BeginInit();
             this.SuspendLayout();
             // 
             // tabs
@@ -76,6 +83,7 @@
             this.tabs.Controls.Add(this.tabPage2);
             this.tabs.Controls.Add(this.tabPage3);
             this.tabs.Controls.Add(this.tabPage4);
+            this.tabs.Controls.Add(this.tabPage5);
             this.tabs.Location = new System.Drawing.Point(12, 12);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
@@ -178,6 +186,24 @@
             this.tabPage2.Text = "Equipment";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // equipTable
+            // 
+            this.equipTable.AllowUserToAddRows = false;
+            this.equipTable.AllowUserToDeleteRows = false;
+            this.equipTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.equipTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.equipTable.BackgroundColor = System.Drawing.Color.White;
+            this.equipTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.equipTable.Location = new System.Drawing.Point(3, 48);
+            this.equipTable.MultiSelect = false;
+            this.equipTable.Name = "equipTable";
+            this.equipTable.ReadOnly = true;
+            this.equipTable.RowHeadersWidth = 51;
+            this.equipTable.RowTemplate.Height = 30;
+            this.equipTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.equipTable.Size = new System.Drawing.Size(765, 250);
+            this.equipTable.TabIndex = 13;
+            // 
             // dateButton
             // 
             this.dateButton.Location = new System.Drawing.Point(9, 304);
@@ -272,19 +298,19 @@
             // 
             // drugsTable1
             // 
-            //this.drugsTable1.AllowUserToAddRows = false;
-            //this.drugsTable1.AllowUserToDeleteRows = false;
-            //this.drugsTable1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            //this.drugsTable1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            //this.drugsTable1.BackgroundColor = System.Drawing.Color.White;
-            //this.drugsTable1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.drugsTable1.AllowUserToAddRows = false;
+            this.drugsTable1.AllowUserToDeleteRows = false;
+            this.drugsTable1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.drugsTable1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.drugsTable1.BackgroundColor = System.Drawing.Color.White;
+            this.drugsTable1.ColumnHeadersHeight = 29;
             this.drugsTable1.Location = new System.Drawing.Point(3, 3);
-            //this.drugsTable1.MultiSelect = false;
+            this.drugsTable1.MultiSelect = false;
             this.drugsTable1.Name = "drugsTable1";
-            //this.drugsTable1.ReadOnly = true;
-            //this.drugsTable1.RowHeadersWidth = 51;
-            //this.drugsTable1.RowTemplate.Height = 30;
-            //this.drugsTable1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.drugsTable1.ReadOnly = true;
+            this.drugsTable1.RowHeadersWidth = 51;
+            this.drugsTable1.RowTemplate.Height = 30;
+            this.drugsTable1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.drugsTable1.Size = new System.Drawing.Size(765, 315);
             this.drugsTable1.TabIndex = 7;
             // 
@@ -323,19 +349,19 @@
             // 
             // ingredientsTable
             // 
-            //this.ingredientsTable.AllowUserToAddRows = false;
-            //this.ingredientsTable.AllowUserToDeleteRows = false;
-            //this.ingredientsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            //this.ingredientsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            //this.ingredientsTable.BackgroundColor = System.Drawing.Color.White;
-            //this.ingredientsTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ingredientsTable.AllowUserToAddRows = false;
+            this.ingredientsTable.AllowUserToDeleteRows = false;
+            this.ingredientsTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.ingredientsTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.ingredientsTable.BackgroundColor = System.Drawing.Color.White;
+            this.ingredientsTable.ColumnHeadersHeight = 29;
             this.ingredientsTable.Location = new System.Drawing.Point(3, 3);
-            //this.ingredientsTable.MultiSelect = false;
+            this.ingredientsTable.MultiSelect = false;
             this.ingredientsTable.Name = "ingredientsTable";
-            //this.ingredientsTable.ReadOnly = true;
-            //this.ingredientsTable.RowHeadersWidth = 51;
-            //this.ingredientsTable.RowTemplate.Height = 30;
-            //this.ingredientsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ingredientsTable.ReadOnly = true;
+            this.ingredientsTable.RowHeadersWidth = 51;
+            this.ingredientsTable.RowTemplate.Height = 30;
+            this.ingredientsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ingredientsTable.Size = new System.Drawing.Size(762, 323);
             this.ingredientsTable.TabIndex = 7;
             // 
@@ -357,7 +383,6 @@
             this.modifyIngredientsButton.TabIndex = 2;
             this.modifyIngredientsButton.Text = "Modify";
             this.modifyIngredientsButton.UseVisualStyleBackColor = true;
-            this.modifyIngredientsButton.Click += new System.EventHandler(this.modifyIngredientsButton_Click);
             // 
             // addIngredientsButton
             // 
@@ -368,6 +393,37 @@
             this.addIngredientsButton.Text = "Add New";
             this.addIngredientsButton.UseVisualStyleBackColor = true;
             this.addIngredientsButton.Click += new System.EventHandler(this.addIngredientsButton_Click);
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.worstButton);
+            this.tabPage5.Controls.Add(this.bestButton);
+            this.tabPage5.Controls.Add(this.detailsButton);
+            this.tabPage5.Controls.Add(this.questionnaireTable);
+            this.tabPage5.Location = new System.Drawing.Point(4, 29);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(768, 393);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Questionnaire";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // questionnaireTable
+            // 
+            this.questionnaireTable.AllowUserToAddRows = false;
+            this.questionnaireTable.AllowUserToDeleteRows = false;
+            this.questionnaireTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.questionnaireTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.questionnaireTable.BackgroundColor = System.Drawing.Color.White;
+            this.questionnaireTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.questionnaireTable.Location = new System.Drawing.Point(3, 0);
+            this.questionnaireTable.MultiSelect = false;
+            this.questionnaireTable.Name = "questionnaireTable";
+            this.questionnaireTable.ReadOnly = true;
+            this.questionnaireTable.RowHeadersWidth = 51;
+            this.questionnaireTable.RowTemplate.Height = 30;
+            this.questionnaireTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.questionnaireTable.Size = new System.Drawing.Size(762, 321);
+            this.questionnaireTable.TabIndex = 0;
             // 
             // roomsTable
             // 
@@ -405,15 +461,32 @@
             this.equipmentTable.Size = new System.Drawing.Size(240, 150);
             this.equipmentTable.TabIndex = 0;
             // 
-            // equipTable
+            // detailsButton
             // 
-            this.equipTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.equipTable.Location = new System.Drawing.Point(3, 48);
-            this.equipTable.Name = "equipTable";
-            this.equipTable.RowHeadersWidth = 51;
-            this.equipTable.RowTemplate.Height = 29;
-            this.equipTable.Size = new System.Drawing.Size(765, 250);
-            this.equipTable.TabIndex = 13;
+            this.detailsButton.Location = new System.Drawing.Point(17, 345);
+            this.detailsButton.Name = "detailsButton";
+            this.detailsButton.Size = new System.Drawing.Size(94, 29);
+            this.detailsButton.TabIndex = 1;
+            this.detailsButton.Text = "Details";
+            this.detailsButton.UseVisualStyleBackColor = true;
+            // 
+            // bestButton
+            // 
+            this.bestButton.Location = new System.Drawing.Point(146, 345);
+            this.bestButton.Name = "bestButton";
+            this.bestButton.Size = new System.Drawing.Size(94, 29);
+            this.bestButton.TabIndex = 2;
+            this.bestButton.Text = "Best Doctors";
+            this.bestButton.UseVisualStyleBackColor = true;
+            // 
+            // worstButton
+            // 
+            this.worstButton.Location = new System.Drawing.Point(279, 345);
+            this.worstButton.Name = "worstButton";
+            this.worstButton.Size = new System.Drawing.Size(94, 29);
+            this.worstButton.TabIndex = 3;
+            this.worstButton.Text = "Worst";
+            this.worstButton.UseVisualStyleBackColor = true;
             // 
             // Main
             // 
@@ -430,13 +503,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.roomTable)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.equipTable)).EndInit();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.drugsTable1)).EndInit();
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ingredientsTable)).EndInit();
+            this.tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.questionnaireTable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.roomsTable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.equipmentTable)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.equipTable)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -470,7 +545,12 @@
         private Button modifyDrugButton;
         private Forms.DrugsTable drugsTable1;
         private Forms.IngredientsTable ingredientsTable;
-        private Forms.RoomTable roomTable;
         private Forms.RoomEquipmentTable equipTable;
+        private TabPage tabPage5;
+        private Forms.RoomTable roomTable;
+        private Forms.QuestionnaireTable questionnaireTable;
+        private Button worstButton;
+        private Button bestButton;
+        private Button detailsButton;
     }
 }

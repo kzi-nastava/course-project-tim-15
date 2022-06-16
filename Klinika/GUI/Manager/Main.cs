@@ -2,7 +2,7 @@
 using Klinika.Drugs.Models;
 using Klinika.Drugs.Services;
 using Klinika.Rooms.Models;
-using Klinika.Rooms.Repositories;
+using Klinika.Questionnaries.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Klinika.Rooms.Services;
 using System.Data;
@@ -15,6 +15,7 @@ namespace Klinika.GUI.Manager
         private readonly IngredientService? ingredientService;
         private readonly RoomServices? roomService;
         private readonly EquipmentService? equipmentService;
+        private readonly QuestionnaireService? questionnaireService;
         public EquipmentTransfer transfer;
         public DataTable unfiltered;
         public bool[] transferCheck;
@@ -23,6 +24,7 @@ namespace Klinika.GUI.Manager
             transferCheck = new bool[2];
             transferCheck[0] = false;
             transferCheck[1] = false;
+            questionnaireService = StartUp.serviceProvider.GetService<QuestionnaireService>();
             drugService = StartUp.serviceProvider.GetService<DrugService>();
             ingredientService = StartUp.serviceProvider.GetService<IngredientService>();
             roomService = StartUp.serviceProvider.GetService<RoomServices>();
@@ -34,11 +36,11 @@ namespace Klinika.GUI.Manager
 
         public void Main_Load(object sender, EventArgs e)
         {
-            
-            //equipmentComboBox.Items.Clear();
+            equipmentComboBox.Items.Clear();
             roomComboBox.Items.Clear();
             quantityComboBox.Items.Clear();
 
+            questionnaireTable.Fill(questionnaireService.GetAll());
             drugsTable1.Fill(drugService.GetAll());
             ingredientsTable.Fill(ingredientService.GetAll());
             roomTable.Fill(roomService.GetExaminationRooms());
@@ -71,7 +73,6 @@ namespace Klinika.GUI.Manager
             DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected room? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (deletionConfirmation == DialogResult.Yes)
             {
-                //Repositories.RoomRepository.Delete((int)roomTable.SelectedRows[0].Cells["ID"].Value);
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Main_Load(null, EventArgs.Empty);
             }
@@ -86,7 +87,6 @@ namespace Klinika.GUI.Manager
         {
             int[] selectedRoom = new int[3];
             selectedRoom[0] = (int)roomTable.SelectedRows[0].Cells["ID"].Value;
-            //selectedRoom[1] = Repositories.RoomRepository.GetTypeId(roomTable.SelectedRows[0].Cells["Type"].Value.ToString());
             selectedRoom[2] = (int)roomTable.SelectedRows[0].Cells["Number"].Value;
             new ModifyRoom(this, selectedRoom).Show();
         }
@@ -120,51 +120,10 @@ namespace Klinika.GUI.Manager
                     && row.Field<int>("Quantity").ToString().Contains(quantityTextBox.Text)
                     ).CopyToDataTable();
 
-                if (roomComboBox.SelectedIndex != -1)
-                {
-                    if (roomComboBox.Items[roomComboBox.SelectedIndex].ToString() != "")
-                    {
-                        filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<string>("Room Type").ToString() == roomComboBox.Items[roomComboBox.SelectedIndex].ToString()).CopyToDataTable();
-                    }
-                }
-
-                if (equipmentComboBox.SelectedIndex != -1)
-                {
-                    if (equipmentComboBox.Items[equipmentComboBox.SelectedIndex].ToString() != "")
-                    {
-                        filtered = filtered.AsEnumerable()
-                            .Where(row => row.Field<string>("Equipment Type").ToString() == equipmentComboBox.Items[equipmentComboBox.SelectedIndex].ToString()).CopyToDataTable();
-                    }
-                }
-
-                if (quantityComboBox.SelectedIndex != -1)
-                {
-                    if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() != "")
-                    {
-                        if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "no available")
-                        {
-                            filtered = filtered.AsEnumerable()
-                                .Where(row => row.Field<int>("Quantity") == 0).CopyToDataTable();
-                        }
-                        else if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "0-10")
-                        {
-                            filtered = filtered.AsEnumerable()
-                                .Where(row => row.Field<int>("Quantity") > 0 && row.Field<int>("Quantity") < 10).CopyToDataTable();
-                        }
-                        else if (quantityComboBox.Items[quantityComboBox.SelectedIndex].ToString() == "10+")
-                        {
-                            filtered = filtered.AsEnumerable()
-                                .Where(row => row.Field<int>("Quantity") >= 10).CopyToDataTable();
-                        }
-                    }
-                }
-
                 equipmentTable.DataSource = filtered;
             }
             catch (System.InvalidOperationException ex)
             {
-                MessageBox.Show("This filter leaves the table empthy!");
             }
         }
 
@@ -256,21 +215,12 @@ namespace Klinika.GUI.Manager
             new ChangeIngredient(-1, this).Show();
         }
 
-        
-        private void modifyIngredientsButton_Click(object sender, EventArgs e)
-        {
-            //new ChangeIngredient(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()), this).Show();
-        }
-
         private void deleteIngredientsButton_Click(object sender, EventArgs e)
         {
             DialogResult deletionConfirmation = MessageBox.Show("Are you sure you want to delete the selected ingredient? This action cannot be undone.", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (deletionConfirmation == DialogResult.Yes)
             {
-                //IngredientService.Delete(int.Parse(ingredientsTable.SelectedRows[0].Cells["id"].Value.ToString()));
                 MessageBox.Show("Room successfully deleted!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //TODO
-                //Services.IngredientService.GetAll();
                 this.Main_Load(null, EventArgs.Empty);
             }
         }
